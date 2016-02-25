@@ -27,7 +27,8 @@ public class Task {
         _taskName = newName;
     }
     
-    private void setDate(Date newDate) {
+    private void setDate(int year, int month, int date) {
+        Date newDate = new Date(year, month, date);
         _deadline = newDate;
     }
 }
