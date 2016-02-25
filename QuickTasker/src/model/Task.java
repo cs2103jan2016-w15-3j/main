@@ -10,26 +10,27 @@ public class Task {
     public void setStartDate(LocalDate startDate) {
         _startDate = LocalDate.now();
     }
-    
-    public Task() {
+    public Task() {        
+
         _taskName = null;
         _deadline = null;
         _startDate = null;
     }
-    
+
     public Task(String taskName, LocalDate deadline, LocalDate startDate) {
         _taskName = taskName;
         _deadline = deadline;
         _startDate = startDate;
     }
-    
-    private String getName() {
+
+    public String getName() {
         return _taskName;
     }
-    
+
     private LocalDate getDate() {
         return _deadline;
     }
+    
     
     private LocalDate getStartDate() {
         return _startDate;
@@ -38,7 +39,7 @@ public class Task {
     private void setName(String newName) {
         _taskName = newName;
     }
-    
+
     private static void setDate(int year, int month, int date) {
         LocalDate newDate = LocalDate.of(date, month, year);
         _deadline = newDate;

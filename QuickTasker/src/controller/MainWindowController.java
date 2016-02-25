@@ -15,12 +15,15 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import model.Task;
+import view.TaskListCell;
 
 public class MainWindowController implements Initializable {
     private Main main;
+    private ParserInterface parser;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setCellFactory();
         setMain(main);
     }
 
@@ -30,19 +33,25 @@ public class MainWindowController implements Initializable {
     @FXML JFXListView<Task> taskListView;
     ObservableList<Task> list = FXCollections.observableArrayList();
 
-
     public void setMain(Main main) {
         this.main = main;
     }
 
     @FXML
-    public void handleEnterKeyPressed(KeyEvent event) {
+    private void handleEnterKeyPressed(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {   
-
             list.add(new Task("some sample", new Date()));
             taskListView.setItems(list);
             commandBox.clear();
         }
+    }
+
+    private void parseCommand(String string) {
+
+    }
+
+    private void setCellFactory() {
+        taskListView.setCellFactory(param -> new TaskListCell());
     }
 
 }

@@ -15,47 +15,50 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import model.Task;
+import view.TaskListCell;
 
 public class MainWindowController implements Initializable {
     private Main main;
+    private ParserInterface parser;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setCellFactory();
         setMain(main);
     }
 
     // Views
-<<<<<<< a9a98651ded5cf277a3ddb17b94cce74a4415f41
-    @FXML
-    Label label;
-    @FXML
-    JFXTextField commandBox;
-
-    private Main main;
-=======
     @FXML Label label;
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
     ObservableList<Task> list = FXCollections.observableArrayList();
->>>>>>> add task to TaskView on enter
+
 
     public void setMain(Main main) {
         this.main = main;
     }
 
-<<<<<<< a9a98651ded5cf277a3ddb17b94cce74a4415f41
+    @FXML
+<<<<<<< 87bade02b4de1c07eadfc7923812ef91b5638004
     public void handleEnterKeyPressed(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ENTER)) {
+        if (event.getCode().equals(KeyCode.ENTER)) {   
 
 =======
-    @FXML
-    public void handleEnterKeyPressed(KeyEvent event) {
+    private void handleEnterKeyPressed(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
+>>>>>>> [feature]display task information in listView after enter key press
             list.add(new Task("some sample", new Date()));
             taskListView.setItems(list);
             commandBox.clear();
->>>>>>> add task to TaskView on enter
         }
+    }
+
+    private void parseCommand(String string) {
+
+    }
+
+    private void setCellFactory() {
+        taskListView.setCellFactory(param -> new TaskListCell());
     }
 
 }
