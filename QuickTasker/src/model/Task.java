@@ -22,4 +22,12 @@ public class Task {
     private Date getDate() {
         return _deadline;
     }
+    
+    private void setName(String newName) {
+        _taskName = newName;
+    }
+    
+    private void setDate(Date newDate) {
+        _deadline = newDate;
+    }
 }
