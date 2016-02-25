@@ -22,7 +22,7 @@
                   <Insets right="10.0" top="10.0" />
                </HBox.margin>
                <children>
-                  <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" minWidth="30.0" text="create new task" AnchorPane.rightAnchor="0.0">
+                  <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" minWidth="30.0" text="Create a new task" AnchorPane.rightAnchor="0.0">
                      <padding>
                         <Insets right="10.0" />
                      </padding>
