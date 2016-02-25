@@ -20,7 +20,7 @@ public class Main extends Application {
     public void mainWindow(){
       
         try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("MainWindowView.fxml"));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/MainWindowView.fxml"));
             AnchorPane pane = loader.load();
             
             
