@@ -31,6 +31,8 @@ public class Main extends Application {
             
             primaryStage.setScene(scene);
             primaryStage.setTitle("Welcome to QuickTasker");
+            primaryStage.setMinWidth(500);
+            primaryStage.setMinHeight(200);
             primaryStage.show();
           
         } catch (IOException e) {
