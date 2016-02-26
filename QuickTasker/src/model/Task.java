@@ -1,17 +1,6 @@
 package model;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.lang.model.util.SimpleAnnotationValueVisitor6;
-
-import com.sun.javafx.scene.SceneEventDispatcher;
-
-import javafx.util.converter.LocalDateStringConverter;
 
 public class Task {
     private String _taskName;

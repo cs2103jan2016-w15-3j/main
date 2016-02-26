@@ -12,15 +12,10 @@ import javafx.scene.layout.AnchorPane;
 
 public class Main extends Application {
     private Stage primaryStage;
-<<<<<<< HEAD
-	@Override
-	public void start(Stage primaryStage){
-	    // Button btn = new Button();
-=======
 
     @Override
     public void start(Stage primaryStage) {
->>>>>>> origin/master
+
         this.primaryStage = primaryStage;
         mainWindow();
     }
