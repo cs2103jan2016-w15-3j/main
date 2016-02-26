@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.AnchorPane;
+import javafx.collections.ObservableList;
 
 public class Main extends Application {
     private Stage primaryStage;
