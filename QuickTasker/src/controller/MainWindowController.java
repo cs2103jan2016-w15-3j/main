@@ -9,18 +9,20 @@ import javafx.scene.input.KeyEvent;
 
 public class MainWindowController {
     // Views
-    @FXML Label label;
-    @FXML JFXTextField commandBox;
-    
+    @FXML
+    Label label;
+    @FXML
+    JFXTextField commandBox;
+
     private Main main;
-    
-    public void setMain(Main main){
-        this.main =main;
+
+    public void setMain(Main main) {
+        this.main = main;
     }
-    
-    public void handleEnterKeyPressed(KeyEvent event){
-        if (event.getCode().equals(KeyCode.ENTER)){
-           
+
+    public void handleEnterKeyPressed(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+
         }
     }
 }
