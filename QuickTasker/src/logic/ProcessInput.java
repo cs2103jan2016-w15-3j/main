@@ -1,5 +1,6 @@
 package logic;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import controller.Commands;
@@ -12,10 +13,8 @@ public class ProcessInput implements Command {
         InputParser parser = new InputParser();
         Commands command = parser.outputCommand(userInput);
         String name = parser.outputTaskName(userInput);
-        String endDate = parser.outputDate(userInput);
-        Task task = new Task();
-        task.setName(name);
-        task.setDate(endDate);
+        LocalDate endDate = parser.outputDate(userInput);
+        Task task = new Task(name, endDate);
         command.execute(tasks, new Task());
     }
     

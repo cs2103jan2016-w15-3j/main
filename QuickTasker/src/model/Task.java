@@ -16,7 +16,12 @@ public class Task {
         _deadline = null;
         _startDate = null;
     }
-
+    
+    public Task(String taskName, LocalDate deadline) {
+        _taskName = taskName;
+        _deadline = deadline;
+    }
+    
     public Task(String taskName, LocalDate deadline, LocalDate startDate) {
         _taskName = taskName;
         _deadline = deadline;
