@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
+<<<<<<< HEAD
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
@@ -42,4 +43,21 @@
          </children>
       </AnchorPane>
 	</children>
+=======
+
+<AnchorPane minHeight="189.0" minWidth="500.0" prefHeight="300.0" prefWidth="394.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
+   <children>
+      <JFXListView fx:id="taskList" minHeight="200.0" prefHeight="250.0" prefWidth="582.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane layoutX="10.0" layoutY="255.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <JFXTextField fx:id="commandBox" minWidth="100.0" onKeyPressed="#handleEnterKeyPressed" prefHeight="30.0" prefWidth="400.0" promptText="Enter command:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="110.0" />
+            <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" layoutX="387.0" layoutY="6.0" minWidth="100.0" prefHeight="17.0" prefWidth="103.0" text="Create a new task" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+>>>>>>> origin/master
 </AnchorPane>
