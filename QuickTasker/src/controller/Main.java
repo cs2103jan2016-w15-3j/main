@@ -1,9 +1,12 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import model.Task;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
@@ -12,10 +15,10 @@ import javafx.collections.ObservableList;
 
 public class Main extends Application {
     private Stage primaryStage;
+    private List<Task> tasks;
 
     @Override
     public void start(Stage primaryStage) {
-
         this.primaryStage = primaryStage;
         mainWindow();
     }
@@ -33,7 +36,7 @@ public class Main extends Application {
             Scene scene = new Scene(pane);
 
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Welcome to QuickTasker!");
+            primaryStage.setTitle("Welcome to QuickTasker");
             primaryStage.setMinWidth(500);
             primaryStage.setMinHeight(200);
             primaryStage.show();

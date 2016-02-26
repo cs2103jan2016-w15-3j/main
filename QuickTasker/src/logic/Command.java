@@ -7,6 +7,6 @@ import controller.InputInterface;
 import model.Task;
 
 public interface Command {
-    void execute(List<Task> list, String details);
+    void execute(List<Task> list, Task task);
 }
 
