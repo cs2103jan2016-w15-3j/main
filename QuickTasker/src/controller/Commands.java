@@ -1,4 +1,4 @@
-package controller;
+package src.controller;
 /**
  * 
  * author A0121558H
@@ -8,7 +8,7 @@ package controller;
 public enum Commands {
     
 
-      CREATE_TASK, UPDATE_TASK, DISPLAY_TASK, DELETE_TASK;  
+      CREATE_TASK, UPDATE_TASK, DISPLAY_TASK, DELETE_TASK, ERROR;  
      
 
 }
