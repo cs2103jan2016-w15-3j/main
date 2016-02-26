@@ -4,33 +4,42 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane minHeight="300.0" minWidth="401.0" prefHeight="300.0" prefWidth="513.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65" fx:controller="controller.MainWindowController">
-   <children>
-      <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="255.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+<AnchorPane minHeight="300.0" minWidth="401.0" prefHeight="300.0" prefWidth="513.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
+	<children>
+		<HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="255.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+			<children>
+				<JFXTextField fx:id="commandBox" onKeyPressed="#handleEnterKeyPressed" prefHeight="31.0" prefWidth="400.0" promptText="Enter command:">
+					<HBox.margin>
+						<Insets left="10.0" right="10.0" />
+					</HBox.margin>
+				</JFXTextField>
+				<AnchorPane>
+					<HBox.margin>
+						<Insets right="10.0" top="10.0" />
+					</HBox.margin>
+					<children>
+						<Label alignment="TOP_RIGHT" contentDisplay="RIGHT" layoutX="-1.0" minWidth="30.0" style="-fx-background-color: #f5f5dc;" text="Create new task" AnchorPane.rightAnchor="3.0">
+							<padding>
+								<Insets right="10.0" />
+							</padding>
+                     <font>
+                        <Font name="Segoe UI" size="16.0" />
+                     </font>
+						</Label>
+					</children>
+				</AnchorPane>
+			</children>
+		</HBox>
+      <ListView prefHeight="250.0" prefWidth="513.0" />
+      <AnchorPane style="-fx-background-color: #f0ffff;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXTextField fx:id="commandBox" onKeyPressed="#handleEnterKeyPressed" prefHeight="31.0" prefWidth="400.0" promptText="Enter command:">
-               <HBox.margin>
-                  <Insets left="10.0" right="10.0" />
-               </HBox.margin>
-            </JFXTextField>
-            <AnchorPane>
-               <HBox.margin>
-                  <Insets right="10.0" top="10.0" />
-               </HBox.margin>
-               <children>
-                  <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" minWidth="30.0" text="Create a new task" AnchorPane.rightAnchor="0.0">
-                     <padding>
-                        <Insets right="10.0" />
-                     </padding>
-                  </Label>
-               </children>
-            </AnchorPane>
+      		<JFXListView fx:id="taskList" blendMode="COLOR_BURN" prefHeight="254.0" prefWidth="513.0" style="-fx-background-color: #f0ffff;" />
          </children>
-      </HBox>
-      <JFXListView fx:id="taskList" prefHeight="254.0" prefWidth="513.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-   </children>
+      </AnchorPane>
+	</children>
 </AnchorPane>
