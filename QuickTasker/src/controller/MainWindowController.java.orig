@@ -25,23 +25,36 @@ public class MainWindowController implements Initializable {
     }
 
     // Views
+<<<<<<< a9a98651ded5cf277a3ddb17b94cce74a4415f41
+    @FXML
+    Label label;
+    @FXML
+    JFXTextField commandBox;
+
+    private Main main;
+=======
     @FXML Label label;
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
     ObservableList<Task> list = FXCollections.observableArrayList();
-
+>>>>>>> add task to TaskView on enter
 
     public void setMain(Main main) {
         this.main = main;
     }
 
+<<<<<<< a9a98651ded5cf277a3ddb17b94cce74a4415f41
+    public void handleEnterKeyPressed(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+
+=======
     @FXML
     public void handleEnterKeyPressed(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ENTER)) {   
-
+        if (event.getCode().equals(KeyCode.ENTER)) {
             list.add(new Task("some sample", new Date()));
             taskListView.setItems(list);
             commandBox.clear();
+>>>>>>> add task to TaskView on enter
         }
     }
 

@@ -4,10 +4,8 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+
 
 
 <AnchorPane minHeight="189.0" minWidth="500.0" prefHeight="300.0"
@@ -21,7 +19,6 @@
 			AnchorPane.topAnchor="0.0" />
 		<AnchorPane layoutX="10.0" layoutY="255.0"
 			AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0"
-
 			AnchorPane.rightAnchor="0.0">
 			<children>
 				<JFXTextField fx:id="commandBox" minWidth="100.0"
