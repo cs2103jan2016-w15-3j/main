@@ -1,6 +1,6 @@
 package logic;
 
-public class AddTask {
+public class AddTask{
     
 
 }
