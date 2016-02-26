@@ -33,7 +33,7 @@ public class Main extends Application {
             Scene scene = new Scene(pane);
 
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Welcome to QuickTasker");
+            primaryStage.setTitle("Welcome to QuickTasker!");
             primaryStage.setMinWidth(500);
             primaryStage.setMinHeight(200);
             primaryStage.show();
