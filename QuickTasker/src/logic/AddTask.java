@@ -10,11 +10,11 @@ public class AddTask implements Command {
     public void execute(List<Task> list, Task task) {
         executeAdd(list, task);
     }
-    
+
     private void executeAdd(List<Task> list, Task task) {
         if (task != null) {
             list.add(task);
-            
+
         }
     }
 }
