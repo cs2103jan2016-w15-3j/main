@@ -52,14 +52,14 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.setHgap(10); // horizontal gap between grids
         grid.setVgap(5); // vertical gap between grids
         grid.setPadding(new Insets(0, 10, 0, 10));
-        grid.setGridLinesVisible(true); // debugging
+        // grid.setGridLinesVisible(true); // debugging
         // set custom columns
         ColumnConstraints taskDetailColumn = new ColumnConstraints();
-        taskDetailColumn.setPercentWidth(70);
+        taskDetailColumn.setPercentWidth(60);
         ColumnConstraints startDateColumn = new ColumnConstraints();
-        startDateColumn.setPercentWidth(15);
+        startDateColumn.setPercentWidth(20);
         ColumnConstraints dueDateColumn = new ColumnConstraints();
-        startDateColumn.setPercentWidth(15);
+        startDateColumn.setPercentWidth(20);
 
         grid.getColumnConstraints().addAll(taskDetailColumn, startDateColumn, dueDateColumn);
 
@@ -125,10 +125,9 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void addControlsToGrid() {
-        System.out.print("test");
         grid.add(taskName, 0, 0); // add(Node child, int columnIndex, int
-        grid.add(taskStartDate, 1, 0, 1, 2); // rowIndex, int colspan, int rowspan)
-        grid.add(taskDeadLine, 2, 0, 1, 2);
+        grid.add(taskStartDate, 1, 0, 1, 1); // rowIndex, int colspan, int rowspan)
+        grid.add(taskDeadLine, 2, 0, 1, 1);
     }
 
 }

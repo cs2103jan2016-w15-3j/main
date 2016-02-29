@@ -46,7 +46,7 @@ public class MainWindowController implements Initializable {
         if (event.getCode().equals(KeyCode.ENTER)) {
             LocalDate startDate = LocalDate.now();
             LocalDate deadLine = LocalDate.now();
-            list.add(new Task("RandomTask", startDate, deadLine));
+            list.add(new Task(commandBox.getText(), startDate, deadLine));
             taskListView.setItems(list);
             commandBox.clear();
         }
