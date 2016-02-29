@@ -1,4 +1,5 @@
 package view;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -6,6 +7,7 @@ import com.jfoenix.controls.JFXListCell;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import model.Task;
 
@@ -22,36 +24,54 @@ public class TaskListCell extends JFXListCell<Task> {
             clearContent();
         } else {
             clearContent();
-            setTaskName(task);
-            setText(task.getName());
+            configureGrid();
+            addControlsToGrid();
+            
+            // addControlsToGrid();
         }
     }
 
+    // @Todo: Remember to clean up these ugly comments they are for team
+    // reference
+    // http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
+    // https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/GridPane.html
     private void configureGrid() {
-        grid.setHgap(10);
-        grid.setVgap(4);
+        grid.setHgap(10); // horizontal gap between grids
+        grid.setVgap(5); // vertical gap between grids
         grid.setPadding(new Insets(0, 10, 0, 10));
+        grid.setGridLinesVisible(true); // debugging
+        // set custom columns
+        ColumnConstraints taskDetailColumn = new ColumnConstraints();
+        taskDetailColumn.setPercentWidth(70);
+        ColumnConstraints startDateColumn = new ColumnConstraints();
+        startDateColumn.setPercentWidth(15);
+        ColumnConstraints dueDateColumn = new ColumnConstraints();
+        startDateColumn.setPercentWidth(15);
+
+        grid.getColumnConstraints().addAll(taskDetailColumn, startDateColumn, dueDateColumn);
+
         // todo set proper margin and padding
         // set proper hGrow
-        /* grid.setHgap(10);
-        grid.setVgap(4);
-        grid.setPadding(new Insets(0, 10, 0, 10));
-        
-        ColumnConstraints column1 = new ColumnConstraints(32);
-        ColumnConstraints column2 = new ColumnConstraints(USE_COMPUTED_SIZE , USE_COMPUTED_SIZE, Double.MAX_VALUE);
-        column2.setHgrow(Priority.NEVER);
-        ColumnConstraints column3 = new ColumnConstraints(30 , 50 , Double.MAX_VALUE);
-        column3.setHgrow(Priority.ALWAYS);
-        column3.setFillWidth(true);
-        ColumnConstraints column4 = new ColumnConstraints(USE_COMPUTED_SIZE , USE_COMPUTED_SIZE , Double.MAX_VALUE);
-        column4.setHgrow(Priority.NEVER);
-        ColumnConstraints column5 = new ColumnConstraints(30 , 50 , Double.MAX_VALUE);
-        column5.setHgrow(Priority.ALWAYS);
-        column5.setFillWidth(true);
-        ColumnConstraints column6 = new ColumnConstraints(10, 12, 16);
-        column6.setHgrow(Priority.NEVER);
-        column6.setFillWidth(false);
-        grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5, column6);*/
+        /*
+         * grid.setHgap(10); grid.setVgap(4); grid.setPadding(new Insets(0, 10,
+         * 0, 10));
+         * 
+         * ColumnConstraints column1 = new ColumnConstraints(32);
+         * ColumnConstraints column2 = new ColumnConstraints(USE_COMPUTED_SIZE ,
+         * USE_COMPUTED_SIZE, Double.MAX_VALUE);
+         * column2.setHgrow(Priority.NEVER); ColumnConstraints column3 = new
+         * ColumnConstraints(30 , 50 , Double.MAX_VALUE);
+         * column3.setHgrow(Priority.ALWAYS); column3.setFillWidth(true);
+         * ColumnConstraints column4 = new ColumnConstraints(USE_COMPUTED_SIZE ,
+         * USE_COMPUTED_SIZE , Double.MAX_VALUE);
+         * column4.setHgrow(Priority.NEVER); ColumnConstraints column5 = new
+         * ColumnConstraints(30 , 50 , Double.MAX_VALUE);
+         * column5.setHgrow(Priority.ALWAYS); column5.setFillWidth(true);
+         * ColumnConstraints column6 = new ColumnConstraints(10, 12, 16);
+         * column6.setHgrow(Priority.NEVER); column6.setFillWidth(false);
+         * grid.getColumnConstraints().addAll(column1, column2, column3,
+         * column4, column5, column6);
+         */
     }
 
     private void configureTaskName() {
@@ -76,12 +96,12 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void setTaskDate(Task task) {
-       LocalDate startDate = task.getStartDate();
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
-       String dateString = formatter.format(startDate);
-       taskStartDate.setText(dateString);
+        LocalDate startDate = task.getStartDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
+        String dateString = formatter.format(startDate);
+        taskStartDate.setText(dateString);
     }
-    
+
     private void setTaskDeadLine(Task task) {
         LocalDate dueDate = task.getDueDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
@@ -90,7 +110,9 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void addControlsToGrid() {
-        grid.add(taskName, 0, 0, 1, 2);
+        grid.add(taskName, 0, 0, 1, 2); // add(Node child, int columnIndex, int
+        grid.add(taskStartDate, 1, 0, 1, 2); // rowIndex, int colspan, int rowspan)
+        grid.add(taskDeadLine, 2, 0, 1, 2);
     }
 
     @Override
