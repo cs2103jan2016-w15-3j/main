@@ -17,18 +17,31 @@ public class TaskListCell extends JFXListCell<Task> {
     private final Label taskName = new Label();
     private final GridPane grid = new GridPane();
 
+    public TaskListCell() {
+        configureGrid();
+        configureTaskName();
+        configureDate();
+        addControlsToGrid();
+    }
+
     @Override
     public void updateItem(Task task, boolean empty) {
         super.updateItem(task, empty);
         if (empty) {
             clearContent();
         } else {
-            clearContent();
-            configureGrid();
-            addControlsToGrid();
-            
-            // addControlsToGrid();
+
+            addContent(task);
+            setGraphic(grid);
+
         }
+    }
+
+    private void addContent(Task task) {
+        setTaskName(task);
+        setTaskStartDate(task);
+        setTaskDueDate(task);
+        setGraphic(grid);
     }
 
     // @Todo: Remember to clean up these ugly comments they are for team
@@ -80,6 +93,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void configureDate() {
         taskStartDate.setStyle("-fx-font-weightt:bold;-fx-padding:10px");
+        taskDeadLine.setStyle("-fx-font-weightt:bold;-fx-padding:10px");
     }
 
     private void clearContent() {
@@ -93,30 +107,28 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void setTaskName(Task task) {
         taskName.setText(task.getName());
+
     }
 
-    private void setTaskDate(Task task) {
+    private void setTaskStartDate(Task task) {
         LocalDate startDate = task.getStartDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String dateString = formatter.format(startDate);
         taskStartDate.setText(dateString);
     }
 
-    private void setTaskDeadLine(Task task) {
+    private void setTaskDueDate(Task task) {
         LocalDate dueDate = task.getDueDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String dateString = formatter.format(dueDate);
         taskDeadLine.setText(dateString);
     }
 
     private void addControlsToGrid() {
-        grid.add(taskName, 0, 0, 1, 2); // add(Node child, int columnIndex, int
+        System.out.print("test");
+        grid.add(taskName, 0, 0); // add(Node child, int columnIndex, int
         grid.add(taskStartDate, 1, 0, 1, 2); // rowIndex, int colspan, int rowspan)
         grid.add(taskDeadLine, 2, 0, 1, 2);
     }
 
-    @Override
-    public String toString() {
-        return taskName.toString();
-    }
 }
