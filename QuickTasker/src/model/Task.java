@@ -32,12 +32,12 @@ public class Task {
         return _taskName;
     }
 
-    private LocalDate getDate() {
+    public LocalDate getDueDate() {
         return _deadline;
     }
     
     
-    private LocalDate getStartDate() {
+    public LocalDate getStartDate() {
         return _startDate;
     }
     
