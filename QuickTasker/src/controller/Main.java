@@ -5,13 +5,10 @@ import java.util.List;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Task;
-import javafx.scene.Scene;
-import javafx.scene.text.Font;
-import javafx.scene.paint.Color;
-import javafx.scene.layout.AnchorPane;
-import javafx.collections.ObservableList;
 
 public class Main extends Application {
     private Stage primaryStage;
