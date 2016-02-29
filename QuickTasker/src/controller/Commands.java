@@ -1,4 +1,4 @@
-package src.controller;
+package controller;
 /**
  * 
  * author A0121558H
