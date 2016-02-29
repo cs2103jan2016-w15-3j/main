@@ -1,13 +1,17 @@
 package view;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import com.jfoenix.controls.JFXListCell;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import model.Task;
 
 public class TaskListCell extends JFXListCell<Task> {
-    private final Label taskDate = new Label();
+    private final Label taskStartDate = new Label();
+    private final Label taskDeadLine = new Label();
     private final Label taskName = new Label();
     private final GridPane grid = new GridPane();
 
@@ -24,6 +28,9 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureGrid() {
+        grid.setHgap(10);
+        grid.setVgap(4);
+        grid.setPadding(new Insets(0, 10, 0, 10));
         // todo set proper margin and padding
         // set proper hGrow
         /* grid.setHgap(10);
@@ -48,11 +55,11 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureTaskName() {
-        taskName.setStyle("-fx-font-weight:bold;");
+        taskName.setStyle("-fx-font-weight:bold; -fx-padding:10px");
     }
 
     private void configureDate() {
-        taskDate.setStyle("-fx-font-weightt:bold");
+        taskStartDate.setStyle("-fx-font-weightt:bold;-fx-padding:10px");
     }
 
     private void clearContent() {
@@ -69,7 +76,17 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void setTaskDate(Task task) {
-
+       LocalDate startDate = task.getStartDate();
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
+       String dateString = formatter.format(startDate);
+       taskStartDate.setText(dateString);
+    }
+    
+    private void setTaskDeadLine(Task task) {
+        LocalDate dueDate = task.getDueDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
+        String dateString = formatter.format(dueDate);
+        taskDeadLine.setText(dateString);
     }
 
     private void addControlsToGrid() {
