@@ -19,7 +19,6 @@ import view.TaskListCell;
 
 public class MainWindowController implements Initializable {
     private Main main;
-    private ParserInterface parser;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -33,6 +32,7 @@ public class MainWindowController implements Initializable {
      */
     @FXML Label label;
     @FXML JFXTextField commandBox;
+    
     @FXML JFXListView<Task> taskListView;
     ObservableList<Task> list = FXCollections.observableArrayList();
 
@@ -50,10 +50,6 @@ public class MainWindowController implements Initializable {
             taskListView.setItems(list);
             commandBox.clear();
         }
-    }
-
-    private void parseCommand(String string) {
-
     }
 
     private void setCellFactory() {
