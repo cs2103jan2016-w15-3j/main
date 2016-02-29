@@ -1,7 +1,7 @@
 package controller;
 
 import java.net.URL;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXListView;
@@ -43,8 +43,10 @@ public class MainWindowController implements Initializable {
     @FXML
     
     private void handleEnterKeyPressed(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ENTER)) {   
-            list.add(new Task("some sample", new Date()));
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            LocalDate startDate = LocalDate.now();
+            LocalDate deadLine = LocalDate.now();
+            list.add(new Task("RandomTask", startDate, deadLine));
             taskListView.setItems(list);
             commandBox.clear();
         }
