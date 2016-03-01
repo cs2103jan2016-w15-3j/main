@@ -77,18 +77,18 @@ public class InputParser {
         return output;
     }
     
-    private static Commands outputCommand(String input) throws Exception{
+    static Commands outputCommand(String input) throws Exception{
         String[] splitted= stringSplitter(input);
         Commands command= DetermineCommandType.getCommand(splitted[0]);
         return command;
     }
 
-    private static String outputDate(String input) throws Exception {
+    static String outputDate(String input) throws Exception {
         String[] splitted = stringSplitter(input);
         return parseDate(splitted[2]);
     }
 
-    private static String outputTaskName(String input) {
+    public static String outputTaskName(String input) {
         String[] splitted = stringSplitter(input);
         return parseTaskName(splitted);
     }
@@ -98,7 +98,7 @@ public class InputParser {
         return parseTime(splitted[3]);
     }
 **/
-    private static String parseTaskName(String[] input) {
+    public static String parseTaskName(String[] input) {
         String output = "";
 
         for (int i = 1; i < input.length - 1; i++) {
