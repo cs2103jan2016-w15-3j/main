@@ -28,6 +28,9 @@ public class MainWindowController implements Initializable {
     }
 
     // Views
+    /*
+     * Author: 
+     */
     @FXML Label label;
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
@@ -38,6 +41,7 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
+    
     private void handleEnterKeyPressed(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {   
             list.add(new Task("some sample", new Date()));
