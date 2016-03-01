@@ -19,11 +19,12 @@ public class ProcessInput {
 
     public ProcessInput(String userInput, List<Task> tasks) {
         InputParser parser = new InputParser();
-        String command = parser.outputCommand(userInput);
+        populateCommandMap();
+/*        String command = parser.outputCommand(userInput);
         String name = parser.outputTaskName(userInput);
-        LocalDate endDate = parser.outputDate(userInput);
-        Task task = new Task(name, LocalDate.now(), endDate);
-        commandMap.get(command).execute(tasks, task);
+        LocalDate endDate = parser.outputDate(userInput);*/
+        Task task = new Task("name", LocalDate.now(), LocalDate.now());
+        commandMap.get(Commands.CREATE_TASK).execute(tasks, task);
     }
 
     public void populateCommandMap() {
