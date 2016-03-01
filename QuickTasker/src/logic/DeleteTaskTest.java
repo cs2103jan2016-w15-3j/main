@@ -2,19 +2,24 @@ package logic;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import model.Task;
+/*
+ * 
+ * author A0130949
+ * Soh Yonghao
+ * 
+ * */
 
 public class DeleteTaskTest {
     Logic logic;
+
     @Before
     public void setUp() throws Exception {
         logic = new Logic();
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             Task task = new Task(i);
             logic.list.add(task);
         }
@@ -28,7 +33,6 @@ public class DeleteTaskTest {
         assertEquals(logic.getSize(), 9);
         logic.deleteTask(8);
         assertEquals(logic.getSize(), 8);
-        
-    }
 
+    }
 }
