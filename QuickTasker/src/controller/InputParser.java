@@ -83,7 +83,7 @@ public class InputParser {
         return command;
     }
 
-    static String outputDate(String input) throws Exception {
+    public static String outputDate(String input) throws Exception {
         String[] splitted = stringSplitter(input);
         return parseDate(splitted[2]);
     }
