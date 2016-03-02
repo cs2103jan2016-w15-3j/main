@@ -27,7 +27,7 @@ public class MainWindowController implements Initializable {
         setMain(main);
     }
 
-    /** Views. */
+    /* Views */
     @FXML Label label;
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
@@ -39,19 +39,25 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) {
-        if (KeyCode.ENTER.equals(event.getCode())) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            if (!isEmptyInput(commandBox.getText())) {
             LocalDate startDate = LocalDate.now();
             LocalDate deadLine = LocalDate.now();
             list.add(new Task(commandBox.getText(), startDate, deadLine));
             taskListView.setItems(list);
             commandBox.clear();
+            String commandStrin = commandBox.getText();
+            }
+        }      
+    }
+    
+    private boolean isEmptyInput(String input){
+        if(input == null || input.isEmpty() || input.trim().equals("")) {
+            return true;
         }
+        return false;
     }
-
-    private void parseCommand(String string) {
-
-    }
-
+ 
     private void setCellFactory() {
         taskListView.setCellFactory(param -> new TaskListCell());
     }
