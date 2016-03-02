@@ -1,64 +1,60 @@
 package model;
-
 import java.time.LocalDate;
 
 public class Task {
-    private String _taskName;
-    private static LocalDate _deadline;
-    private LocalDate _startDate;
-    private static int _index;
-    
-    public void setStartDate(LocalDate startDate) {
-        _startDate = LocalDate.now();
+    private static String taskName;
+    private static LocalDate endDate;
+    private static LocalDate startDate;
+
+    public void setStartDateAsNow() {
+        startDate = LocalDate.now();
     }
-    
-    public Task(int index) {        
-        _index = index;
-        _taskName = null;
-        _deadline = null;
-        _startDate = null;
+
+    /** Default constructor **/
+    public Task() {
+        taskName = "";
+        endDate = LocalDate.MIN;
+        setStartDateAsNow();
     }
-    
-    public Task(String taskName, LocalDate deadline, int index) {
-        _taskName = taskName;
-        _deadline = deadline;
-        _index = index;
+    /** Constructor for tasks with only task name **/
+    public Task(String taskName) {
+        Task.taskName = taskName;
+        setStartDateAsNow();
+        Task.endDate = LocalDate.MAX;
     }
-    
-    public Task(String taskName, LocalDate deadline, LocalDate startDate, int index) {
-        _taskName = taskName;
-        _deadline = deadline;
-        _startDate = startDate;
-        _index = index;
+
+    /** Constructor for floating tasks **/
+    public Task(String taskName, LocalDate startDate) {
+        Task.taskName = taskName;
+        Task.endDate = LocalDate.MAX;
+        Task.startDate = startDate;
     }
-    
-    public int getIndex() {
-        return _index;
-    }
-    
-    public void setIndex(int newIndex) {
-        _index = newIndex;
+
+    /** Constructor with all fields filled **/
+    public Task(String taskName, LocalDate startDate, LocalDate endDate) {
+        Task.taskName = taskName;
+        Task.endDate = endDate;
+        Task.startDate = startDate;
     }
 
     public String getName() {
-        return _taskName;
+        return taskName;
     }
 
     public LocalDate getDate() {
-        return _deadline;
-    }
-    
-    
-    public LocalDate getStartDate() {
-        return _startDate;
-    }
-    
-    public void setName(String newName) {
-        _taskName = newName;
+        return endDate;
     }
 
-    public static void setDate(int year, int month, int date) {
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setName(String newName) {
+        taskName = newName;
+    }
+
+    private static void setNewEndDate(int date, int month, int year) {
         LocalDate newDate = LocalDate.of(date, month, year);
-        _deadline = newDate;
+        endDate = newDate;
     }
 }
