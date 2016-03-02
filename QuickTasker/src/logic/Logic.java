@@ -6,12 +6,12 @@ import java.util.TreeMap;
 
 import controller.Commands;
 import model.Task;
-/*
+/**
  * 
- * author A0130949
+ * Author A0130949
  * Soh Yonghao
  * 
- * */
+ *. */
 
 public class Logic {
     protected static List<Task> list;

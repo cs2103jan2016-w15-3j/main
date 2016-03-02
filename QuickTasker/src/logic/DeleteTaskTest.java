@@ -6,12 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.Task;
-/*
+/**
  * 
- * author A0130949
+ * Author A0130949
  * Soh Yonghao
  * 
- * */
+ *. */
 
 public class DeleteTaskTest {
     Logic logic;

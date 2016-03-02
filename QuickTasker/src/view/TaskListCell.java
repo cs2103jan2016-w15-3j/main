@@ -44,10 +44,12 @@ public class TaskListCell extends JFXListCell<Task> {
         setGraphic(grid);
     }
 
-    // @Todo: Remember to clean up these ugly comments they are for team
-    // reference
-    // http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
-    // https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/GridPane.html
+    /**
+     * @Todo: Remember to clean up these ugly comments they are for team
+     * reference
+     * http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
+     * https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/GridPane.html
+     */
     private void configureGrid() {
         grid.setHgap(10); // horizontal gap between grids
         grid.setVgap(5); // vertical gap between grids

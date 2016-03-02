@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 /**
- * author A0121558H
+ * Author A0121558H
  * 
  * This class takes in an input and processes it.
  * 
@@ -18,69 +18,64 @@ public class InputParser {
 
     private static LocalDate currentDate = strToDate(getNowDate());
 
-    /** Messages **/
+    /** Messages *.*/
     private static final String MESSAGE_INVALID = "Format invalid. Please input in "
             + "this format\"add <taskname> <date> <time>\"";
     private static final String MESSAGE_INVALID_DATE = "Date format invalid. Please try again.";
 
     /**
-     * convert a date in String to Date format
+     * Convert a date in String to Date format
      * 
-     * String format yyyy-MM-dd
+     * String format yyyy-MM-dd.
      * 
      * @param str
      * @return Date
      */
     public static LocalDate strToDate(String str) {
-        if (str == null)
+        if (str == null) {
             return null;
+        }
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         ParsePosition pos = new ParsePosition(0);
         Date strToDate = formatter.parse(str, pos);
-        LocalDate local= strToDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-        return local;
+        return strToDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     /**
      * Gets current date
-     **/
+     *.*/
     public static String getNowDate() {
         Date currentTime = new Date();
         SimpleDateFormat formatter = new java.text.SimpleDateFormat("dd-MM-yyyy");
-        String nowDate = formatter.format(currentTime);
-        return nowDate;
+        return formatter.format(currentTime);
     }
 
     /**
-     * convert Date to string format
+     * Convert Date to string format.
      * 
      * @param date
      * @return String yyyy-MM-dd
      */
     public static String dateToStr(Date date) {
-        if (date == null)
+        if (date == null) {
             return null;
+        }
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        String dateString = formatter.format(date);
-        return dateString;
+        return formatter.format(date);
     }
 
    
 
-    /** This method splits the input **/
+    /** This method splits the input *.*/
     private static String[] stringSplitter(String input) {
-        String[] output = input.split(" ");
-
-        return output;
+        return input.split(" ");
     }
     
     static Commands outputCommand(String input) throws Exception{
         String[] splitted= stringSplitter(input);
-        Commands command= DetermineCommandType.getCommand(splitted[0]);
-        return command;
+        return DetermineCommandType.getCommand(splitted[0]);
     }
 
     public static String outputDate(String input) throws Exception {
@@ -93,11 +88,11 @@ public class InputParser {
         return parseTaskName(splitted);
     }
 
- /**   private static String outputTime(String input) {
+ /**   Private static String outputTime(String input) {
         String[] splitted = stringSplitter(input);
         return parseTime(splitted[3]);
     }
-**/
+*.*/
     public static String parseTaskName(String[] input) {
         String output = "";
 

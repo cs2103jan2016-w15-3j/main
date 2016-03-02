@@ -30,10 +30,7 @@ public class MainWindowController implements Initializable {
         setMain(main);
     }
 
-    // Views
-    /*
-     * Author: 
-     */
+    /** Views. */
     @FXML Label label;
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
@@ -44,7 +41,6 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    
     private void handleEnterKeyPressed(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
             if (!isEmptyInput(commandBox.getText())) {

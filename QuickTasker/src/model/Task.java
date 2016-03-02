@@ -6,7 +6,7 @@ public class Task {
     private String _taskName;
     private static LocalDate _deadline;
     private LocalDate _startDate;
-    private static int _index = 0;
+    private static int _index;
     
     public void setStartDate(LocalDate startDate) {
         _startDate = LocalDate.now();

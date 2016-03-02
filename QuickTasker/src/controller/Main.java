@@ -10,13 +10,14 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     private Stage primaryStage;
+
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         mainWindow();
     }
 
-    // Responsible for displaying main window
+    /** Responsible for displaying main window. */
     public void mainWindow() {
 
         try {
@@ -35,7 +36,6 @@ public class Main extends Application {
             primaryStage.show();
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
