@@ -90,19 +90,19 @@ public class UserInputParser {
 
     /** To retrieve attributes **/
 
-    public static LocalDate getStartDate() {
+    public  LocalDate getStartDate() {
         return startDate;
     }
 
-    public static LocalDate getEndDate() {
+    public  LocalDate getEndDate() {
         return endDate;
     }
 
-    public static String getCommand() {
+    public  String getCommand() {
         return command;
     }
 
-    public static String getTaskName() {
+    public  String getTaskName() {
         return taskName;
     }
 
