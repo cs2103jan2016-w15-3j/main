@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Task;
-/*
+/**
  * 
- * author A0130949
+ * Author A0130949
  * Soh Yonghao
  * 
- * */
+ *. */
 
 public class DisplayTask<E> implements Command<E> {
 
