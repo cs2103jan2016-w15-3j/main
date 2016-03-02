@@ -6,6 +6,7 @@ import controller.Commands;
 import controller.Commands;
 import controller.InputParser;
 import model.Task;
+import parser.Commands;
 
  *
  * author A0130949
@@ -24,9 +25,9 @@ public class ProcessInput {
         commandMap.get(command).execute(tasks, task);
         populateCommandMap();
         
-         * String command = parser.outputCommand(userInput); String name =
-         * parser.outputTaskName(userInput); LocalDate endDate =
-         * parser.outputDate(userInput);
+        String command = parser.outputCommand(userInput); 
+        String name = parser.outputTaskName(userInput); 
+        LocalDate endDate = parser.outputDate(userInput);
          
         Task task = new Task("name", LocalDate.now(), LocalDate.now());
         commandMap.get(Commands.CREATE_TASK).execute(tasks, task);
