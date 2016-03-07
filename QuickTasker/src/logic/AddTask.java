@@ -8,7 +8,7 @@ import model.Task;
  * Author A0130949
  * Soh Yonghao
  * 
- *. */
+ **/
 
 public class AddTask<E> implements Command {
     private static final String NOTHING_TO_ADD = "Cannot add nothing";
