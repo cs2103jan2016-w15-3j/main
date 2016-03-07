@@ -29,13 +29,8 @@ public class DisplayTaskTest {
 
     @Test
     public void test() {
-        tasks = new ArrayList<Task>();
-        for(int i = 0; i < 10; i++) {
-            Task task = new Task();
-            tasks.add(task);
-        }
         DisplayTask<Task> dTask = new DisplayTask<Task>();
-        assertEquals(dTask.executeDisplay(test), tasks);
+        assertEquals(dTask.executeDisplay(test), test);
     }
 
 }
