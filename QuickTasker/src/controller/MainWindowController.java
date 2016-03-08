@@ -45,7 +45,6 @@ public class MainWindowController implements Initializable {
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
-            if (!isEmptyInput(commandBox.getText())) {
             LocalDate startDate = LocalDate.now();
             LocalDate deadLine = LocalDate.now();
             String userInput = commandBox.getText();
