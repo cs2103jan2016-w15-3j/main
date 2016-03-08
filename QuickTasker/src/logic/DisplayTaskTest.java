@@ -22,7 +22,7 @@ public class DisplayTaskTest {
     public void setUp() throws Exception {
         test = new ArrayList<Task>();
         for (int i = 0; i < 10; i++) {
-            Task task = new Task(i);
+            Task task = new Task();
             test.add(task);
         }
     }
@@ -31,7 +31,7 @@ public class DisplayTaskTest {
     public void test() {
         tasks = new ArrayList<Task>();
         for(int i = 0; i < 10; i++) {
-            Task task = new Task(i);
+            Task task = new Task();
             tasks.add(task);
         }
         DisplayTask<Task> dTask = new DisplayTask<Task>();

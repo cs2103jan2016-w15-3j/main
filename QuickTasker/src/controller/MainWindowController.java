@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
+import com.sun.javafx.scene.paint.GradientUtils.Parser;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import model.Task;
 import view.TaskListCell;
+import logic.*;
+import parser.UserInputParser;
+
 
 public class MainWindowController implements Initializable {
     private Main main;
@@ -43,12 +47,22 @@ public class MainWindowController implements Initializable {
             if (!isEmptyInput(commandBox.getText())) {
             LocalDate startDate = LocalDate.now();
             LocalDate deadLine = LocalDate.now();
-            list.add(new Task(commandBox.getText(), startDate, deadLine));
+            String userInput = commandBox.getText();
+            UserInputParser parser = new UserInputParser();
+            Command<String> command = parser.getCommand(userInput);
+            if (command.equals("add")) {
+                list.add(new Task(parser.getTaskName(userInput), startDate, deadLine));
+            }
             taskListView.setItems(list);
             commandBox.clear();
             String commandStrin = commandBox.getText();
             }
         }      
+    }
+    
+    @FXML
+    private void handleDeleteTask(KeyEvent event) {
+        if (event.get)
     }
     
     private boolean isEmptyInput(String input){

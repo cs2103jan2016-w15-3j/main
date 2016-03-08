@@ -19,7 +19,7 @@ public class UserInputParser {
 
     /** Constructor for Parser object 
      * @throws Exception **/
-    public UserInputParser(String userInput) throws Exception {
+    /*public UserInputParser(String userInput) throws Exception {
         removeWhiteSpaces(userInput);
         determineLengthOfInput();
         command = userCommand[0];
@@ -27,6 +27,7 @@ public class UserInputParser {
         startDate = setStartDate();
         endDate = setEndDate();
     }
+    */
 /**
  * Checks if it is a floating task. If yes, returns null.
  * @return

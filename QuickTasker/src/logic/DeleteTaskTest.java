@@ -20,7 +20,7 @@ public class DeleteTaskTest {
     public void setUp() throws Exception {
         logic = new Logic();
         for (int i = 0; i < 10; i++) {
-            Task task = new Task(i);
+            Task task = new Task();
             logic.list.add(task);
         }
     }

@@ -1,15 +1,15 @@
 package view;
 
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 import com.jfoenix.controls.JFXListCell;
-
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import model.Task;
+import logic.Logic;
 
 public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartDate = new Label();
@@ -120,7 +120,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void setTaskDueDate(Task task) {
-        LocalDate dueDate = task.getDueDate();
+        LocalDate dueDate = task.getDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String dateString = formatter.format(dueDate);
         taskDeadLine.setText(dateString);
@@ -130,6 +130,10 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.add(taskName, 0, 0); // add(Node child, int columnIndex, int
         grid.add(taskStartDate, 1, 0, 1, 1); // rowIndex, int colspan, int rowspan)
         grid.add(taskDeadLine, 2, 0, 1, 1);
+    }
+    
+    private void displayTaskList(Task task) {
+        
     }
 
 }
