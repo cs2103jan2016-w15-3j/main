@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.PrimitiveIterator.OfDouble;
 
+import javax.xml.ws.handler.LogicalHandler;
+
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.javafx.scene.paint.GradientUtils.Parser;
@@ -28,6 +30,7 @@ import parser.UserInputParser;
 public class MainWindowController implements Initializable {
     private Main main;
     private ParserInterface parser;
+    private Logic logicHandler;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -36,9 +39,12 @@ public class MainWindowController implements Initializable {
     }
 
     /* Views */
-    @FXML Label label;
-    @FXML JFXTextField commandBox;
-    @FXML JFXListView<Task> taskListView;
+    @FXML
+    Label label;
+    @FXML
+    JFXTextField commandBox;
+    @FXML
+    JFXListView<Task> taskListView;
     ObservableList<Task> list = FXCollections.observableArrayList();
 
     public void setMain(Main main) {
@@ -56,27 +62,27 @@ public class MainWindowController implements Initializable {
             if (command.equals("add")) {
                 list.add(new Task(parser.getTaskName(userInput), startDate, deadLine));
             } else if (command.equals("delete")) {
-                
+                // list remove
             }
+
             taskListView.setItems(list);
             commandBox.clear();
             String commandStrin = commandBox.getText();
-            }
-        }      
+        }
     }
-    
+
     @FXML
     private void handleDeleteTask(KeyEvent event) {
-        if (event.get)
+        // if (event.get)
     }
-    
-    private boolean isEmptyInput(String input){
-        if(input == null || input.isEmpty() || input.trim().equals("")) {
+
+    private boolean isEmptyInput(String input) {
+        if (input == null || input.isEmpty() || input.trim().equals("")) {
             return true;
         }
         return false;
     }
- 
+
     private void setCellFactory() {
         taskListView.setCellFactory(param -> new TaskListCell());
     }
