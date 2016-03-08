@@ -64,7 +64,7 @@ public class MainWindowController implements Initializable {
             LocalDate startDate = LocalDate.now();
             LocalDate deadLine = LocalDate.now();
             String userInput = commandBox.getText();
-            UserInputParser parser = new UserInputParser();
+           /* UserInputParser parser = new UserInputParser();
             Commands command = parser.getCommand(userInput);
             if (command.equals("add")) {
                 list.add(new Task(parser.getTaskName(userInput), startDate, deadLine));
@@ -78,11 +78,12 @@ public class MainWindowController implements Initializable {
                JFXDialog dialog = new JFXDialog();
                dialog.show();
             }
-        
-
+        */
+            String commandString = commandBox.getText();
+            list.add(new Task(commandString, startDate, deadLine));
             taskListView.setItems(list);
             commandBox.clear();
-            String commandStrin = commandBox.getText();
+            
         }
 }
     
