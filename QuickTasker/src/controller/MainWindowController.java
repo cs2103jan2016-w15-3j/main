@@ -3,6 +3,7 @@ package controller;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.PrimitiveIterator.OfDouble;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
@@ -52,6 +53,8 @@ public class MainWindowController implements Initializable {
             Command<String> command = parser.getCommand(userInput);
             if (command.equals("add")) {
                 list.add(new Task(parser.getTaskName(userInput), startDate, deadLine));
+            } else if (command.equals("delete")) {
+                
             }
             taskListView.setItems(list);
             commandBox.clear();
