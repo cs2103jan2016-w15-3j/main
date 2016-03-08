@@ -22,6 +22,7 @@ import model.Task;
 import view.TaskListCell;
 import logic.*;
 import parser.UserInputParser;
+import parser.Commands;
 
 /*
  * Author: A0133333U
@@ -58,12 +59,14 @@ public class MainWindowController implements Initializable {
             LocalDate deadLine = LocalDate.now();
             String userInput = commandBox.getText();
             UserInputParser parser = new UserInputParser();
-            Command<String> command = parser.getCommand(userInput);
+            Commands command = parser.getCommand(userInput);
             if (command.equals("add")) {
                 list.add(new Task(parser.getTaskName(userInput), startDate, deadLine));
             } else if (command.equals("delete")) {
                 // list remove
-            }
+            } else if (command.equals("view")) {
+                // todo: implement view by index
+            } else if (command.equals"edit")
 
             taskListView.setItems(list);
             commandBox.clear();
