@@ -1,6 +1,4 @@
 package view;
-
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.jfoenix.controls.JFXListCell;
@@ -45,8 +43,6 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     /**
-     * @Todo: Remember to clean up these ugly comments they are for team
-     * reference
      * http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
      * https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/GridPane.html
      */
