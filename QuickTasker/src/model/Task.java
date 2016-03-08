@@ -1,6 +1,11 @@
 package model;
 import java.time.LocalDate;
 
+/**
+ * 
+ * @author A0121558H/A0130949
+ *
+ */
 public class Task {
     private static String taskName;
     private static LocalDate endDate;
@@ -41,7 +46,7 @@ public class Task {
         return taskName;
     }
 
-    public LocalDate getDate() {
+    public LocalDate getDueDate() {
         return endDate;
     }
 
