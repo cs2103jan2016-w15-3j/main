@@ -15,25 +15,25 @@ import model.Task;
  */
 
 public class DeleteTaskTest {
-	Logic logic;
+    Logic logic;
 
-	@Before
-	public void setUp() throws Exception {
-		logic = new Logic();
-		for (int i = 0; i < 10; i++) {
-			Task task = new Task();
-			logic.list.add(task);
-		}
-	}
+    @Before
+    public void setUp() throws Exception {
+        logic = new Logic();
+        for (int i = 0; i < 10; i++) {
+            Task task = new Task();
+            logic.list.add(task);
+        }
+    }
 
-	@Test
-	public void test() throws Exception {
-		setUp();
-		assertEquals(logic.getSize(), 10);
-		logic.deleteTask(0);
-		assertEquals(logic.getSize(), 9);
-		logic.deleteTask(8);
-		assertEquals(logic.getSize(), 8);
+    @Test
+    public void test() throws Exception {
+        setUp();
+        assertEquals(logic.getSize(), 10);
+        logic.deleteTask(0);
+        assertEquals(logic.getSize(), 9);
+        logic.deleteTask(8);
+        assertEquals(logic.getSize(), 8);
 
-	}
+    }
 }
