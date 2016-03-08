@@ -10,16 +10,24 @@ import java.time.format.DateTimeFormatter;
  */
 public class UserInputParser {
 
-    private static String taskName;
-    private static LocalDate startDate;
-    private static LocalDate endDate;
-    private static String command;
-    private static String[] userCommand;
+    private String taskName;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String command;
+    private String[] userCommand;
     private static int lengthOfInput;
 
-    /** Constructor for Parser object 
-     * @throws Exception **/
-    public UserInputParser(String userInput) throws Exception {
+    /**
+     * Constructor for Parser object
+     * 
+     * @throws Exception
+     **/
+    /**
+     * public UserInputParser(String userInput) throws Exception {
+     * 
+     * }
+     **/
+    public void setAttributes(String userInput) throws Exception {
         removeWhiteSpaces(userInput);
         determineLengthOfInput();
         command = userCommand[0];
@@ -27,12 +35,14 @@ public class UserInputParser {
         startDate = setStartDate();
         endDate = setEndDate();
     }
-/**
- * Checks if it is a floating task. If yes, returns null.
- * @return
- * @throws Exception
- */
-    public static LocalDate setEndDate() throws Exception {
+
+    /**
+     * Checks if it is a floating task. If yes, returns null.
+     * 
+     * @return
+     * @throws Exception
+     */
+    public LocalDate setEndDate() throws Exception {
         if (!checkIfFloatingTask()) {
             return stringToLocalDate(userCommand[lengthOfInput - 1]);
         } else {
@@ -40,7 +50,7 @@ public class UserInputParser {
         }
     }
 
-    public static LocalDate setStartDate() throws Exception {
+    public LocalDate setStartDate() throws Exception {
         if (checkIfFloatingTask()) {
             return stringToLocalDate(userCommand[lengthOfInput - 1]);
         } else {
@@ -48,7 +58,7 @@ public class UserInputParser {
         }
     }
 
-    public static String setTaskName() throws Exception {
+    public String setTaskName() throws Exception {
         String output = "";
         int taskNameIndex = lengthOfInput - 3;
 
@@ -62,12 +72,12 @@ public class UserInputParser {
         return output;
     }
 
-    public static String[] removeWhiteSpaces(String input) {
+    public String[] removeWhiteSpaces(String input) {
         userCommand = input.split(" ");
         return userCommand;
     }
 
-    public static void determineLengthOfInput() {
+    public void determineLengthOfInput() {
         lengthOfInput = userCommand.length;
     }
 
@@ -78,7 +88,7 @@ public class UserInputParser {
         return output;
     }
 
-    public static boolean checkIfFloatingTask() throws Exception {
+    public boolean checkIfFloatingTask() throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         try {
             LocalDate.parse(userCommand[lengthOfInput - 1], formatter);
@@ -88,22 +98,50 @@ public class UserInputParser {
         return true;
     }
 
-    /** To retrieve attributes **/
+    /*
+     * (non-Javadoc)
+     * 
+     * @see parser.ParserInterface#getStartDate()
+     */
 
-    public  LocalDate getStartDate() {
+    public LocalDate getStartDate(String userInput) throws Exception {
+        setAttributes(userInput);
         return startDate;
     }
 
-    public  LocalDate getEndDate() {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see parser.ParserInterface#getEndDate()
+     */
+    public LocalDate getEndDate(String userInput) throws Exception {
+        setAttributes(userInput);
         return endDate;
     }
 
-    public  String getCommand() {
-        return command;
+    /*
+     * (non-Javadoc)
+     * 
+     * @see parser.ParserInterface#getCommand()
+     */
+    public Commands getCommand(String userInput) throws Exception {
+        setAttributes(userInput);
+        return DetermineCommandType.getCommand(command);
     }
 
-    public  String getTaskName() {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see parser.ParserInterface#getTaskName()
+     */
+    public String getTaskName(String userInput) throws Exception {
+        setAttributes(userInput);
         return taskName;
     }
+
+    /**
+     * 1)check if only one word in userCommand like add 2)check date format
+     * 3)check cannot empty taskname
+     */
 
 }
