@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import model.Task;
+import parser.ParserInterface;
 import view.TaskListCell;
 import logic.*;
 import parser.UserInputParser;
@@ -29,15 +30,16 @@ import parser.Commands;
  */
 
 public class MainWindowController implements Initializable {
-    private Main main;
-    private ParserInterface parser;
-    private Logic logicHandler;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setCellFactory();
-        setMain(main);
-    }
+	private Main main;
+	private ParserInterface parser;
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		setCellFactory();
+		setMain(main);
+	}
+
 
     /* Views */
     @FXML
@@ -48,9 +50,10 @@ public class MainWindowController implements Initializable {
     JFXListView<Task> taskListView;
     ObservableList<Task> list = FXCollections.observableArrayList();
 
-    public void setMain(Main main) {
-        this.main = main;
-    }
+	public void setMain(Main main) {
+		this.main = main;
+	}
+
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) {
@@ -66,7 +69,9 @@ public class MainWindowController implements Initializable {
                 // list remove
             } else if (command.equals("view")) {
                 // todo: implement view by index
-            } else if (command.equals"edit")
+            } else if (command.equals("edit")){
+                
+            }
 
             taskListView.setItems(list);
             commandBox.clear();
@@ -89,5 +94,6 @@ public class MainWindowController implements Initializable {
     private void setCellFactory() {
         taskListView.setCellFactory(param -> new TaskListCell());
     }
+
 
 }

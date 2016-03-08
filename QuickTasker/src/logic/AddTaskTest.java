@@ -1,35 +1,35 @@
 package logic;
 
-import static org.junit.Assert.*;
-
-import java.time.LocalDate;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import model.Task;
+
 /**
  * 
- * Author A0130949
- * Soh Yonghao
+ * Author A0130949 Soh Yonghao
  * 
- *. */
+ * .
+ */
 
 public class AddTaskTest {
-    Logic logic;
-    @Before
-    public void setUp() throws Exception {
-        logic = new Logic();
-    }
+	Logic logic;
 
-    @Test
-    public void test() throws Exception {
-        setUp();
-        logic.addTask(new Task());
-        assertEquals(logic.getSize(), 1);
-        logic.addTask(new Task());
-        assertEquals(logic.getSize(), 2);
-        
-    }
+	@Before
+	public void setUp() throws Exception {
+		logic = new Logic();
+	}
+
+	@Test
+	public void test() throws Exception {
+		setUp();
+		logic.addTask(new Task());
+		assertEquals(logic.getSize(), 1);
+		logic.addTask(new Task());
+		assertEquals(logic.getSize(), 2);
+
+	}
 
 }

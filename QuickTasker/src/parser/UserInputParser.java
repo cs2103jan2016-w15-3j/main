@@ -4,107 +4,143 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * 
+ *. 
  * @author A0121558H
  *
  */
 public class UserInputParser {
 
-    private static String taskName;
-    private static LocalDate startDate;
-    private static LocalDate endDate;
-    private static String command;
-    private static String[] userCommand;
-    private static int lengthOfInput;
+	private String taskName;
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private String command;
+	private String[] userCommand;
+	private static int lengthOfInput;
 
-    /** Constructor for Parser object 
-     * @throws Exception **/
-    public UserInputParser() throws Exception {
-        removeWhiteSpaces(userInput);
-        determineLengthOfInput();
-        command = userCommand[0];
-        taskName = setTaskName();
-        startDate = setStartDate();
-        endDate = setEndDate();
-    }
-    
-/**
- * Checks if it is a floating task. If yes, returns null.
- * @return
- * @throws Exception
- */
-    public static LocalDate setEndDate() throws Exception {
-        if (!checkIfFloatingTask()) {
-            return stringToLocalDate(userCommand[lengthOfInput - 1]);
-        } else {
-            return null;
-        }
-    }
+	/**
+	 * Constructor for Parser object.
+	 * 
+	 * @throws Exception
+	 **/
+	/**
+	 * Public UserInputParser(String userInput) throws Exception {
+	 * 
+	 * }
+	 *.*/
+	public void setAttributes(String userInput) throws Exception {
+		removeWhiteSpaces(userInput);
+		determineLengthOfInput();
+		command = userCommand[0];
+		taskName = setTaskName();
+		startDate = setStartDate();
+		endDate = setEndDate();
+	}
 
-    public static LocalDate setStartDate() throws Exception {
-        if (checkIfFloatingTask()) {
-            return stringToLocalDate(userCommand[lengthOfInput - 1]);
-        } else {
-            return stringToLocalDate(userCommand[lengthOfInput - 2]);
-        }
-    }
+	/**
+	 * Checks if it is a floating task. If yes, returns null.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public LocalDate setEndDate() throws Exception {
+		if (!checkIfFloatingTask()) {
+			return stringToLocalDate(userCommand[lengthOfInput - 1]);
+		} else {
+			return null;
+		}
+	}
 
-    public static String setTaskName() throws Exception {
-        String output = "";
-        int taskNameIndex = lengthOfInput - 3;
+	public LocalDate setStartDate() throws Exception {
+		if (checkIfFloatingTask()) {
+			return stringToLocalDate(userCommand[lengthOfInput - 1]);
+		} else {
+			return stringToLocalDate(userCommand[lengthOfInput - 2]);
+		}
+	}
 
-        if (checkIfFloatingTask()) {
-            taskNameIndex--;
-        }
+	public String setTaskName() throws Exception {
+		String output = "";
+		int taskNameIndex = lengthOfInput - 3;
 
-        for (int i = 1; i < taskNameIndex; i++) {
-            output += userCommand[i];
-        }
-        return output;
-    }
+		if (checkIfFloatingTask()) {
+			taskNameIndex--;
+		}
 
-    public static String[] removeWhiteSpaces(String input) {
-        userCommand = input.split(" ");
-        return userCommand;
-    }
+		for (int i = 1; i < taskNameIndex; i++) {
+			output += userCommand[i];
+		}
+		return output;
+	}
 
-    public static void determineLengthOfInput() {
-        lengthOfInput = userCommand.length;
-    }
+	public String[] removeWhiteSpaces(String input) {
+		userCommand = input.split(" ");
+		return userCommand;
+	}
 
-    public static LocalDate stringToLocalDate(String date) {
+	public void determineLengthOfInput() {
+		lengthOfInput = userCommand.length;
+	}
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate output = LocalDate.parse(date, formatter);
-        return output;
-    }
+	public static LocalDate stringToLocalDate(String date) {
 
-    public static boolean checkIfFloatingTask() throws Exception {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        try {
-            LocalDate.parse(userCommand[lengthOfInput - 1], formatter);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		return LocalDate.parse(date, formatter);
+	}
 
-    /** To retrieve attributes **/
+	public boolean checkIfFloatingTask() throws Exception {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		try {
+			LocalDate.parse(userCommand[lengthOfInput - 1], formatter);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
 
-    public  LocalDate getStartDate() {
-        return startDate;
-    }
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see parser.ParserInterface#getStartDate()
+	 */
 
-    public  LocalDate getEndDate() {
-        return endDate;
-    }
+	public LocalDate getStartDate(String userInput) throws Exception {
+		setAttributes(userInput);
+		return startDate;
+	}
 
-    public  String getCommand() {
-        return command;
-    }
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see parser.ParserInterface#getEndDate()
+	 */
+	public LocalDate getEndDate(String userInput) throws Exception {
+		setAttributes(userInput);
+		return endDate;
+	}
 
-    public  String getTaskName() {
-        return taskName;
-    }
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see parser.ParserInterface#getCommand()
+	 */
+	public Commands getCommand(String userInput) throws Exception {
+		setAttributes(userInput);
+		return DetermineCommandType.getCommand(command);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see parser.ParserInterface#getTaskName()
+	 */
+	public String getTaskName(String userInput) throws Exception {
+		setAttributes(userInput);
+		return taskName;
+	}
+
+	/**
+	 * 1)check if only one word in userCommand like add 2)check date format
+	 * 3)check cannot empty taskname.
+	 */
 
 }
