@@ -3,14 +3,9 @@ package controller;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import java.util.PrimitiveIterator.OfDouble;
-
+import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-import com.sun.jmx.snmp.SnmpUnknownSubSystemException;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-import com.sun.org.apache.xalan.internal.xsltc.dom.UnionIterator;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,8 +18,17 @@ import model.Task;
 import parser.ParserInterface;
 import parser.UserInputParser;
 import view.TaskListCell;
+import logic.*;
+import parser.UserInputParser;
+import parser.Commands;
+
+/*
+ * Author: A0133333U
+ */
 
 public class MainWindowController implements Initializable {
+
+    private static final String String = null;
     private Main main;
     private UserInputParser parser;
 
@@ -35,38 +39,45 @@ public class MainWindowController implements Initializable {
     }
 
     /** Views. */
+
     @FXML
     Label label;
     @FXML
     JFXTextField commandBox;
     @FXML
     JFXListView<Task> taskListView;
-    ObservableList<Task> list = FXCollections.observableArrayList();
+    ObservableList<Task> guiList = FXCollections.observableArrayList();
 
     public void setMain(Main main) {
         this.main = main;
     }
 
-    @FXML
-    private void handleEnterKeyPressed(KeyEvent event) throws Exception {
-        if (event.getCode().equals(KeyCode.ENTER)) {
-            LocalDate startDate = /*
-                                   * parser.getStartDate(commandBox.getText())
-                                   */LocalDate.now();
-            LocalDate deadLine = LocalDate.now();
-            parser = new UserInputParser();
-            Logic logic = new Logic();
-            logic.addTask(new Task());
-            String input = parser.getTaskName(commandBox.getText());
-            list.add(new Task(input/* commandBox.getText() */, parser.getStartDate(commandBox.getText())/* startDate */,
-                    parser.getEndDate(commandBox.getText())/* deadLine) */));
-            taskListView.setItems(list);
-            commandBox.clear();
-        }
-    }
-
     private boolean isEmptyInput(String input) {
         return input == null || input.isEmpty() || "".equals(input.trim());
+    }
+
+    @FXML
+    private void handleEnterKeyPressed(KeyEvent event) throws Exception {
+        if (!isEmptyInput(commandBox.getText()) && event.getCode().equals(KeyCode.ENTER)) {
+            LocalDate startDate = LocalDate.now();
+            LocalDate deadLine = LocalDate.now();
+            UserInputParser parser = new UserInputParser();
+            Logic logic = new Logic();
+            parser.getCommand(commandBox.getText());
+            logic.addTask(new Task());
+            String input = parser.getTaskName(commandBox.getText());
+            guiList.add(new Task(input, parser.getStartDate(commandBox.getText()),
+                    parser.getEndDate(commandBox.getText())));
+            //guiList.remove(parser.deleteIndexNumber(input + 1));
+
+            taskListView.setItems(guiList);
+            commandBox.clear();
+        }
+        /*
+         * if delete logic.deleteTask(index of task) guiList.remove(task's
+         * index) taskListView.setItems(guiList)
+         * 
+         */
     }
 
     private void setCellFactory() {

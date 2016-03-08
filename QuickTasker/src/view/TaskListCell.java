@@ -1,10 +1,15 @@
 package view;
 
+/*
+ * 
+ * Author: Xin Kenan, Lee Jia Lin
+ * 
+ */
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import com.jfoenix.controls.JFXListCell;
-
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
@@ -15,11 +20,13 @@ public class TaskListCell extends JFXListCell<Task> {
 	private final Label taskStartDate = new Label();
 	private final Label taskDeadLine = new Label();
 	private final Label taskName = new Label();
+	private final Label taskIndex = new Label();
 	private final GridPane grid = new GridPane();
 
 	public TaskListCell() {
 		configureGrid();
 		configureTaskName();
+		//configureTaskIndex();
 		configureDate();
 		addControlsToGrid();
 	}
@@ -30,10 +37,8 @@ public class TaskListCell extends JFXListCell<Task> {
 		if (empty) {
 			clearContent();
 		} else {
-
 			addContent(task);
 			setGraphic(grid);
-
 		}
 	}
 
@@ -43,10 +48,14 @@ public class TaskListCell extends JFXListCell<Task> {
 		setTaskDueDate(task);
 		setGraphic(grid);
 	}
+	
+	/*private void deleteContent(Task task) {
+	    // todo: getTaskIndex
+	    // deleteTaskIndex
+	    // remove
+	}*/
 
 	/**
-	 * @Todo: Remember to clean up these ugly comments they are for team
-	 *        reference
 	 *        http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
 	 *        https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/
 	 *        GridPane.html
@@ -55,7 +64,6 @@ public class TaskListCell extends JFXListCell<Task> {
 		grid.setHgap(10); // horizontal gap between grids
 		grid.setVgap(5); // vertical gap between grids
 		grid.setPadding(new Insets(0, 10, 0, 10));
-		// grid.setGridLinesVisible(true); // debugging
 		// set custom columns
 		ColumnConstraints taskDetailColumn = new ColumnConstraints();
 		taskDetailColumn.setPercentWidth(60);
@@ -63,7 +71,6 @@ public class TaskListCell extends JFXListCell<Task> {
 		startDateColumn.setPercentWidth(20);
 		ColumnConstraints dueDateColumn = new ColumnConstraints();
 		startDateColumn.setPercentWidth(20);
-
 		grid.getColumnConstraints().addAll(taskDetailColumn, startDateColumn, dueDateColumn);
 
 		// todo set proper margin and padding
@@ -93,7 +100,11 @@ public class TaskListCell extends JFXListCell<Task> {
 	private void configureTaskName() {
 		taskName.setStyle("-fx-font-weight:bold; -fx-padding:10px");
 	}
-
+	
+	/*private void configureTaskIndex() {
+	    taskIndex.setStyle("-fx-font-weight:bold; -fx-padding:10px");
+	}
+*/
 	private void configureDate() {
 		taskStartDate.setStyle("-fx-font-weightt:bold;-fx-padding:10px");
 		taskDeadLine.setStyle("-fx-font-weightt:bold;-fx-padding:10px");
