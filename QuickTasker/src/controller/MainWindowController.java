@@ -7,6 +7,9 @@ import java.util.PrimitiveIterator.OfDouble;
 
 import javax.xml.ws.handler.LogicalHandler;
 
+import org.omg.PortableServer.POA;
+
+import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.javafx.scene.paint.GradientUtils.Parser;
@@ -56,7 +59,7 @@ public class MainWindowController implements Initializable {
 
 
     @FXML
-    private void handleEnterKeyPressed(KeyEvent event) {
+    private void handleEnterKeyPressed(KeyEvent event) throws Exception {
         if (event.getCode().equals(KeyCode.ENTER)) {
             LocalDate startDate = LocalDate.now();
             LocalDate deadLine = LocalDate.now();
@@ -71,13 +74,18 @@ public class MainWindowController implements Initializable {
                 // todo: implement view by index
             } else if (command.equals("edit")){
                 
+            } else {
+               JFXDialog dialog = new JFXDialog();
+               dialog.show();
             }
+        
 
             taskListView.setItems(list);
             commandBox.clear();
             String commandStrin = commandBox.getText();
         }
-    }
+}
+    
 
     @FXML
     private void handleDeleteTask(KeyEvent event) {
