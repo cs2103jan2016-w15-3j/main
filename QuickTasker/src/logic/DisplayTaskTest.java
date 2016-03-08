@@ -17,22 +17,22 @@ import model.Task;
  */
 
 public class DisplayTaskTest {
-	private ArrayList<Task> test;
-	private ArrayList<Task> tasks;
+    private ArrayList<Task> test;
+    private ArrayList<Task> tasks;
 
-	@Before
-	public void setUp() throws Exception {
-		test = new ArrayList<Task>();
-		for (int i = 0; i < 10; i++) {
-			Task task = new Task();
-			test.add(task);
-		}
-	}
+    @Before
+    public void setUp() throws Exception {
+        test = new ArrayList<Task>();
+        for (int i = 0; i < 10; i++) {
+            Task task = new Task();
+            test.add(task);
+        }
+    }
 
-	@Test
-	public void test() {
-		DisplayTask<Task> dTask = new DisplayTask<Task>();
-		assertEquals(dTask.executeDisplay(test), test);
-	}
+    @Test
+    public void test() {
+        DisplayTask<Task> dTask = new DisplayTask<Task>();
+        assertEquals(dTask.executeDisplay(test), test);
+    }
 
 }

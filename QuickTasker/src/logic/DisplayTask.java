@@ -14,14 +14,14 @@ import model.Task;
 
 public class DisplayTask<E> implements Command<E> {
 
-	@Override
-	public void execute(List list, Object task) {
-		executeDisplay(list);
+    @Override
+    public void execute(List list, Object task) {
+        executeDisplay(list);
 
-	}
+    }
 
-	public ArrayList<Task> executeDisplay(List<Task> list) {
-		return (ArrayList<Task>) list;
-	}
+    public ArrayList<Task> executeDisplay(List<Task> list) {
+        return (ArrayList<Task>) list;
+    }
 
 }

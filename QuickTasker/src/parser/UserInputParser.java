@@ -3,16 +3,13 @@ package parser;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import com.sun.media.sound.SoftInstrument;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-
 /**
  * .
  * 
  * @author A0121558H
  *
  */
-public class UserInputParser {
+public class UserInputParser implements ParserInterface {
 
     private String taskName;
     private LocalDate startDate;
@@ -50,6 +47,20 @@ public class UserInputParser {
         System.out.println("parser enddate " + endDate);
     }
 
+    public void setAttributesForGetCommands(String userInput) throws setAttributeException {
+        removeWhiteSpaces(userInput);
+        determineLengthOfInput();
+        command = userCommand[0];
+    }
+
+    public static class setAttributeException extends RuntimeException {
+        // the purpose of setting cusom exception is such that you can tell exactly which class,
+        // and which method causes the exception, rather than seeing a bunch of red.
+        // The purpose of using RuntimeException is because it is the only 'unchcked' exception.
+        // A quick google will provide you some insights on how chcked expcetions are failed
+        // experiments in various programming languages including Java
+    }
+
     /**
      * Checks if it is a floating task. If yes, returns null.
      * 
@@ -57,10 +68,9 @@ public class UserInputParser {
      * @throws Exception
      */
     public LocalDate setEndDate() throws Exception {
-        /**
-         * if (!checkIfFloatingTask()) { return
-         * stringToLocalDate(userCommand[lengthOfInput - 1]); } else {
-         * System.out.println("sould return null"); return null; }
+        /*
+         * if (!checkIfFloatingTask()) { return stringToLocalDate(userCommand[lengthOfInput - 1]); }
+         * else { System.out.println("sould return null"); return null; }
          **/
         return stringToLocalDate(userCommand[lengthOfInput - 1]);
     }
@@ -73,7 +83,7 @@ public class UserInputParser {
         String output = "";
         int taskNameIndex = lengthOfInput - 2;
 
-        /**
+        /*
          * if (checkIfFloatingTask()) { taskNameIndex--; }
          **/
         System.out.println("index " + taskNameIndex);
@@ -101,10 +111,9 @@ public class UserInputParser {
     }
 
     /**
-     * public boolean checkIfFloatingTask() throws Exception { DateTimeFormatter
-     * formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); try {
-     * LocalDate.parse(userCommand[lengthOfInput - 1], formatter); } catch
-     * (Exception e) { return false; } return true; }
+     * Public boolean checkIfFloatingTask() throws Exception { DateTimeFormatter formatter =
+     * DateTimeFormatter.ofPattern("dd-MM-yyyy"); try { LocalDate.parse(userCommand[lengthOfInput -
+     * 1], formatter); } catch (Exception e) { return false; } return true; }
      **/
 
     /**
@@ -135,7 +144,7 @@ public class UserInputParser {
      * @see parser.ParserInterface#getCommand()
      */
     public Commands getCommand(String userInput) throws Exception {
-        setAttributes(userInput);
+        setAttributesForGetCommands(userInput);
         return DetermineCommandType.getCommand(command);
     }
 
@@ -148,15 +157,16 @@ public class UserInputParser {
         setAttributes(userInput);
         return taskName;
     }
-    
-    public int deleteIndexNumber(String input){
-        String[] splitted= input.split("\\s+");
-        return Integer.parseInt(splitted[1]);    
+
+    public int getTaskIndex(String input) {
+        String cleanInput = input.trim();
+        String[] splitted = input.split("\\s+");
+        return Integer.parseInt(splitted[1]) - 1;
     }
 
     /**
-     * 1)check if only one word in userCommand like add 2)check date format
-     * 3)check cannot empty taskname.
+     * 1)check if only one word in userCommand like add 2)check date format 3)check cannot empty
+     * taskname.
      */
 
 }
