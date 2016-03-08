@@ -37,7 +37,11 @@ public class MainWindowController implements Initializable {
     private Main main;
     private UserInputParser parser;
 
-
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setCellFactory();
+        setMain(main);
+    }
 
     /* Views */
     @FXML
@@ -46,12 +50,10 @@ public class MainWindowController implements Initializable {
     JFXTextField commandBox;
     @FXML
     JFXListView<Task> taskListView;
-    ObservableList<Task> list = FXCollections.observableArrayList();
 
     public void setMain(Main main) {
         this.main = main;
     }
-
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) throws Exception {

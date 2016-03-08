@@ -66,11 +66,6 @@ public class UserInputParser {
     }
 
     public LocalDate setStartDate() throws Exception {
-        /*
-         * if (checkIfFloatingTask()) { return
-         * stringToLocalDate(userCommand[lengthOfInput - 1]); } else { return
-         * stringToLocalDate(userCommand[lengthOfInput - 2]); }
-         */
         return stringToLocalDate(userCommand[lengthOfInput - 2]);
     }
 

@@ -1,4 +1,10 @@
 package view;
+/*
+ * 
+ * Author: Xin Kenan, Lee Jia Lin
+ * 
+ */
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.jfoenix.controls.JFXListCell;
@@ -7,18 +13,18 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import model.Task;
-import logic.Logic;
 
 public class TaskListCell extends JFXListCell<Task> {
-
 	private final Label taskStartDate = new Label();
 	private final Label taskDeadLine = new Label();
 	private final Label taskName = new Label();
+	private final Label taskIndex = new Label();
 	private final GridPane grid = new GridPane();
 
 	public TaskListCell() {
 		configureGrid();
 		configureTaskName();
+		//configureTaskIndex();
 		configureDate();
 		addControlsToGrid();
 	}
@@ -29,10 +35,8 @@ public class TaskListCell extends JFXListCell<Task> {
 		if (empty) {
 			clearContent();
 		} else {
-
 			addContent(task);
 			setGraphic(grid);
-
 		}
 	}
 
@@ -62,7 +66,6 @@ public class TaskListCell extends JFXListCell<Task> {
 		startDateColumn.setPercentWidth(20);
 		ColumnConstraints dueDateColumn = new ColumnConstraints();
 		startDateColumn.setPercentWidth(20);
-
 		grid.getColumnConstraints().addAll(taskDetailColumn, startDateColumn, dueDateColumn);
 
 		// todo set proper margin and padding
