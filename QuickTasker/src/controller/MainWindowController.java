@@ -34,14 +34,9 @@ import parser.Commands;
 
 public class MainWindowController implements Initializable {
 
-	private Main main;
-	private ParserInterface parser;
+    private Main main;
+    private UserInputParser parser;
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		setCellFactory();
-		setMain(main);
-	}
 
 
     /* Views */
@@ -53,9 +48,9 @@ public class MainWindowController implements Initializable {
     JFXListView<Task> taskListView;
     ObservableList<Task> list = FXCollections.observableArrayList();
 
-	public void setMain(Main main) {
-		this.main = main;
-	}
+    public void setMain(Main main) {
+        this.main = main;
+    }
 
 
     @FXML
@@ -86,23 +81,18 @@ public class MainWindowController implements Initializable {
             
         }
 }
-    
-
+  
     @FXML
     private void handleDeleteTask(KeyEvent event) {
         // if (event.get)
     }
 
     private boolean isEmptyInput(String input) {
-        if (input == null || input.isEmpty() || input.trim().equals("")) {
-            return true;
-        }
-        return false;
+        return input == null || input.isEmpty() || "".equals(input.trim());
     }
 
     private void setCellFactory() {
         taskListView.setCellFactory(param -> new TaskListCell());
     }
-
 
 }
