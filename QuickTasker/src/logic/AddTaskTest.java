@@ -25,9 +25,9 @@ public class AddTaskTest {
     @Test
     public void test() throws Exception {
         setUp();
-        logic.addTask(new Task(1));
+        logic.addTask(new Task());
         assertEquals(logic.getSize(), 1);
-        logic.addTask(new Task("name", LocalDate.now(), LocalDate.now(),2));
+        logic.addTask(new Task());
         assertEquals(logic.getSize(), 2);
         
     }

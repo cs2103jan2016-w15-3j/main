@@ -22,20 +22,15 @@ public class DisplayTaskTest {
     public void setUp() throws Exception {
         test = new ArrayList<Task>();
         for (int i = 0; i < 10; i++) {
-            Task task = new Task(i);
+            Task task = new Task();
             test.add(task);
         }
     }
 
     @Test
     public void test() {
-        tasks = new ArrayList<Task>();
-        for(int i = 0; i < 10; i++) {
-            Task task = new Task(i);
-            tasks.add(task);
-        }
         DisplayTask<Task> dTask = new DisplayTask<Task>();
-        assertEquals(dTask.executeDisplay(test), tasks);
+        assertEquals(dTask.executeDisplay(test), test);
     }
 
 }
