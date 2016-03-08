@@ -2,7 +2,7 @@ package parser;
 
 public class DetermineCommandType {
 
-    static Commands getCommand(String input) {
+    public static Commands getCommand(String input) {
 
         switch (input) {
             case "add":
