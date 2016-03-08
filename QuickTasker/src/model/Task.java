@@ -8,9 +8,9 @@ import java.time.LocalDate;
  *
  */
 public class Task {
-	private static String taskName;
-	private static LocalDate endDate;
-	private static LocalDate startDate;
+	private String taskName;
+	private LocalDate endDate;
+	private LocalDate startDate;
 
 	public void setStartDateAsNow() {
 		startDate = LocalDate.now();
@@ -25,23 +25,23 @@ public class Task {
 
 	/** Constructor for tasks with only task name *.*/
 	public Task(String taskName) {
-		Task.taskName = taskName;
+		this.taskName = taskName;
 		setStartDateAsNow();
-		Task.endDate = LocalDate.MAX;
+		this.endDate = LocalDate.MAX;
 	}
 
 	/** Constructor for floating tasks *.*/
 	public Task(String taskName, LocalDate startDate) {
-		Task.taskName = taskName;
-		Task.endDate = LocalDate.MAX;
-		Task.startDate = startDate;
+		this.taskName = taskName;
+		this.endDate = LocalDate.MAX;
+		this.startDate = startDate;
 	}
 
 	/** Constructor with all fields filled *.*/
 	public Task(String taskName, LocalDate startDate, LocalDate endDate) {
-		Task.taskName = taskName;
-		Task.endDate = endDate;
-		Task.startDate = startDate;
+		this.taskName = taskName;
+		this.endDate = endDate;
+		this.startDate = startDate;
 	}
 
 	public String getName() {
@@ -60,8 +60,5 @@ public class Task {
 		taskName = newName;
 	}
 
-	private static void setNewEndDate(int date, int month, int year) {
-		LocalDate newDate = LocalDate.of(date, month, year);
-		endDate = newDate;
-	}
+	
 }
