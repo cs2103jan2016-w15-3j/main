@@ -96,7 +96,7 @@ public class UserInputParser implements ParserInterface {
     }
 
     public String[] removeWhiteSpaces(String input) {
-        userCommand = input.split(" ");
+        userCommand = input.split("\\s+");
         return userCommand;
     }
 
