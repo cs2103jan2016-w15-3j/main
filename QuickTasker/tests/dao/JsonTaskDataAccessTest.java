@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageTypeSpecifier;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,6 +34,11 @@ public class JsonTaskDataAccessTest {
     @Test
     public void whenNewHandlerCreatedPathShouldNotBeNull() {
         assertNotNull(dataHandler.getFilePath());
+    }
+    
+    @Test
+    public void ifPathOfSaveFileIsNullThenUseDefaultPath(){
+    	
     }
 
     @Test

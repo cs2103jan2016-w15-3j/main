@@ -45,7 +45,11 @@ public class SettingManager {
     }
 
     public String getPathOfSaveFile() {
-        return settings.getString("saveFileLocation");
+        try{
+        	return settings.getString("saveFileLocation");
+        }catch (NullPointerException e){
+        	return null;
+        }
     }
 
     public void setPathOfSaveFile(String absolutePathOfSaveFile) {

@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -16,6 +15,7 @@ import model.Task;
 
 public class JsonTaskDataAccess implements TaskDataAccessObject {
     private Path pathOfSaveFile;
+    private final Path DEFAULT_PATH = Paths.get("tasks.json");
     private SettingManager settings = new SettingManager();
 
     public JsonTaskDataAccess() {
@@ -23,7 +23,9 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     }
 
     private void initialize() {
-        this.pathOfSaveFile = Paths.get(settings.getPathOfSaveFile());
+    	String p = settings.getPathOfSaveFile();
+        if (p == null ) pathOfSaveFile = DEFAULT_PATH;
+        else pathOfSaveFile = Paths.get(p);
         if (Files.notExists(pathOfSaveFile)) {
             createNewSaveFile();
         }
@@ -35,7 +37,6 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         } catch (IOException e) {
             throw new CreateSaveFileException();
         }
-
     }
 
     @Override
