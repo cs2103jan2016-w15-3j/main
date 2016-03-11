@@ -33,11 +33,13 @@ public class SettingManagerTest {
         assertFalse(settings.isEmpty());
     }
 
-    // if critical properties does not exist (accidentally removed) , should be set default
-    // eg.saveFilePath = save.json
-
-    // more thorough approach : look for customSettings.properties first, if critical ones does not
-    // exist, look for the default.properties
+    /**
+     * If critical properties does not exist (accidentally removed) , should be set default
+     * eg.saveFilePath = save.json
+     * 
+     * more thorough approach : look for customSettings.properties first, if critical ones does not
+     * exist, look for the default.properties
+     */
 
     private void removeEverythingFromSettingsFile(Configuration settings) {
         settings = settingManager.getConfigs();

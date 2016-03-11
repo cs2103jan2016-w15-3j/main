@@ -35,8 +35,8 @@ public class Logic {
         commandMap.put(Commands.DELETE_TASK, new DeleteTask());
         commandMap.put(Commands.DISPLAY_TASK, new DisplayTask());
     }
-    
-    public void exit(){
+
+    public void exit() {
         System.exit(0);
     }
 

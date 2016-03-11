@@ -14,7 +14,7 @@ public class Task {
     private LocalDate endDate;
     private LocalDate startDate;
     private int id;
-   
+
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
     }
@@ -74,9 +74,10 @@ public class Task {
     private void generateId() {
         this.id = ++IdGenerator;
     }
- /*   public static void decrementId(Task task) {
-        task.id--;
-    }*/
+
+    /**
+     * Public static void decrementId(Task task) { task.id--; }
+     */
 
     @Override
     public int hashCode() {
@@ -85,26 +86,25 @@ public class Task {
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
         result = prime * result + id;
         result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
-        result = prime * result + ((taskName == null) ? 0 : taskName.hashCode());
-        return result;
+        return prime * result + ((taskName == null) ? 0 : taskName.hashCode());
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
         Task other = (Task) obj;
         if (endDate == null) {
-            if (other.endDate != null) return false;
-        } else if (!endDate.equals(other.endDate)) return false;
-        if (id != other.id) return false;
+            if (other.endDate != null) { return false; }
+        } else if (!endDate.equals(other.endDate)) { return false; }
+        if (id != other.id) { return false; }
         if (startDate == null) {
-            if (other.startDate != null) return false;
-        } else if (!startDate.equals(other.startDate)) return false;
+            if (other.startDate != null) { return false; }
+        } else if (!startDate.equals(other.startDate)) { return false; }
         if (taskName == null) {
-            if (other.taskName != null) return false;
-        } else if (!taskName.equals(other.taskName)) return false;
+            if (other.taskName != null) { return false; }
+        } else if (!taskName.equals(other.taskName)) { return false; }
         return true;
     }
 

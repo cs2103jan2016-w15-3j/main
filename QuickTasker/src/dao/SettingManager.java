@@ -31,7 +31,9 @@ public class SettingManager {
             createDefaultSettings();
         } else if (settingFileIsEmpty()) {
             resetDefaultSettings();
-        } else loadSettings();
+        } else {
+            loadSettings();
+        }
     }
 
     public void resetDefaultSettings() throws ResetSettingsException {
@@ -45,10 +47,10 @@ public class SettingManager {
     }
 
     public String getPathOfSaveFile() {
-        try{
-        	return settings.getString("saveFileLocation");
-        }catch (NullPointerException e){
-        	return null;
+        try {
+            return settings.getString("saveFileLocation");
+        } catch (NullPointerException e) {
+            return null;
         }
     }
 

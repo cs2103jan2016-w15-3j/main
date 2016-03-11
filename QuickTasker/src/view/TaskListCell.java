@@ -8,14 +8,12 @@ package view;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.jfoenix.controls.JFXListCell;
-import com.sun.javafx.collections.ObservableSequentialListWrapper;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import jdk.nashorn.internal.runtime.linker.LinkerCallSite;
 import model.Task;
 
 public class TaskListCell extends JFXListCell<Task> {
@@ -27,12 +25,12 @@ public class TaskListCell extends JFXListCell<Task> {
     private final GridPane grid = new GridPane();
     private ObservableList<Task> tasks;
 
-    public TaskListCell(ObservableList<Task> list)  {
+    public TaskListCell(ObservableList<Task> list) {
         configureGrid();
         configureTaskName();
         configureDate();
         addControlsToGrid();
-        tasks=list;
+        tasks = list;
     }
 
     @Override
@@ -54,8 +52,8 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void setTaskId(Task task) {
-        
-      //  taskId.setText(String.valueOf(task.getId()));
+
+        // taskId.setText(String.valueOf(task.getId()));
         final int offset = 1;
         taskId.setText(String.valueOf(tasks.indexOf(task) + offset));
     }

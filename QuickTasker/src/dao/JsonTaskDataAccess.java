@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -23,9 +24,12 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     }
 
     private void initialize() {
-    	String p = settings.getPathOfSaveFile();
-        if (p == null ) pathOfSaveFile = DEFAULT_PATH;
-        else pathOfSaveFile = Paths.get(p);
+        String p = settings.getPathOfSaveFile();
+        if (p != null) {
+            pathOfSaveFile = Paths.get(p);
+        } else {
+            pathOfSaveFile = DEFAULT_PATH;
+        }
         if (Files.notExists(pathOfSaveFile)) {
             createNewSaveFile();
         }
@@ -82,12 +86,10 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     @Override
     public void reset() {
-        // TODO Auto-generated method stub
 
     }
 
     public Path getFilePath() {
-        // TODO Auto-generated method stub
         return this.pathOfSaveFile;
     }
 
