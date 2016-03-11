@@ -8,6 +8,6 @@ package parser;
  */
 public enum Commands {
 
-    CREATE_TASK, UPDATE_TASK, DISPLAY_TASK, DELETE_TASK, ERROR;
+    CREATE_TASK, UPDATE_TASK, DISPLAY_TASK, DELETE_TASK, EXIT, ERROR;
 
 }
