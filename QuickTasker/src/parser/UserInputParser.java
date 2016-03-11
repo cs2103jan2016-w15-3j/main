@@ -2,7 +2,7 @@ package parser;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
+//import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
 import java.util.Date;
 import java.util.List;
 
@@ -87,10 +87,8 @@ public class UserInputParser implements ParserInterface {
         /*
          * if (checkIfFloatingTask()) { taskNameIndex--; }
          **/
-        System.out.println("index " + taskNameIndex);
         for (int i = 1; i < taskNameIndex; i++) {
             output += userCommand[i] + " ";
-            System.out.println("output " + output);
         }
         // output += userCommand[taskNameIndex];
         return output;
@@ -102,10 +100,9 @@ public class UserInputParser implements ParserInterface {
         /*
          * if (checkIfFloatingTask()) { taskNameIndex--; }
          **/
-        System.out.println("index " + taskNameIndex);
         for (int i = 2; i < taskNameIndex; i++) {
             output += userCommand[i] + " ";
-            System.out.println("output " + output);
+            System.out.println("asad" + output);
         }
         // output += userCommand[taskNameIndex];
         return output;
@@ -165,10 +162,11 @@ public class UserInputParser implements ParserInterface {
     }
     public int getIndexForUpdate(String userInput) {
         removeWhiteSpaces(userInput);
-        return Integer.parseInt(userCommand[1]);
+        return Integer.parseInt(userCommand[1]) - 1;
     }
     public String getTaskNameForUpdate(String userInput) throws Exception {
         setAttributesForUpdates(userInput);
+        System.out.println("anana" + taskName);
         return taskName;
     }
     public LocalDate getStartDateForUpdate(String userInput) throws Exception {
@@ -183,7 +181,7 @@ public class UserInputParser implements ParserInterface {
         removeWhiteSpaces(input);
         command=userCommand[0];
         determineLengthOfInput();
-        setTaskNameForUpdates();
+        taskName = setTaskNameForUpdates();
         startDate=stringToLocalDate(userCommand[lengthOfInput-2]);
         endDate = stringToLocalDate(userCommand[lengthOfInput-1]);
     }
