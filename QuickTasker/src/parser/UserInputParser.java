@@ -40,11 +40,8 @@ public class UserInputParser implements ParserInterface {
         determineLengthOfInput();
         command = userCommand[0];
         taskName = setTaskName();
-        System.out.println("parser" + taskName);
         startDate = setStartDate();
-        System.out.println("parser startdate " + startDate);
         endDate = setEndDate();
-        System.out.println("parser enddate " + endDate);
     }
 
     public void setAttributesForGetCommands(String userInput) throws setAttributeException {
