@@ -17,8 +17,12 @@ public class DetermineCommandType {
                 return Commands.DELETE_TASK;
             case "update":
                 return Commands.UPDATE_TASK;
+            case "change":
+                return Commands.UPDATE_TASK;
             case "read":
                 return Commands.DISPLAY_TASK;
+            case "exit":
+                return Commands.EXIT;
             default:
                 return Commands.ERROR;
         }
