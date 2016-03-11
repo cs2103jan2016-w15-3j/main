@@ -2,9 +2,13 @@ package parser;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
+import java.util.Date;
+import java.util.List;
+
+//import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 /**
- * .
  * 
  * @author A0121558H
  *
@@ -94,6 +98,21 @@ public class UserInputParser implements ParserInterface {
         // output += userCommand[taskNameIndex];
         return output;
     }
+    public String setTaskNameForUpdates() throws Exception {
+        String output = "";
+        int taskNameIndex = lengthOfInput - 2;
+
+        /*
+         * if (checkIfFloatingTask()) { taskNameIndex--; }
+         **/
+        System.out.println("index " + taskNameIndex);
+        for (int i = 2; i < taskNameIndex; i++) {
+            output += userCommand[i] + " ";
+            System.out.println("output " + output);
+        }
+        // output += userCommand[taskNameIndex];
+        return output;
+    }
 
     public String[] removeWhiteSpaces(String input) {
         userCommand = input.split("\\s+");
@@ -147,7 +166,30 @@ public class UserInputParser implements ParserInterface {
         setAttributesForGetCommands(userInput);
         return DetermineCommandType.getCommand(command);
     }
-
+    public int getIndexForUpdate(String userInput) {
+        removeWhiteSpaces(userInput);
+        return Integer.parseInt(userCommand[1]);
+    }
+    public String getTaskNameForUpdate(String userInput) throws Exception {
+        setAttributesForUpdates(userInput);
+        return taskName;
+    }
+    public LocalDate getStartDateForUpdate(String userInput) throws Exception {
+       setAttributesForUpdates(userInput);
+       return startDate;
+    }
+    public LocalDate getEndDateForUpdate(String userInput) throws Exception {
+        setAttributesForUpdates(userInput);
+        return endDate;
+    }
+    private void setAttributesForUpdates(String input) throws Exception {
+        removeWhiteSpaces(input);
+        command=userCommand[0];
+        determineLengthOfInput();
+        setTaskNameForUpdates();
+        startDate=stringToLocalDate(userCommand[lengthOfInput-2]);
+        endDate = stringToLocalDate(userCommand[lengthOfInput-1]);
+    }
     /**
      * (non-Javadoc)
      * 
