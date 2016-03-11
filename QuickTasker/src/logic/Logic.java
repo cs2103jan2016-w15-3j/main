@@ -35,6 +35,10 @@ public class Logic {
         commandMap.put(Commands.DELETE_TASK, new DeleteTask());
         commandMap.put(Commands.DISPLAY_TASK, new DisplayTask());
     }
+    
+    public void exit(){
+        System.exit(0);
+    }
 
     public void addTask(Task task) {
         commandMap.get(Commands.CREATE_TASK).execute(list, task);

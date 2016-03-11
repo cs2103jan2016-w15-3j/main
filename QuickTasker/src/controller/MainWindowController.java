@@ -66,6 +66,8 @@ public class MainWindowController implements Initializable {
             createTask(userInput);
         } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
             deleteTask(userInput);
+        } else if (parser.getCommand(userInput) == Commands.EXIT){
+            operations.exit();
         }
     }
 
