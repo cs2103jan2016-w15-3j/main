@@ -28,6 +28,7 @@ public class MainWindowController implements Initializable {
     private Main main;
     private ParserInterface parser = new UserInputParser();
     private Logic operations = new Logic();
+   
 
     @FXML Label label;
     @FXML JFXTextField commandBox;
@@ -75,9 +76,15 @@ public class MainWindowController implements Initializable {
         int taskIndex;
         taskIndex = parser.getTaskIndex(userInput);
         guiList.remove(taskIndex);
+    //    updateList(guiList, taskIndex);
         refresh();
     }
-
+ /**   private void updateList(ObservableList<Task> list, int index) {
+        for (int i=index;i< list.size(); i++) {
+            Task.decrementId(list.get(i));
+        }
+    }
+**/
     private void refresh() {
         taskListView.setItems(guiList);
     }
@@ -101,7 +108,7 @@ public class MainWindowController implements Initializable {
     }
 
     private void setCellFactory() {
-        taskListView.setCellFactory(param -> new TaskListCell());
+        taskListView.setCellFactory(param -> new TaskListCell(guiList));
     }
 
 }

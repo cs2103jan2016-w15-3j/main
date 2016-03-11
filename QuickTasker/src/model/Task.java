@@ -14,7 +14,7 @@ public class Task {
     private LocalDate endDate;
     private LocalDate startDate;
     private int id;
-
+   
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
     }
@@ -72,8 +72,11 @@ public class Task {
     }
 
     private void generateId() {
-        this.id = IdGenerator++;
+        this.id = ++IdGenerator;
     }
+ /*   public static void decrementId(Task task) {
+        task.id--;
+    }*/
 
     @Override
     public int hashCode() {
