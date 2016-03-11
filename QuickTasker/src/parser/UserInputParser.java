@@ -134,7 +134,7 @@ public class UserInputParser implements ParserInterface {
      */
     public LocalDate getEndDate(String userInput) throws Exception {
         setAttributes(userInput);
-        System.out.println(endDate);
+       // System.out.println(endDate);
         return endDate;
     }
 
