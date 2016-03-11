@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * .
  * 
  * @author A0121558H
  *
@@ -31,7 +30,7 @@ public class UserInputParser implements ParserInterface {
      * @throws Exception
      **/
     /**
-     * Public UserInputParser(String userInput) throws Exception {
+     * Public (String userInput) throws Exception {
      * 
      * } .
      */
@@ -91,7 +90,6 @@ public class UserInputParser implements ParserInterface {
             output += userCommand[i] + " ";
             System.out.println("output " + output);
         }
-        // output += userCommand[taskNameIndex];
         return output;
     }
 
@@ -158,7 +156,7 @@ public class UserInputParser implements ParserInterface {
         return taskName;
     }
 
-    public int getTaskIndex(String input) {
+    public int getTaskIndex(String input) { 
         String cleanInput = input.trim();
         String[] splitted = input.split("\\s+");
         return Integer.parseInt(splitted[1]) - 1;

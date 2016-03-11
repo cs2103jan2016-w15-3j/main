@@ -7,11 +7,16 @@ import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import logic.Logic;
@@ -33,11 +38,15 @@ public class MainWindowController implements Initializable {
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
     ObservableList<Task> guiList = FXCollections.observableArrayList();
+    ListChangeListener<? super Task> listener;
+
     
     
     // Display messages as visual feedback for users
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
-    private static final String MESSAGE_ADD_CONFIRMED = "";
+    private static final String MESSAGE_ADD_CONFIRMED = "This is added to the ";
+    private static final String MESSAGE_DELETE_CONFIRMED = "";
+    private static final String MESSAGE_COMPLETED_CONFIRMED = "";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -72,7 +81,25 @@ public class MainWindowController implements Initializable {
             createTask(userInput);
         } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
             deleteTask(userInput);
+       // } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
+        } else if (userInput.contains("edit")) {
+            editTask(userInput);
         }
+    }
+    
+    private void editTask(String userInput) throws Exception {
+        int taskIndex = parser.getTaskIndex(userInput);
+        guiList.get(taskIndex);
+        System.out.println(taskIndex);
+        
+        /*taskListView.getSelectionModel().getSelectedIndex();
+        taskListView.getFocusModel().focus(taskIndex);*/
+        guiList.addListener(listener);
+        taskListView.getSelectionModel();
+        taskListView.getFocusModel().focus(taskIndex);
+        taskListView.scrollTo(taskIndex);
+        // pass to parser --> logic --> 
+        refresh();
     }
 
     private void deleteTask(String userInput) throws Exception {
@@ -107,5 +134,14 @@ public class MainWindowController implements Initializable {
     private void setCellFactory() {
         taskListView.setCellFactory(param -> new TaskListCell());
     }
-
+    
+  class SearchHighlightedTextCell extends ListCell<String> {
+      private static final String HIGHLIGHT_CLASS = "search-highlight";
+      private final StringProperty searchText;
+      SearchHighlightedTextCell(StringProperty searchText) {
+          this.searchText = searchText;
+  }
+  }
 }
+
+
