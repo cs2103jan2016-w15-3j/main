@@ -19,6 +19,12 @@ public class DetermineCommandType {
                 return Commands.UPDATE_TASK;
             case "change":
                 return Commands.UPDATE_TASK;
+            case "sort":
+                return Commands.SORT_TASK;
+            case "search":
+                return Commands.SEARCH_TASK;
+            case "find":
+                return Commands.SEARCH_TASK;
             case "read":
                 return Commands.DISPLAY_TASK;
             case "exit":
