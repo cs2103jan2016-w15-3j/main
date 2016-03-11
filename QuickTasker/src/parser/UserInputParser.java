@@ -157,16 +157,8 @@ public class UserInputParser implements ParserInterface {
         setAttributes(userInput);
         return taskName;
     }
-
     public int getTaskIndex(String input) {
-        String cleanInput = input.trim();
         String[] splitted = input.split("\\s+");
         return Integer.parseInt(splitted[1]) - 1;
     }
-
-    /**
-     * 1)check if only one word in userCommand like add 2)check date format 3)check cannot empty
-     * taskname.
-     */
-
 }
