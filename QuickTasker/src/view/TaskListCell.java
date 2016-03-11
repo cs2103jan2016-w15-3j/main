@@ -52,6 +52,7 @@ public class TaskListCell extends JFXListCell<Task> {
         setTaskName(task);
         setTaskId(task);
         setTaskStartDate(task);
+        setTaskDueDate(task);
         setGraphic(grid);
     }
 
