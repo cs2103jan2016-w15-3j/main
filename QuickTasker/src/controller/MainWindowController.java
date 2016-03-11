@@ -33,11 +33,17 @@ public class MainWindowController implements Initializable {
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
     ObservableList<Task> guiList = FXCollections.observableArrayList();
+    
+    
+    // Display messages as visual feedback for users
+    private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
+    private static final String MESSAGE_ADD_CONFIRMED = "";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setCellFactory();
         setMain(main);
+        
     }
 
     public void setMain(Main main) {
