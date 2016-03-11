@@ -19,6 +19,10 @@ public class DeleteTaskTest {
 
     @Before
     public void setUp() throws Exception {
+        init();
+    }
+
+    private void init() {
         logic = new Logic();
         for (int i = 0; i < 10; i++) {
             Task task = new Task();
@@ -28,7 +32,6 @@ public class DeleteTaskTest {
 
     @Test
     public void test() throws Exception {
-        setUp();
         assertEquals(logic.getSize(), 10);
         logic.deleteTask(0);
         assertEquals(logic.getSize(), 9);
