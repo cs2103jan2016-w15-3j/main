@@ -31,13 +31,17 @@ public class Logic {
     public int getSize() {
         return list.size();
     }
+    
+    public ArrayList<Task> getList() {
+        return (ArrayList<Task>) list;
+    }
 
     public void populateCommandMap() {
         commandMap = new TreeMap<Commands, Command>();
         commandMap.put(Commands.CREATE_TASK, new AddTask());
         commandMap.put(Commands.DELETE_TASK, new DeleteTask());
         commandMap.put(Commands.DISPLAY_TASK, new DisplayTask());
-        //commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
+        commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
     }
     
     public void exit(){
