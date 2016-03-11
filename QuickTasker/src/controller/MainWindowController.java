@@ -13,6 +13,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -44,9 +45,9 @@ public class MainWindowController implements Initializable {
     
     // Display messages as visual feedback for users
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
-    private static final String MESSAGE_ADD_CONFIRMED = "This is added to the ";
-    private static final String MESSAGE_DELETE_CONFIRMED = "";
-    private static final String MESSAGE_COMPLETED_CONFIRMED = "";
+    private static final String MESSAGE_ADD_CONFIRMED = "Task added to list.";
+    private static final String MESSAGE_DELETE_CONFIRMED = "Task deleted from list.";
+    private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -89,12 +90,12 @@ public class MainWindowController implements Initializable {
     
     private void editTask(String userInput) throws Exception {
         int taskIndex = parser.getTaskIndex(userInput);
-        guiList.get(taskIndex);
-        System.out.println(taskIndex);
+        ListCell<Task> listCell;
         
-        /*taskListView.getSelectionModel().getSelectedIndex();
-        taskListView.getFocusModel().focus(taskIndex);*/
-        guiList.addListener(listener);
+        System.out.println(taskIndex);
+        taskListView.setStyle("-fx-background-color: yellow");
+
+        //guiList.addListener(listener);
         taskListView.getSelectionModel();
         taskListView.getFocusModel().focus(taskIndex);
         taskListView.scrollTo(taskIndex);

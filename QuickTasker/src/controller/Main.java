@@ -12,10 +12,6 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private Stage primaryStage;
     
-    // placeholder icon for quickTasker
-    private static final String IMAGE_ICON = "/images/icon.png";
-
-
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -36,7 +32,7 @@ public class Main extends Application {
 
             primaryStage.setScene(scene);
             primaryStage.setTitle("Welcome to QuickTasker");
-            this.primaryStage.getIcons().add(new Image("file:resources/images/home.png"));
+            primaryStage.getIcons().add(new Image("file:resources/images/home.png"));
             primaryStage.setMinWidth(500);
             primaryStage.setMinHeight(200);
             primaryStage.show();
