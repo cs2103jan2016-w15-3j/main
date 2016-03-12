@@ -14,38 +14,35 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import logic.Logic;
 import model.Task;
-import parser.Commands;
 import parser.ParserInterface;
 import parser.UserInputParser;
 import view.TaskListCell;
 
-/**
- * Author: A0133333U
- */
 public class MainWindowController implements Initializable {
     private Main main;
     private ParserInterface parser = new UserInputParser();
     private Logic operations = new Logic();
+   
 
     @FXML Label label;
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
     ObservableList<Task> guiList = FXCollections.observableArrayList();
 
-    /** Display messages as visual feedback for users. */
-    private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
-    private static final String MESSAGE_ADD_CONFIRMED = "";
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setCellFactory();
         setMain(main);
-
     }
 
     public void setMain(Main main) {
         this.main = main;
+    }
+
+    private boolean isEmptyInput(String input) {
+        return input == null || input.isEmpty() || "".equals(input.trim());
     }
 
     @FXML
@@ -66,7 +63,7 @@ public class MainWindowController implements Initializable {
             createTask(userInput);
         } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
             deleteTask(userInput);
-        } else if (parser.getCommand(userInput) == Commands.EXIT) {
+        } else if (parser.getCommand(userInput) == Commands.EXIT){
             operations.exit();
         }
     }
@@ -75,14 +72,15 @@ public class MainWindowController implements Initializable {
         int taskIndex;
         taskIndex = parser.getTaskIndex(userInput);
         guiList.remove(taskIndex);
-        // updateList(guiList, taskIndex);
+    //    updateList(guiList, taskIndex);
         refresh();
     }
-
-    /**
-     * Private void updateList(ObservableList<Task> list, int index) { for (int i=index;i<
-     * list.size(); i++) { Task.decrementId(list.get(i)); } }
-     **/
+ /**   private void updateList(ObservableList<Task> list, int index) {
+        for (int i=index;i< list.size(); i++) {
+            Task.decrementId(list.get(i));
+        }
+    }
+**/
     private void refresh() {
         taskListView.setItems(guiList);
     }

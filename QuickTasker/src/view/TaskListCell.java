@@ -1,4 +1,5 @@
 package view;
+
 /*
  * 
  * Author: Xin Kenan, Lee Jia Lin
@@ -25,12 +26,12 @@ public class TaskListCell extends JFXListCell<Task> {
     private final GridPane grid = new GridPane();
     private ObservableList<Task> tasks;
 
-    public TaskListCell(ObservableList<Task> list) {
+    public TaskListCell(ObservableList<Task> list)  {
         configureGrid();
         configureTaskName();
         configureDate();
         addControlsToGrid();
-        tasks = list;
+        tasks=list;
     }
 
     @Override
@@ -48,6 +49,7 @@ public class TaskListCell extends JFXListCell<Task> {
         setTaskName(task);
         setTaskId(task);
         setTaskStartDate(task);
+        setTaskDueDate(task);
         setGraphic(grid);
     }
 

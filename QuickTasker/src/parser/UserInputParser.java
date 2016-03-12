@@ -2,11 +2,13 @@ package parser;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+//import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
+import java.util.Date;
+import java.util.List;
 
-// import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+//import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 /**
- * .
  * 
  * @author A0121558H
  *
@@ -42,11 +44,8 @@ public class UserInputParser implements ParserInterface {
         determineLengthOfInput();
         command = userCommand[0];
         taskName = setTaskName();
-        System.out.println("parser" + taskName);
         startDate = setStartDate();
-        System.out.println("parser startdate " + startDate);
         endDate = setEndDate();
-        System.out.println("parser enddate " + endDate);
     }
 
     public void setAttributesForGetCommands(String userInput) throws setAttributeException {
@@ -88,15 +87,12 @@ public class UserInputParser implements ParserInterface {
         /*
          * if (checkIfFloatingTask()) { taskNameIndex--; }
          **/
-        System.out.println("index " + taskNameIndex);
         for (int i = 1; i < taskNameIndex; i++) {
             output += userCommand[i] + " ";
-            System.out.println("output " + output);
         }
         // output += userCommand[taskNameIndex];
         return output;
     }
-
     public String setTaskNameForUpdates() throws Exception {
         String output = "";
         int taskNameIndex = lengthOfInput - 2;
@@ -104,10 +100,9 @@ public class UserInputParser implements ParserInterface {
         /*
          * if (checkIfFloatingTask()) { taskNameIndex--; }
          **/
-        System.out.println("index " + taskNameIndex);
         for (int i = 2; i < taskNameIndex; i++) {
             output += userCommand[i] + " ";
-            System.out.println("output " + output);
+            System.out.println("asad" + output);
         }
         // output += userCommand[taskNameIndex];
         return output;
@@ -152,7 +147,7 @@ public class UserInputParser implements ParserInterface {
      */
     public LocalDate getEndDate(String userInput) throws Exception {
         setAttributes(userInput);
-        // System.out.println(endDate);
+       // System.out.println(endDate);
         return endDate;
     }
 
@@ -165,36 +160,30 @@ public class UserInputParser implements ParserInterface {
         setAttributesForGetCommands(userInput);
         return DetermineCommandType.getCommand(command);
     }
-
     public int getIndexForUpdate(String userInput) {
         removeWhiteSpaces(userInput);
         return Integer.parseInt(userCommand[1]) - 1;
     }
-
     public String getTaskNameForUpdate(String userInput) throws Exception {
         setAttributesForUpdates(userInput);
         return taskName;
     }
-
     public LocalDate getStartDateForUpdate(String userInput) throws Exception {
-        setAttributesForUpdates(userInput);
-        return startDate;
+       setAttributesForUpdates(userInput);
+       return startDate;
     }
-
     public LocalDate getEndDateForUpdate(String userInput) throws Exception {
         setAttributesForUpdates(userInput);
         return endDate;
     }
-
     private void setAttributesForUpdates(String input) throws Exception {
         removeWhiteSpaces(input);
-        command = userCommand[0];
+        command=userCommand[0];
         determineLengthOfInput();
-        setTaskNameForUpdates();
-        startDate = stringToLocalDate(userCommand[lengthOfInput - 2]);
-        endDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
+        taskName = setTaskNameForUpdates();
+        startDate=stringToLocalDate(userCommand[lengthOfInput-2]);
+        endDate = stringToLocalDate(userCommand[lengthOfInput-1]);
     }
-
     /**
      * (non-Javadoc)
      * 
@@ -204,7 +193,6 @@ public class UserInputParser implements ParserInterface {
         setAttributes(userInput);
         return taskName;
     }
-
     public int getTaskIndex(String input) {
         String[] splitted = input.split("\\s+");
         return Integer.parseInt(splitted[1]) - 1;
