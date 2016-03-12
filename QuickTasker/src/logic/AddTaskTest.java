@@ -15,21 +15,21 @@ import model.Task;
  */
 
 public class AddTaskTest {
-	Logic logic;
+    Logic logic;
 
-	@Before
-	public void setUp() throws Exception {
-		logic = new Logic();
-	}
+    @Before
+    public void setUp() throws Exception {
+        logic = new Logic();
+    }
 
-	@Test
-	public void test() throws Exception {
-		setUp();
-		logic.addTask(new Task());
-		assertEquals(logic.getSize(), 1);
-		logic.addTask(new Task());
-		assertEquals(logic.getSize(), 2);
+    @Test
+    public void test() throws Exception {
+        setUp();
+        logic.addTask(new Task());
+        assertEquals(logic.getSize(), 1);
+        logic.addTask(new Task());
+        assertEquals(logic.getSize(), 2);
 
-	}
+    }
 
 }

@@ -3,16 +3,9 @@ package controller;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import java.util.PrimitiveIterator.OfDouble;
 
-import javax.xml.ws.handler.LogicalHandler;
-
-import org.omg.PortableServer.POA;
-
-import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-import com.sun.javafx.scene.paint.GradientUtils.Parser;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,87 +15,98 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import model.Task;
-import parser.ParserInterface;
-import view.TaskListCell;
-import logic.*;
-import parser.UserInputParser;
 import parser.Commands;
+import parser.ParserInterface;
+import parser.UserInputParser;
+import view.TaskListCell;
 
-/*
+/**
  * Author: A0133333U
  */
-
 public class MainWindowController implements Initializable {
+    private Main main;
+    private ParserInterface parser = new UserInputParser();
+    private Logic operations = new Logic();
 
-	private Main main;
-	private ParserInterface parser;
+    @FXML Label label;
+    @FXML JFXTextField commandBox;
+    @FXML JFXListView<Task> taskListView;
+    ObservableList<Task> guiList = FXCollections.observableArrayList();
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		setCellFactory();
-		setMain(main);
-	}
+    /** Display messages as visual feedback for users. */
+    private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
+    private static final String MESSAGE_ADD_CONFIRMED = "";
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setCellFactory();
+        setMain(main);
 
-    /* Views */
-    @FXML
-    Label label;
-    @FXML
-    JFXTextField commandBox;
-    @FXML
-    JFXListView<Task> taskListView;
-    ObservableList<Task> list = FXCollections.observableArrayList();
+    }
 
-	public void setMain(Main main) {
-		this.main = main;
-	}
-
+    public void setMain(Main main) {
+        this.main = main;
+    }
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) throws Exception {
-        if (event.getCode().equals(KeyCode.ENTER)) {
-            LocalDate startDate = LocalDate.now();
-            LocalDate deadLine = LocalDate.now();
-            String userInput = commandBox.getText();
-           /* UserInputParser parser = new UserInputParser();
-            Commands command = parser.getCommand(userInput);
-            if (command.equals("add")) {
-                list.add(new Task(parser.getTaskName(userInput), startDate, deadLine));
-            } else if (command.equals("delete")) {
-                // list remove
-            } else if (command.equals("view")) {
-                // todo: implement view by index
-            } else if (command.equals("edit")){
-                
-            } else {
-               JFXDialog dialog = new JFXDialog();
-               dialog.show();
-            }
-        */
-            String commandString = commandBox.getText();
-            list.add(new Task(commandString, startDate, deadLine));
-            taskListView.setItems(list);
-            commandBox.clear();
-            
-        }
-}
-    
 
-    @FXML
-    private void handleDeleteTask(KeyEvent event) {
-        // if (event.get)
+        String userInput = commandBox.getText();
+        if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
+            performOperations(userInput);
+        }
     }
 
-    private boolean isEmptyInput(String input) {
-        if (input == null || input.isEmpty() || input.trim().equals("")) {
-            return true;
+    private void performOperations(String userInput) throws Exception {
+        String taskName;
+        LocalDate startDate;
+        LocalDate dueDate;
+        int taskIndex;
+        if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
+            createTask(userInput);
+        } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
+            deleteTask(userInput);
+        } else if (parser.getCommand(userInput) == Commands.EXIT) {
+            operations.exit();
         }
-        return false;
+    }
+
+    private void deleteTask(String userInput) throws Exception {
+        int taskIndex;
+        taskIndex = parser.getTaskIndex(userInput);
+        guiList.remove(taskIndex);
+        // updateList(guiList, taskIndex);
+        refresh();
+    }
+
+    /**
+     * Private void updateList(ObservableList<Task> list, int index) { for (int i=index;i<
+     * list.size(); i++) { Task.decrementId(list.get(i)); } }
+     **/
+    private void refresh() {
+        taskListView.setItems(guiList);
+    }
+
+    private void createTask(String userInput) throws Exception {
+        String taskName;
+        LocalDate startDate;
+        LocalDate dueDate;
+        taskName = parser.getTaskName(userInput);
+        startDate = parser.getStartDate(userInput);
+        dueDate = parser.getEndDate(userInput);
+        Task newTask = new Task(taskName, startDate, dueDate);
+        operations.addTask(newTask);
+        guiList.add(newTask);
+        refresh();
+        commandBox.clear();
+    }
+
+    private boolean enterKeyIsPressed(KeyEvent event) {
+        return KeyCode.ENTER.equals(event.getCode());
     }
 
     private void setCellFactory() {
-        taskListView.setCellFactory(param -> new TaskListCell());
+        taskListView.setCellFactory(param -> new TaskListCell(guiList));
     }
-
 
 }

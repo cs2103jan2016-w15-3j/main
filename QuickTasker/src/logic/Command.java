@@ -12,5 +12,5 @@ import model.Task;
  */
 
 public interface Command<E> {
-	void execute(List<Task> list, E task);
+    void execute(List<Task> list, E task);
 }
