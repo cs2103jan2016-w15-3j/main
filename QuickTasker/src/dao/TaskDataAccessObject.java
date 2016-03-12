@@ -7,7 +7,8 @@ import model.Task;
 public interface TaskDataAccessObject {
     /**
      * Implements the DAO Design Pattern for the Task objects.
-     * http://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
+     * http://www.tutorialspoint.com/design_pattern/data_access_object_pattern.
+     * htm
      */
     List<Task> getTasks();
 

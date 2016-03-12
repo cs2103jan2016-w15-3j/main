@@ -15,6 +15,7 @@ import model.Task;
  */
 
 public class DeleteTaskTest {
+    private Logic logic;
 
     @Before
     public void setUp() throws Exception {

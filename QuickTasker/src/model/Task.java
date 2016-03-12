@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDate;
 
 /**
+ * .
  * 
  * @author A0121558H/A0130949
  *
@@ -14,7 +15,6 @@ public class Task {
     private LocalDate startDate;
     private int id;
 
-   
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
     }
@@ -101,17 +101,6 @@ public class Task {
         if (taskName == null) {
             if (other.taskName != null) { return false; }
         } else if (!taskName.equals(other.taskName)) { return false; }
-        return true;
-    }
-            if (other.endDate != null) return false;
-        } else if (!endDate.equals(other.endDate)) return false;
-        if (id != other.id) return false;
-        if (startDate == null) {
-            if (other.startDate != null) return false;
-        } else if (!startDate.equals(other.startDate)) return false;
-        if (taskName == null) {
-            if (other.taskName != null) return false;
-        } else if (!taskName.equals(other.taskName)) return false;
         return true;
     }
 

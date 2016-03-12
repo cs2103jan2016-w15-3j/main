@@ -31,7 +31,7 @@ public class Logic {
     public int getSize() {
         return list.size();
     }
-    
+
     public ArrayList<Task> getList() {
         return (ArrayList<Task>) list;
     }
@@ -43,8 +43,8 @@ public class Logic {
         commandMap.put(Commands.DISPLAY_TASK, new DisplayTask());
         commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
     }
-    
-    public void exit(){
+
+    public void exit() {
         System.exit(0);
     }
 
@@ -61,7 +61,7 @@ public class Logic {
     public void displayTask() {
         commandMap.get(Commands.DISPLAY_TASK).execute(list, null);
     }
-    
+
     public void updateTask(String input) {
         commandMap.get(Commands.UPDATE_TASK).execute(list, input);
         storage.save(list);

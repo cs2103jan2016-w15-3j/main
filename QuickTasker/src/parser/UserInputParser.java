@@ -2,13 +2,11 @@ package parser;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
-import java.util.Date;
-import java.util.List;
 
-//import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+// import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 /**
+ * .
  * 
  * @author A0121558H
  *
@@ -55,6 +53,7 @@ public class UserInputParser implements ParserInterface {
     }
 
     public static class setAttributeException extends RuntimeException {}
+
     public LocalDate setEndDate() {
         return stringToLocalDate(userCommand[lengthOfInput - 1]);
     }
@@ -122,7 +121,7 @@ public class UserInputParser implements ParserInterface {
         return DetermineCommandType.getCommand(command);
     }
 
-    /** Methods for updates **/
+    /** Methods for updates *. */
 
     public int getIndexForUpdate(String userInput) {
         removeWhiteSpaces(userInput);

@@ -34,11 +34,11 @@ public class SettingManagerTest {
     }
 
     /**
-     * If critical properties does not exist (accidentally removed) , should be set default
-     * eg.saveFilePath = save.json
+     * If critical properties does not exist (accidentally removed) , should be
+     * set default eg.saveFilePath = save.json
      * 
-     * more thorough approach : look for customSettings.properties first, if critical ones does not
-     * exist, look for the default.properties
+     * more thorough approach : look for customSettings.properties first, if
+     * critical ones does not exist, look for the default.properties
      */
 
     private void removeEverythingFromSettingsFile(Configuration settings) {

@@ -1,12 +1,11 @@
 package parser;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.ocpsoft.prettytime.PrettyTime;
 import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
-
-import java.util.Calendar;
 
 public class ExperimentParseDate {
     public static void main(String args[]) {
@@ -25,7 +24,7 @@ public class ExperimentParseDate {
         System.out.println(ptime.format(cal.getTime()));
 
         List<Date> dates = new PrettyTimeParser().parse("I'm going to the beach tomorrow");
-        System.out.println("Pretty time: " + dates.get(0).toString());
+        System.out.println("Pretty time: " + dates.get(0));
     }
 
     public static void parseDate(String input) {

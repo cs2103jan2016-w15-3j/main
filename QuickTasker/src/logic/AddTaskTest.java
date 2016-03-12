@@ -16,10 +16,15 @@ import model.Task;
 
 public class AddTaskTest {
 
+    private Logic logic;
+
     @Before
     public void setUp() throws Exception {
         logic = new Logic();
     }
+
+    @Test
+    public void test() {
 
         logic.addTask(new Task());
         assertEquals(logic.getSize(), 1);

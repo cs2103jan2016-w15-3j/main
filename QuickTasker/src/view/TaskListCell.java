@@ -1,13 +1,12 @@
 package view;
 
 /*
- * 
  * Author: Xin Kenan, Lee Jia Lin
- * 
  */
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import com.jfoenix.controls.JFXListCell;
 
 import javafx.collections.ObservableList;
@@ -26,12 +25,12 @@ public class TaskListCell extends JFXListCell<Task> {
     private final GridPane grid = new GridPane();
     private ObservableList<Task> tasks;
 
-    public TaskListCell(ObservableList<Task> list)  {
+    public TaskListCell(ObservableList<Task> list) {
         configureGrid();
         configureTaskName();
         configureDate();
         addControlsToGrid();
-        tasks=list;
+        tasks = list;
     }
 
     @Override
@@ -78,15 +77,15 @@ public class TaskListCell extends JFXListCell<Task> {
         taskDeadLine.setText(dateString);
     }
 
-    /*private void deleteContent(Task task) {
-        // todo: getTaskIndex
-        // deleteTaskIndex
-        // remove
-    }*/
+    /*
+     * private void deleteContent(Task task) { // todo: getTaskIndex //
+     * deleteTaskIndex // remove }
+     */
 
     /**
      * Http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
-     * https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/ GridPane.html
+     * https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/
+     * GridPane.html
      */
     private void configureGrid() {
         grid.setHgap(10); // horizontal gap between grids
@@ -109,7 +108,6 @@ public class TaskListCell extends JFXListCell<Task> {
         /*
          * grid.setHgap(10); grid.setVgap(4); grid.setPadding(new Insets(0, 10,
          * 0, 10));
-         * 
          * ColumnConstraints column1 = new ColumnConstraints(32);
          * ColumnConstraints column2 = new ColumnConstraints(USE_COMPUTED_SIZE ,
          * USE_COMPUTED_SIZE, Double.MAX_VALUE);
