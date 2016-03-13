@@ -27,6 +27,7 @@ public class UserInputParser implements ParserInterface {
     private String command;
     private String[] userCommand;
     private int lengthOfInput;
+    private int numToUse;
 
     public UserInputParser() {
         this.taskName = "";
@@ -49,11 +50,11 @@ public class UserInputParser implements ParserInterface {
         removeWhiteSpaces(userInput);
         determineLengthOfInput();
         command = userCommand[0];
+        checkIfEnglishDate();
         taskName = setTaskName();
-        System.out.println("parser" + taskName);
-        startDate = setStartDate();
+        setDate(checkIfEnglishDate());
+        // System.out.println("parser" + taskName);
         System.out.println("parser startdate " + startDate);
-        endDate = setEndDate();
         System.out.println("parser enddate " + endDate);
     }
 
@@ -88,14 +89,26 @@ public class UserInputParser implements ParserInterface {
 
     public String setTaskName() {
         String output = "";
-        int taskNameIndex = lengthOfInput - 2;
+        if (numToUse == 1) {
+            int taskNameIndex = lengthOfInput - 1;
 
-        System.out.println("index " + taskNameIndex);
-        for (int i = 1; i < taskNameIndex; i++) {
-            output += userCommand[i] + " ";
-            System.out.println("output " + output);
+            System.out.println("index " + taskNameIndex);
+            for (int i = 1; i < taskNameIndex; i++) {
+                output += userCommand[i] + " ";
+                System.out.println("output " + output);
+            }
+            output = output.trim();
+        } else {
+            int taskNameIndex = lengthOfInput - 2;
+
+            System.out.println("index " + taskNameIndex);
+            for (int i = 1; i < taskNameIndex; i++) {
+                output += userCommand[i] + " ";
+                System.out.println("output in setTaskName:" + output);
+            }
+            output = output.trim();
         }
-        return output.trim();
+        return output;
     }
 
     public String[] removeWhiteSpaces(String input) {
@@ -114,9 +127,15 @@ public class UserInputParser implements ParserInterface {
         // return LocalDate.parse(date, formatter);
 
         DateTimeParser parser = new DateTimeParser();
-        System.out.println("DATE: " + date);
         return parser.parseDate(date);
     }
+
+    /**
+     * Public boolean checkIfFloatingTask() throws Exception { DateTimeFormatter
+     * formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); try {
+     * LocalDate.parse(userCommand[lengthOfInput - 1], formatter); } catch
+     * (Exception e) { return false; } return true; }
+     **/
 
     public LocalDate getStartDate(String userInput) {
         setAttributes(userInput);
@@ -171,7 +190,8 @@ public class UserInputParser implements ParserInterface {
         command = userCommand[0];
         determineLengthOfInput();
         taskName = setTaskNameForUpdates();
-        setDate(checkIfEnglishDate());
+        startDate = stringToLocalDate(userCommand[lengthOfInput - 2]);
+        endDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
     }
 
     private void setDate(int numToSetDate) {
@@ -183,6 +203,11 @@ public class UserInputParser implements ParserInterface {
             endDate = stringToLocalDate("tomorrow");
         } else {
             startDate = stringToLocalDate("today");
+            // System.out.println("for check next day :
+            // "+userCommand[lengthOfInput-2]);
+            // System.out.println("for check next day :
+            // "+userCommand[lengthOfInput-1]);
+
             endDate = stringToLocalDate(userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1]);
         }
     }
@@ -191,8 +216,8 @@ public class UserInputParser implements ParserInterface {
         // 1 is tmr
         // 2 is either next day or day after
         // 0 is not english
-        String toCheck = userCommand[lengthOfInput - 1] + " " + userCommand[lengthOfInput - 2];
-        int numToUse = 0;
+        String toCheck = userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1];
+        numToUse = 0;
 
         if (userCommand[lengthOfInput - 1].equals("tomorrow")) {
             numToUse = 1;
