@@ -114,6 +114,7 @@ public class UserInputParser implements ParserInterface {
         // return LocalDate.parse(date, formatter);
 
         DateTimeParser parser = new DateTimeParser();
+        System.out.println("DATE: " + date);
         return parser.parseDate(date);
     }
 
