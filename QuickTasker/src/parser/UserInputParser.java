@@ -3,8 +3,14 @@ package parser;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
+import org.ocpsoft.prettytime.shade.org.antlr.runtime.ParserRuleReturnScope;
+
+import jdk.management.resource.internal.inst.SocketDispatcherRMHooks;
+
 import java.util.Date;
 import java.util.List;
+
+import javax.print.attribute.ResolutionSyntax;
 
 //import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
@@ -103,16 +109,13 @@ public class UserInputParser implements ParserInterface {
 
     public static LocalDate stringToLocalDate(String date) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return LocalDate.parse(date, formatter);
-    }
+        // DateTimeFormatter formatter =
+        // DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        // return LocalDate.parse(date, formatter);
 
-    /**
-     * Public boolean checkIfFloatingTask() throws Exception { DateTimeFormatter
-     * formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); try {
-     * LocalDate.parse(userCommand[lengthOfInput - 1], formatter); } catch
-     * (Exception e) { return false; } return true; }
-     **/
+        DateTimeParser parser = new DateTimeParser();
+        return parser.parseDate(date);
+    }
 
     public LocalDate getStartDate(String userInput) {
         setAttributes(userInput);
@@ -167,8 +170,35 @@ public class UserInputParser implements ParserInterface {
         command = userCommand[0];
         determineLengthOfInput();
         taskName = setTaskNameForUpdates();
-        startDate = stringToLocalDate(userCommand[lengthOfInput - 2]);
-        endDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
+        setDate(checkIfEnglishDate());
+    }
+
+    private void setDate(int numToSetDate) {
+        if (numToSetDate == 0) {
+            startDate = stringToLocalDate(userCommand[lengthOfInput - 2]);
+            endDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
+        } else if (numToSetDate == 1) {
+            startDate = stringToLocalDate("today");
+            endDate = stringToLocalDate("tomorrow");
+        } else {
+            startDate = stringToLocalDate("today");
+            endDate = stringToLocalDate(userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1]);
+        }
+    }
+
+    private int checkIfEnglishDate() {
+        // 1 is tmr
+        // 2 is either next day or day after
+        // 0 is not english
+        String toCheck = userCommand[lengthOfInput - 1] + " " + userCommand[lengthOfInput - 2];
+        int numToUse = 0;
+
+        if (userCommand[lengthOfInput - 1].equals("tomorrow")) {
+            numToUse = 1;
+        } else if (toCheck.equals("next day") || toCheck.equals("day after")) {
+            numToUse = 2;
+        }
+        return numToUse;
     }
 
     public String setTaskNameForUpdates() {
