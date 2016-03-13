@@ -53,7 +53,6 @@ public class UserInputParser implements ParserInterface {
         checkIfEnglishDate();
         taskName = setTaskName();
         setDate(checkIfEnglishDate());
-        // System.out.println("parser" + taskName);
         System.out.println("parser startdate " + startDate);
         System.out.println("parser enddate " + endDate);
     }
@@ -122,20 +121,9 @@ public class UserInputParser implements ParserInterface {
 
     public static LocalDate stringToLocalDate(String date) {
 
-        // DateTimeFormatter formatter =
-        // DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        // return LocalDate.parse(date, formatter);
-
         DateTimeParser parser = new DateTimeParser();
         return parser.parseDate(date);
     }
-
-    /**
-     * Public boolean checkIfFloatingTask() throws Exception { DateTimeFormatter
-     * formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); try {
-     * LocalDate.parse(userCommand[lengthOfInput - 1], formatter); } catch
-     * (Exception e) { return false; } return true; }
-     **/
 
     public LocalDate getStartDate(String userInput) {
         setAttributes(userInput);
@@ -144,7 +132,7 @@ public class UserInputParser implements ParserInterface {
 
     public LocalDate getEndDate(String userInput) {
         setAttributes(userInput);
-        // System.out.println(endDate);
+
         return endDate;
     }
 
@@ -199,16 +187,11 @@ public class UserInputParser implements ParserInterface {
             startDate = stringToLocalDate(userCommand[lengthOfInput - 2]);
             endDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
         } else if (numToSetDate == 1) {
-            startDate = stringToLocalDate("today");
-            endDate = stringToLocalDate("tomorrow");
-        } else {
-            startDate = stringToLocalDate("today");
-            // System.out.println("for check next day :
-            // "+userCommand[lengthOfInput-2]);
-            // System.out.println("for check next day :
-            // "+userCommand[lengthOfInput-1]);
+            startDate = endDate = stringToLocalDate("today");
 
-            endDate = stringToLocalDate(userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1]);
+        } else {
+            startDate = endDate = stringToLocalDate(
+                    userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1]);
         }
     }
 

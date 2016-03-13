@@ -16,11 +16,9 @@ public class DateTimeParser {
         DateTimeFormatter formatterForDashes = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter formatterForSlashes = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate output;
-        
-        System.out.println("IN DATETIMEPARSER");
-        System.out.println("INPUT IN DATEIMTPARSER: " +input);
 
-        
+        System.out.println("IN DATETIMEPARSER");
+        System.out.println("INPUT IN DATEIMTPARSER: " + input);
 
         if (!checkIfEnglish(input)) {
             try {
@@ -32,18 +30,16 @@ public class DateTimeParser {
             try {
                 output = LocalDate.parse(input, formatterForSlashes);
             } catch (Exception e) {
-               output = null;
-               //other part need to handle null LocalDate
+                output = null;
             }
         } else {
             // english
-            System.out.println("INPUT IN DATEIMTPARSER ELSE: " +input);
+            System.out.println("INPUT IN DATEIMTPARSER ELSE: " + input);
             if (input.equals("today")) {
                 output = LocalDate.now();
             } else if (input.equals("tomorrow")) {
                 output = LocalDate.now().plusDays(1);
             } else if (input.equals("next day")) {
-                System.out.println("IN DATETIMEPARSER CHECK NEXTDAY");
                 output = LocalDate.now().plusDays(1);
             } else {
                 output = LocalDate.now().plusDays(2);
