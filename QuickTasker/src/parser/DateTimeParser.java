@@ -15,10 +15,12 @@ public class DateTimeParser {
 
         DateTimeFormatter formatterForDashes = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter formatterForSlashes = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate output;
+        DateTimeFormatter formatterEmpty = DateTimeFormatter.ofPattern("ddMMyyyy");
+        DateTimeFormatter formatterDashesShortened = DateTimeFormatter.ofPattern("dd-MM-yy");
+        DateTimeFormatter formatterSlashesShortened = DateTimeFormatter.ofPattern("dd/MM/yy");
+        DateTimeFormatter formatterEmptyShortened = DateTimeFormatter.ofPattern("ddMMyy");
 
-        System.out.println("IN DATETIMEPARSER");
-        System.out.println("INPUT IN DATEIMTPARSER: " + input);
+        LocalDate output;
 
         if (!checkIfEnglish(input)) {
             try {
@@ -29,12 +31,37 @@ public class DateTimeParser {
             }
             try {
                 output = LocalDate.parse(input, formatterForSlashes);
+                return output;
+            } catch (Exception e) {
+                // output = null;
+                // try next
+            }
+            try {
+                output = LocalDate.parse(input, formatterDashesShortened);
+                return output;
+            } catch (Exception e) {
+                // try next
+            }
+            try {
+                output = LocalDate.parse(input, formatterSlashesShortened);
+                return output;
+            } catch (Exception e) {
+                // try next
+            }
+            try {
+                output = LocalDate.parse(input, formatterEmptyShortened);
+                return output;
+            } catch (Exception e) {
+                // try next
+            }
+            try {
+                output = LocalDate.parse(input, formatterEmpty);
+                return output;
             } catch (Exception e) {
                 output = null;
             }
         } else {
             // english
-            System.out.println("INPUT IN DATEIMTPARSER ELSE: " + input);
             if (input.equals("today")) {
                 output = LocalDate.now();
             } else if (input.equals("tomorrow")) {

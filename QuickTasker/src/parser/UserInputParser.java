@@ -36,16 +36,6 @@ public class UserInputParser implements ParserInterface {
         this.command = "";
     }
 
-    /**
-     * Constructor for Parser object.
-     * 
-     * @throws Exception
-     **/
-    /**
-     * Public UserInputParser(String userInput) throws Exception {
-     * 
-     * } .
-     */
     public void setAttributes(String userInput) {
         removeWhiteSpaces(userInput);
         determineLengthOfInput();
@@ -94,7 +84,6 @@ public class UserInputParser implements ParserInterface {
             System.out.println("index " + taskNameIndex);
             for (int i = 1; i < taskNameIndex; i++) {
                 output += userCommand[i] + " ";
-                System.out.println("output " + output);
             }
             output = output.trim();
         } else {
@@ -103,7 +92,6 @@ public class UserInputParser implements ParserInterface {
             System.out.println("index " + taskNameIndex);
             for (int i = 1; i < taskNameIndex; i++) {
                 output += userCommand[i] + " ";
-                System.out.println("output in setTaskName:" + output);
             }
             output = output.trim();
         }
@@ -219,5 +207,4 @@ public class UserInputParser implements ParserInterface {
         }
         return output.trim();
     }
-
 }
