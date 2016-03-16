@@ -9,6 +9,7 @@
     -fx-padding: 10px ;
     -fx-background-color: transparent, -fx-background ;
     -fx-background-insets: 0px, 2px ;
+   
 }
 
 .list-cell:empty {

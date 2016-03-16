@@ -3,10 +3,8 @@ package controller;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -21,27 +19,36 @@ import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import logic.Logic;
+import dao.*;
 import model.Task;
 import parser.Commands;
 import parser.ParserInterface;
 import parser.UserInputParser;
 import view.TaskListCell;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.lang.AssertionError;
 
 /**
  * Author: A0133333U
+ * 
+ * todo: create more classes! too many classes in one?
  */
 public class MainWindowController implements Initializable {
+    
+    private static Logger logger;
+    //private dao storage;
     private Main main;
     private ParserInterface parser = new UserInputParser();
     private Logic operations = new Logic();
-
+   
     @FXML Label label;
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
     ObservableList<Task> guiList = FXCollections.observableArrayList();
     ListChangeListener<? super Task> listener;
-
     
+   
     
     // Display messages as visual feedback for users
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
@@ -51,9 +58,13 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        
         setCellFactory();
         setMain(main);
-        
+        logger = Logger.getLogger("MyLogger");
+        logger.setLevel(Level.INFO);
+        logger.log(Level.SEVERE, "Test logging"); 
+
     }
 
     public void setMain(Main main) {
@@ -63,6 +74,10 @@ public class MainWindowController implements Initializable {
     private boolean isEmptyInput(String input) {
         return input == null || input.isEmpty() || "".equals(input.trim());
     }
+    
+    private boolean enterKeyIsPressed(KeyEvent event) {
+        return KeyCode.ENTER.equals(event.getCode());
+    }
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) throws Exception {
@@ -70,10 +85,11 @@ public class MainWindowController implements Initializable {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             performOperations(userInput);
+            logger.log(Level.SEVERE, userInput);
         }
     }
 
-    private void performOperations(String userInput) throws Exception {
+    private void performOperations(String userInput) throws Exception  {
         String taskName;
         LocalDate startDate;
         LocalDate dueDate;
@@ -83,19 +99,17 @@ public class MainWindowController implements Initializable {
         } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
             deleteTask(userInput);
        // } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
+       //     updateTask(userInput);
         } else if (userInput.contains("edit")) {
             editTask(userInput);
-        }
+        } 
+        assert (false); // execution should not reach here
     }
     
     private void editTask(String userInput) throws Exception {
         int taskIndex = parser.getTaskIndex(userInput);
         ListCell<Task> listCell;
-        
-        System.out.println(taskIndex);
-        taskListView.setStyle("-fx-background-color: yellow");
-
-        //guiList.addListener(listener);
+        guiList.addListener(listener);
         taskListView.getSelectionModel();
         taskListView.getFocusModel().focus(taskIndex);
         taskListView.scrollTo(taskIndex);
@@ -127,10 +141,9 @@ public class MainWindowController implements Initializable {
         refresh();
         commandBox.clear();
     }
+    
+   
 
-    private boolean enterKeyIsPressed(KeyEvent event) {
-        return KeyCode.ENTER.equals(event.getCode());
-    }
 
     private void setCellFactory() {
         taskListView.setCellFactory(param -> new TaskListCell());
