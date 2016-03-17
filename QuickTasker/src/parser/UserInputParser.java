@@ -1,4 +1,139 @@
-public String getTaskName(String userInput) {
+package parser;
+
+import java.time.LocalDate;
+import java.util.logging.*;
+
+import org.omg.CORBA.PRIVATE_MEMBER;
+
+/**
+ * 
+ * @author A0121558H Dawson
+ *
+ */
+public class UserInputParser implements ParserInterface {
+
+    private String taskName;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String command;
+    private String[] userCommand;
+    private int lengthOfInput;
+    private int numToUse;
+    private static Logger loggerTaskName = Logger.getLogger("setTaskName");
+
+    public UserInputParser() {
+        this.taskName = "";
+        this.startDate = LocalDate.MIN;
+        this.endDate = LocalDate.MAX;
+        this.command = "";
+    }
+
+    public void setAttributes(String userInput) {
+        removeWhiteSpaces(userInput);
+        determineLengthOfInput();
+        command = userCommand[0];
+        isEnglishDate();
+        taskName = setTaskName();
+        setDate(isEnglishDate());
+        System.out.println("parser startdate " + startDate);
+        System.out.println("parser enddate " + endDate);
+    }
+
+    public void setAttributesForGetCommands(String userInput) throws setAttributeException {
+        removeWhiteSpaces(userInput);
+        determineLengthOfInput();
+        command = userCommand[0];
+    }
+
+    public static class setAttributeException extends RuntimeException {
+        // the purpose of setting cusom exception is such that you can tell
+        // exactly which class,
+        // and which method causes the exception, rather than seeing a bunch of
+        // red.
+        // The purpose of using RuntimeException is because it is the only
+        // 'unchcked' exception.
+        // A quick google will provide you some insights on how chcked
+        // expcetions are failed
+        // experiments in various programming languages including Java
+    }
+
+    /**
+     * Checks if it is a floating task. If yes, returns null.
+     */
+    public LocalDate setEndDate() {
+        return stringToLocalDate(userCommand[lengthOfInput - 1]);
+    }
+
+    public LocalDate setStartDate() {
+        return stringToLocalDate(userCommand[lengthOfInput - 2]);
+    }
+
+    // LOGGING
+    public String setTaskName() {
+        loggerTaskName.log(Level.INFO, "Start of process");
+        String output = "";
+        
+        try {
+            if (numToUse == 1) {
+                int taskNameIndex = lengthOfInput - 1;
+
+                System.out.println("index " + taskNameIndex);
+                for (int i = 1; i < taskNameIndex; i++) {
+                    output += userCommand[i] + " ";
+                }
+                output = output.trim();
+            } else {
+                int taskNameIndex = lengthOfInput - 2;
+
+                System.out.println("index " + taskNameIndex);
+                for (int i = 1; i < taskNameIndex; i++) {
+                    output += userCommand[i] + " ";               }
+                output = output.trim();
+            }
+        } catch (Exception e) {
+            loggerTaskName.log(Level.WARNING, "Error in taskname processing", e);
+        }
+        loggerTaskName.log(Level.INFO, "end of processing");
+
+        return output;
+    }
+
+    // TRYCATCH
+    public String[] removeWhiteSpaces(String input) {
+
+        try {
+            userCommand = input.split("\\s+");
+        } catch (Exception e) {//change into logger
+            System.out.println("Error in splitting");
+            System.out.println("Please enter again");
+        }
+        return userCommand;
+    }
+
+    // ASSERT
+    public void determineLengthOfInput() {
+        assert (userCommand.length > 4); 
+        lengthOfInput = userCommand.length;
+    }
+
+    public static LocalDate stringToLocalDate(String date) {
+
+        DateTimeParser parser = new DateTimeParser();
+        return parser.parseDate(date);
+    }
+
+    public LocalDate getStartDate(String userInput) {
+        setAttributes(userInput);
+        return startDate;
+    }
+
+    public LocalDate getEndDate(String userInput) {
+        setAttributes(userInput);
+
+        return endDate;
+    }
+    
+    public String getTaskName(String userInput) {
         setAttributes(userInput);
         return taskName;
     }
