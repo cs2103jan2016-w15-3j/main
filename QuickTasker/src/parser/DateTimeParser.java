@@ -5,7 +5,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Author dawson A0121558H
+ * @author A0121558H
+ * dawson 
  * 
  *
  */
@@ -22,7 +23,7 @@ public class DateTimeParser {
 
         LocalDate output;
 
-        if (!checkIfEnglish(input)) {
+        if (!isEnglish(input)) {
             try {
                 output = LocalDate.parse(input, formatterForDashes);
                 return output;
@@ -80,7 +81,7 @@ public class DateTimeParser {
      * }
      */
 
-    private boolean checkIfEnglish(String input) {
+    private boolean isEnglish(String input) {
         return (input.equals("today") || input.equals("tomorrow") || input.equals("next day")
                 || input.equals("day after"));
     }
