@@ -11,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import model.Task;
 
 import java.time.LocalDate;
@@ -83,21 +84,15 @@ public class TaskListCell extends JFXListCell<Task> {
     private void configureGrid() {
         grid.setHgap(10); // horizontal gap between grids
         grid.setVgap(5); // vertical gap between grids
-        grid.setPadding(new Insets(0, 10, 0, 10));
-        // set custom columns
+        grid.setPadding(new Insets(0, 10, 0, 10));// set custom columns
+        ColumnConstraints column1 = new ColumnConstraints();
+        column1.setMaxWidth(5);
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setMaxWidth(30);
+        ColumnConstraints column3 = new ColumnConstraints();
+        column3.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().addAll(column1, column2, column3);
 
-        ColumnConstraints taskIdColumn = new ColumnConstraints();
-        taskIdColumn.setMaxWidth(50);
-        ColumnConstraints checkBoxColumn = new ColumnConstraints();
-        checkBoxColumn.setPercentWidth(3);
-        ColumnConstraints taskDetailColumn = new ColumnConstraints();
-        taskDetailColumn.setPercentWidth(58);
-        ColumnConstraints startDateColumn = new ColumnConstraints();
-        startDateColumn.setPercentWidth(20);
-        ColumnConstraints dueDateColumn = new ColumnConstraints();
-        startDateColumn.setPercentWidth(20);
-        grid.getColumnConstraints()
-                .addAll(taskIdColumn, taskDetailColumn, startDateColumn, dueDateColumn);
 
     }
 
@@ -111,7 +106,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureCheckBox() {
-        checkBox.setMaxWidth(10);
+        //checkBox.setMaxWidth(10);
     }
 
     private void clearContent() {
@@ -129,7 +124,7 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.add(taskId, 0, 0);
         grid.add(checkBox, 1, 0);
         grid.add(taskName, 2, 0); // add(Node child, int columnIndex, int
-        grid.add(taskStartDate, 3, 0, 1, 1); // rowIndex, int colspan, int
-        grid.add(taskDeadLine, 4, 0, 1, 1);
+        grid.add(taskStartDate, 3, 0); // rowIndex, int colspan, int
+        grid.add(taskDeadLine, 4, 0);
     }
 }
