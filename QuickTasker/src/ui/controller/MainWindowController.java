@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-    //private dao storage;
+    //private data storage;
     private Main main;
     private ParserInterface parser = new UserInputParser();
     private Logic operations = new Logic();

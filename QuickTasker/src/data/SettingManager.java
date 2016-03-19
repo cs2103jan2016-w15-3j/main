@@ -1,4 +1,4 @@
-package dao;
+package data;
 
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
