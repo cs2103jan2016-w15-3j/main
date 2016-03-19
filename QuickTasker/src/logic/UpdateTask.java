@@ -1,14 +1,13 @@
 package logic;
 
-import java.util.List;
-
 import model.Task;
 import parser.UserInputParser;
 
+import java.util.List;
+
 public class UpdateTask<E> implements Command {
 
-    @Override
-    public void execute(List list, Object userInput) {
+    @Override public void execute(List list, Object userInput) {
         try {
             UserInputParser parser = new UserInputParser();
             String updates = (String) userInput;

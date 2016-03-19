@@ -1,11 +1,11 @@
 package parser;
 
 import java.time.LocalDate;
+
 /**
  * .
- * 
- * @author A0121558H
  *
+ * @author A0121558H
  */
 public class UserInputParser implements ParserInterface {
 
@@ -41,7 +41,8 @@ public class UserInputParser implements ParserInterface {
         command = userCommand[0];
     }
 
-    public static class setAttributeException extends RuntimeException {}
+    public static class setAttributeException extends RuntimeException {
+    }
 
     public LocalDate setEndDate() {
         return stringToLocalDate(userCommand[lengthOfInput - 1]);
@@ -114,7 +115,9 @@ public class UserInputParser implements ParserInterface {
         return DetermineCommandType.getCommand(command);
     }
 
-    /** Methods for updates *. */
+    /**
+     * Methods for updates *.
+     */
 
     public int getIndexForUpdate(String userInput) {
         removeWhiteSpaces(userInput);

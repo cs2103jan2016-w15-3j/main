@@ -1,16 +1,14 @@
 package logic;
 
-import static org.junit.Assert.assertEquals;
-
+import model.Task;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Task;
+import static org.junit.Assert.assertEquals;
 
 /**
- * 
  * Author A0130949 Soh Yonghao
- * 
+ * <p>
  * .
  */
 
@@ -18,13 +16,11 @@ public class AddTaskTest {
 
     private Logic logic;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         logic = new Logic();
     }
 
-    @Test
-    public void test() {
+    @Test public void test() {
 
         logic.addTask(new Task());
         assertEquals(logic.getSize(), 1);

@@ -1,8 +1,10 @@
 package dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import model.Task;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,50 +13,40 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import model.Task;;
+import static org.junit.Assert.*;
 
 public class JsonTaskDataAccessTest {
     List<Task> plannerNotebook;
     JsonTaskDataAccess dataHandler;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         plannerNotebook = new ArrayList<Task>();
         dataHandler = new JsonTaskDataAccess();
     }
 
-    @Test
-    public void whenNewHandlerCreatedPathShouldNotBeNull() {
+    @Test public void whenNewHandlerCreatedPathShouldNotBeNull() {
         assertNotNull(dataHandler.getFilePath());
     }
 
-    @Test
-    public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
+    @Test public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
 
     }
 
-    @Test
-    public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
+    @Test public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
         Files.deleteIfExists(dataHandler.getFilePath());
 
         dataHandler = new JsonTaskDataAccess();
         assertTrue(hasSaveFile());
     }
 
-    @Test
-    public void canSaveListOfTasksToJsonFile() {
+    @Test public void canSaveListOfTasksToJsonFile() {
         List<Task> tasks = create10Tasks();
         dataHandler.save(tasks);
         try {
             BufferedReader reader = Files.newBufferedReader(dataHandler.getFilePath());
             Gson gson = new Gson();
-            List<Task> testObj = gson.fromJson(reader, new TypeToken<List<Task>>() {}.getType());
+            List<Task> testObj = gson.fromJson(reader, new TypeToken<List<Task>>() {
+            }.getType());
             assertEquals(testObj, tasks);
             reader.close();
         } catch (IOException e) {
@@ -62,8 +54,7 @@ public class JsonTaskDataAccessTest {
         }
     }
 
-    @Test
-    public void canSaveOneTaskIntoJsonFile() {
+    @Test public void canSaveOneTaskIntoJsonFile() {
         String taskName = "Task 1";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         dataHandler.save(testTask);

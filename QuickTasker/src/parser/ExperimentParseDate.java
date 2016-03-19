@@ -1,11 +1,11 @@
 package parser;
 
+import org.ocpsoft.prettytime.PrettyTime;
+import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import org.ocpsoft.prettytime.PrettyTime;
-import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
 
 public class ExperimentParseDate {
     public static void main(String args[]) {

@@ -1,21 +1,19 @@
 package logic;
 
-import java.util.List;
-
 import model.Task;
 
+import java.util.List;
+
 /**
- * 
  * Author A0130949 Soh Yonghao
- * 
+ * <p>
  * .
  */
 
 public class AddTask<E> implements Command {
     private static final String NOTHING_TO_ADD = "Cannot add nothing";
 
-    @Override
-    public void execute(List list, Object task) {
+    @Override public void execute(List list, Object task) {
         executeAdd(list, (Task) task);
     }
 

@@ -4,9 +4,8 @@ import java.time.LocalDate;
 
 /**
  * .
- * 
- * @author A0121558H/A0130949
  *
+ * @author A0121558H/A0130949
  */
 public class Task {
     private static int IdGenerator;
@@ -19,7 +18,9 @@ public class Task {
         startDate = LocalDate.now();
     }
 
-    /** Default constructor *. */
+    /**
+     * Default constructor *.
+     */
     public Task() {
         taskName = "";
         endDate = LocalDate.MIN;
@@ -27,7 +28,9 @@ public class Task {
         generateId();
     }
 
-    /** Constructor for tasks with only task name *. */
+    /**
+     * Constructor for tasks with only task name *.
+     */
     public Task(String taskName) {
         this.taskName = taskName;
         setStartDateAsNow();
@@ -35,7 +38,9 @@ public class Task {
         generateId();
     }
 
-    /** Constructor for floating tasks *. */
+    /**
+     * Constructor for floating tasks *.
+     */
     public Task(String taskName, LocalDate startDate) {
         this.taskName = taskName;
         this.endDate = LocalDate.MAX;
@@ -43,7 +48,9 @@ public class Task {
         generateId();
     }
 
-    /** Constructor with all fields filled *. */
+    /**
+     * Constructor with all fields filled *.
+     */
     public Task(String taskName, LocalDate startDate, LocalDate endDate) {
         this.taskName = taskName;
         this.endDate = endDate;
@@ -75,8 +82,7 @@ public class Task {
         this.id = ++IdGenerator;
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
@@ -85,22 +91,41 @@ public class Task {
         return prime * result + ((taskName == null) ? 0 : taskName.hashCode());
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) { return true; }
-        if (obj == null) { return false; }
-        if (getClass() != obj.getClass()) { return false; }
+    @Override public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         Task other = (Task) obj;
         if (endDate == null) {
-            if (other.endDate != null) { return false; }
-        } else if (!endDate.equals(other.endDate)) { return false; }
-        if (id != other.id) { return false; }
+            if (other.endDate != null) {
+                return false;
+            }
+        } else if (!endDate.equals(other.endDate)) {
+            return false;
+        }
+        if (id != other.id) {
+            return false;
+        }
         if (startDate == null) {
-            if (other.startDate != null) { return false; }
-        } else if (!startDate.equals(other.startDate)) { return false; }
+            if (other.startDate != null) {
+                return false;
+            }
+        } else if (!startDate.equals(other.startDate)) {
+            return false;
+        }
         if (taskName == null) {
-            if (other.taskName != null) { return false; }
-        } else if (!taskName.equals(other.taskName)) { return false; }
+            if (other.taskName != null) {
+                return false;
+            }
+        } else if (!taskName.equals(other.taskName)) {
+            return false;
+        }
         return true;
     }
 

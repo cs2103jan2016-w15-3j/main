@@ -1,12 +1,7 @@
 package controller;
 
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.ResourceBundle;
-
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,6 +16,10 @@ import parser.ParserInterface;
 import parser.UserInputParser;
 import view.TaskListCell;
 
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.ResourceBundle;
+
 public class MainWindowController implements Initializable {
     private Main main;
     private ParserInterface parser = new UserInputParser();
@@ -31,8 +30,7 @@ public class MainWindowController implements Initializable {
     @FXML JFXListView<Task> taskListView;
     ObservableList<Task> guiList = FXCollections.observableArrayList();
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @Override public void initialize(URL location, ResourceBundle resources) {
         setCellFactory();
         setMain(main);
     }
@@ -45,8 +43,7 @@ public class MainWindowController implements Initializable {
         return input == null || input.isEmpty() || "".equals(input.trim());
     }
 
-    @FXML
-    private void handleEnterKeyPressed(KeyEvent event) throws Exception {
+    @FXML private void handleEnterKeyPressed(KeyEvent event) throws Exception {
 
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {

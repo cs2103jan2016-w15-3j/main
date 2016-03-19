@@ -4,17 +4,16 @@ package view;
  * Author: Xin Kenan, Lee Jia Lin
  */
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 import com.jfoenix.controls.JFXListCell;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import model.Task;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartDate = new Label();
@@ -33,8 +32,7 @@ public class TaskListCell extends JFXListCell<Task> {
         tasks = list;
     }
 
-    @Override
-    public void updateItem(Task task, boolean empty) {
+    @Override public void updateItem(Task task, boolean empty) {
         super.updateItem(task, empty);
         if (empty) {
             clearContent();
@@ -100,8 +98,8 @@ public class TaskListCell extends JFXListCell<Task> {
         startDateColumn.setPercentWidth(20);
         ColumnConstraints dueDateColumn = new ColumnConstraints();
         startDateColumn.setPercentWidth(20);
-        grid.getColumnConstraints().addAll(taskIdColumn, taskDetailColumn, startDateColumn,
-                dueDateColumn);
+        grid.getColumnConstraints()
+                .addAll(taskIdColumn, taskDetailColumn, startDateColumn, dueDateColumn);
 
         // todo set proper margin and padding
         // set proper hGrow
