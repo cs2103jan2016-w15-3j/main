@@ -3,6 +3,7 @@ package controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -19,10 +20,10 @@ public class Main extends Application {
     /**
      * Responsible for displaying main window.
      */
-    public void mainWindow() {
+    private void mainWindow() {
 
         try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/MainWindowView.fxml"));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
             AnchorPane pane = loader.load();
 
             MainWindowController mainWindowController = new MainWindowController();
@@ -32,6 +33,7 @@ public class Main extends Application {
 
             primaryStage.setScene(scene);
             primaryStage.setTitle("Welcome to QuickTasker");
+            primaryStage.getIcons().add(new Image("file:resources/images/home.png"));
             primaryStage.setMinWidth(500);
             primaryStage.setMinHeight(200);
             primaryStage.show();
@@ -43,5 +45,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+
     }
 }

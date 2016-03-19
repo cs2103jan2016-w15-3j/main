@@ -31,9 +31,7 @@ public class SettingManager {
             createDefaultSettings();
         } else if (settingFileIsEmpty()) {
             resetDefaultSettings();
-        } else {
-            loadSettings();
-        }
+        } else loadSettings();
     }
 
     public void resetDefaultSettings() throws ResetSettingsException {
@@ -110,5 +108,4 @@ public class SettingManager {
 
     public static class ResetSettingsException extends RuntimeException {
     }
-
 }

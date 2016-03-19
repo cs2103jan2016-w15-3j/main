@@ -85,17 +85,16 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     }
 
-    public Path getFilePath() {
+    Path getFilePath() {
         return this.pathOfSaveFile;
     }
 
-    public static class CreateSaveFileException extends RuntimeException {
+    private static class CreateSaveFileException extends RuntimeException {
     }
 
-    public static class GetTasksException extends RuntimeException {
+    private static class GetTasksException extends RuntimeException {
     }
 
-    public static class SaveTasksException extends RuntimeException {
+    private static class SaveTasksException extends RuntimeException {
     }
-
 }
