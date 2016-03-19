@@ -1,4 +1,4 @@
-package controller;
+package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
@@ -17,7 +17,7 @@ import model.Task;
 import parser.Commands;
 import parser.ParserInterface;
 import parser.UserInputParser;
-import view.TaskListCell;
+import ui.model.TaskListCell;
 
 import java.net.URL;
 import java.time.LocalDate;

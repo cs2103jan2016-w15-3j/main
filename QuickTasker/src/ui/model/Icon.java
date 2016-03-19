@@ -1,4 +1,4 @@
-package view;
+package ui.model;
 
 public enum Icon {
     ICON_GLASS('\uf000'),

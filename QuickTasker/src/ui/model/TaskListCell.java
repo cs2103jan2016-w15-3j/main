@@ -1,4 +1,4 @@
-package view;
+package ui.model;
 
 /*
  * Author: Xin Kenan, Lee Jia Lin
@@ -11,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import model.Task;
 
@@ -97,6 +98,8 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureTaskName() {
+        taskName.setPrefWidth(230);
+        taskName.setWrapText(true);
         taskName.setStyle("-fx-font-weight:bold; -fx-font-family: sans-serif; -fx-padding:10px");
     }
 
@@ -123,7 +126,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private void addControlsToGrid() {
         grid.add(taskId, 0, 0);
         grid.add(checkBox, 1, 0);
-        grid.add(taskName, 2, 0); // add(Node child, int columnIndex, int
+        grid.add(new HBox(taskName), 2, 0); // add(Node child, int columnIndex, int
         grid.add(taskStartDate, 3, 0); // rowIndex, int colspan, int
         grid.add(taskDeadLine, 4, 0);
     }

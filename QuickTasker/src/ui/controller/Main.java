@@ -1,4 +1,4 @@
-package controller;
+package ui.controller;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +34,7 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("Welcome to QuickTasker");
             primaryStage.getIcons().add(new Image("file:resources/images/home.png"));
-            primaryStage.setMinWidth(500);
+            primaryStage.setMinWidth(550);
             primaryStage.setMinHeight(200);
             primaryStage.show();
 
