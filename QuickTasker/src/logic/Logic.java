@@ -1,6 +1,6 @@
 package logic;
 
-import dao.JsonTaskDataAccess;
+import data.JsonTaskDataAccess;
 import model.Task;
 import parser.Commands;
 
