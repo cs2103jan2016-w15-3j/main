@@ -5,6 +5,10 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
+import com.sun.istack.internal.FinalArrayList;
+import com.sun.org.glassfish.external.statistics.Statistic;
+import com.sun.xml.internal.fastinfoset.algorithm.IEEE754FloatingPointEncodingAlgorithm;
+
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -55,6 +59,7 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_ADD_CONFIRMED = "Task added to list.";
     private static final String MESSAGE_DELETE_CONFIRMED = "Task deleted from list.";
     private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
+    private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
