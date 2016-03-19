@@ -1,13 +1,13 @@
 package dao;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-
 import org.apache.commons.configuration2.Configuration;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SettingManagerTest {
     SettingManager settingManager;

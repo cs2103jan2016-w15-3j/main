@@ -1,8 +1,10 @@
 package dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import model.Task;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,13 +13,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import model.Task;;
+;
 
 public class JsonTaskDataAccessTest {
     List<Task> plannerNotebook;
@@ -49,7 +47,8 @@ public class JsonTaskDataAccessTest {
         try {
             BufferedReader reader = Files.newBufferedReader(dataHandler.getFilePath());
             Gson gson = new Gson();
-            List<Task> testObj = gson.fromJson(reader, new TypeToken<List<Task>>() {}.getType());
+            List<Task> testObj = gson.fromJson(reader, new TypeToken<List<Task>>() {
+            }.getType());
             assertEquals(testObj, tasks);
             reader.close();
         } catch (IOException e) {

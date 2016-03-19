@@ -1,8 +1,8 @@
 package dao;
 
-import java.util.List;
-
 import model.Task;
+
+import java.util.List;
 
 public interface TaskDataAccessObject {
     /**

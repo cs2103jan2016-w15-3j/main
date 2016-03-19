@@ -1,14 +1,13 @@
 package logic;
 
+import model.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Task;
-
 /**
- * 
  * Author A0130949 Soh Yonghao
- * 
+ * <p>
  * .
  */
 

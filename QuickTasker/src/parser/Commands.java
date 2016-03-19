@@ -1,9 +1,8 @@
 package parser;
 
 /**
- * 
  * Author A0121558H Lau Dawson
- *
+ * <p>
  * .
  */
 public enum Commands {

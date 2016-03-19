@@ -4,9 +4,8 @@ import java.time.LocalDate;
 
 /**
  * .
- * 
- * @author A0121558H/A0130949
  *
+ * @author A0121558H/A0130949
  */
 public class Task {
     private static int IdGenerator;
@@ -19,7 +18,9 @@ public class Task {
         startDate = LocalDate.now();
     }
 
-    /** Default constructor *. */
+    /**
+     * Default constructor *.
+     */
     public Task() {
         taskName = "";
         endDate = LocalDate.MIN;
@@ -27,7 +28,9 @@ public class Task {
         generateId();
     }
 
-    /** Constructor for tasks with only task name *. */
+    /**
+     * Constructor for tasks with only task name *.
+     */
     public Task(String taskName) {
         this.taskName = taskName;
         setStartDateAsNow();
@@ -35,7 +38,9 @@ public class Task {
         generateId();
     }
 
-    /** Constructor for floating tasks *. */
+    /**
+     * Constructor for floating tasks *.
+     */
     public Task(String taskName, LocalDate startDate) {
         this.taskName = taskName;
         this.endDate = LocalDate.MAX;
@@ -43,7 +48,9 @@ public class Task {
         generateId();
     }
 
-    /** Constructor with all fields filled *. */
+    /**
+     * Constructor with all fields filled *.
+     */
     public Task(String taskName, LocalDate startDate, LocalDate endDate) {
         this.taskName = taskName;
         this.endDate = endDate;

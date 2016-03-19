@@ -1,5 +1,10 @@
 package dao;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import model.Task;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -7,12 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import model.Task;
 
 public class JsonTaskDataAccess implements TaskDataAccessObject {
     private Path pathOfSaveFile;
@@ -43,7 +42,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         try {
             BufferedReader reader = Files.newBufferedReader(pathOfSaveFile);
             Gson gson = new Gson();
-            List<Task> tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {}.getType());
+            List<Task> tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {
+            }.getType());
             reader.close();
             return tasks;
         } catch (IOException e) {
@@ -90,9 +90,18 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         return this.pathOfSaveFile;
     }
 
-    public static class CreateSaveFileException extends RuntimeException {};
+    public static class CreateSaveFileException extends RuntimeException {
+    }
 
-    public static class GetTasksException extends RuntimeException {};
+    ;
 
-    public static class SaveTasksException extends RuntimeException {};
+    public static class GetTasksException extends RuntimeException {
+    }
+
+    ;
+
+    public static class SaveTasksException extends RuntimeException {
+    }
+
+    ;
 }

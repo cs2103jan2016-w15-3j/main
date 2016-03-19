@@ -4,9 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * 
  * @author A0121558H
- *
  */
 public class UserInputParser implements ParserInterface {
 
@@ -26,12 +24,12 @@ public class UserInputParser implements ParserInterface {
 
     /**
      * Constructor for Parser object.
-     * 
+     *
      * @throws Exception
      **/
     /**
      * Public (String userInput) throws Exception {
-     * 
+     * <p>
      * } .
      */
     public void setAttributes(String userInput) throws Exception {
@@ -62,7 +60,7 @@ public class UserInputParser implements ParserInterface {
 
     /**
      * Checks if it is a floating task. If yes, returns null.
-     * 
+     *
      * @return
      * @throws Exception
      */
@@ -116,7 +114,7 @@ public class UserInputParser implements ParserInterface {
 
     /**
      * (non-Javadoc)
-     * 
+     *
      * @see parser.ParserInterface#getStartDate()
      */
 
@@ -127,7 +125,7 @@ public class UserInputParser implements ParserInterface {
 
     /**
      * (non-Javadoc)
-     * 
+     *
      * @see parser.ParserInterface#getEndDate()
      */
     public LocalDate getEndDate(String userInput) throws Exception {
@@ -138,7 +136,7 @@ public class UserInputParser implements ParserInterface {
 
     /**
      * (non-Javadoc)
-     * 
+     *
      * @see parser.ParserInterface#getCommand()
      */
     public Commands getCommand(String userInput) throws Exception {
@@ -148,7 +146,7 @@ public class UserInputParser implements ParserInterface {
 
     /**
      * (non-Javadoc)
-     * 
+     *
      * @see parser.ParserInterface#getTaskName()
      */
     public String getTaskName(String userInput) throws Exception {
@@ -156,7 +154,7 @@ public class UserInputParser implements ParserInterface {
         return taskName;
     }
 
-    public int getTaskIndex(String input) { 
+    public int getTaskIndex(String input) {
         String cleanInput = input.trim();
         String[] splitted = input.split("\\s+");
         return Integer.parseInt(splitted[1]) - 1;

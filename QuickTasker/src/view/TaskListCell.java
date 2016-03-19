@@ -6,24 +6,23 @@ package view;
  * 
  */
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.control.CheckBox;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import model.Task;
 
-public class TaskListCell extends JFXListCell<Task>  {
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartDate = new Label();
     private final Label taskDeadLine = new Label();
     private final Label taskName = new Label();
     private final Label taskId = new Label();
-    private final JFXCheckBox  checkBox = new JFXCheckBox();
+    private final JFXCheckBox checkBox = new JFXCheckBox();
     private final GridPane grid = new GridPane();
 
     public TaskListCell() {
@@ -56,7 +55,7 @@ public class TaskListCell extends JFXListCell<Task>  {
 
     private void setTaskId(Task task) {
         taskId.setText(String.valueOf(task.getId()));
-     
+
     }
 
     private void setTaskName(Task task) {
@@ -87,7 +86,7 @@ public class TaskListCell extends JFXListCell<Task>  {
         grid.setVgap(5); // vertical gap between grids
         grid.setPadding(new Insets(0, 10, 0, 10));
         // set custom columns
-        
+
         ColumnConstraints taskIdColumn = new ColumnConstraints();
         taskIdColumn.setMaxWidth(50);
         ColumnConstraints checkBoxColumn = new ColumnConstraints();
@@ -111,9 +110,9 @@ public class TaskListCell extends JFXListCell<Task>  {
         taskStartDate.setStyle("-fx-font-weightt:bold;-fx-padding:10px");
         taskDeadLine.setStyle("-fx-font-weightt:bold;-fx-padding:10px");
     }
-    
+
     private void configureCheckBox() {
-       checkBox.setMaxWidth(10);
+        checkBox.setMaxWidth(10);
     }
 
     private void clearContent() {
@@ -124,13 +123,13 @@ public class TaskListCell extends JFXListCell<Task>  {
     private void configureIcon() {
         // todo : implement awesome font icons and custom css
         // icons to be applied to relevant tasks
-        
-        
+
+
     }
 
     private void addControlsToGrid() {
         grid.add(taskId, 0, 0);
-        grid.add(checkBox, 1 , 0);
+        grid.add(checkBox, 1, 0);
         grid.add(taskName, 2, 0); // add(Node child, int columnIndex, int
         grid.add(taskStartDate, 3, 0, 1, 1); // rowIndex, int colspan, int
         grid.add(taskDeadLine, 4, 0, 1, 1);

@@ -6,7 +6,7 @@ public interface ParserInterface {
 
     /**
      * To retrieve attributes.
-     * 
+     *
      * @throws Exception
      **/
 

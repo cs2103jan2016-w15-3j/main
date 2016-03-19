@@ -1,18 +1,16 @@
 package logic;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-
+import model.Task;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Task;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * 
  * Author A0130949 Soh Yonghao
- * 
+ * <p>
  * .
  */
 
