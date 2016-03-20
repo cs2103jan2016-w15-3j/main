@@ -2,10 +2,13 @@ package logic;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import model.Task;
+import parser.Commands;
 
 /**
  * 
@@ -37,6 +40,7 @@ public class DeleteTaskTest {
         assertEquals(logic.getSize(), 9);
         logic.deleteTask(8);
         assertEquals(logic.getSize(), 8);
-
+        logic.commandMap.get(Commands.DELETE_TASK).undo((ArrayList<Task>) logic.list);
+        assertEquals(logic.getSize(), 9);        
     }
 }
