@@ -1,9 +1,14 @@
 package parser;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.*;
 
 import org.omg.CORBA.PRIVATE_MEMBER;
+
+import com.sun.org.apache.xml.internal.serializer.ElemDesc;
+
+import javafx.util.converter.LocalDateStringConverter;
 
 /**
  * 
@@ -34,7 +39,8 @@ public class UserInputParser implements ParserInterface {
         command = userCommand[0];
         isEnglishDate();
         taskName = setTaskName();
-        setDate(isEnglishDate());
+        setDate(numToUse);
+        System.out.println("numTouse:" + numToUse);
         System.out.println("parser startdate " + startDate);
         System.out.println("parser enddate " + endDate);
     }
@@ -72,9 +78,9 @@ public class UserInputParser implements ParserInterface {
     public String setTaskName() {
         loggerTaskName.log(Level.INFO, "Start of process");
         String output = "";
-        
+
         try {
-            if (numToUse == 1) {
+            if (numToUse == 1 || numToUse == 3) {
                 int taskNameIndex = lengthOfInput - 1;
 
                 System.out.println("index " + taskNameIndex);
@@ -87,7 +93,8 @@ public class UserInputParser implements ParserInterface {
 
                 System.out.println("index " + taskNameIndex);
                 for (int i = 1; i < taskNameIndex; i++) {
-                    output += userCommand[i] + " ";               }
+                    output += userCommand[i] + " ";
+                }
                 output = output.trim();
             }
         } catch (Exception e) {
@@ -103,17 +110,23 @@ public class UserInputParser implements ParserInterface {
 
         try {
             userCommand = input.split("\\s+");
-        } catch (Exception e) {//change into logger
+        } catch (Exception e) {// change into logger
             System.out.println("Error in splitting");
             System.out.println("Please enter again");
         }
         return userCommand;
     }
 
-    // ASSERT
     public void determineLengthOfInput() {
-        assert (userCommand.length > 4); 
         lengthOfInput = userCommand.length;
+    }
+
+    private boolean isFloating() {
+
+        DateTimeParser parser = new DateTimeParser();
+
+        return (parser.isLocalDate(userCommand[lengthOfInput - 1])
+                && !parser.isLocalDate(userCommand[lengthOfInput - 2]));
     }
 
     public static LocalDate stringToLocalDate(String date) {
@@ -132,7 +145,7 @@ public class UserInputParser implements ParserInterface {
 
         return endDate;
     }
-    
+
     public String getTaskName(String userInput) {
         setAttributes(userInput);
         return taskName;
@@ -183,19 +196,26 @@ public class UserInputParser implements ParserInterface {
         if (numToSetDate == 0) {
             startDate = stringToLocalDate(userCommand[lengthOfInput - 2]);
             endDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
-        } else if (numToSetDate == 1) {
+        } else if (numToSetDate == 4) {
             startDate = endDate = stringToLocalDate("today");
-
-        } else {
+        } else if (numToSetDate == 1) {
+            startDate = endDate = stringToLocalDate("tomorrow");
+        } else if (numToSetDate == 2) {
             startDate = endDate = stringToLocalDate(
                     userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1]);
+        } else if (numToSetDate == 3) {// floating task only accept date format
+                                       // now
+            startDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
+            endDate = LocalDate.of(12, 12, 12);// palceholder for null
         }
     }
 
     private int isEnglishDate() {
         // 1 is tmr
         // 2 is either next day or day after
+        // 3 is floating task
         // 0 is not english
+        // 4 is today
         String toCheck = userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1];
         numToUse = 0;
 
@@ -203,6 +223,10 @@ public class UserInputParser implements ParserInterface {
             numToUse = 1;
         } else if (toCheck.equals("next day") || toCheck.equals("day after")) {
             numToUse = 2;
+        } else if (isFloating()) {
+            numToUse = 3;
+        } else if (userCommand[lengthOfInput - 1].equals("today")) {
+            numToUse = 4;
         }
         return numToUse;
     }

@@ -5,8 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * @author A0121558H
- * dawson 
+ * @author A0121558H dawson
  * 
  *
  */
@@ -84,6 +83,47 @@ public class DateTimeParser {
     private boolean isEnglish(String input) {
         return (input.equals("today") || input.equals("tomorrow") || input.equals("next day")
                 || input.equals("day after"));
+    }
+
+    public boolean isLocalDate(String input) {
+        DateTimeFormatter formatterForDashes = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatterForSlashes = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatterEmpty = DateTimeFormatter.ofPattern("ddMMyyyy");
+        DateTimeFormatter formatterDashesShortened = DateTimeFormatter.ofPattern("dd-MM-yy");
+        DateTimeFormatter formatterSlashesShortened = DateTimeFormatter.ofPattern("dd/MM/yy");
+        DateTimeFormatter formatterEmptyShortened = DateTimeFormatter.ofPattern("ddMMyy");
+
+        try {
+            LocalDate.parse(input, formatterForDashes);
+            return true;
+        } catch (Exception e) {
+        }
+        try {
+            LocalDate.parse(input, formatterForSlashes);
+            return true;
+        } catch (Exception e) {
+        }
+        try {
+            LocalDate.parse(input, formatterEmpty);
+            return true;
+        } catch (Exception e) {
+        }
+        try {
+            LocalDate.parse(input, formatterDashesShortened);
+            return true;
+        } catch (Exception e) {
+        }
+        try {
+            LocalDate.parse(input, formatterSlashesShortened);
+            return true;
+        } catch (Exception e) {
+        }
+        try {
+            LocalDate.parse(input, formatterEmptyShortened);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }
