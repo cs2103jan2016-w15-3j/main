@@ -53,20 +53,23 @@ public class Logic {
     public ArrayList<Task> addTask(Task task) {
         commandMap.get(Commands.CREATE_TASK).execute(list, task);
         storage.save(list);
-        return (ArrayList) list;
+        return (ArrayList<Task>) list;
     }
 
-    public void deleteTask(int index) {
+    public ArrayList<Task> deleteTask(int index) {
         commandMap.get(Commands.DELETE_TASK).execute(list, index);
         storage.save(list);
+        return (ArrayList<Task>) list;
     }
 
     public void displayTask() {
         commandMap.get(Commands.DISPLAY_TASK).execute(list, null);
     }
     
-    public void updateTask(String input) {
-        commandMap.get(Commands.UPDATE_TASK).execute(list, input);
+    public ArrayList<Task> updateTask(Task task, int index) {
+        list.add(task);
+        commandMap.get(Commands.UPDATE_TASK).execute(list, index);
         storage.save(list);
+        return (ArrayList<Task>) list;
     }
 }
