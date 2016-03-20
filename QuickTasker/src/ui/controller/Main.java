@@ -6,13 +6,25 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import ui.controller.MainWindowController;
+//import main.resources.view.RootLayoutController;
 
 import java.io.IOException;
 
-public class Main extends Application {
-    private Stage primaryStage;
+// @author:  A0133333U
 
-    @Override public void start(Stage primaryStage) {
+public class Main extends Application {
+    
+    private static final String APP_TITLE = "Welcome to QuickTasker!";
+    private static final String IMAGE_ICON = "img/home.png";
+
+    private Stage primaryStage;
+    // private RootLayoutController rootLayoutController;
+    private static final int STAGE_MINIMUM_HEIGHT = 200;
+    private static final int STAGE_MINIMUM_WIDTH = 550;
+
+    @Override 
+    public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         mainWindow();
     }
@@ -28,14 +40,12 @@ public class Main extends Application {
 
             MainWindowController mainWindowController = new MainWindowController();
             mainWindowController.setMain(this);
-
+            primaryStage.getIcons().add(new Image(IMAGE_ICON));
             Scene scene = new Scene(pane);
-
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Welcome to QuickTasker");
-            primaryStage.getIcons().add(new Image("file:resources/images/home.png"));
-            primaryStage.setMinWidth(550);
-            primaryStage.setMinHeight(200);
+            primaryStage.setTitle(APP_TITLE);
+            primaryStage.setMinWidth(STAGE_MINIMUM_WIDTH);
+            primaryStage.setMinHeight(STAGE_MINIMUM_HEIGHT);
             primaryStage.show();
 
         } catch (IOException e) {
