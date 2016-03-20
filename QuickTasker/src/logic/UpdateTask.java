@@ -9,8 +9,8 @@ import parser.UserInputParser;
 public class UpdateTask<E> implements Command<Object> {
 
     @Override
-    public void execute(List<Task> list, Object userInput) {
-        try {
+    public void execute(List<Task> list, Object index) {
+/*        try {
             UserInputParser parser = new UserInputParser();
             String updates = (String) userInput;
             Task newTask = new Task(parser.getTaskNameForUpdate(updates), parser.getStartDateForUpdate(updates),
@@ -18,12 +18,14 @@ public class UpdateTask<E> implements Command<Object> {
             executeUpdate(parser.getIndexForUpdate(updates), newTask, list);
         } catch (Exception e) {
              System.out.println("Error");
-        }
+        }*/
+        int taskIndex = (int) index;
+        executeUpdate(taskIndex, list);
     }
     
     
-    public void executeUpdate(int taskIndex, Task newTask, List<Task> list) {
-        System.out.println(" aaaa   "  + newTask.getName());
+    public void executeUpdate(int taskIndex, List<Task> list) {
+        Task newTask = list.remove(list.size() - 1);
         list.set(taskIndex, newTask);
     }
 
