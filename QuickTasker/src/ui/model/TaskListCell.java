@@ -94,7 +94,6 @@ public class TaskListCell extends JFXListCell<Task> {
         column3.setHgrow(Priority.ALWAYS);
         grid.getColumnConstraints().addAll(column1, column2, column3);
 
-
     }
 
     private void configureTaskName() {

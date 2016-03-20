@@ -6,6 +6,7 @@ import parser.Commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.TreeMap;
 
 /**
@@ -18,16 +19,24 @@ import java.util.TreeMap;
 
 public class Logic {
     protected static List<Task> list;
-    private TreeMap<Commands, Command> commandMap;
+    protected TreeMap<Commands, Command> commandMap;
     private JsonTaskDataAccess storage;
+    protected Stack<Commands> stack;
 
     public Logic() {
+        initialize();
+    }
+
+    private void initialize() {
         populateCommandMap();
         list = new ArrayList<Task>();
+        assert (list != null);
         storage = new JsonTaskDataAccess();
+        stack = new Stack<Commands>();
     }
 
     public int getSize() {
+        assert (list.size() >= 0);
         return list.size();
     }
 
@@ -47,22 +56,34 @@ public class Logic {
         System.exit(0);
     }
 
-    public void addTask(Task task) {
+    public ArrayList<Task> addTask(Task task) {
         commandMap.get(Commands.CREATE_TASK).execute(list, task);
+        stack.push(Commands.CREATE_TASK);
         storage.save(list);
+        return (ArrayList<Task>) list;
     }
 
-    public void deleteTask(int index) {
+    public ArrayList<Task> deleteTask(int index) {
         commandMap.get(Commands.DELETE_TASK).execute(list, index);
+        stack.push(Commands.DELETE_TASK);
         storage.save(list);
+        return (ArrayList<Task>) list;
     }
 
     public void displayTask() {
         commandMap.get(Commands.DISPLAY_TASK).execute(list, null);
     }
 
-    public void updateTask(String input) {
-        commandMap.get(Commands.UPDATE_TASK).execute(list, input);
+    public ArrayList<Task> updateTask(Task task, int index) {
+        list.add(task);
+        commandMap.get(Commands.UPDATE_TASK).execute(list, index);
+        stack.push(Commands.UPDATE_TASK);
         storage.save(list);
+        return (ArrayList<Task>) list;
+    }
+
+    public ArrayList<Task> undo() {
+        commandMap.get(stack.pop()).undo((ArrayList<Task>) list);
+        return (ArrayList<Task>) list;
     }
 }

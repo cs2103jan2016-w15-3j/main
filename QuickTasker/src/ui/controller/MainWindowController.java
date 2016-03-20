@@ -27,10 +27,7 @@ import java.util.logging.Logger;
 
 /**
  * Author: A0133333U
- * <p>
- * todo: create more classes! too many classes in one?
  */
-
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
@@ -42,6 +39,7 @@ public class MainWindowController implements Initializable {
     @FXML Label label;
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
+    @FXML Label header;
     private ObservableList<Task> guiList = FXCollections.observableArrayList();
     private ListChangeListener<? super Task> listener;
 
@@ -70,10 +68,6 @@ public class MainWindowController implements Initializable {
         return input == null || input.isEmpty() || "".equals(input.trim());
     }
 
-    private boolean enterKeyIsPressed(KeyEvent event) {
-        return KeyCode.ENTER.equals(event.getCode());
-    }
-
     @FXML private void handleEnterKeyPressed(KeyEvent event) throws Exception {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
@@ -91,12 +85,13 @@ public class MainWindowController implements Initializable {
             createTask(userInput);
         } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
             deleteTask(userInput);
+        } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
+            updateTask(userInput);
+        } else if (parser.getCommand(userInput) == Commands.UNDO) {
+            undoTask();
         } else if (parser.getCommand(userInput) == Commands.EXIT) {
+            System.exit(0);
             operations.exit();
-            // } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
-            //     updateTask(userInput);
-        } else if (userInput.contains("edit")) {
-            editTask(userInput);
         }
         assert (false); // execution should not reach here
     }
@@ -112,34 +107,52 @@ public class MainWindowController implements Initializable {
         refresh();
     }
 
+    private void undoTask() {
+        guiList = FXCollections.observableArrayList(operations.undo());
+        afterOperation();
+        ;
+    }
+
+    private void updateTask(String userInput) throws Exception {
+        Task newTask = new Task(parser.getTaskNameForUpdate(userInput),
+                parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput));
+        guiList = FXCollections.observableArrayList(
+                operations.updateTask(newTask, parser.getIndexForUpdate(userInput)));
+        afterOperation();
+    }
+
     private void deleteTask(String userInput) throws Exception {
         int taskIndex;
         taskIndex = parser.getTaskIndex(userInput);
-        guiList.remove(taskIndex);
-        // updateList(guiList, taskIndex);
-        refresh();
+        guiList = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
+        afterOperation();
     }
 
-    /**
-     * Private void updateList(ObservableList<Task> list, int index) { for (int
-     * i=index;i< list.size(); i++) { Task.decrementId(list.get(i)); } }
-     **/
     private void refresh() {
         taskListView.setItems(guiList);
     }
 
     private void createTask(String userInput) throws Exception {
-        String taskName;
-        LocalDate startDate;
-        LocalDate dueDate;
-        taskName = parser.getTaskName(userInput);
-        startDate = parser.getStartDate(userInput);
-        dueDate = parser.getEndDate(userInput);
-        Task newTask = new Task(taskName, startDate, dueDate);
-        operations.addTask(newTask);
-        guiList.add(newTask);
+        Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
+                parser.getEndDate(userInput));
+        guiList = FXCollections.observableArrayList(operations.addTask(newTask));
+        afterOperation();
+    }
+
+    private void afterOperation() {
+        setCellFactory();
         refresh();
         commandBox.clear();
+    }
+
+    private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate)
+            throws Exception {
+        Task newTask = new Task(taskName, startDate, dueDate);
+        return newTask;
+    }
+
+    private boolean enterKeyIsPressed(KeyEvent event) {
+        return KeyCode.ENTER.equals(event.getCode());
     }
 
     private void setCellFactory() {
@@ -155,5 +168,3 @@ public class MainWindowController implements Initializable {
         }
     }
 }
-
-

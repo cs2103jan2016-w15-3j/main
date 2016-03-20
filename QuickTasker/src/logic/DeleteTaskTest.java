@@ -3,6 +3,9 @@ package logic;
 import model.Task;
 import org.junit.Before;
 import org.junit.Test;
+import parser.Commands;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,7 +16,7 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class DeleteTaskTest {
-    private Logic logic;
+    Logic logic;
 
     @Before public void setUp() throws Exception {
         init();
@@ -23,7 +26,7 @@ public class DeleteTaskTest {
         logic = new Logic();
         for (int i = 0; i < 10; i++) {
             Task task = new Task();
-            Logic.list.add(task);
+            logic.list.add(task);
         }
     }
 
@@ -33,6 +36,7 @@ public class DeleteTaskTest {
         assertEquals(logic.getSize(), 9);
         logic.deleteTask(8);
         assertEquals(logic.getSize(), 8);
-
+        logic.commandMap.get(Commands.DELETE_TASK).undo((ArrayList<Task>) logic.list);
+        assertEquals(logic.getSize(), 9);
     }
 }

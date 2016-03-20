@@ -139,7 +139,7 @@ public class UserInputParser implements ParserInterface {
         return endDate;
     }
 
-    private void setAttributesForUpdates(String input) {
+    public void setAttributesForUpdates(String input) {
         removeWhiteSpaces(input);
         command = userCommand[0];
         determineLengthOfInput();
