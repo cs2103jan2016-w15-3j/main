@@ -17,18 +17,20 @@ import parser.Commands;
  * .
  */
 
-public class Logic {
+public class Logic { 
     protected static List<Task> list;
-    private TreeMap<Commands, Command> commandMap;
+    protected TreeMap<Commands, Command> commandMap;
     private JsonTaskDataAccess storage;
 
     public Logic() {
         populateCommandMap();
         list = new ArrayList<Task>();
+        assert(list != null);
         storage = new JsonTaskDataAccess();
     }
 
     public int getSize() {
+        assert(list.size() >= 0);
         return list.size();
     }
     
@@ -48,9 +50,10 @@ public class Logic {
         System.exit(0);
     }
 
-    public void addTask(Task task) {
+    public ArrayList<Task> addTask(Task task) {
         commandMap.get(Commands.CREATE_TASK).execute(list, task);
         storage.save(list);
+        return (ArrayList) list;
     }
 
     public void deleteTask(int index) {
