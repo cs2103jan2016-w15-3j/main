@@ -19,6 +19,8 @@ public class DetermineCommandType {
                 return Commands.UPDATE_TASK;
             case "read":
                 return Commands.DISPLAY_TASK;
+            case "undo":
+                return Commands.UNDO;
             default:
                 return Commands.ERROR;
         }
