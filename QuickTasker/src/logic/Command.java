@@ -1,5 +1,6 @@
 package logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Task;
@@ -12,5 +13,6 @@ import model.Task;
  */
 
 public interface Command<E> {
-    void execute(List<Task> list, E task);
+    void execute(List<Task> list, E op);
+    void undo(ArrayList<Task> list);
 }
