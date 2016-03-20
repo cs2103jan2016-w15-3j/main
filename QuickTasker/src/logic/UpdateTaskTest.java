@@ -2,6 +2,8 @@ package logic;
 
 import static org.junit.Assert.*;
 
+import java.time.LocalDate;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,13 +25,13 @@ public class UpdateTaskTest {
 
     @Test
     public void testUpdatingWithName() throws Exception {
-        logic.updateTask("update 1 name 11-11-2016 11-12-2017");
+        logic.updateTask(new Task("name", LocalDate.now(), LocalDate.now()), 0);
         assertEquals("name", logic.getList().get(0).getName());
     }
     
     @Test
     public void testUpdatingWithLongerName() throws Exception {
-        logic.updateTask("update 2 name longer by alot 11-11-2016 11-12-2017");
+        logic.updateTask(new Task("name longer by alot", LocalDate.now(), LocalDate.now()), 1);
         assertEquals("name longer by alot", logic.getList().get(1).getName());
     }
 }
