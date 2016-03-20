@@ -177,7 +177,7 @@ public class UserInputParser implements ParserInterface {
         setAttributesForUpdates(userInput);
         return endDate;
     }
-    private void setAttributesForUpdates(String input) throws Exception {
+    public void setAttributesForUpdates(String input) throws Exception {
         removeWhiteSpaces(input);
         command=userCommand[0];
         determineLengthOfInput();
