@@ -33,6 +33,7 @@ public class MainWindowController implements Initializable {
     @FXML Label label;
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
+    @FXML Label header;
     ObservableList<Task> guiList = FXCollections.observableArrayList();
 
     @Override
@@ -51,7 +52,6 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) throws Exception {
-
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             performOperations(userInput);
@@ -68,6 +68,7 @@ public class MainWindowController implements Initializable {
         } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
             deleteTask(userInput);
         } else if (parser.getCommand(userInput) == Commands.EXIT){
+            System.exit(0);
             operations.exit();
         }
     }
@@ -97,8 +98,9 @@ public class MainWindowController implements Initializable {
         startDate = parser.getStartDate(userInput);
         dueDate = parser.getEndDate(userInput);
         Task newTask = new Task(taskName, startDate, dueDate);
-        operations.addTask(newTask);
-        guiList.add(newTask);
+        guiList = FXCollections.observableArrayList(operations.addTask(newTask));
+        //guiList.add(newTask);
+        setCellFactory();
         refresh();
         commandBox.clear();
     }
