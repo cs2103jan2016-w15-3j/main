@@ -1,5 +1,10 @@
 package parser;
 
+/**
+ * @author A0121558H
+ *         Dawson
+ */
+
 public class DetermineCommandType {
 
     public static Commands getCommand(String input) {
@@ -27,6 +32,8 @@ public class DetermineCommandType {
                 return Commands.SEARCH_TASK;
             case "read":
                 return Commands.DISPLAY_TASK;
+            case "undo":
+                return Commands.UNDO_TASK;
             case "exit":
                 return Commands.EXIT;
             default:

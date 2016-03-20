@@ -2,6 +2,7 @@ package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
+import data.JsonTaskDataAccess;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -30,14 +31,12 @@ import java.util.logging.Logger;
 
 /**
  * Author: A0133333U
- * <p>
- * todo: create more classes! too many classes in one?
  */
-
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-    //private data storage;
+    private static MainWindowController mainWindowController;
+    private JsonTaskDataAccess storage;
     private Main main;
     private ParserInterface parser = new UserInputParser();
     private Logic operations = new Logic();
@@ -45,6 +44,7 @@ public class MainWindowController implements Initializable {
     @FXML Label label;
     @FXML JFXTextField commandBox;
     @FXML JFXListView<Task> taskListView;
+    @FXML Label header;
     private ObservableList<Task> guiList = FXCollections.observableArrayList();
     private ListChangeListener<? super Task> listener;
 
@@ -94,7 +94,12 @@ public class MainWindowController implements Initializable {
             createTask(userInput);
         } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
             deleteTask(userInput);
+        } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
+            updateTask(userInput);
+        } else if (parser.getCommand(userInput) == Commands.UNDO) {
+            undoTask();
         } else if (parser.getCommand(userInput) == Commands.EXIT) {
+            System.exit(0);
             operations.exit();
             // } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
             //     updateTask(userInput);
@@ -111,42 +116,52 @@ public class MainWindowController implements Initializable {
     }
 
     private void editTask(String userInput) throws Exception {
+        String[] input;
+        int indexToEdit;
+        boolean editAll = false;
+        Task taskToEdit;
+
+        // if it's edit all
+        if (userInput.toLowerCase().contains("all")) {
+
+        }
         int taskIndex = parser.getTaskIndex(userInput);
-        ListCell<Task> listCell;
-        guiList.addListener(listener);
-        taskListView.getSelectionModel();
-        taskListView.getFocusModel().focus(taskIndex);
-        taskListView.scrollTo(taskIndex);
-        // pass to parser --> logic -->
+
         refresh();
+    }
+
+    private void markTaskCompleted(String userInput) throws Exception {
+
+    }
+
+    private void undoTask() {
+        guiList = FXCollections.observableArrayList(operations.undo());
+        afterOperation();
+    }
+
+    private void updateTask(String userInput) throws Exception {
+        Task newTask = new Task(parser.getTaskNameForUpdate(userInput),
+                parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput));
+        guiList = FXCollections.observableArrayList(
+                operations.updateTask(newTask, parser.getIndexForUpdate(userInput)));
+        afterOperation();
     }
 
     private void deleteTask(String userInput) throws Exception {
         int taskIndex;
         taskIndex = parser.getTaskIndex(userInput);
-        guiList.remove(taskIndex);
-        // updateList(guiList, taskIndex);
-        refresh();
+        guiList = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
+        afterOperation();
     }
 
-    /**
-     * Private void updateList(ObservableList<Task> list, int index) { for (int
-     * i=index;i< list.size(); i++) { Task.decrementId(list.get(i)); } }
-     **/
     private void refresh() {
         taskListView.setItems(guiList);
     }
 
     private void createTask(String userInput) throws Exception {
-        String taskName;
-        LocalDate startDate;
-        LocalDate dueDate;
-        taskName = parser.getTaskName(userInput);
-        startDate = parser.getStartDate(userInput);
-        dueDate = parser.getEndDate(userInput);
-        Task newTask = new Task(taskName, startDate, dueDate);
-        operations.addTask(newTask);
-        guiList.add(newTask);
+        Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
+                parser.getEndDate(userInput));
+        guiList = FXCollections.observableArrayList(operations.addTask(newTask));
         taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
             @Override
             public void changed(ObservableValue<? extends Task> observable, Task oldValue,
@@ -154,8 +169,19 @@ public class MainWindowController implements Initializable {
                 System.out.println("changed");
             }
         });
+        afterOperation();
+    }
+
+    private void afterOperation() {
+        setCellFactory();
         refresh();
         commandBox.clear();
+    }
+
+    private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate)
+            throws Exception {
+        Task newTask = new Task(taskName, startDate, dueDate);
+        return newTask;
     }
 
     private void setCellFactory() {
@@ -171,5 +197,3 @@ public class MainWindowController implements Initializable {
         }
     }
 }
-
-

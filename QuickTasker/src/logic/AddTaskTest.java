@@ -3,6 +3,9 @@ package logic;
 import model.Task;
 import org.junit.Before;
 import org.junit.Test;
+import parser.Commands;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,20 +16,18 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class AddTaskTest {
-
-    private Logic logic;
+    Logic logic;
 
     @Before public void setUp() throws Exception {
         logic = new Logic();
     }
 
-    @Test public void test() {
-
+    @Test public void testSizeOfListAfterAdd() throws Exception {
         logic.addTask(new Task());
-        assertEquals(logic.getSize(), 1);
         logic.addTask(new Task());
         assertEquals(logic.getSize(), 2);
-
+        logic.commandMap.get(Commands.CREATE_TASK).undo((ArrayList<Task>) Logic.list);
+        assertEquals(logic.getSize(), 1);
     }
 
 }

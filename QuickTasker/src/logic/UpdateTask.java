@@ -1,26 +1,30 @@
 package logic;
 
 import model.Task;
-import parser.UserInputParser;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
-public class UpdateTask<E> implements Command {
+public class UpdateTask<E> implements Command<Object> {
+    private Stack<Task> undoStackTask = new Stack<Task>();
+    private Stack<Integer> undoStackInt = new Stack<Integer>();
 
-    @Override public void execute(List list, Object userInput) {
-        try {
-            UserInputParser parser = new UserInputParser();
-            String updates = (String) userInput;
-            Task newTask = new Task(parser.getTaskNameForUpdate(updates),
-                    parser.getStartDateForUpdate(updates), parser.getEndDateForUpdate(updates));
-            executeUpdate(parser.getIndexForUpdate(updates), newTask, list);
-        } catch (Exception e) {
-            System.out.println("aaa");
-        }
+    @Override public void execute(List<Task> list, Object index) {
+        int taskIndex = (int) index;
+        undoStackTask.push(list.get(taskIndex));
+        undoStackInt.push(taskIndex);
+        executeUpdate(taskIndex, list);
     }
 
-    public void executeUpdate(int taskIndex, Task newTask, List<Task> list) {
-        System.out.println(" aaaa   " + newTask.getName());
+    public void executeUpdate(int taskIndex, List<Task> list) {
+        Task newTask = list.remove(list.size() - 1);
         list.set(taskIndex, newTask);
     }
+
+    @Override public void undo(ArrayList<Task> list) {
+        // TODO Auto-generated method stub
+        list.set(undoStackInt.pop(), undoStackTask.pop());
+    }
+
 }

@@ -29,6 +29,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final GridPane grid = new GridPane();
     private ObservableList<Task> tasks;
+    public boolean isCompleted;
 
     public TaskListCell(ObservableList<Task> list) {
         configureGrid();
@@ -60,7 +61,8 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void setTaskId(Task task) {
-        taskId.setText(String.valueOf(task.getId()));
+        final int offset = 1;
+        taskId.setText(String.valueOf(tasks.indexOf(task) + offset));
     }
 
     private void setTaskName(Task task) {
@@ -68,17 +70,21 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void setTaskStartDate(Task task) {
-        LocalDate startDate = task.getStartDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dateString = formatter.format(startDate);
-        taskStartDate.setText(dateString);
+        if (task.getStartDate() != null) {
+            LocalDate startDate = task.getStartDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String dateString = formatter.format(startDate);
+            taskStartDate.setText(dateString);
+        } else taskStartDate.setText("");
     }
 
     private void setTaskDueDate(Task task) {
-        LocalDate dueDate = task.getDueDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dateString = formatter.format(dueDate);
-        taskDeadLine.setText(dateString);
+        if (task.getStartDate() != null) {
+            LocalDate dueDate = task.getDueDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String dateString = formatter.format(dueDate);
+            taskDeadLine.setText(dateString);
+        } else taskDeadLine.setText("");
     }
 
     /**
@@ -97,7 +103,6 @@ public class TaskListCell extends JFXListCell<Task> {
         column3.setHgrow(Priority.ALWAYS);
         grid.getColumnConstraints().addAll(column1, column2, column3);
 
-
     }
 
     private void configureTaskName() {
@@ -112,7 +117,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureCheckBox() {
-        //checkBox.setMaxWidth(10);
+        checkBox.setSelected(isCompleted);
     }
 
     private void clearContent() {
@@ -123,7 +128,6 @@ public class TaskListCell extends JFXListCell<Task> {
     private void configureIcon() {
         // todo : implement awesome font icons and custom css
         // icons to be applied to relevant tasks
-
     }
 
     private void addControlsToGrid() {
