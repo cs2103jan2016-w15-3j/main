@@ -6,6 +6,8 @@ package ui.model;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -45,6 +47,7 @@ public class TaskListCell extends JFXListCell<Task> {
         } else {
             addContent(task);
             setGraphic(grid);
+
         }
     }
 

@@ -3,6 +3,8 @@ package ui.controller;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -10,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import logic.Logic;
@@ -97,6 +100,12 @@ public class MainWindowController implements Initializable {
             //     updateTask(userInput);
         } else if (userInput.contains("edit")) {
             editTask(userInput);
+        }else if (userInput.contains("1")){
+            //taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+            Task task = guiList.get(0);
+            task.setDone(true);
+            System.out.println(task.isDone());
         }
         assert (false); // execution should not reach here
     }
@@ -138,6 +147,13 @@ public class MainWindowController implements Initializable {
         Task newTask = new Task(taskName, startDate, dueDate);
         operations.addTask(newTask);
         guiList.add(newTask);
+        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
+            @Override
+            public void changed(ObservableValue<? extends Task> observable, Task oldValue,
+                    Task newValue) {
+                System.out.println("changed");
+            }
+        });
         refresh();
         commandBox.clear();
     }

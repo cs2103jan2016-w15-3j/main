@@ -28,12 +28,11 @@ public class Main extends Application {
 
             MainWindowController mainWindowController = new MainWindowController();
             mainWindowController.setMain(this);
-
+            primaryStage.getIcons().add(new Image("img/icon.png"));
             Scene scene = new Scene(pane);
 
             primaryStage.setScene(scene);
             primaryStage.setTitle("Welcome to QuickTasker");
-            primaryStage.getIcons().add(new Image("file:resources/images/home.png"));
             primaryStage.setMinWidth(550);
             primaryStage.setMinHeight(200);
             primaryStage.show();
