@@ -24,4 +24,9 @@ public class DisplayTask<E> implements Command<E> {
         return (ArrayList<Task>) list;
     }
 
+    @Override
+    public void undo(ArrayList<Task> list) {
+        // TODO Auto-generated method stub
+        
+    }
 }
