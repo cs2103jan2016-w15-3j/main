@@ -110,7 +110,6 @@ public class MainWindowController implements Initializable {
     private void undoTask() {
         guiList = FXCollections.observableArrayList(operations.undo());
         afterOperation();
-        ;
     }
 
     private void updateTask(String userInput) throws Exception {

@@ -1,13 +1,11 @@
 package parser;
 
 import java.time.LocalDate;
-import java.util.logging.*;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * 
  * @author A0121558H Dawson
- *
  */
 public class UserInputParser implements ParserInterface {
 
@@ -46,15 +44,6 @@ public class UserInputParser implements ParserInterface {
     }
 
     public static class setAttributeException extends RuntimeException {
-        // the purpose of setting cusom exception is such that you can tell
-        // exactly which class,
-        // and which method causes the exception, rather than seeing a bunch of
-        // red.
-        // The purpose of using RuntimeException is because it is the only
-        // 'unchcked' exception.
-        // A quick google will provide you some insights on how chcked
-        // expcetions are failed
-        // experiments in various programming languages including Java
     }
 
     /**
@@ -119,8 +108,8 @@ public class UserInputParser implements ParserInterface {
 
         DateTimeParser parser = new DateTimeParser();
 
-        return (parser.isLocalDate(userCommand[lengthOfInput - 1])
-                && !parser.isLocalDate(userCommand[lengthOfInput - 2]));
+        return (parser.isLocalDate(userCommand[lengthOfInput - 1]) && !parser
+                .isLocalDate(userCommand[lengthOfInput - 2]));
     }
 
     public static LocalDate stringToLocalDate(String date) {
@@ -155,7 +144,9 @@ public class UserInputParser implements ParserInterface {
         return DetermineCommandType.getCommand(command);
     }
 
-    /** Methods for updates **/
+    /**
+     * Methods for updates
+     **/
 
     public int getIndexForUpdate(String userInput) {
         removeWhiteSpaces(userInput);
@@ -177,7 +168,7 @@ public class UserInputParser implements ParserInterface {
         return endDate;
     }
 
-    private void setAttributesForUpdates(String input) {
+    public void setAttributesForUpdates(String input) {
         removeWhiteSpaces(input);
         command = userCommand[0];
         determineLengthOfInput();
@@ -198,7 +189,7 @@ public class UserInputParser implements ParserInterface {
             startDate = endDate = stringToLocalDate(
                     userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1]);
         } else if (numToSetDate == 3) {// floating task only accept date format
-                                       // now
+            // now
             startDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
             endDate = LocalDate.of(12, 12, 12);// palceholder for null
         }

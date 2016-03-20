@@ -119,7 +119,6 @@ public class TaskListCell extends JFXListCell<Task> {
     private void configureIcon() {
         // todo : implement awesome font icons and custom css
         // icons to be applied to relevant tasks
-
     }
 
     private void addControlsToGrid() {

@@ -26,7 +26,7 @@ public class AddTaskTest {
         logic.addTask(new Task());
         logic.addTask(new Task());
         assertEquals(logic.getSize(), 2);
-        logic.commandMap.get(Commands.CREATE_TASK).undo((ArrayList<Task>) logic.list);
+        logic.commandMap.get(Commands.CREATE_TASK).undo((ArrayList<Task>) Logic.list);
         assertEquals(logic.getSize(), 1);
     }
 

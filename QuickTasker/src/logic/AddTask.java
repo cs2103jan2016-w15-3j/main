@@ -42,7 +42,7 @@ public class AddTask<E> implements Command<Object> {
     }
 
     @Override public void undo(ArrayList<Task> list) {
-        int index = findTask(undoStack.pop().getId(), (ArrayList<Task>) list);
+        int index = findTask(undoStack.pop().getId(), list);
         if (index >= 0) {
             list.remove(index);
         } else {

@@ -1,9 +1,8 @@
 package parser;
+
 /**
- * 
- * @author A0121558H 
- * Dawson
- *
+ * @author A0121558H
+ *         Dawson
  */
 
 public class DetermineCommandType {

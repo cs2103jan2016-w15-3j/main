@@ -16,7 +16,7 @@ public class DeleteTask<E> implements Command<Object> {
     private Stack<Task> undoStack = new Stack<Task>();
 
     @Override public void execute(List<Task> list, Object task) {
-        undoStack.push((Task) list.get((int) task));
+        undoStack.push(list.get((int) task));
         executeDelete(list, (int) task);
 
     }
