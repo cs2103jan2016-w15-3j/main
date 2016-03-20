@@ -6,6 +6,8 @@ package ui.model;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -27,6 +29,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final GridPane grid = new GridPane();
     private ObservableList<Task> tasks;
+    public boolean isCompleted;
 
     public TaskListCell(ObservableList<Task> list) {
         configureGrid();
@@ -109,7 +112,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureCheckBox() {
-        //checkBox.setMaxWidth(10);
+        checkBox.setSelected(isCompleted);
     }
 
     private void clearContent() {

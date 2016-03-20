@@ -2,6 +2,10 @@ package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
+import com.sun.org.glassfish.external.statistics.Statistic;
+import com.sun.xml.internal.ws.api.message.SuppressAutomaticWSARequestHeadersFeature;
+
+import data.JsonTaskDataAccess;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -27,14 +31,13 @@ import java.util.logging.Logger;
 
 /**
  * Author: A0133333U
- * <p>
- * todo: create more classes! too many classes in one?
  */
 
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-    //private data storage;
+    private static MainWindowController mainWindowController;
+    private JsonTaskDataAccess storage;
     private Main main;
     private ParserInterface parser = new UserInputParser();
     private Logic operations = new Logic();
@@ -102,14 +105,23 @@ public class MainWindowController implements Initializable {
     }
 
     private void editTask(String userInput) throws Exception {
+        String[] input;
+        int indexToEdit;
+        boolean editAll = false;
+        Task taskToEdit;
+        
+        // if it's edit all
+        if (userInput.toLowerCase().contains("all")) {
+            
+            
+        }
         int taskIndex = parser.getTaskIndex(userInput);
-        ListCell<Task> listCell;
-        guiList.addListener(listener);
-        taskListView.getSelectionModel();
-        taskListView.getFocusModel().focus(taskIndex);
-        taskListView.scrollTo(taskIndex);
-        // pass to parser --> logic -->
+      
         refresh();
+    }
+    
+    private void markTaskCompleted(String userInput) throws Exception {
+        
     }
 
     private void deleteTask(String userInput) throws Exception {
