@@ -21,6 +21,8 @@ public class DetermineCommandType {
                 return Commands.DISPLAY_TASK;
             case "undo":
                 return Commands.UNDO;
+            case "redo":
+                return Commands.REDO;
             default:
                 return Commands.ERROR;
         }
