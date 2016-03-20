@@ -16,4 +16,6 @@ public interface Command<E> {
     void execute(List<Task> list, E op);
 
     void undo(ArrayList<Task> list);
+    
+    void redo(ArrayList<Task> list);
 }
