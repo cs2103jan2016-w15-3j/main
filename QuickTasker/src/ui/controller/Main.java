@@ -15,8 +15,8 @@ import java.io.IOException;
 
 public class Main extends Application {
     
-    private static final String APP_TITLE = "Welcome to QuickTasker";
-    private static final String IMAGE_ICON = "file: home.png";
+    private static final String APP_TITLE = "Welcome to QuickTasker!";
+    private static final String IMAGE_ICON = "img/home.png";
 
     private Stage primaryStage;
     // private RootLayoutController rootLayoutController;
@@ -40,12 +40,10 @@ public class Main extends Application {
 
             MainWindowController mainWindowController = new MainWindowController();
             mainWindowController.setMain(this);
-
+            primaryStage.getIcons().add(new Image(IMAGE_ICON));
             Scene scene = new Scene(pane);
-
             primaryStage.setScene(scene);
             primaryStage.setTitle(APP_TITLE);
-            primaryStage.getIcons().add(new Image(IMAGE_ICON));
             primaryStage.setMinWidth(STAGE_MINIMUM_WIDTH);
             primaryStage.setMinHeight(STAGE_MINIMUM_HEIGHT);
             primaryStage.show();
