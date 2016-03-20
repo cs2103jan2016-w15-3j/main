@@ -2,9 +2,6 @@ package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-import com.sun.org.glassfish.external.statistics.Statistic;
-import com.sun.xml.internal.ws.api.message.SuppressAutomaticWSARequestHeadersFeature;
-
 import data.JsonTaskDataAccess;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -113,7 +110,6 @@ public class MainWindowController implements Initializable {
 
         // if it's edit all
         if (userInput.toLowerCase().contains("all")) {
-
 
         }
         int taskIndex = parser.getTaskIndex(userInput);

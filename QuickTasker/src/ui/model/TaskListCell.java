@@ -6,8 +6,6 @@ package ui.model;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
-import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -60,7 +58,8 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void setTaskId(Task task) {
-        taskId.setText(String.valueOf(task.getId()));
+        final int offset = 1;
+        taskId.setText(String.valueOf(tasks.indexOf(task) + offset));
     }
 
     private void setTaskName(Task task) {
@@ -68,17 +67,21 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void setTaskStartDate(Task task) {
-        LocalDate startDate = task.getStartDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dateString = formatter.format(startDate);
-        taskStartDate.setText(dateString);
+        if (task.getStartDate() != null) {
+            LocalDate startDate = task.getStartDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String dateString = formatter.format(startDate);
+            taskStartDate.setText(dateString);
+        } else taskStartDate.setText("");
     }
 
     private void setTaskDueDate(Task task) {
-        LocalDate dueDate = task.getDueDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dateString = formatter.format(dueDate);
-        taskDeadLine.setText(dateString);
+        if (task.getStartDate() != null) {
+            LocalDate dueDate = task.getDueDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String dateString = formatter.format(dueDate);
+            taskDeadLine.setText(dateString);
+        } else taskDeadLine.setText("");
     }
 
     /**
