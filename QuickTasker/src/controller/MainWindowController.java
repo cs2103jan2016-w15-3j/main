@@ -70,12 +70,18 @@ public class MainWindowController implements Initializable {
             deleteTask(userInput);
         } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
             updateTask(userInput);
+        } else if (parser.getCommand(userInput) == Commands.UNDO) {
+            undoTask();
         } else if (parser.getCommand(userInput) == Commands.EXIT){
             System.exit(0);
             operations.exit();
         }
     }
     
+    private void undoTask() {
+        guiList = FXCollections.observableArrayList(operations.undo());
+        afterOperation();;
+    }
     private void updateTask(String userInput) throws Exception {
         Task newTask = new Task(parser.getTaskNameForUpdate(userInput), parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput));
         guiList = FXCollections.observableArrayList(operations.updateTask(newTask, parser.getIndexForUpdate(userInput)));
