@@ -1,8 +1,14 @@
 package parser;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Arrays;
+
+import java.util.Collections;
+
 //import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 /**
  * @author A0121558H dawson
@@ -125,5 +131,86 @@ public class DateTimeParser {
             return false;
         }
     }
+    // FOR TIME
+    // SCAN WHOLE STRING ARRAY
+    // HAVE 2 INT VARIABLE TO STORE WHICH INDEX TIME IS FOUND IN ARRAY
+    // IF BOTH USED=> START TIME AND END TIME; check index pos to determine
+    // IF ONLY ONE ASSUME START TIME
+    // REMOVE THE TIME THEN SETATTRIBUTES USE ARRAYLIST THEN CONVERT BACK
 
+    private boolean isTime(String input) {
+        return (input.indexOf(':') >= 0) || (input.indexOf("pm") >= 0) || input.indexOf("am") >= 0;
+    }
+
+    public ArrayList<Integer> indicesToDetermineTime(String[] input) {
+
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+
+        for (int i = 0; i < input.length; i++) {
+            if (isTime(input[i])) {
+                indices.add(i);
+            }
+        }
+        return indices;
+    }
+
+    public ArrayList<LocalTime> getTime(String[] input, ArrayList<Integer> indices) {
+        ArrayList<LocalTime> output = new ArrayList<LocalTime>();
+
+        for (int i = 0; i < indices.size(); i++) {
+            output.add(toLocalTime(input[indices.get(i)]));
+        }
+        return output;
+    }
+
+    private LocalTime toLocalTime(String input) {
+        DateTimeFormatter timeColons = DateTimeFormatter.ofPattern("HH:MM");
+        // how to set am pm??? TODO
+        return LocalTime.parse(input, timeColons);
+    }
+
+    public String[] removeTime(String[] userCommand) {
+        // test
+      /*  System.out.println("BEFORE REMOVE");
+        for (String s : userCommand) {
+            System.out.print(s);
+        }*/
+
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+        indices = indicesToDetermineTime(userCommand);
+        int numIndices = indices.size();
+        ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList((userCommand)));
+
+        if (numIndices == 0) {
+            return userCommand;
+        } else if (numIndices == 1) {
+            int first= indices.get(0);
+           // System.out.println("check indices: " + indices.get(0));
+         //   System.out.println("to remove: " + tempUserCommand.get(indices.get(0)));
+            tempUserCommand.remove(first);
+        } else {
+            int first = indices.get(0);
+            int second = indices.get(1);
+
+          //  System.out.println("1st: " + first);
+         //   System.out.println("2nd: " + second);
+
+            if (first > second) {
+                tempUserCommand.remove(first);
+                tempUserCommand.remove(second);
+            } else {
+                tempUserCommand.remove(second);
+                tempUserCommand.remove(first);
+            }
+        }
+
+        // String[] checkcheck= tempUserCommand.toArray(new
+        // String[tempUserCommand.size()]);
+        // test
+      /*  System.out.println("AFTER REMOVE");
+        for (String t : tempUserCommand)
+            System.out.print(t);*/
+
+        return tempUserCommand.toArray(new String[tempUserCommand.size()]);
+    }
 }
