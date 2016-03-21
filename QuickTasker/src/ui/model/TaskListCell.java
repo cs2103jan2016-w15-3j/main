@@ -6,9 +6,8 @@ package ui.model;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
@@ -16,9 +15,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import model.Task;
+import ui.controller.TaskDoneEvent;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
 public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartDate = new Label();
@@ -29,7 +31,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final GridPane grid = new GridPane();
     private ObservableList<Task> tasks;
-    public boolean isCompleted;
+    public boolean handlerAdded = false;
 
     public TaskListCell(ObservableList<Task> list) {
         configureGrid();
@@ -46,10 +48,22 @@ public class TaskListCell extends JFXListCell<Task> {
         if (empty) {
             clearContent();
         } else {
+            if (!handlerAdded) {
+                getListView().addEventFilter(TASK_COMPLETE, new EventHandler<TaskDoneEvent>() {
+                            @Override public void handle(TaskDoneEvent event) {
+                                event.consume();
+                                handlerAdded = true;
+                                checkBox.setAllowIndeterminate(false);
+                                checkBox.fire();
+                            }
+                        }
+
+                );
+            }
             addContent(task);
             setGraphic(grid);
-
         }
+
     }
 
     private void addContent(Task task) {
@@ -117,7 +131,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureCheckBox() {
-        checkBox.setSelected(isCompleted);
+
     }
 
     private void clearContent() {

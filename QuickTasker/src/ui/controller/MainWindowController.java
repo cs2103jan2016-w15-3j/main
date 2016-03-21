@@ -4,11 +4,11 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import data.JsonTaskDataAccess;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -77,10 +77,14 @@ public class MainWindowController implements Initializable {
         return KeyCode.ENTER.equals(event.getCode());
     }
 
-    @FXML private void handleEnterKeyPressed(KeyEvent event) throws Exception {
+    @FXML private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
-            performOperations(userInput);
+            try {
+                performOperations(userInput);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             logger.log(Level.SEVERE, userInput);
         }
     }
@@ -99,18 +103,11 @@ public class MainWindowController implements Initializable {
         } else if (parser.getCommand(userInput) == Commands.UNDO) {
             undoTask();
         } else if (parser.getCommand(userInput) == Commands.EXIT) {
-            System.exit(0);
             operations.exit();
-            // } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
-            //     updateTask(userInput);
         } else if (userInput.contains("edit")) {
             editTask(userInput);
-        }else if (userInput.contains("1")){
-            //taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-            Task task = guiList.get(0);
-            task.setDone(true);
-            System.out.println(task.isDone());
+        } else if (userInput.contains("mark")) {
+            markTaskCompleted(userInput);
         }
         assert (false); // execution should not reach here
     }
@@ -131,6 +128,28 @@ public class MainWindowController implements Initializable {
     }
 
     private void markTaskCompleted(String userInput) throws Exception {
+
+        int i = parser.getIndexForDone(userInput);
+        Task task = guiList.get(i);
+        task.setDone(true);
+        taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        taskListView.getSelectionModel().select(i);
+        taskListView.fireEvent(new TaskDoneEvent());
+        javafx.concurrent.Task<Void> sleeper = new javafx.concurrent.Task<Void>() {
+            @Override protected Void call() throws Exception {
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override public void handle(WorkerStateEvent event) {
+                taskListView.getSelectionModel().clearSelection();
+            }
+        });
+        new Thread(sleeper).start();
 
     }
 
@@ -162,13 +181,7 @@ public class MainWindowController implements Initializable {
         Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
                 parser.getEndDate(userInput));
         guiList = FXCollections.observableArrayList(operations.addTask(newTask));
-        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
-            @Override
-            public void changed(ObservableValue<? extends Task> observable, Task oldValue,
-                    Task newValue) {
-                System.out.println("changed");
-            }
-        });
+
         afterOperation();
     }
 

@@ -7,8 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class Main extends Application {
 
     private static final String APP_TITLE = "Welcome to QuickTasker!";
@@ -43,7 +41,7 @@ public class Main extends Application {
             primaryStage.setMinHeight(STAGE_MINIMUM_HEIGHT);
             primaryStage.show();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

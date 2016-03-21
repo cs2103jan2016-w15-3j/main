@@ -153,6 +153,11 @@ public class UserInputParser implements ParserInterface {
         return Integer.parseInt(userCommand[1]) - 1;
     }
 
+    public int getIndexForDone(String userInput) {
+        removeWhiteSpaces(userInput);
+        return Integer.parseInt(userCommand[1]) - 1;
+    }
+
     public String getTaskNameForUpdate(String userInput) {
         setAttributesForUpdates(userInput);
         return taskName;

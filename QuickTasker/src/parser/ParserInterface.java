@@ -22,6 +22,8 @@ public interface ParserInterface {
 
     int getIndexForUpdate(String userInput);
 
+    int getIndexForDone(String userInput);
+
     String getTaskNameForUpdate(String userInput) throws Exception;
 
     LocalDate getStartDateForUpdate(String userInput) throws Exception;
