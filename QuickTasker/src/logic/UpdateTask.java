@@ -9,8 +9,11 @@ import java.util.Stack;
 public class UpdateTask<E> implements Command<Object> {
     private Stack<Task> undoStackTask = new Stack<Task>();
     private Stack<Integer> undoStackInt = new Stack<Integer>();
-
-    @Override public void execute(List<Task> list, Object index) {
+    private Stack<Task> redoStackTask = new Stack<Task>(); 
+    private Stack<Integer> redoStackInt = new Stack<Integer>();
+    
+    @Override
+    public void execute(List<Task> list, Object index) {
         int taskIndex = (int) index;
         undoStackTask.push(list.get(taskIndex));
         undoStackInt.push(taskIndex);
@@ -22,9 +25,25 @@ public class UpdateTask<E> implements Command<Object> {
         list.set(taskIndex, newTask);
     }
 
-    @Override public void undo(ArrayList<Task> list) {
-        // TODO Auto-generated method stub
-        list.set(undoStackInt.pop(), undoStackTask.pop());
+    @Override
+    public void undo(ArrayList<Task> list) {
+        int undoIndex = undoStackInt.pop();
+        Task undoTask = undoStackTask.pop();
+        redoStackInt.push(undoIndex);
+        redoStackTask.push(list.get(undoIndex));
+        list.set(undoIndex, undoTask);
+    }
+
+
+    @Override
+    public void redo(ArrayList<Task> list) {
+        int redoIndex = redoStackInt.pop();
+        Task redoTask = redoStackTask.pop();
+        System.out.println("redo index " + redoIndex);
+        System.out.println("redo name " + redoTask.getName());
+        undoStackInt.push(redoIndex);
+        undoStackTask.push(list.get(redoIndex));
+        list.set(redoIndex, redoTask);
     }
 
 }
