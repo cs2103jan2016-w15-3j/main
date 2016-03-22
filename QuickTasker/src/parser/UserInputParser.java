@@ -105,6 +105,7 @@ public class UserInputParser implements ParserInterface {
 
         return output;
     }
+
     // TRYCATCH
     public String[] removeWhiteSpaces(String input) {
 
@@ -144,6 +145,18 @@ public class UserInputParser implements ParserInterface {
         setAttributes(userInput);
 
         return endDate;
+    }
+
+    public LocalTime getStartTime(String userInput) {
+        setAttributes(userInput);
+
+        return startTime;
+    }
+
+    public LocalTime getEndTime(String userInput) {
+        setAttributes(userInput);
+
+        return endTime;
     }
 
     public String getTaskName(String userInput) {
@@ -203,7 +216,7 @@ public class UserInputParser implements ParserInterface {
         } else if (numToSetDate == 2) {
             startDate = endDate = stringToLocalDate(
                     userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1]);
-        } else if (numToSetDate == 3) {//floating task
+        } else if (numToSetDate == 3) {// floating task
             startDate = LocalDate.MIN;
             endDate = LocalDate.MIN;// placeholder for null
         } else if (numToSetDate == 4) {
