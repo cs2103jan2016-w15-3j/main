@@ -105,7 +105,6 @@ public class UserInputParser implements ParserInterface {
 
         return output;
     }
-
     // TRYCATCH
     public String[] removeWhiteSpaces(String input) {
 
