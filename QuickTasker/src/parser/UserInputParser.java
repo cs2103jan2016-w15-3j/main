@@ -34,13 +34,13 @@ public class UserInputParser implements ParserInterface {
         DateTimeParser dateTimeParser = new DateTimeParser();
 
         removeWhiteSpaces(userInput);
-        setTime();
+        setTime(userCommand);
         userCommand = dateTimeParser.removeTime(userCommand);
         determineLengthOfInput();
         command = userCommand[0];
         isEnglishDate();
         taskName = setTaskName();
-        setDate(numToUse);
+        setDate(numToUse, lengthOfInput);
         System.out.println("numTouse:" + numToUse);
         System.out.println("parser startdate " + startDate);
         System.out.println("parser enddate " + endDate);
@@ -207,15 +207,15 @@ public class UserInputParser implements ParserInterface {
         endDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
     }
 
-    private void setDate(int numToSetDate) {
+    public void setDate(int numToSetDate, int length) {
         if (numToSetDate == 0) {
-            startDate = stringToLocalDate(userCommand[lengthOfInput - 2]);
-            endDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
+            startDate = stringToLocalDate(userCommand[length - 2]);
+            endDate = stringToLocalDate(userCommand[length - 1]);
         } else if (numToSetDate == 1) {
             startDate = endDate = stringToLocalDate("tomorrow");
         } else if (numToSetDate == 2) {
             startDate = endDate = stringToLocalDate(
-                    userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1]);
+                    userCommand[length - 2] + " " + userCommand[length - 1]);
         } else if (numToSetDate == 3) {// floating task
             startDate = LocalDate.MIN;
             endDate = LocalDate.MIN;// placeholder for null
@@ -224,14 +224,14 @@ public class UserInputParser implements ParserInterface {
         }
     }
 
-    public void setTime() {
+    public void setTime(String[] input) {
         DateTimeParser parser = new DateTimeParser();
-        ArrayList<Integer> indicesTime = parser.indicesToDetermineTime(userCommand);
+        ArrayList<Integer> indicesTime = parser.indicesToDetermineTime(input);
 
         if (indicesTime.size() == 0) {
             return;
         }
-        ArrayList<LocalTime> localTimes = parser.parseTime(userCommand, indicesTime);
+        ArrayList<LocalTime> localTimes = parser.parseTime(input, indicesTime);
 
         if (indicesTime.size() == 1) {
             startTime = localTimes.get(0);
