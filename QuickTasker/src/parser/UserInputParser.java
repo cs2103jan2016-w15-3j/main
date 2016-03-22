@@ -1,8 +1,10 @@
 package parser;
 
 import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.logging.*;
+
 
 /**
  * @author A0121558H Dawson
@@ -12,6 +14,8 @@ public class UserInputParser implements ParserInterface {
     private String taskName;
     private LocalDate startDate;
     private LocalDate endDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private String command;
     private String[] userCommand;
     private int lengthOfInput;
@@ -22,11 +26,17 @@ public class UserInputParser implements ParserInterface {
         this.taskName = "";
         this.startDate = LocalDate.MIN;
         this.endDate = LocalDate.MAX;
+        this.startTime = LocalTime.MIN;
+        this.endTime = LocalTime.MAX;
         this.command = "";
     }
 
     public void setAttributes(String userInput) {
+        DateTimeParser dateTimeParser = new DateTimeParser();
+
         removeWhiteSpaces(userInput);
+        setTime();
+        userCommand = dateTimeParser.removeTime(userCommand);
         determineLengthOfInput();
         command = userCommand[0];
         isEnglishDate();
@@ -35,6 +45,8 @@ public class UserInputParser implements ParserInterface {
         System.out.println("numTouse:" + numToUse);
         System.out.println("parser startdate " + startDate);
         System.out.println("parser enddate " + endDate);
+        System.out.println("parser starttime " + startTime);
+        System.out.println("parser endtime " + endTime);
     }
 
     public void setAttributesForGetCommands(String userInput) throws setAttributeException {
@@ -181,8 +193,6 @@ public class UserInputParser implements ParserInterface {
         if (numToSetDate == 0) {
             startDate = stringToLocalDate(userCommand[lengthOfInput - 2]);
             endDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
-        } else if (numToSetDate == 4) {
-            startDate = endDate = stringToLocalDate("today");
         } else if (numToSetDate == 1) {
             startDate = endDate = stringToLocalDate("tomorrow");
         } else if (numToSetDate == 2) {
@@ -192,6 +202,26 @@ public class UserInputParser implements ParserInterface {
             // now
             startDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
             endDate = LocalDate.of(12, 12, 12);// palceholder for null
+        } else if (numToSetDate == 4) {
+            startDate = endDate = stringToLocalDate("today");
+        }
+    }
+    public void setTime() {
+        DateTimeParser parser = new DateTimeParser();
+        ArrayList<Integer> indicesTime = parser.indicesToDetermineTime(userCommand);
+
+        if (indicesTime.size() == 0) {
+            return;
+        }
+        ArrayList<LocalTime> localTimes = parser.getTime(userCommand, indicesTime);
+       
+        if (indicesTime.size() == 1) {
+            startTime = localTimes.get(0);
+            endTime=null;
+        }
+        if (indicesTime.size() == 2) {
+            startTime = localTimes.get(0);
+            endTime = localTimes.get(1);
         }
     }
 
