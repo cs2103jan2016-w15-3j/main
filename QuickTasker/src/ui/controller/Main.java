@@ -9,8 +9,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-//import main.resources.view.RootLayoutController;
-
 // @author:  A0133333U
 
 public class Main extends Application {
@@ -23,7 +21,8 @@ public class Main extends Application {
     private static final int STAGE_MINIMUM_HEIGHT = 200;
     private static final int STAGE_MINIMUM_WIDTH = 550;
 
-    @Override public void start(Stage primaryStage) throws Exception {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         mainWindow();
     }

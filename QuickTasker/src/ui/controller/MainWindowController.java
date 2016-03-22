@@ -52,7 +52,8 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
     private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
 
-    @Override public void initialize(URL location, ResourceBundle resources) {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
         setCellFactory();
         setMain(main);
@@ -74,7 +75,8 @@ public class MainWindowController implements Initializable {
         return KeyCode.ENTER.equals(event.getCode());
     }
 
-    @FXML private void handleEnterKeyPressed(KeyEvent event) throws Exception {
+    @FXML
+    private void handleEnterKeyPressed(KeyEvent event) throws Exception {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             performOperations(userInput);

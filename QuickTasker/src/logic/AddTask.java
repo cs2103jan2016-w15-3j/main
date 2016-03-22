@@ -19,7 +19,8 @@ public class AddTask<E> implements Command<Object> {
     private static Logger loggerAdd = Logger.getLogger("log");
     private Stack<Task> undoStack = new Stack<Task>();
 
-    @Override public void execute(List<Task> list, Object task) {
+    @Override
+    public void execute(List<Task> list, Object task) {
         assert (list.size() >= 0);
         undoStack.push((Task) task);
         executeAdd(list, (Task) task);
@@ -41,7 +42,8 @@ public class AddTask<E> implements Command<Object> {
         loggerAdd.log(Level.INFO, "END");
     }
 
-    @Override public void undo(ArrayList<Task> list) {
+    @Override
+    public void undo(ArrayList<Task> list) {
         int index = findTask(undoStack.pop().getId(), list);
         if (index >= 0) {
             list.remove(index);

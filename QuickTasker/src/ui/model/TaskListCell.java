@@ -39,7 +39,8 @@ public class TaskListCell extends JFXListCell<Task> {
         tasks = list;
     }
 
-    @Override public void updateItem(Task task, boolean empty) {
+    @Override
+    public void updateItem(Task task, boolean empty) {
         super.updateItem(task, empty);
         if (empty) {
             clearContent();

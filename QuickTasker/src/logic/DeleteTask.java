@@ -15,7 +15,8 @@ import java.util.Stack;
 public class DeleteTask<E> implements Command<Object> {
     private Stack<Task> undoStack = new Stack<Task>();
 
-    @Override public void execute(List<Task> list, Object task) {
+    @Override
+    public void execute(List<Task> list, Object task) {
         undoStack.push(list.get((int) task));
         executeDelete(list, (int) task);
 
@@ -25,7 +26,8 @@ public class DeleteTask<E> implements Command<Object> {
         list.remove(index);
     }
 
-    @Override public void undo(ArrayList<Task> list) {
+    @Override
+    public void undo(ArrayList<Task> list) {
         list.add(undoStack.pop());
 
     }

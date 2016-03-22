@@ -18,11 +18,13 @@ import static org.junit.Assert.assertEquals;
 public class AddTaskTest {
     Logic logic;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         logic = new Logic();
     }
 
-    @Test public void testSizeOfListAfterAdd() throws Exception {
+    @Test
+    public void testSizeOfListAfterAdd() throws Exception {
         logic.addTask(new Task());
         logic.addTask(new Task());
         assertEquals(logic.getSize(), 2);
