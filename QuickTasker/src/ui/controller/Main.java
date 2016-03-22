@@ -22,14 +22,31 @@ public class Main extends Application {
     private static final int STAGE_MINIMUM_WIDTH = 550;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        // Do not remove these 2 lines of comments:
+        /*Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
+        Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);*/
+
         mainWindow();
     }
 
-    /**
-     * Responsible for displaying main window.
-     */
+    // usage : Platform.runLater(getFxWrapper(yourRunnable));
+    public static Runnable getFxWrapper(final Runnable r) {
+        return new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    r.run();
+                } catch (Exception e) {
+                    // call logger.log here to handle thread exception
+                    System.out.println("Found an exception");
+                }
+            }
+        };
+    }
+
     private void mainWindow() {
 
         try {
@@ -46,7 +63,7 @@ public class Main extends Application {
             primaryStage.setMinHeight(STAGE_MINIMUM_HEIGHT);
             primaryStage.show();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

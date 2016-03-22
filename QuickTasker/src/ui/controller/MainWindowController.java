@@ -7,10 +7,13 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import logic.Logic;
@@ -27,7 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Author: A0133333U/A0130949Y
+ * Author: A0133333U/A0130949Y/A0126077E
  */
 public class MainWindowController implements Initializable {
 
@@ -60,7 +63,6 @@ public class MainWindowController implements Initializable {
         logger = Logger.getLogger("MyLogger");
         logger.setLevel(Level.INFO);
         logger.log(Level.SEVERE, "Test logging");
-
     }
 
     void setMain(Main main) {
@@ -76,7 +78,7 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    private void handleEnterKeyPressed(KeyEvent event) throws Exception {
+    private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             performOperations(userInput);
@@ -101,6 +103,10 @@ public class MainWindowController implements Initializable {
             redoTask();
         } else if (parser.getCommand(userInput) == Commands.EXIT) {
             operations.exit();
+        } else if (userInput.contains("edit")) {
+            editTask(userInput);
+        } else if (userInput.contains("mark")) {
+            markTaskCompleted(userInput);
         }
         assert (false); // execution should not reach here
     }
@@ -122,6 +128,29 @@ public class MainWindowController implements Initializable {
 
     private void markTaskCompleted(String userInput) throws Exception {
 
+        int i = parser.getIndexForDone(userInput);
+        Task task = guiList.get(i);
+        task.setDone(true);
+        taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        taskListView.getSelectionModel().select(i);
+        taskListView.fireEvent(new TaskDoneEvent());
+        javafx.concurrent.Task<Void> sleeper = new javafx.concurrent.Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                taskListView.getSelectionModel().clearSelection();
+            }
+        });
+        new Thread(sleeper).start();
     }
 
     private void redoTask() {

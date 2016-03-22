@@ -12,6 +12,7 @@ public class Task {
     private String taskName;
     private LocalDate endDate;
     private LocalDate startDate;
+    private boolean isDone = false;
     private int id;
 
     public void setStartDateAsNow() {
@@ -76,6 +77,14 @@ public class Task {
 
     public int getId() {
         return id;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 
     private void generateId() {
