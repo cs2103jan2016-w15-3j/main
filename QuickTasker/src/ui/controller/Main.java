@@ -7,8 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 // @author:  A0133333U
 
 public class Main extends Application {
@@ -33,16 +31,12 @@ public class Main extends Application {
 
     // usage : Platform.runLater(getFxWrapper(yourRunnable));
     public static Runnable getFxWrapper(final Runnable r) {
-        return new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    r.run();
-                } catch (Exception e) {
-                    // call logger.log here to handle thread exception
-                    System.out.println("Found an exception");
-                }
+        return () -> {
+            try {
+                r.run();
+            } catch (Exception e) {
+                // call logger.log here to handle thread exception
+                System.out.println("Found an exception");
             }
         };
     }

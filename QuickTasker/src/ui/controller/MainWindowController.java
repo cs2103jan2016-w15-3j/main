@@ -5,10 +5,7 @@ import com.jfoenix.controls.JFXTextField;
 import data.JsonTaskDataAccess;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -16,6 +13,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import logic.Logic;
 import model.Task;
 import parser.Commands;
@@ -41,12 +39,12 @@ public class MainWindowController implements Initializable {
     private ParserInterface parser = new UserInputParser();
     private Logic operations = new Logic();
 
-    @FXML Label label;
-    @FXML JFXTextField commandBox;
-    @FXML JFXListView<Task> taskListView;
-    @FXML Label header;
+    @FXML private Label label;
+    @FXML private AnchorPane container;
+    @FXML private JFXTextField commandBox;
+    @FXML private JFXListView<Task> taskListView;
+
     private ObservableList<Task> guiList = FXCollections.observableArrayList();
-    private ListChangeListener<? super Task> listener;
 
     // Display messages as visual feedback for users
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
@@ -60,9 +58,14 @@ public class MainWindowController implements Initializable {
 
         setCellFactory();
         setMain(main);
-        logger = Logger.getLogger("MyLogger");
+        initLogger();
+
+
+    }
+
+    private void initLogger() {
+        logger = Logger.getLogger("UILogger");
         logger.setLevel(Level.INFO);
-        logger.log(Level.SEVERE, "Test logging");
     }
 
     void setMain(Main main) {
@@ -81,32 +84,44 @@ public class MainWindowController implements Initializable {
     private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
-            performOperations(userInput);
-            logger.log(Level.SEVERE, userInput);
+            try {
+                performOperations(userInput);
+            } catch (UIOperationException e) {
+                logger.log(Level.SEVERE, "Error occured at " + this.getClass().getName()
+                        + " within performOperation method.");
+            }
+            logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
         }
     }
 
-    private void performOperations(String userInput) throws Exception {
+    private class UIOperationException extends RuntimeException {
+    }
+
+    private void performOperations(String userInput) throws UIOperationException {
         String taskName;
         LocalDate startDate;
         LocalDate dueDate;
         int taskIndex;
-        if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
-            createTask(userInput);
-        } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
-            deleteTask(userInput);
-        } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
-            updateTask(userInput);
-        } else if (parser.getCommand(userInput) == Commands.UNDO_TASK) {
-            undoTask();
-        } else if (parser.getCommand(userInput) == Commands.REDO) {
-            redoTask();
-        } else if (parser.getCommand(userInput) == Commands.EXIT) {
-            operations.exit();
-        } else if (userInput.contains("edit")) {
-            editTask(userInput);
-        } else if (userInput.contains("mark")) {
-            markTaskCompleted(userInput);
+        try {
+            if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
+                createTask(userInput);
+            } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
+                deleteTask(userInput);
+            } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
+                updateTask(userInput);
+            } else if (parser.getCommand(userInput) == Commands.UNDO_TASK) {
+                undoTask();
+            } else if (parser.getCommand(userInput) == Commands.REDO) {
+                redoTask();
+            } else if (parser.getCommand(userInput) == Commands.EXIT) {
+                operations.exit();
+            } else if (userInput.contains("edit")) {
+                editTask(userInput);
+            } else if (userInput.contains("mark")) {
+                markTaskCompleted(userInput);
+            }
+        } catch (Exception e) {
+            throw new UIOperationException();
         }
         assert (false); // execution should not reach here
     }
@@ -130,7 +145,7 @@ public class MainWindowController implements Initializable {
 
         int i = parser.getIndexForDone(userInput);
         Task task = guiList.get(i);
-        task.setDone(true);
+        task.setDone(true); // logic should handle
         taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         taskListView.getSelectionModel().select(i);
         taskListView.fireEvent(new TaskDoneEvent());
@@ -140,17 +155,17 @@ public class MainWindowController implements Initializable {
                 try {
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
+                    // do nothing. handles libray bug
                 }
                 return null;
             }
         };
-        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                taskListView.getSelectionModel().clearSelection();
-            }
+        sleeper.setOnSucceeded(event -> {
+            taskListView.getSelectionModel().clearSelection();
+            commandBox.clear();
         });
         new Thread(sleeper).start();
+        // Do not refresh entire list to avoid stack overflow of Event object
     }
 
     private void redoTask() {
@@ -197,8 +212,7 @@ public class MainWindowController implements Initializable {
 
     private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate)
             throws Exception {
-        Task newTask = new Task(taskName, startDate, dueDate);
-        return newTask;
+        return new Task(taskName, startDate, dueDate);
     }
 
     private void setCellFactory() {

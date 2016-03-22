@@ -3,7 +3,7 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.layout.*?>
-<AnchorPane minHeight="189.0" minWidth="500.0" prefHeight="300.0"
+<AnchorPane fx:id="container" minHeight="189.0" minWidth="500.0" prefHeight="300.0"
             prefWidth="394.0" stylesheets="@/css/application.css"
             xmlns="http://javafx.com/javafx/8.0.65"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controller.MainWindowController">
@@ -14,7 +14,7 @@
     <AnchorPane layoutX="10.0" layoutY="255.0"
                 AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0"
                 AnchorPane.rightAnchor="0.0">
-        <JFXTextField fx:id="commandBox" focusColor="WHITE"
+        <JFXTextField fx:id="commandBox" focusColor="lightgrey"
                       layoutX="4.0" maxWidth="500.0" minWidth="100.0"
                       onKeyPressed="#handleEnterKeyPressed"
                       prefHeight="30.0" prefWidth="500.0" promptText="Enter command:"

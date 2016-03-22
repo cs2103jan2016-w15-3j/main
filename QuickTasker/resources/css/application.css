@@ -1,6 +1,10 @@
 /* Please refer to https://www.google.com/design/spec/material-design/introduction.html for styling */
 /* Please refer to https://www.google.com/design/spec/style/color.html#color-color-palette for colors */
 
+#container{
+    background:#FFFFFF;
+}
+
 .list-view {
     -fx-padding: 3px ;
 }
@@ -8,7 +12,6 @@
 .list-cell {
     -fx-padding: 10px ;
     -fx-background-color: transparent, -fx-background ;
-    -fx-background-insets: 0px, 2px ;
 }
 
 .list-cell:empty {
@@ -17,3 +20,41 @@
     -fx-background-insets: 0 ;
 }
 
+.task-check-box{
+      -fx-unchecked-color: BLACK;
+      -fx-checked-color : #CC0000;
+}
+
+#taskListView .scroll-bar:horizontal .track,
+#taskListView .scroll-bar:vertical .track{
+    -fx-background-color:transparent;
+    -fx-border-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius:2em;
+}
+ 
+#taskListView .scroll-bar:horizontal .increment-button ,
+#taskListView .scroll-bar:horizontal .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 0 10 0;
+}
+ 
+#taskListView .scroll-bar:vertical .increment-button ,
+#taskListView .scroll-bar:vertical .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 10 0 0;
+}
+#taskListView  .scroll-bar .increment-arrow,
+#taskListView  .scroll-bar .decrement-arrow{
+    -fx-shape:" ";  
+    -fx-padding:0;
+}
+ 
+#taskListView .scroll-bar:horizontal .thumb,
+#taskListView .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}

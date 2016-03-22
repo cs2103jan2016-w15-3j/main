@@ -8,7 +8,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
@@ -16,7 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import model.Task;
-import ui.controller.TaskDoneEvent;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +30,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final GridPane grid = new GridPane();
     private ObservableList<Task> tasks;
-    public boolean handlerAdded = false;
+    private boolean handlerAdded = false;
 
     public TaskListCell(ObservableList<Task> list) {
         configureGrid();
@@ -51,20 +49,17 @@ public class TaskListCell extends JFXListCell<Task> {
             clearContent();
         } else {
             if (!handlerAdded) {
-                getListView().addEventFilter(TASK_COMPLETE, new EventHandler<TaskDoneEvent>() {
-                    @Override
-                    public void handle(TaskDoneEvent event) {
-                                event.consume();
-                                handlerAdded = true;
+                getListView().addEventFilter(TASK_COMPLETE, event -> {
+                    event.consume();
+                    handlerAdded = true;
 
-                                checkBox.setAllowIndeterminate(false);
-                        new Thread(() -> {
-                            Thread.currentThread().setUncaughtExceptionHandler(
-                                    (t, e) -> Platform.runLater(() -> System.out.println()));
-                            checkBox.fire();
+                    checkBox.setAllowIndeterminate(false);
+                    new Thread(() -> {
+                        Thread.currentThread().setUncaughtExceptionHandler(
+                                (t, e) -> Platform.runLater(System.out::println));
+                        checkBox.fire();
 
-                        }).start();
-                            }
+                    }).start();
                         }
 
                 );
@@ -140,7 +135,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureCheckBox() {
-
+        checkBox.getStyleClass().add("task-check-box");
     }
 
     private void clearContent() {
