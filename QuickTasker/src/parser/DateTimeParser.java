@@ -158,7 +158,7 @@ public class DateTimeParser {
     }
 
     private LocalTime toLocalTime(String input) {
-        DateTimeFormatter timeColons = DateTimeFormatter.ofPattern("HH:MM");
+        DateTimeFormatter timeColons = DateTimeFormatter.ofPattern("HH:mm");
         // how to set am pm??? TODO
         return LocalTime.parse(input, timeColons);
     }
