@@ -131,12 +131,6 @@ public class DateTimeParser {
             return false;
         }
     }
-    // FOR TIME
-    // SCAN WHOLE STRING ARRAY
-    // HAVE 2 INT VARIABLE TO STORE WHICH INDEX TIME IS FOUND IN ARRAY
-    // IF BOTH USED=> START TIME AND END TIME; check index pos to determine
-    // IF ONLY ONE ASSUME START TIME
-    // REMOVE THE TIME THEN SETATTRIBUTES USE ARRAYLIST THEN CONVERT BACK
 
     private boolean isTime(String input) {
         return (input.indexOf(':') >= 0) || (input.indexOf("pm") >= 0) || input.indexOf("am") >= 0;
@@ -154,7 +148,7 @@ public class DateTimeParser {
         return indices;
     }
 
-    public ArrayList<LocalTime> getTime(String[] input, ArrayList<Integer> indices) {
+    public ArrayList<LocalTime> parseTime(String[] input, ArrayList<Integer> indices) {
         ArrayList<LocalTime> output = new ArrayList<LocalTime>();
 
         for (int i = 0; i < indices.size(); i++) {
