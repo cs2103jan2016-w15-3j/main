@@ -18,7 +18,8 @@ import static org.junit.Assert.assertEquals;
 public class DeleteTaskTest {
     Logic logic;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         init();
     }
 
@@ -30,7 +31,8 @@ public class DeleteTaskTest {
         }
     }
 
-    @Test public void test() throws Exception {
+    @Test
+    public void test() throws Exception {
         assertEquals(logic.getSize(), 10);
         logic.deleteTask(0);
         assertEquals(logic.getSize(), 9);

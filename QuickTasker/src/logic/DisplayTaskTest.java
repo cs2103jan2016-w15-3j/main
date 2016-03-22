@@ -18,7 +18,8 @@ public class DisplayTaskTest {
     private ArrayList<Task> test;
     private ArrayList<Task> tasks;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         test = new ArrayList<Task>();
         for (int i = 0; i < 10; i++) {
             Task task = new Task();
@@ -26,7 +27,8 @@ public class DisplayTaskTest {
         }
     }
 
-    @Test public void test() {
+    @Test
+    public void test() {
         DisplayTask<Task> dTask = new DisplayTask<Task>();
         assertEquals(dTask.executeDisplay(test), test);
     }

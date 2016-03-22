@@ -6,6 +6,7 @@ package ui.model;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -43,18 +44,26 @@ public class TaskListCell extends JFXListCell<Task> {
         tasks = list;
     }
 
-    @Override public void updateItem(Task task, boolean empty) {
+    @Override
+    public void updateItem(Task task, boolean empty) {
         super.updateItem(task, empty);
         if (empty) {
             clearContent();
         } else {
             if (!handlerAdded) {
                 getListView().addEventFilter(TASK_COMPLETE, new EventHandler<TaskDoneEvent>() {
-                            @Override public void handle(TaskDoneEvent event) {
+                    @Override
+                    public void handle(TaskDoneEvent event) {
                                 event.consume();
                                 handlerAdded = true;
+
                                 checkBox.setAllowIndeterminate(false);
-                                checkBox.fire();
+                        new Thread(() -> {
+                            Thread.currentThread().setUncaughtExceptionHandler(
+                                    (t, e) -> Platform.runLater(() -> System.out.println()));
+                            checkBox.fire();
+
+                        }).start();
                             }
                         }
 

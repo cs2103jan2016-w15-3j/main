@@ -19,27 +19,32 @@ public class JsonTaskDataAccessTest {
     private List<Task> plannerNotebook;
     private JsonTaskDataAccess dataHandler;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         plannerNotebook = new ArrayList<>();
         dataHandler = new JsonTaskDataAccess();
     }
 
-    @Test public void whenNewHandlerCreatedPathShouldNotBeNull() {
+    @Test
+    public void whenNewHandlerCreatedPathShouldNotBeNull() {
         assertNotNull(dataHandler.getFilePath());
     }
 
-    @Test public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
+    @Test
+    public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
 
     }
 
-    @Test public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
+    @Test
+    public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
         Files.deleteIfExists(dataHandler.getFilePath());
 
         dataHandler = new JsonTaskDataAccess();
         assertTrue(hasSaveFile());
     }
 
-    @Test public void canSaveListOfTasksToJsonFile() {
+    @Test
+    public void canSaveListOfTasksToJsonFile() {
         List<Task> tasks = create10Tasks();
         dataHandler.save(tasks);
         try {
@@ -54,7 +59,8 @@ public class JsonTaskDataAccessTest {
         }
     }
 
-    @Test public void canSaveOneTaskIntoJsonFile() {
+    @Test
+    public void canSaveOneTaskIntoJsonFile() {
         String taskName = "Task 1";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         dataHandler.save(testTask);

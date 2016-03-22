@@ -55,7 +55,8 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
     private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
 
-    @Override public void initialize(URL location, ResourceBundle resources) {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
         setCellFactory();
         setMain(main);
@@ -77,7 +78,8 @@ public class MainWindowController implements Initializable {
         return KeyCode.ENTER.equals(event.getCode());
     }
 
-    @FXML private void handleEnterKeyPressed(KeyEvent event) {
+    @FXML
+    private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             try {
@@ -136,7 +138,8 @@ public class MainWindowController implements Initializable {
         taskListView.getSelectionModel().select(i);
         taskListView.fireEvent(new TaskDoneEvent());
         javafx.concurrent.Task<Void> sleeper = new javafx.concurrent.Task<Void>() {
-            @Override protected Void call() throws Exception {
+            @Override
+            protected Void call() throws Exception {
                 try {
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
@@ -145,7 +148,8 @@ public class MainWindowController implements Initializable {
             }
         };
         sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override public void handle(WorkerStateEvent event) {
+            @Override
+            public void handle(WorkerStateEvent event) {
                 taskListView.getSelectionModel().clearSelection();
             }
         });

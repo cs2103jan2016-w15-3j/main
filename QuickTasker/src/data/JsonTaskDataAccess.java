@@ -42,7 +42,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
-    @Override public List<Task> getTasks() throws GetTasksException {
+    @Override
+    public List<Task> getTasks() throws GetTasksException {
         try {
             BufferedReader reader = Files.newBufferedReader(pathOfSaveFile);
             Gson gson = new Gson();
@@ -55,7 +56,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
-    @Override public void save(Task task) throws SaveTasksException {
+    @Override
+    public void save(Task task) throws SaveTasksException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(task);
         try {
@@ -68,7 +70,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
-    @Override public void save(List<Task> tasks) throws SaveTasksException {
+    @Override
+    public void save(List<Task> tasks) throws SaveTasksException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(tasks);
         try {
@@ -81,7 +84,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
-    @Override public void reset() {
+    @Override
+    public void reset() {
 
     }
 

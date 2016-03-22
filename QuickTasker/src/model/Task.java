@@ -91,7 +91,8 @@ public class Task {
         this.id = ++IdGenerator;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
@@ -100,7 +101,8 @@ public class Task {
         return prime * result + ((taskName == null) ? 0 : taskName.hashCode());
     }
 
-    @Override public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
