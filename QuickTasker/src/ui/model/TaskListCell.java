@@ -50,7 +50,7 @@ public class TaskListCell extends JFXListCell<Task> {
         }
     }
 
-    private void addContent(Task task) {
+    protected void addContent(Task task) {
         setTaskName(task);
         setTaskId(task);
         setTaskStartDate(task);
@@ -58,16 +58,16 @@ public class TaskListCell extends JFXListCell<Task> {
         setGraphic(grid);
     }
 
-    private void setTaskId(Task task) {
+    protected void setTaskId(Task task) {
         final int offset = 1;
         taskId.setText(String.valueOf(tasks.indexOf(task) + offset));
     }
 
-    private void setTaskName(Task task) {
+    protected void setTaskName(Task task) {
         taskName.setText(task.getName());
     }
 
-    private void setTaskStartDate(Task task) {
+    protected void setTaskStartDate(Task task) {
         if (task.getStartDate() != null) {
             LocalDate startDate = task.getStartDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -76,7 +76,7 @@ public class TaskListCell extends JFXListCell<Task> {
         } else taskStartDate.setText("");
     }
 
-    private void setTaskDueDate(Task task) {
+    protected void setTaskDueDate(Task task) {
         if (task.getStartDate() != null) {
             LocalDate dueDate = task.getDueDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
