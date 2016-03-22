@@ -8,7 +8,6 @@ import java.util.Stack;
 
 /**
  * Author A0130949 Soh Yonghao
- *
  */
 
 public class DeleteTask<E> implements Command<Object> {
@@ -17,7 +16,7 @@ public class DeleteTask<E> implements Command<Object> {
 
     @Override
     public void execute(List<Task> list, Object task) {
-        undoStack.push((Task) list.get((int) task));
+        undoStack.push(list.get((int) task));
         executeDelete(list, (int) task);
     }
 
@@ -43,7 +42,7 @@ public class DeleteTask<E> implements Command<Object> {
 
     private int findTask(int index, ArrayList<Task> list) {
         int position = -1;
-        for (int i = 0 ; i < list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId() == index) {
                 position = i;
             }

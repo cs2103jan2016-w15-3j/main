@@ -21,6 +21,6 @@ public class Search<E> implements Command<Object> {
     @Override
     public void redo(ArrayList<Task> list) {
         // TODO Auto-generated method stub
-        
+
     }
 }

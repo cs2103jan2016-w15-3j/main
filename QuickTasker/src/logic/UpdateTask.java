@@ -9,9 +9,9 @@ import java.util.Stack;
 public class UpdateTask<E> implements Command<Object> {
     private Stack<Task> undoStackTask = new Stack<Task>();
     private Stack<Integer> undoStackInt = new Stack<Integer>();
-    private Stack<Task> redoStackTask = new Stack<Task>(); 
+    private Stack<Task> redoStackTask = new Stack<Task>();
     private Stack<Integer> redoStackInt = new Stack<Integer>();
-    
+
     @Override
     public void execute(List<Task> list, Object index) {
         int taskIndex = (int) index;
@@ -33,7 +33,6 @@ public class UpdateTask<E> implements Command<Object> {
         redoStackTask.push(list.get(undoIndex));
         list.set(undoIndex, undoTask);
     }
-
 
     @Override
     public void redo(ArrayList<Task> list) {

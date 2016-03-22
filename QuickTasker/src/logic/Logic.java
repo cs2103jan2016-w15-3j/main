@@ -23,7 +23,7 @@ public class Logic {
     private JsonTaskDataAccess storage;
     protected Stack<Commands> undoStack;
     protected Stack<Commands> redoStack;
-    
+
     public Logic() {
         initialize();
     }
@@ -87,14 +87,14 @@ public class Logic {
     public ArrayList<Task> undo() {
         Commands command = undoStack.pop();
         redoStack.push(command);
-        commandMap.get(command).undo((ArrayList<Task>)list);
-        return (ArrayList<Task>) list; 
+        commandMap.get(command).undo((ArrayList<Task>) list);
+        return (ArrayList<Task>) list;
     }
-    
+
     public ArrayList<Task> redo() {
         Commands command = redoStack.pop();
-        undoStack.push(command);        
-        commandMap.get(command).redo((ArrayList<Task>)list);
-        return (ArrayList<Task>) list; 
+        undoStack.push(command);
+        commandMap.get(command).redo((ArrayList<Task>) list);
+        return (ArrayList<Task>) list;
     }
 }

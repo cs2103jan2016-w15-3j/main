@@ -99,7 +99,7 @@ public class MainWindowController implements Initializable {
             undoTask();
         } else if (parser.getCommand(userInput) == Commands.REDO) {
             redoTask();
-        } else if (parser.getCommand(userInput) == Commands.EXIT){
+        } else if (parser.getCommand(userInput) == Commands.EXIT) {
             operations.exit();
         }
         assert (false); // execution should not reach here
@@ -126,7 +126,7 @@ public class MainWindowController implements Initializable {
 
     private void redoTask() {
         guiList = FXCollections.observableArrayList(operations.redo());
-        afterOperation();;
+        afterOperation();
     }
 
     private void undoTask() {

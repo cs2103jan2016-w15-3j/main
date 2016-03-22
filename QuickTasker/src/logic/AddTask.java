@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 
 /**
  * Author A0130949 Soh Yonghao
- *
  */
 
 public class AddTask<E> implements Command<Object> {
@@ -46,7 +45,7 @@ public class AddTask<E> implements Command<Object> {
     public void undo(ArrayList<Task> list) {
         Task undoTask = undoStack.pop();
         redoStack.push(undoTask);
-        int index = findTask(undoTask.getId(), (ArrayList<Task>) list);
+        int index = findTask(undoTask.getId(), list);
         if (index >= 0) {
             list.remove(index);
         } else {

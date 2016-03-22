@@ -1,20 +1,14 @@
-[
-  {
-    "taskName": "something",
-    "endDate": {
-      "year": 12,
-      "month": 12,
-      "day": 12
-    },
-    "startDate": {
-      "year": 2016,
-      "month": 12,
-      "day": 11
-    },
-    "id": 1
+{
+  "taskName": "Task 1",
+  "endDate": {
+    "year": 2016,
+    "month": 3,
+    "day": 23
   },
-  {
-    "taskName": "",
-    "id": 2
-  }
-]
+  "startDate": {
+    "year": 2016,
+    "month": 3,
+    "day": 23
+  },
+  "id": 21
+}

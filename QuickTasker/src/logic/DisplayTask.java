@@ -32,6 +32,6 @@ public class DisplayTask<E> implements Command<E> {
     @Override
     public void redo(ArrayList<Task> list) {
         // TODO Auto-generated method stub
-        
+
     }
 }
