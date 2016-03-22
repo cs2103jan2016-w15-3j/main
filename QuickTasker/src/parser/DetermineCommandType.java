@@ -36,6 +36,8 @@ public class DetermineCommandType {
                 return Commands.UNDO_TASK;
             case "exit":
                 return Commands.EXIT;
+            case "redo":
+                return Commands.REDO;
             default:
                 return Commands.ERROR;
         }

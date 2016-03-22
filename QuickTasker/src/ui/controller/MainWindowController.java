@@ -27,7 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Author: A0133333U
+ * Author: A0133333U/A0130949Y
  */
 public class MainWindowController implements Initializable {
 
@@ -95,10 +95,11 @@ public class MainWindowController implements Initializable {
             deleteTask(userInput);
         } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
             updateTask(userInput);
-        } else if (parser.getCommand(userInput) == Commands.UNDO) {
+        } else if (parser.getCommand(userInput) == Commands.UNDO_TASK) {
             undoTask();
-        } else if (parser.getCommand(userInput) == Commands.EXIT) {
-            System.exit(0);
+        } else if (parser.getCommand(userInput) == Commands.REDO) {
+            redoTask();
+        } else if (parser.getCommand(userInput) == Commands.EXIT){
             operations.exit();
         }
         assert (false); // execution should not reach here
@@ -121,6 +122,11 @@ public class MainWindowController implements Initializable {
 
     private void markTaskCompleted(String userInput) throws Exception {
 
+    }
+
+    private void redoTask() {
+        guiList = FXCollections.observableArrayList(operations.redo());
+        afterOperation();;
     }
 
     private void undoTask() {

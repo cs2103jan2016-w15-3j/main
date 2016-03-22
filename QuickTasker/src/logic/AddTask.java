@@ -10,14 +10,14 @@ import java.util.logging.Logger;
 
 /**
  * Author A0130949 Soh Yonghao
- * <p>
- * .
+ *
  */
 
 public class AddTask<E> implements Command<Object> {
     private static final String NOTHING_TO_ADD = "Cannot add nothing";
     private static Logger loggerAdd = Logger.getLogger("log");
     private Stack<Task> undoStack = new Stack<Task>();
+    private Stack<Task> redoStack = new Stack<Task>();
 
     @Override
     public void execute(List<Task> list, Object task) {
@@ -44,7 +44,9 @@ public class AddTask<E> implements Command<Object> {
 
     @Override
     public void undo(ArrayList<Task> list) {
-        int index = findTask(undoStack.pop().getId(), list);
+        Task undoTask = undoStack.pop();
+        redoStack.push(undoTask);
+        int index = findTask(undoTask.getId(), (ArrayList<Task>) list);
         if (index >= 0) {
             list.remove(index);
         } else {
@@ -60,5 +62,12 @@ public class AddTask<E> implements Command<Object> {
             }
         }
         return position;
+    }
+
+    @Override
+    public void redo(ArrayList<Task> list) {
+        Task redoTask = redoStack.pop();
+        undoStack.push(redoTask);
+        list.add(redoTask);
     }
 }

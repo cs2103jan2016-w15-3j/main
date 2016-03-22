@@ -28,4 +28,10 @@ public class DisplayTask<E> implements Command<E> {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void redo(ArrayList<Task> list) {
+        // TODO Auto-generated method stub
+        
+    }
 }

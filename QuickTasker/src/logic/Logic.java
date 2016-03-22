@@ -21,8 +21,9 @@ public class Logic {
     protected static List<Task> list;
     protected TreeMap<Commands, Command> commandMap;
     private JsonTaskDataAccess storage;
-    protected Stack<Commands> stack;
-
+    protected Stack<Commands> undoStack;
+    protected Stack<Commands> redoStack;
+    
     public Logic() {
         initialize();
     }
@@ -32,7 +33,8 @@ public class Logic {
         list = new ArrayList<Task>();
         assert (list != null);
         storage = new JsonTaskDataAccess();
-        stack = new Stack<Commands>();
+        undoStack = new Stack<Commands>();
+        redoStack = new Stack<Commands>();
     }
 
     public int getSize() {
@@ -58,14 +60,14 @@ public class Logic {
 
     public ArrayList<Task> addTask(Task task) {
         commandMap.get(Commands.CREATE_TASK).execute(list, task);
-        stack.push(Commands.CREATE_TASK);
+        undoStack.push(Commands.CREATE_TASK);
         storage.save(list);
         return (ArrayList<Task>) list;
     }
 
     public ArrayList<Task> deleteTask(int index) {
         commandMap.get(Commands.DELETE_TASK).execute(list, index);
-        stack.push(Commands.DELETE_TASK);
+        undoStack.push(Commands.DELETE_TASK);
         storage.save(list);
         return (ArrayList<Task>) list;
     }
@@ -77,13 +79,22 @@ public class Logic {
     public ArrayList<Task> updateTask(Task task, int index) {
         list.add(task);
         commandMap.get(Commands.UPDATE_TASK).execute(list, index);
-        stack.push(Commands.UPDATE_TASK);
+        undoStack.push(Commands.UPDATE_TASK);
         storage.save(list);
         return (ArrayList<Task>) list;
     }
 
     public ArrayList<Task> undo() {
-        commandMap.get(stack.pop()).undo((ArrayList<Task>) list);
-        return (ArrayList<Task>) list;
+        Commands command = undoStack.pop();
+        redoStack.push(command);
+        commandMap.get(command).undo((ArrayList<Task>)list);
+        return (ArrayList<Task>) list; 
+    }
+    
+    public ArrayList<Task> redo() {
+        Commands command = redoStack.pop();
+        undoStack.push(command);        
+        commandMap.get(command).redo((ArrayList<Task>)list);
+        return (ArrayList<Task>) list; 
     }
 }
