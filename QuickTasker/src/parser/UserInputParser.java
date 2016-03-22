@@ -3,7 +3,8 @@ package parser;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author A0121558H Dawson
@@ -126,8 +127,8 @@ public class UserInputParser implements ParserInterface {
 
         DateTimeParser parser = new DateTimeParser();
 
-        return (!parser.isLocalDate(userCommand[lengthOfInput - 1])
-                && !parser.isLocalDate(userCommand[lengthOfInput - 2]));
+        return (!parser.isLocalDate(userCommand[lengthOfInput - 1]) && !parser
+                .isLocalDate(userCommand[lengthOfInput - 2]));
     }
 
     public static LocalDate stringToLocalDate(String date) {
