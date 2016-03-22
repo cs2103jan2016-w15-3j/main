@@ -66,7 +66,7 @@ public class MainWindowController implements Initializable {
         this.main = main;
     }
 
-    private boolean isEmptyInput(String input) {
+    protected boolean isEmptyInput(String input) {
         return input == null || input.isEmpty() || "".equals(input.trim());
     }
 
