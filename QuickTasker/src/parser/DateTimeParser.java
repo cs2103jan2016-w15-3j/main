@@ -2,13 +2,6 @@ package parser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
-
-import java.util.Collections;
-
-import com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException;
-
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -161,7 +154,7 @@ public class DateTimeParser {
 
             String toCheck = input[i - 2] + " " + input[i - 1];
             System.out.println("input[i-1]: " + input[i - 1]);
-            System.out.println("input[i-2] + input[i-1]: " + "" +input[i - 2] + input[i-1] );
+            System.out.println("input[i-2] + input[i-1]: " + "" + input[i - 2] + input[i - 1]);
 
             if (isDate(input[i - 1])) {
                 System.out.println("ZZZZZZ");

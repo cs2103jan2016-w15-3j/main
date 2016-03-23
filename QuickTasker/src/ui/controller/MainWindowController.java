@@ -3,17 +3,21 @@ package ui.controller;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import data.JsonTaskDataAccess;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 import logic.Logic;
 import model.Task;
 import parser.Commands;
@@ -26,6 +30,8 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
 /**
  * Author: A0133333U/A0130949Y/A0126077E
@@ -59,8 +65,6 @@ public class MainWindowController implements Initializable {
         setCellFactory();
         setMain(main);
         initLogger();
-
-
     }
 
     private void initLogger() {
@@ -145,10 +149,11 @@ public class MainWindowController implements Initializable {
 
         int i = parser.getIndexForDone(userInput);
         Task task = guiList.get(i);
-        task.setDone(true); // logic should handle
+        task.setDone(true);
         taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         taskListView.getSelectionModel().select(i);
-        taskListView.fireEvent(new TaskDoneEvent());
+        taskListView.fireEvent(new TaskDoneEvent(task));
+
         javafx.concurrent.Task<Void> sleeper = new javafx.concurrent.Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -200,8 +205,12 @@ public class MainWindowController implements Initializable {
     private void createTask(String userInput) throws Exception {
         Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
                 parser.getEndDate(userInput));
-        guiList = FXCollections.observableArrayList(operations.addTask(newTask));
-        afterOperation();
+        guiList.add(newTask);
+        taskListView.setItems(guiList);
+
+
+   /*     guiList = FXCollections.observableArrayList(operations.addTask(newTask));
+        afterOperation();*/
     }
 
     private void afterOperation() {
@@ -216,7 +225,25 @@ public class MainWindowController implements Initializable {
     }
 
     private void setCellFactory() {
-        taskListView.setCellFactory(param -> new TaskListCell(guiList));
+        taskListView.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
+            @Override
+            public ListCell<Task> call(ListView<Task> param) {
+                TaskListCell listCell = new TaskListCell(guiList);
+                taskListView.addEventFilter(TASK_COMPLETE, new EventHandler<TaskDoneEvent>() {
+                    @Override
+                    public void handle(TaskDoneEvent event) {
+                        new Thread(() -> {
+                            Thread.currentThread().setUncaughtExceptionHandler(
+                                    (t, e) -> Platform.runLater(System.out::println));
+                            if (listCell.getCheckbox().getText().equals(event.getTask().getName()))
+                                listCell.getCheckbox().fire();
+                        }).start();
+
+                    }
+                });
+                return listCell;
+            }
+        });
     }
 
     class SearchHighlightedTextCell extends ListCell<String> {

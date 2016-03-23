@@ -6,20 +6,16 @@ package ui.model;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import model.Task;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
-import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
 public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartDate = new Label();
@@ -30,7 +26,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final GridPane grid = new GridPane();
     private ObservableList<Task> tasks;
-    private boolean handlerAdded = false;
+    private Task task;
 
     public TaskListCell(ObservableList<Task> list) {
         configureGrid();
@@ -48,22 +44,24 @@ public class TaskListCell extends JFXListCell<Task> {
         if (empty) {
             clearContent();
         } else {
-            if (!handlerAdded) {
-                getListView().addEventFilter(TASK_COMPLETE, event -> {
-                    event.consume();
-                    handlerAdded = true;
-
-                    checkBox.setAllowIndeterminate(false);
+            //if (task.isDone()) checkBox.fire();
+/*            if (!checkBox.isSelected()) {
+                getListView().addEventHandler(TASK_COMPLETE, event -> {
+                    int selected = getListView().getSelectionModel().getSelectedIndex();
+                    System.out.println("The task name is :" + task.getName());
+                    System.out.println("Event task name is :" + event.getTask().getName());
+                    System.out.println("===================");
+                    //checkBox.setAllowIndeterminate(false);
                     new Thread(() -> {
                         Thread.currentThread().setUncaughtExceptionHandler(
                                 (t, e) -> Platform.runLater(System.out::println));
                         checkBox.fire();
-
+                        // event.getTask should be right
+                        // however the problem is checkbox, checkbox moves around different cells.
+                        // bind checkout to task ?
                     }).start();
-                        }
-
-                );
-            }
+                });
+            }*/
             addContent(task);
             setGraphic(grid);
         }
@@ -71,7 +69,8 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     protected void addContent(Task task) {
-        setTaskName(task);
+        setCheckBox(task);
+        //setTaskName(task);
         setTaskId(task);
         setTaskStartDate(task);
         setTaskDueDate(task);
@@ -81,6 +80,10 @@ public class TaskListCell extends JFXListCell<Task> {
     protected void setTaskId(Task task) {
         final int offset = 1;
         taskId.setText(String.valueOf(tasks.indexOf(task) + offset));
+    }
+
+    public JFXCheckBox getCheckbox() {
+        return checkBox;
     }
 
     protected void setTaskName(Task task) {
@@ -105,6 +108,10 @@ public class TaskListCell extends JFXListCell<Task> {
         } else taskDeadLine.setText("");
     }
 
+    public void fireCheckBox() {
+        checkBox.fire();
+    }
+
     /**
      * Http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
      * https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/ GridPane.html
@@ -119,7 +126,7 @@ public class TaskListCell extends JFXListCell<Task> {
         column2.setMaxWidth(20);
         ColumnConstraints column3 = new ColumnConstraints();
         column3.setHgrow(Priority.ALWAYS);
-        grid.getColumnConstraints().addAll(column1, column2, column3);
+        grid.getColumnConstraints().addAll(column1, column3);
 
     }
 
@@ -151,8 +158,13 @@ public class TaskListCell extends JFXListCell<Task> {
     private void addControlsToGrid() {
         grid.add(taskId, 0, 0);
         grid.add(checkBox, 1, 0);
-        grid.add(new HBox(taskName), 2, 0); // add(Node child, int columnIndex, int
-        grid.add(taskStartDate, 3, 0); // rowIndex, int colspan, int
-        grid.add(taskDeadLine, 4, 0);
+        //grid.add(new HBox(taskName), 2, 0); // add(Node child, int columnIndex, int
+        grid.add(taskStartDate, 2, 0); // rowIndex, int colspan, int
+        grid.add(taskDeadLine, 3, 0);
+    }
+
+    public void setCheckBox(Task task) {
+        checkBox.setText(task.getName());
+        if (task.isDone()) checkBox.fire();
     }
 }
