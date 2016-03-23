@@ -31,16 +31,22 @@ public class UserInputParser implements ParserInterface {
     }
 
     public void setAttributes(String userInput) {
+      //UPDATED AS OF 23/3/2016
         DateTimeParser dateTimeParser = new DateTimeParser();
 
         removeWhiteSpaces(userInput);
+
         setTime(userCommand);
         userCommand = dateTimeParser.removeTime(userCommand);
+
+        determineLengthOfInput();
+        isEnglishDate();
+        setDate(numToUse, lengthOfInput);
+        userCommand = dateTimeParser.removeDate(userCommand);
+
         determineLengthOfInput();
         command = userCommand[0];
-        isEnglishDate();
         taskName = setTaskName();
-        setDate(numToUse, lengthOfInput);
         System.out.println("numTouse:" + numToUse);
         System.out.println("parser startdate " + startDate);
         System.out.println("parser enddate " + endDate);
@@ -70,34 +76,17 @@ public class UserInputParser implements ParserInterface {
 
     // LOGGING
     public String setTaskName() {
+        //UPDATED AS OF 23/3/2016
+
         loggerTaskName.log(Level.INFO, "Start of process");
         String output = "";
 
         try {
-            if (numToUse == 1) {
-                int taskNameIndex = lengthOfInput - 1;
-
-                for (int i = 1; i < taskNameIndex; i++) {
-                    output += userCommand[i] + " ";
-                }
-                output = output.trim();
-            } else if (numToUse == 3) {
-                // floating task
-                int taskNameIndex = lengthOfInput;
-
-                for (int i = 1; i < taskNameIndex; i++) {
-                    output += userCommand[i] + " ";
-                }
-                output = output.trim();
-            } else {
-                int taskNameIndex = lengthOfInput - 2;
-
-                System.out.println("index " + taskNameIndex);
-                for (int i = 1; i < taskNameIndex; i++) {
-                    output += userCommand[i] + " ";
-                }
-                output = output.trim();
+            for (int i = 1; i < lengthOfInput; i++) {
+                output += userCommand[i] + " ";
             }
+            output = output.trim();
+            
         } catch (Exception e) {
             loggerTaskName.log(Level.WARNING, "Error in taskname processing", e);
         }
@@ -126,8 +115,7 @@ public class UserInputParser implements ParserInterface {
 
         DateTimeParser parser = new DateTimeParser();
 
-        return (!parser.isLocalDate(userCommand[lengthOfInput - 1])
-                && !parser.isLocalDate(userCommand[lengthOfInput - 2]));
+        return (!parser.isDate(userCommand[lengthOfInput - 1]) && !parser.isDate(userCommand[lengthOfInput - 2]));
     }
 
     public static LocalDate stringToLocalDate(String date) {
@@ -214,8 +202,7 @@ public class UserInputParser implements ParserInterface {
         } else if (numToSetDate == 1) {
             startDate = endDate = stringToLocalDate("tomorrow");
         } else if (numToSetDate == 2) {
-            startDate = endDate = stringToLocalDate(
-                    userCommand[length - 2] + " " + userCommand[length - 1]);
+            startDate = endDate = stringToLocalDate(userCommand[length - 2] + " " + userCommand[length - 1]);
         } else if (numToSetDate == 3) {// floating task
             startDate = LocalDate.MIN;
             endDate = LocalDate.MIN;// placeholder for null
