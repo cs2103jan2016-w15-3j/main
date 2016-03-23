@@ -17,7 +17,7 @@ public class Main extends Application {
     private Stage primaryStage;
     // private RootLayoutController rootLayoutController;
     private static final int STAGE_MINIMUM_HEIGHT = 200;
-    private static final int STAGE_MINIMUM_WIDTH = 550;
+    private static final int STAGE_MINIMUM_WIDTH = 560;
 
     @Override
     public void start(Stage primaryStage) {

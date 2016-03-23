@@ -90,7 +90,7 @@ public class TaskListCell extends JFXListCell<Task> {
     protected void setTaskStartDate(Task task) {
         if (task.getStartDate() != null) {
             LocalDate startDate = task.getStartDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String dateString = formatter.format(startDate);
             taskStartDate.setText(dateString);
         } else taskStartDate.setText("");
@@ -99,7 +99,7 @@ public class TaskListCell extends JFXListCell<Task> {
     protected void setTaskDueDate(Task task) {
         if (task.getStartDate() != null) {
             LocalDate dueDate = task.getDueDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String dateString = formatter.format(dueDate);
             taskDeadLine.setText(dateString);
         } else taskDeadLine.setText("");
@@ -116,7 +116,7 @@ public class TaskListCell extends JFXListCell<Task> {
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setMaxWidth(5);
         ColumnConstraints column2 = new ColumnConstraints();
-        column2.setMaxWidth(30);
+        column2.setMaxWidth(20);
         ColumnConstraints column3 = new ColumnConstraints();
         column3.setHgrow(Priority.ALWAYS);
         grid.getColumnConstraints().addAll(column1, column2, column3);
