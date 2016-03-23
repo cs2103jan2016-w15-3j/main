@@ -2,6 +2,13 @@ package parser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
+
+import java.util.Collections;
+
+import com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException;
+
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,55 +83,56 @@ public class DateTimeParser {
         }
         return output;
     }
-    /*
-     * public LocalTime parseTime(String input) {
-     * 
-     * }
-     */
 
     private boolean isEnglish(String input) {
         return (input.equals("today") || input.equals("tomorrow") || input.equals("next day")
                 || input.equals("day after"));
     }
 
-    public boolean isLocalDate(String input) {
-        DateTimeFormatter formatterForDashes = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        DateTimeFormatter formatterForSlashes = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter formatterEmpty = DateTimeFormatter.ofPattern("ddMMyyyy");
-        DateTimeFormatter formatterDashesShortened = DateTimeFormatter.ofPattern("dd-MM-yy");
-        DateTimeFormatter formatterSlashesShortened = DateTimeFormatter.ofPattern("dd/MM/yy");
-        DateTimeFormatter formatterEmptyShortened = DateTimeFormatter.ofPattern("ddMMyy");
+    public boolean isDate(String input) {
 
-        try {
-            LocalDate.parse(input, formatterForDashes);
+        if (input.equals("tomorrow") || input.equals("day after") || input.equals("next day")) {
             return true;
-        } catch (Exception e) {
-        }
-        try {
-            LocalDate.parse(input, formatterForSlashes);
-            return true;
-        } catch (Exception e) {
-        }
-        try {
-            LocalDate.parse(input, formatterEmpty);
-            return true;
-        } catch (Exception e) {
-        }
-        try {
-            LocalDate.parse(input, formatterDashesShortened);
-            return true;
-        } catch (Exception e) {
-        }
-        try {
-            LocalDate.parse(input, formatterSlashesShortened);
-            return true;
-        } catch (Exception e) {
-        }
-        try {
-            LocalDate.parse(input, formatterEmptyShortened);
-            return true;
-        } catch (Exception e) {
-            return false;
+
+        } else {
+            DateTimeFormatter formatterForDashes = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter formatterForSlashes = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter formatterEmpty = DateTimeFormatter.ofPattern("ddMMyyyy");
+            DateTimeFormatter formatterDashesShortened = DateTimeFormatter.ofPattern("dd-MM-yy");
+            DateTimeFormatter formatterSlashesShortened = DateTimeFormatter.ofPattern("dd/MM/yy");
+            DateTimeFormatter formatterEmptyShortened = DateTimeFormatter.ofPattern("ddMMyy");
+
+            try {
+                LocalDate.parse(input, formatterForDashes);
+                return true;
+            } catch (Exception e) {
+            }
+            try {
+                LocalDate.parse(input, formatterForSlashes);
+                return true;
+            } catch (Exception e) {
+            }
+            try {
+                LocalDate.parse(input, formatterEmpty);
+                return true;
+            } catch (Exception e) {
+            }
+            try {
+                LocalDate.parse(input, formatterDashesShortened);
+                return true;
+            } catch (Exception e) {
+            }
+            try {
+                LocalDate.parse(input, formatterSlashesShortened);
+                return true;
+            } catch (Exception e) {
+            }
+            try {
+                LocalDate.parse(input, formatterEmptyShortened);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
         }
     }
 
@@ -144,6 +152,33 @@ public class DateTimeParser {
         return indices;
     }
 
+    public ArrayList<Integer> indicesToDetermineDate(String[] input) {
+
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+
+        for (int i = input.length; i > 1; i--) {
+            System.out.println("index-1: " + (i - 1));
+
+            String toCheck = input[i - 2] + " " + input[i - 1];
+            System.out.println("input[i-1]: " + input[i - 1]);
+            System.out.println("input[i-2] + input[i-1]: " + "" +input[i - 2] + input[i-1] );
+
+            if (isDate(input[i - 1])) {
+                System.out.println("ZZZZZZ");
+                indices.add(i - 1);
+            } else if (isDate(toCheck)) {
+                System.out.println("CBCBCB");
+                indices.add(i - 2);
+                indices.add(i - 1);
+            }
+        }
+
+        for (Integer z : indices) {
+            System.out.println("Inside indices " + z);
+        }
+        return indices;
+    }
+
     public ArrayList<LocalTime> parseTime(String[] input, ArrayList<Integer> indices) {
         ArrayList<LocalTime> output = new ArrayList<LocalTime>();
 
@@ -159,12 +194,35 @@ public class DateTimeParser {
         return LocalTime.parse(input, timeColons);
     }
 
+    public String[] removeDate(String[] userCommand) {
+
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+        indices = indicesToDetermineDate(userCommand);
+        int numIndices = indices.size();
+        ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList((userCommand)));
+
+        if (numIndices == 0) {
+            return userCommand;
+        } else if (numIndices == 1) {
+            int first = indices.get(0);
+            tempUserCommand.remove(first);
+        } else {
+            int first = indices.get(0);
+            int second = indices.get(1);
+
+            /* Remove second one first to prevent indices from changing */
+            if (first > second) {
+                tempUserCommand.remove(first);
+                tempUserCommand.remove(second);
+            } else {
+                tempUserCommand.remove(second);
+                tempUserCommand.remove(first);
+            }
+        }
+        return tempUserCommand.toArray(new String[tempUserCommand.size()]);
+    }
+
     public String[] removeTime(String[] userCommand) {
-        // test
-      /*  System.out.println("BEFORE REMOVE");
-        for (String s : userCommand) {
-            System.out.print(s);
-        }*/
 
         ArrayList<Integer> indices = new ArrayList<Integer>();
         indices = indicesToDetermineTime(userCommand);
@@ -175,15 +233,10 @@ public class DateTimeParser {
             return userCommand;
         } else if (numIndices == 1) {
             int first = indices.get(0);
-            // System.out.println("check indices: " + indices.get(0));
-            //   System.out.println("to remove: " + tempUserCommand.get(indices.get(0)));
             tempUserCommand.remove(first);
         } else {
             int first = indices.get(0);
             int second = indices.get(1);
-
-            //  System.out.println("1st: " + first);
-            //   System.out.println("2nd: " + second);
 
             if (first > second) {
                 tempUserCommand.remove(first);
@@ -193,14 +246,6 @@ public class DateTimeParser {
                 tempUserCommand.remove(first);
             }
         }
-
-        // String[] checkcheck= tempUserCommand.toArray(new
-        // String[tempUserCommand.size()]);
-        // test
-      /*  System.out.println("AFTER REMOVE");
-        for (String t : tempUserCommand)
-            System.out.print(t);*/
-
         return tempUserCommand.toArray(new String[tempUserCommand.size()]);
     }
 }
