@@ -28,7 +28,7 @@ public class DeleteTask<E> implements Command<Object> {
     public void undo(ArrayList<Task> list) {
         Task deletedTask = undoStack.pop();
         redoStack.push(deletedTask);
-        list.add(deletedTask);
+        list.add(deletedTask.getId() - 1, deletedTask);
     }
 
     @Override
