@@ -15,6 +15,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import logic.Logic;
+import model.RecurringTask;
 import model.Task;
 import parser.Commands;
 import parser.ParserInterface;
@@ -212,6 +213,12 @@ public class MainWindowController implements Initializable {
         guiList = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
     }
+    
+    private void createRecurringTask(String userInput) throws Exception {
+        RecurringTask newTask = makeRecurringTask("taskName", LocalDate.now(), LocalDate.now(), "week");
+        guiList = FXCollections.observableArrayList(operations.addTask(newTask));
+        afterOperation();
+    }
 
     private void afterOperation() {
         setCellFactory();
@@ -222,6 +229,11 @@ public class MainWindowController implements Initializable {
     private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate)
             throws Exception {
         return new Task(taskName, startDate, dueDate);
+    }
+    
+    private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate, String type)
+            throws Exception {
+        return new RecurringTask(taskName, startDate, dueDate, type);
     }
 
     private void setCellFactory() {
