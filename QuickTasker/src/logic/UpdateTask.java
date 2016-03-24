@@ -30,7 +30,9 @@ public class UpdateTask<E> implements Command<Object> {
         if (updatedTask.getStartDate() == LocalDate.MIN) {
             updatedTask.setStartDate(list.get(taskIndex).getStartDate());
             updatedTask.setEndDate(list.get(taskIndex).getDueDate()); 
-        } 
+        } else if (updatedTask.getName().equals("")) {
+            updatedTask.setName(list.get(taskIndex).getName());
+        }
         return updatedTask;
     }
     
