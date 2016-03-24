@@ -7,7 +7,7 @@ import java.time.LocalDate;
  *
  * @author A0121558H/A0130949
  */
-public class Task {
+public class Task implements Comparable {
     private static int IdGenerator;
     private String taskName;
     private LocalDate endDate;
@@ -147,5 +147,42 @@ public class Task {
         }
         return true;
     }
-
+    
+    @Override
+    public int compareTo(Object task) {
+        Task comparedTask = (Task) task;
+        
+        if (this.getDueDate().getDayOfMonth() > comparedTask.getDueDate().getDayOfMonth()) {
+            if (this.getDueDate().getMonthValue() >= comparedTask.getDueDate().getMonthValue()) {
+                if (this.getDueDate().getYear() >= comparedTask.getDueDate().getYear()) {
+                    return 1;
+                }
+            }
+        }
+        if (this.getDueDate().getMonthValue() > comparedTask.getDueDate().getMonthValue()) {
+            if (this.getDueDate().getYear() > comparedTask.getDueDate().getYear()) {
+                return 1;
+            }
+        }
+        if (this.getDueDate().getYear() > comparedTask.getDueDate().getYear()) {
+            return 1;
+        }
+        
+        if (this.getStartDate().getDayOfMonth() > comparedTask.getStartDate().getDayOfMonth()) {
+            if (this.getStartDate().getMonthValue() >= comparedTask.getStartDate().getMonthValue()) {
+                if (this.getStartDate().getYear() >= comparedTask.getStartDate().getYear()) {
+                    return 1;
+                }
+            }
+        }
+        if (this.getStartDate().getMonthValue() > comparedTask.getStartDate().getMonthValue()) {
+            if (this.getStartDate().getYear() > comparedTask.getStartDate().getYear()) {
+                return 1;
+            }
+        }
+        if (this.getStartDate().getYear() > comparedTask.getStartDate().getYear()) {
+            return 1;
+        }
+        return -1;
+    }
 }
