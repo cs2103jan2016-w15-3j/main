@@ -115,6 +115,9 @@ public class MainWindowController implements Initializable {
                 redoTask();
             } else if (parser.getCommand(userInput) == Commands.EXIT) {
                 operations.exit();
+            } else if (parser.getCommand(userInput) == Commands.SORT_TASK) {
+                System.out.println("getting the command");
+                sortTask(userInput);
             } else if (userInput.contains("edit")) {
                 editTask(userInput);
             } else if (userInput.contains("mark")) {
@@ -167,7 +170,13 @@ public class MainWindowController implements Initializable {
         new Thread(sleeper).start();
         // Do not refresh entire list to avoid stack overflow of Event object
     }
-
+    
+    private void sortTask(String userInput) {
+        System.out.println("Sorting");
+        guiList = FXCollections.observableArrayList(operations.sort());
+        afterOperation(); 
+    }
+    
     private void redoTask() {
         guiList = FXCollections.observableArrayList(operations.redo());
         afterOperation();
