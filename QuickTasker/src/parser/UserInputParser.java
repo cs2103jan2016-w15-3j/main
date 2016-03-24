@@ -201,7 +201,7 @@ public class UserInputParser implements ParserInterface {
         determineLengthOfInput();
         userCommand = removeIndexToUpdate();
 
-        if (!isNameUpdate()) {
+        if (!isFloatingUpdate()) {
 
             setTime(userCommand);
             userCommand = dateTimeParser.removeTime(userCommand);
@@ -213,9 +213,11 @@ public class UserInputParser implements ParserInterface {
             setTaskName();
         } else {
             determineLengthOfInput();
-            userCommand = removeOnlyWord(getIndexForTaskNameUpdate());
+            userCommand = removeFloatingWord(getIndexForTaskNameUpdate());
             determineLengthOfInput();
-            setTaskNameOnly();
+            setFloatingTaskNameUpdate();
+            setDateFloating();
+            setTimeFloating();
         }
         System.out.println("task name:" + taskName);
         System.out.println("parser startdate " + startDate);
@@ -224,7 +226,7 @@ public class UserInputParser implements ParserInterface {
         System.out.println("parser endtime " + endTime);
     }
 
-    private void setTaskNameOnly() {
+    private void setFloatingTaskNameUpdate() {
         String output = "";
         for (int i = 1; i < lengthOfInput; i++) {
             output += userCommand[i];
@@ -234,7 +236,17 @@ public class UserInputParser implements ParserInterface {
         taskName = output;
     }
 
-    private String[] removeOnlyWord(int indexToRemove) {
+    private void setDateFloating() {
+        startDate = LocalDate.MAX;
+        endDate = LocalDate.MAX;
+    }
+
+    private void setTimeFloating() {
+        startTime = LocalTime.MAX;
+        endTime = LocalTime.MAX;
+    }
+
+    private String[] removeFloatingWord(int indexToRemove) {
         ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList(userCommand));
         tempUserCommand.remove(indexToRemove);
         return tempUserCommand.toArray(new String[tempUserCommand.size()]);
@@ -245,7 +257,7 @@ public class UserInputParser implements ParserInterface {
         int index = 0;
         for (int i = lengthOfInput; i >= 0; i--) {
 
-            if (userCommand[i - 1].equals("name")) {
+            if (userCommand[i - 1].equals("floating")) {
                 index = i - 1;
                 break;
             }
@@ -276,11 +288,11 @@ public class UserInputParser implements ParserInterface {
         }
     }
 
-    private boolean isNameUpdate() {
+    private boolean isFloatingUpdate() {
         boolean check = false;
 
         for (String s : userCommand) {
-            if (s.equals("name")) {
+            if (s.equals("floating")) {
                 check = true;
             }
         }
