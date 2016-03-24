@@ -151,7 +151,9 @@ public class Task implements Comparable {
     @Override
     public int compareTo(Object task) {
         Task comparedTask = (Task) task;
-        
+        if (this.getDueDate() == LocalDate.MIN) {
+            return -1;
+        }
         if (this.getDueDate().getDayOfMonth() > comparedTask.getDueDate().getDayOfMonth()) {
             if (this.getDueDate().getMonthValue() >= comparedTask.getDueDate().getMonthValue()) {
                 if (this.getDueDate().getYear() >= comparedTask.getDueDate().getYear()) {
