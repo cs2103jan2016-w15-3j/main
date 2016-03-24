@@ -35,7 +35,7 @@ public class Task {
     public Task(String taskName) {
         this.taskName = taskName;
         setStartDateAsNow();
-        this.endDate = LocalDate.MAX;
+        this.endDate = LocalDate.MIN;
         generateId();
     }
 
@@ -44,7 +44,7 @@ public class Task {
      */
     public Task(String taskName, LocalDate startDate) {
         this.taskName = taskName;
-        this.endDate = LocalDate.MAX;
+        this.endDate = LocalDate.MIN;
         this.startDate = startDate;
         generateId();
     }
@@ -82,7 +82,15 @@ public class Task {
     public boolean isDone() {
         return isDone;
     }
-
+    
+    public void setStartDate(LocalDate date) {
+        this.startDate = date;
+    }
+    
+    public void setEndDate(LocalDate date) {
+        this.endDate = date;
+    }
+    
     public void setDone(boolean done) {
         isDone = done;
     }
