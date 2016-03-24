@@ -1,10 +1,17 @@
 package parser;
 
+/**TODO
+ * FIX "edge of tomorrow" tomorrow
+ * scan from behind. stop once hit date
+ */
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.*;
+
+import org.ocpsoft.prettytime.shade.com.joestelmach.natty.generated.DateParser.formal_date_return;
+import org.ocpsoft.prettytime.shade.net.fortuna.ical4j.util.Strings;
 
 /**
  * @author A0121558H Dawson
@@ -48,7 +55,7 @@ public class UserInputParser implements ParserInterface {
         determineLengthOfInput();
         command = userCommand[0];
         setTaskName();
-        System.out.println("numTouse:" + numToUse);
+        System.out.println("task name:" + taskName);
         System.out.println("parser startdate " + startDate);
         System.out.println("parser enddate " + endDate);
         System.out.println("parser starttime " + startTime);
@@ -198,14 +205,69 @@ public class UserInputParser implements ParserInterface {
         command = userCommand[0];
         determineLengthOfInput();
         userCommand = removeIndexToUpdate();
-        setTime(userCommand);
-        userCommand = dateTimeParser.removeTime(userCommand);
-        determineLengthOfInput();
-        isEnglishDate();
-        setDate(numToUse, lengthOfInput);
-        userCommand = dateTimeParser.removeDate(userCommand);
-        determineLengthOfInput();
-        setTaskName();
+
+        if (!isFloatingUpdate()) {
+
+            setTime(userCommand);
+            userCommand = dateTimeParser.removeTime(userCommand);
+            determineLengthOfInput();
+            isEnglishDate();
+            setDate(numToUse, lengthOfInput);
+            userCommand = dateTimeParser.removeDate(userCommand);
+            determineLengthOfInput();
+            setTaskName();
+        } else {
+            determineLengthOfInput();
+            userCommand = removeFloatingWord(getIndexForTaskNameUpdate());
+            determineLengthOfInput();
+            setFloatingTaskNameUpdate();
+            setDateFloating();
+            setTimeFloating();
+        }
+        System.out.println("task name:" + taskName);
+        System.out.println("parser startdate " + startDate);
+        System.out.println("parser enddate " + endDate);
+        System.out.println("parser starttime " + startTime);
+        System.out.println("parser endtime " + endTime);
+    }
+
+    private void setFloatingTaskNameUpdate() {
+        String output = "";
+        for (int i = 1; i < lengthOfInput; i++) {
+            output += userCommand[i];
+            output += " ";
+        }
+        output = output.trim();
+        taskName = output;
+    }
+
+    private void setDateFloating() {
+        startDate = LocalDate.MAX;
+        endDate = LocalDate.MAX;
+    }
+
+    private void setTimeFloating() {
+        startTime = LocalTime.MAX;
+        endTime = LocalTime.MAX;
+    }
+
+    private String[] removeFloatingWord(int indexToRemove) {
+        ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList(userCommand));
+        tempUserCommand.remove(indexToRemove);
+        return tempUserCommand.toArray(new String[tempUserCommand.size()]);
+
+    }
+
+    private int getIndexForTaskNameUpdate() {
+        int index = 0;
+        for (int i = lengthOfInput; i >= 0; i--) {
+
+            if (userCommand[i - 1].equals("floating")) {
+                index = i - 1;
+                break;
+            }
+        }
+        return index;
     }
 
     private String[] removeIndexToUpdate() {
@@ -213,7 +275,7 @@ public class UserInputParser implements ParserInterface {
         tempUserCommand.remove(1);
         return tempUserCommand.toArray(new String[tempUserCommand.size()]);
     }
-    /*Methods for updates end*/
+    /* Methods for updates end */
 
     public void setDate(int numToSetDate, int length) {
         if (numToSetDate == 0) {
@@ -229,6 +291,17 @@ public class UserInputParser implements ParserInterface {
         } else if (numToSetDate == 4) {
             startDate = endDate = stringToLocalDate("today");
         }
+    }
+
+    private boolean isFloatingUpdate() {
+        boolean check = false;
+
+        for (String s : userCommand) {
+            if (s.equals("floating")) {
+                check = true;
+            }
+        }
+        return check;
     }
 
     public void setTime(String[] input) {

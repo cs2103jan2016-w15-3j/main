@@ -90,24 +90,38 @@ public class TaskListCell extends JFXListCell<Task> {
     protected void setTaskStartDate(Task task) {
         if (task.getStartDate() != null) {
             LocalDate startDate = task.getStartDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-            String dateString = formatter.format(startDate);
-            taskStartDate.setText(dateString);
-        } else taskStartDate.setText("");
+            // from here
+            if (startDate == LocalDate.MIN || startDate==LocalDate.MAX) {
+                taskStartDate.setText("Not Specified");
+            } else {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String dateString = formatter.format(startDate);
+                taskStartDate.setText(dateString);
+            }
+            // stop here
+        } else
+            taskStartDate.setText("");
     }
 
     protected void setTaskDueDate(Task task) {
         if (task.getStartDate() != null) {
             LocalDate dueDate = task.getDueDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-            String dateString = formatter.format(dueDate);
-            taskDeadLine.setText(dateString);
-        } else taskDeadLine.setText("");
+            // from here
+            if (dueDate == LocalDate.MIN || dueDate==LocalDate.MAX) {
+                taskDeadLine.setText("Not Specified");
+            } else {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String dateString = formatter.format(dueDate);
+                taskDeadLine.setText(dateString);
+            }
+        } else
+            taskDeadLine.setText("");
     }
 
     /**
      * Http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
-     * https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/ GridPane.html
+     * https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/
+     * GridPane.html
      */
     private void configureGrid() {
         grid.setHgap(10); // horizontal gap between grids
@@ -151,7 +165,8 @@ public class TaskListCell extends JFXListCell<Task> {
     private void addControlsToGrid() {
         grid.add(taskId, 0, 0);
         grid.add(checkBox, 1, 0);
-        grid.add(new HBox(taskName), 2, 0); // add(Node child, int columnIndex, int
+        grid.add(new HBox(taskName), 2, 0); // add(Node child, int columnIndex,
+                                            // int
         grid.add(taskStartDate, 3, 0); // rowIndex, int colspan, int
         grid.add(taskDeadLine, 4, 0);
     }
