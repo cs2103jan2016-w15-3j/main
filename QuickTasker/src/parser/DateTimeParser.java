@@ -3,14 +3,8 @@ package parser;
 /**
  * author A0121558H
  */
+
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Arrays;
-
-import java.util.Collections;
-
-import com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException;
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -94,7 +88,8 @@ public class DateTimeParser {
 
     public boolean isDate(String input) {
 
-        if (input.equals("today")|| input.equals("tomorrow") || input.equals("day after") || input.equals("next day")) {
+        if (input.equals("today") || input.equals("tomorrow") || input.equals("day after") || input
+                .equals("next day")) {
             return true;
 
         } else {
@@ -164,11 +159,11 @@ public class DateTimeParser {
 
             String toCheck = input[i - 2] + " " + input[i - 1];
             System.out.println("input[i-1]: " + input[i - 1]);
-            System.out.println("input[i-2] + input[i-1]: " + "" +input[i - 2] + input[i-1] );
+            System.out.println("input[i-2] + input[i-1]: " + "" + input[i - 2] + input[i - 1]);
 
-            if (isDate(input[i - 1])) {               
+            if (isDate(input[i - 1])) {
                 indices.add(i - 1);
-            } else if (isDate(toCheck)) {               
+            } else if (isDate(toCheck)) {
                 indices.add(i - 2);
                 indices.add(i - 1);
             }

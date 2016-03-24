@@ -2,6 +2,7 @@ package data;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import model.RecurringTask;
 import model.Task;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,14 +39,13 @@ public class JsonTaskDataAccessTest {
     @Test
     public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
         Files.deleteIfExists(dataHandler.getFilePath());
-
         dataHandler = new JsonTaskDataAccess();
         assertTrue(hasSaveFile());
     }
 
     @Test
     public void canSaveListOfTasksToJsonFile() {
-        List<Task> tasks = create10Tasks();
+        List<Task> tasks = createTasksWithStartAndEnd(20);
         dataHandler.save(tasks);
         try {
             BufferedReader reader = Files.newBufferedReader(dataHandler.getFilePath());
@@ -68,6 +68,20 @@ public class JsonTaskDataAccessTest {
         assertEquals(testTask, resultTask);
     }
 
+    @Test
+    public void canReadsavedTasksFromJsonFile() {
+        plannerNotebook = create30TasksWithDifferentAttributes();
+        dataHandler.save(plannerNotebook);
+        List<Task> tasksRead = dataHandler.getTasks();
+        assertEquals(plannerNotebook, tasksRead);
+    }
+
+    @Test
+    public void ifTaskSaveFileHasNoTaskGetTasksShouldNotReturnNull() throws IOException {
+        dataHandler.reset();
+        assertNotNull(dataHandler.getTasks());
+    }
+
     private Task readOneTask() {
         try {
             BufferedReader reader = Files.newBufferedReader(dataHandler.getFilePath());
@@ -81,15 +95,43 @@ public class JsonTaskDataAccessTest {
         }
     }
 
-    private List<Task> create10Tasks() {
+    private List<Task> create30TasksWithDifferentAttributes() {
         List<Task> tasks = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        tasks.addAll(createTasksWithStartAndEnd(10));
+        tasks.addAll(createTasksWithOnlyTaskNameAttribute(10));
+        tasks.addAll(createRecurringTasks(10));
+        return tasks;
+    }
+
+    private List<Task> createRecurringTasks(int numberOfTasks) {
+        List<Task> tasks = new ArrayList<>();
+        for (int i = 0; i < numberOfTasks; i++) {
+            String taskName = "Recurring Task " + i;
+            Task recurringTask = new RecurringTask(taskName, LocalDate.now(),
+                    LocalDate.now().plusMonths(1), "week");
+            tasks.add(recurringTask);
+        }
+        return tasks;
+    }
+
+    private List<Task> createTasksWithOnlyTaskNameAttribute(int numberOfTasks) {
+        List<Task> tasks = new ArrayList<>();
+        for (int i = 0; i < numberOfTasks; i++) {
+            String taskName = "Task " + i;
+            Task task = new Task(taskName);
+            tasks.add(task);
+        }
+        return tasks;
+    }
+
+    private List<Task> createTasksWithStartAndEnd(int numberOfTasks) {
+        List<Task> tasks = new ArrayList<>();
+        for (int i = 0; i < numberOfTasks; i++) {
             String taskName = "Task " + i;
             Task task = new Task(taskName, LocalDate.now(), LocalDate.now());
             tasks.add(task);
         }
         return tasks;
-
     }
 
     private boolean hasSaveFile() {

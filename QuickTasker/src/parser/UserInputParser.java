@@ -4,7 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author A0121558H Dawson
@@ -116,7 +117,8 @@ public class UserInputParser implements ParserInterface {
 
         DateTimeParser parser = new DateTimeParser();
 
-        return (!parser.isDate(userCommand[lengthOfInput - 1]) && !parser.isDate(userCommand[lengthOfInput - 2]));
+        return (!parser.isDate(userCommand[lengthOfInput - 1]) && !parser
+                .isDate(userCommand[lengthOfInput - 2]));
     }
 
     public static LocalDate stringToLocalDate(String date) {
@@ -222,7 +224,8 @@ public class UserInputParser implements ParserInterface {
         } else if (numToSetDate == 1) {
             startDate = endDate = stringToLocalDate("tomorrow");
         } else if (numToSetDate == 2) {
-            startDate = endDate = stringToLocalDate(userCommand[length - 2] + " " + userCommand[length - 1]);
+            startDate = endDate = stringToLocalDate(
+                    userCommand[length - 2] + " " + userCommand[length - 1]);
         } else if (numToSetDate == 3) {// floating task
             startDate = LocalDate.MIN;
             endDate = LocalDate.MIN;// placeholder for null

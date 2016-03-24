@@ -23,6 +23,7 @@ public class SettingManager {
     private Configuration settings;
 
     public SettingManager() {
+
         initiate();
     }
 

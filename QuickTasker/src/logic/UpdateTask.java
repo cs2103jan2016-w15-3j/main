@@ -25,17 +25,17 @@ public class UpdateTask<E> implements Command<Object> {
         Task newTask = list.remove(list.size() - 1);
         list.set(taskIndex, checkAttributes(newTask, taskIndex, list));
     }
-    
+
     private Task checkAttributes(Task updatedTask, int taskIndex, List<Task> list) {
         if (updatedTask.getStartDate() == LocalDate.MIN) {
             updatedTask.setStartDate(list.get(taskIndex).getStartDate());
-            updatedTask.setEndDate(list.get(taskIndex).getDueDate()); 
+            updatedTask.setEndDate(list.get(taskIndex).getDueDate());
         } else if (updatedTask.getName().equals("")) {
             updatedTask.setName(list.get(taskIndex).getName());
         }
         return updatedTask;
     }
-    
+
     @Override
     public void undo(ArrayList<Task> list) {
         int undoIndex = undoStackInt.pop();

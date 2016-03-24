@@ -26,7 +26,7 @@ public class SettingManagerTest {
     @Test
     public void ifSettingsFileIsEmptyShouldSetDefault() {
         Configuration settings = null;
-        removeEverythingFromSettingsFile(settings);
+        removeEverythingFromSettingsFile();
 
         settingManager = new SettingManager();
         settings = settingManager.getConfigs();
@@ -41,8 +41,8 @@ public class SettingManagerTest {
      * critical ones does not exist, look for the default.properties
      */
 
-    private void removeEverythingFromSettingsFile(Configuration settings) {
-        settings = settingManager.getConfigs();
+    private void removeEverythingFromSettingsFile() {
+        Configuration settings = settingManager.getConfigs();
         settings.clear();
     }
 
