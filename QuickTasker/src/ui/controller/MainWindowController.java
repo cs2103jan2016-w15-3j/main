@@ -2,22 +2,16 @@ package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-import data.JsonTaskDataAccess;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.util.Callback;
 import logic.Logic;
 import model.Task;
 import parser.Commands;
@@ -39,14 +33,10 @@ import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-    private static MainWindowController mainWindowController;
-    private JsonTaskDataAccess storage;
     private Main main;
-    private ParserInterface parser = new UserInputParser();
-    private Logic operations = new Logic();
+    private final ParserInterface parser = new UserInputParser();
+    private final Logic operations = new Logic();
 
-    @FXML private Label label;
-    @FXML private AnchorPane container;
     @FXML private JFXTextField commandBox;
     @FXML private JFXListView<Task> taskListView;
 
@@ -154,23 +144,28 @@ public class MainWindowController implements Initializable {
         taskListView.getSelectionModel().select(i);
         taskListView.fireEvent(new TaskDoneEvent(task));
 
-        javafx.concurrent.Task<Void> sleeper = new javafx.concurrent.Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    Thread.sleep(400);
-                } catch (InterruptedException e) {
-                    // do nothing. handles libray bug
-                }
-                return null;
-            }
-        };
+        javafx.concurrent.Task<Void> sleeper;
+        sleeper = makeSleeper(400);
         sleeper.setOnSucceeded(event -> {
             taskListView.getSelectionModel().clearSelection();
             commandBox.clear();
         });
         new Thread(sleeper).start();
         // Do not refresh entire list to avoid stack overflow of Event object
+    }
+
+    private javafx.concurrent.Task<Void> makeSleeper(int duration) {
+        return new javafx.concurrent.Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(duration);
+                } catch (InterruptedException e) {
+                    // do nothing. handles library bug
+                }
+                return null;
+            }
+        };
     }
 
     private void redoTask() {
@@ -207,10 +202,7 @@ public class MainWindowController implements Initializable {
                 parser.getEndDate(userInput));
         guiList.add(newTask);
         taskListView.setItems(guiList);
-
-
-   /*     guiList = FXCollections.observableArrayList(operations.addTask(newTask));
-        afterOperation();*/
+        commandBox.clear();
     }
 
     private void afterOperation() {
@@ -225,24 +217,14 @@ public class MainWindowController implements Initializable {
     }
 
     private void setCellFactory() {
-        taskListView.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
-            @Override
-            public ListCell<Task> call(ListView<Task> param) {
-                TaskListCell listCell = new TaskListCell(guiList);
-                taskListView.addEventFilter(TASK_COMPLETE, new EventHandler<TaskDoneEvent>() {
-                    @Override
-                    public void handle(TaskDoneEvent event) {
-                        new Thread(() -> {
-                            Thread.currentThread().setUncaughtExceptionHandler(
-                                    (t, e) -> Platform.runLater(System.out::println));
-                            if (listCell.getCheckbox().getText().equals(event.getTask().getName()))
-                                listCell.getCheckbox().fire();
-                        }).start();
-
-                    }
-                });
-                return listCell;
-            }
+        taskListView.setCellFactory(param -> {
+            TaskListCell listCell = new TaskListCell(guiList);
+            taskListView.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
+                Thread.currentThread().setUncaughtExceptionHandler(
+                        (t, e) -> Platform.runLater(System.out::println));
+                if (listCell.getTask().equals(event.getTask())) listCell.getCheckBox().fire();
+            }).start());
+            return listCell;
         });
     }
 

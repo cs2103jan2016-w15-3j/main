@@ -16,12 +16,11 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class JsonTaskDataAccessTest {
-    private List<Task> plannerNotebook;
     private JsonTaskDataAccess dataHandler;
 
     @Before
     public void setUp() throws Exception {
-        plannerNotebook = new ArrayList<>();
+        List<Task> plannerNotebook = new ArrayList<>();
         dataHandler = new JsonTaskDataAccess();
     }
 
