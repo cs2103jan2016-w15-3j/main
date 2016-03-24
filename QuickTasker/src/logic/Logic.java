@@ -1,9 +1,9 @@
 package logic;
 
 import data.JsonTaskDataAccess;
+import model.RecurringTask;
 import model.Task;
 import parser.Commands;
-import sun.swing.icon.SortArrowIcon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +52,7 @@ public class Logic {
         commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
         commandMap.put(Commands.SEARCH_TASK, new Search());
         commandMap.put(Commands.SORT_TASK, new Sort());
+        //commandMap.put(Commands.RECUR_TASK, new AddRecurTask());
     }
 
     public void exit() {
@@ -64,6 +65,13 @@ public class Logic {
         storage.save(list);
         return (ArrayList<Task>) list;
     }
+    
+/*    public ArrayList<Task> addRecurTask(RecurringTask task) {
+        commandMap.get(Commands.CREATE_TASK).execute(list, task);
+        undoStack.push(Commands.CREATE_TASK);
+        storage.save(list);
+        return (ArrayList<Task>) list;
+    }*/
 
     public ArrayList<Task> deleteTask(int index) {
         commandMap.get(Commands.DELETE_TASK).execute(list, index);
