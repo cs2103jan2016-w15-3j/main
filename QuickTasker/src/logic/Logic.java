@@ -3,6 +3,7 @@ package logic;
 import data.JsonTaskDataAccess;
 import model.Task;
 import parser.Commands;
+import sun.swing.icon.SortArrowIcon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,8 @@ public class Logic {
         commandMap.put(Commands.DELETE_TASK, new DeleteTask());
         commandMap.put(Commands.DISPLAY_TASK, new DisplayTask());
         commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
+        commandMap.put(Commands.SEARCH_TASK, new Search());
+        commandMap.put(Commands.SORT_TASK, new Sort());
     }
 
     public void exit() {
@@ -93,5 +96,10 @@ public class Logic {
         undoStack.push(command);
         commandMap.get(command).redo((ArrayList<Task>) list);
         return (ArrayList<Task>) list;
+    }
+    
+    public ArrayList<Task> sort() {
+        commandMap.get(Commands.SORT_TASK).execute(list, "");
+        return (ArrayList<Task>) list;        
     }
 }
