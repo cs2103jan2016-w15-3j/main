@@ -17,13 +17,15 @@ import javafx.scene.layout.Priority;
 import model.Task;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 
 import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
 public class TaskListCell extends JFXListCell<Task> {
     private final Label taskName = new Label();
-    private final Label taskIndex = new Label();
     private final Label taskId = new Label();
     private final Label taskStartDate = new Label();
     private final Label taskDeadLine = new Label();
@@ -123,15 +125,44 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     protected void setTaskStartTime(Task task) {
-        /* if (task.getTime() != null) */
-        final int offset = 1;
-        taskStartTime.setText("start time here");
-    }
+    	if (task.getStartTime() != null) {
+            String startTime = task.getStartTime().toString();
+            System.out.println("start time is " +startTime);
+            // from here
+/*            if (startTime == LocalTime.MIN || startTime == LocalTime.MAX) {
+                taskStartTime.setText("Not specified here");
+            } else {*/
+               // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+              //  String timeString = formatter.toFormat(startTime);
+            String timeString = startTime;
+                taskStartTime.setText(timeString);
+         //} 
+            // stop here
+        } else
+        	
+            taskStartTime.setText("Not specified");
+    
+}
+    
+    
 
     protected void setTaskEndTime(Task task) {
-        final int offset = 1;
-        taskEndTime.setText("end time here");
+    	if (task.getEndTime() != null) {
+           String endTime = task.getEndTime().toString();
+            System.out.println("end time is " + endTime);
+            // from here
+            /*if (endTime == LocalTime.MIN || endTime == LocalTime.MAX) {
+                taskEndTime.setText("Not Specified here");
+            } else {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+                */
+                String timeString = endTime;
+             taskEndTime.setText(timeString);
+           // }
+        } else
+            taskEndTime.setText("Not specified");
     }
+    
 
     /**
      * Http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm

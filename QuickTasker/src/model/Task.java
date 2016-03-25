@@ -108,6 +108,17 @@ public class Task implements Comparable {
     public LocalDate getStartDate() {
         return startDate;
     }
+    
+    // @author: A0133333U
+    public LocalTime getStartTime() {
+    	return startTime;
+    	
+    }
+    
+    // @author: A0133333U
+    public LocalTime getEndTime() {
+    	return endTime;
+    }
 
     public void setName(String newName) {
         taskName = newName;
