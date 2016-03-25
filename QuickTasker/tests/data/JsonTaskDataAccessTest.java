@@ -82,6 +82,16 @@ public class JsonTaskDataAccessTest {
         assertNotNull(dataHandler.getTasks());
     }
 
+    @Test
+    public void deserializedRecurringTasksShouldHaveCorrectType() {
+        Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week");
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(t);
+        dataHandler.save(tasks);
+        dataHandler.getTasks().get(0);
+        assertEquals(RecurringTask.class, dataHandler.getTasks().get(0).getClass());
+    }
+
     private Task readOneTask() {
         try {
             BufferedReader reader = Files.newBufferedReader(dataHandler.getFilePath());

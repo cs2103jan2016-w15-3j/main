@@ -23,9 +23,9 @@ public class Task implements Comparable {
      * Default constructor *.
      */
     public Task() {
-        taskName = "";
-        endDate = LocalDate.MIN;
-        setStartDateAsNow();
+        this.taskName = "";
+        this.endDate = LocalDate.MIN;
+        this.setStartDateAsNow();
         generateId();
     }
 
@@ -160,4 +160,5 @@ public class Task implements Comparable {
         }
         return -1;
     }
+
 }
