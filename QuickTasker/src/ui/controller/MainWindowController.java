@@ -131,6 +131,8 @@ public class MainWindowController implements Initializable {
                 editTask(userInput);
             } else if (userInput.contains("mark")) {
                 markTaskCompleted(userInput);
+            } else if (userInput.contains("recur")) {
+                createRecurringTask(userInput);
             }
         } catch (Exception e) {
             throw new UIOperationException();
@@ -216,7 +218,7 @@ public class MainWindowController implements Initializable {
     }
 
     private void createRecurringTask(String userInput) throws Exception {
-        RecurringTask newTask = makeRecurringTask("taskName", LocalDate.now(), LocalDate.now(),
+        Task newTask = makeRecurringTask("taskName", LocalDate.of(2016, 03, 20), LocalDate.of(2016, 03, 23),
                 "week");
         plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
@@ -233,9 +235,9 @@ public class MainWindowController implements Initializable {
         return new Task(taskName, startDate, dueDate);
     }
 
-    private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
+    private Task makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
             String type) throws Exception {
-        return new RecurringTask(taskName, startDate, dueDate, type);
+        return new Task(taskName, startDate, dueDate, type);
     }
 
     private void setCellFactory() {
