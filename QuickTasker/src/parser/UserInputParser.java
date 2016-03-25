@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.*;
 
-import org.ocpsoft.prettytime.shade.com.joestelmach.natty.generated.DateParser.formal_date_return;
-import org.ocpsoft.prettytime.shade.net.fortuna.ical4j.util.Strings;
-
 /**
  * @author A0121558H Dawson
  */
@@ -195,6 +192,7 @@ public class UserInputParser implements ParserInterface {
     }
 
     public void setAttributesForUpdates(String input) {
+        //TODO update date only 
         DateTimeParser dateTimeParser = new DateTimeParser();
         removeWhiteSpaces(input);
         command = userCommand[0];
@@ -280,8 +278,8 @@ public class UserInputParser implements ParserInterface {
         } else if (numToSetDate == 2) {
             startDate = endDate = stringToLocalDate(userCommand[length - 2] + " " + userCommand[length - 1]);
         } else if (numToSetDate == 3) {// floating task
-            startDate = LocalDate.MIN;
-            endDate = LocalDate.MIN;// placeholder for null
+            startDate = LocalDate.MAX;
+            endDate = LocalDate.MAX;// placeholder for null
         } else if (numToSetDate == 4) {
             startDate = endDate = stringToLocalDate("today");
         } else if(numToSetDate==5) {

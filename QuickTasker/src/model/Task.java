@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  * .
@@ -10,8 +11,10 @@ import java.time.LocalDate;
 public class Task {
     private static int IdGenerator;
     private String taskName;
-    private LocalDate endDate;
     private LocalDate startDate;
+    private LocalDate endDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private int id;
 
     public void setStartDateAsNow() {
@@ -23,7 +26,10 @@ public class Task {
      */
     public Task() {
         taskName = "";
+        startDate= LocalDate.MIN;
         endDate = LocalDate.MIN;
+        startTime=LocalTime.MIN;
+        endTime=LocalTime.MIN;
         setStartDateAsNow();
         generateId();
     }
@@ -34,7 +40,7 @@ public class Task {
     public Task(String taskName) {
         this.taskName = taskName;
         setStartDateAsNow();
-        this.endDate = LocalDate.MAX;
+        this.endDate = LocalDate.MIN;
         generateId();
     }
 
@@ -43,7 +49,7 @@ public class Task {
      */
     public Task(String taskName, LocalDate startDate) {
         this.taskName = taskName;
-        this.endDate = LocalDate.MAX;
+        this.endDate = LocalDate.MIN;
         this.startDate = startDate;
         generateId();
     }
@@ -57,6 +63,26 @@ public class Task {
         this.startDate = startDate;
         generateId();
     }
+    public Task(String taskName, LocalDate startDate, LocalDate endDate, 
+            LocalTime startTime) {
+        this.taskName = taskName;
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.endDate=endDate;
+        this.startTime=startTime;
+        generateId();     
+    }
+    public Task(String taskName, LocalDate startDate, LocalDate endDate, 
+            LocalTime startTime, LocalTime endTime) {
+        this.taskName = taskName;
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.endDate=endDate;
+        this.startTime=startTime;
+        this.endTime=endTime;
+        generateId();     
+    }
+
 
     public String getName() {
         return taskName;
