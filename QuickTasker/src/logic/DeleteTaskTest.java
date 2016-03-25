@@ -27,7 +27,7 @@ public class DeleteTaskTest {
         logic = new Logic();
         for (int i = 0; i < 10; i++) {
             Task task = new Task();
-            Logic.list.add(task);
+            logic.list.add(task);
         }
     }
 
@@ -38,7 +38,7 @@ public class DeleteTaskTest {
         assertEquals(logic.getSize(), 9);
         logic.deleteTask(8);
         assertEquals(logic.getSize(), 8);
-        logic.commandMap.get(Commands.DELETE_TASK).undo((ArrayList<Task>) Logic.list);
+        logic.commandMap.get(Commands.DELETE_TASK).undo((ArrayList<Task>) logic.list);
         assertEquals(logic.getSize(), 9);
     }
 }
