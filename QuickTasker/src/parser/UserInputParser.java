@@ -3,6 +3,7 @@ package parser;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +33,7 @@ public class UserInputParser implements ParserInterface {
     }
 
     public void setAttributes(String userInput) {
-        //UPDATED AS OF 23/3/2016
+        // UPDATED AS OF 23/3/2016
         DateTimeParser dateTimeParser = new DateTimeParser();
 
         removeWhiteSpaces(userInput);
@@ -47,7 +48,7 @@ public class UserInputParser implements ParserInterface {
 
         determineLengthOfInput();
         command = userCommand[0];
-        taskName = setTaskName();
+        setTaskName();
         System.out.println("numTouse:" + numToUse);
         System.out.println("parser startdate " + startDate);
         System.out.println("parser enddate " + endDate);
@@ -76,8 +77,8 @@ public class UserInputParser implements ParserInterface {
     }
 
     // LOGGING
-    public String setTaskName() {
-        //UPDATED AS OF 23/3/2016
+    public void setTaskName() {
+        // UPDATED AS OF 23/3/2016
 
         loggerTaskName.log(Level.INFO, "Start of process");
         String output = "";
@@ -93,7 +94,7 @@ public class UserInputParser implements ParserInterface {
         }
         loggerTaskName.log(Level.INFO, "end of processing");
 
-        return output;
+        taskName = output;
     }
 
     // TRYCATCH
@@ -194,13 +195,27 @@ public class UserInputParser implements ParserInterface {
     }
 
     public void setAttributesForUpdates(String input) {
+        DateTimeParser dateTimeParser = new DateTimeParser();
         removeWhiteSpaces(input);
         command = userCommand[0];
         determineLengthOfInput();
-        taskName = setTaskNameForUpdates();
-        startDate = stringToLocalDate(userCommand[lengthOfInput - 2]);
-        endDate = stringToLocalDate(userCommand[lengthOfInput - 1]);
+        userCommand = removeIndexToUpdate();
+        setTime(userCommand);
+        userCommand = dateTimeParser.removeTime(userCommand);
+        determineLengthOfInput();
+        isEnglishDate();
+        setDate(numToUse, lengthOfInput);
+        userCommand = dateTimeParser.removeDate(userCommand);
+        determineLengthOfInput();
+        setTaskName();
     }
+
+    private String[] removeIndexToUpdate() {
+        ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList((userCommand)));
+        tempUserCommand.remove(1);
+        return tempUserCommand.toArray(new String[tempUserCommand.size()]);
+    }
+    /*Methods for updates end*/
 
     public void setDate(int numToSetDate, int length) {
         if (numToSetDate == 0) {

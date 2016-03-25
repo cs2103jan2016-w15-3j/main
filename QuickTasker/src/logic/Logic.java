@@ -1,6 +1,7 @@
 package logic;
 
 import data.JsonTaskDataAccess;
+import data.TaskDataAccessObject;
 import model.Task;
 import parser.Commands;
 
@@ -11,16 +12,13 @@ import java.util.TreeMap;
 
 /**
  * Author A0130949 Soh Yonghao
- * <p>
- * <p>
- * <p>
  * .
  */
 
 public class Logic {
     protected static List<Task> list;
     protected TreeMap<Commands, Command> commandMap;
-    private JsonTaskDataAccess storage;
+    private TaskDataAccessObject storage;
     protected Stack<Commands> undoStack;
     protected Stack<Commands> redoStack;
 
@@ -52,6 +50,13 @@ public class Logic {
         commandMap.put(Commands.DELETE_TASK, new DeleteTask());
         commandMap.put(Commands.DISPLAY_TASK, new DisplayTask());
         commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
+        commandMap.put(Commands.SEARCH_TASK, new Search());
+        commandMap.put(Commands.SORT_TASK, new Sort());
+        //commandMap.put(Commands.RECUR_TASK, new AddRecurTask());
+    }
+
+    public List<Task> loadSavedTask() {
+        return storage.getTasks();
     }
 
     public void exit() {
@@ -64,6 +69,13 @@ public class Logic {
         storage.save(list);
         return (ArrayList<Task>) list;
     }
+    
+/*    public ArrayList<Task> addRecurTask(RecurringTask task) {
+        commandMap.get(Commands.CREATE_TASK).execute(list, task);
+        undoStack.push(Commands.CREATE_TASK);
+        storage.save(list);
+        return (ArrayList<Task>) list;
+    }*/
 
     public ArrayList<Task> deleteTask(int index) {
         commandMap.get(Commands.DELETE_TASK).execute(list, index);
@@ -95,6 +107,11 @@ public class Logic {
         Commands command = redoStack.pop();
         undoStack.push(command);
         commandMap.get(command).redo((ArrayList<Task>) list);
+        return (ArrayList<Task>) list;
+    }
+
+    public ArrayList<Task> sort() {
+        commandMap.get(Commands.SORT_TASK).execute(list, "");
         return (ArrayList<Task>) list;
     }
 }

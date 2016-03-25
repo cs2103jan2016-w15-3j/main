@@ -66,7 +66,6 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskName(Task task) {
         taskName.setText(task.getName());
-
     }
 
     protected void setTaskStartDate(Task task) {
