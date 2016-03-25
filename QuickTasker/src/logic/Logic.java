@@ -2,6 +2,7 @@ package logic;
 
 import data.JsonTaskDataAccess;
 import data.TaskDataAccessObject;
+import model.RecurringTask;
 import model.Task;
 import parser.Commands;
 
@@ -16,7 +17,7 @@ import java.util.TreeMap;
  */
 
 public class Logic {
-    protected static List<Task> list;
+    protected List<Task> list;
     protected TreeMap<Commands, Command> commandMap;
     private TaskDataAccessObject storage;
     protected Stack<Commands> undoStack;
@@ -55,8 +56,22 @@ public class Logic {
         //commandMap.put(Commands.RECUR_TASK, new AddRecurTask());
     }
 
-    public List<Task> loadSavedTask() {
-        return storage.getTasks();
+    public ArrayList<Task> loadSavedTask() {
+        this.list = storage.getTasks();
+        System.out.println(list.size());
+        adjustmentForRecurringTasks();
+        return (ArrayList<Task>) list;
+    }
+    
+    public void adjustmentForRecurringTasks() {
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println("changing recurring task");
+            if (list.get(i).getRecurring()) {
+                System.out.println(list.get(i).getName() + " " + list.get(i).getStartDate());
+                list.get(i).adjustDate();;
+                System.out.println(list.get(i).getName() + " " + list.get(i).getStartDate());
+            }
+        }
     }
 
     public void exit() {
@@ -78,6 +93,7 @@ public class Logic {
     }*/
 
     public ArrayList<Task> deleteTask(int index) {
+        System.out.println("deleting " + list.size());
         commandMap.get(Commands.DELETE_TASK).execute(list, index);
         undoStack.push(Commands.DELETE_TASK);
         storage.save(list);
