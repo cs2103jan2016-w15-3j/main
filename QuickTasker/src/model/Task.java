@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 /**
  * .
@@ -14,6 +15,8 @@ public class Task implements Comparable {
     private LocalDate startDate;
     private boolean isDone = false;
     private int id;
+    private boolean isRecurring = false;
+    private String type;
 
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
@@ -58,6 +61,15 @@ public class Task implements Comparable {
         this.startDate = startDate;
         generateId();
     }
+    
+    public Task(String taskName, LocalDate startDate, LocalDate endDate, String type) {
+        this.taskName = taskName;
+        this.endDate = endDate;
+        this.startDate = startDate;
+        generateId();
+        this.type = type;
+        setRecurring();
+    }
 
     public String getName() {
         return taskName;
@@ -92,11 +104,84 @@ public class Task implements Comparable {
     }
 
     public void setDone(boolean done) {
-        isDone = done;
+        isDone = done;   
+    }
+    
+    public void setRecurring() {
+        this.isRecurring = true;
+    }
+    
+    public boolean getRecurring() {
+        return isRecurring;
     }
 
     private void generateId() {
         this.id = ++IdGenerator;
+    }
+    
+    public void adjustDate() {
+        this.checkYearsPast();
+        this.checkMonthsPast();
+        this.checkDaysPast();
+    }
+
+    private void checkYearsPast() {
+        if (LocalDate.now().getYear() > this.getDueDate().getYear()) {
+            if (this.getType().equals("week")) {
+                long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.WEEKS);
+                setNextDates(this.getStartDate().plusWeeks(amount + 1),
+                        this.getDueDate().plusWeeks(amount + 1));
+            } else {
+                long amount = this.getStartDate().until(LocalDate.now(), ChronoUnit.DAYS);
+                setNextDates(this.getStartDate().plusDays(amount),
+                        this.getDueDate().plusDays(amount));
+            }
+        }
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    private void checkMonthsPast() {
+        if (LocalDate.now().getMonthValue() > this.getDueDate().getMonthValue()) {
+            if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
+                if (this.getType().equals("week")) {
+                    long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.WEEKS);
+                    setNextDates(this.getStartDate().plusWeeks(amount + 1),
+                            this.getDueDate().plusWeeks(amount + 1));
+                } else {
+                    long amount = this.getStartDate().until(LocalDate.now(), ChronoUnit.DAYS);
+                    setNextDates(this.getStartDate().plusDays(amount),
+                            this.getDueDate().plusDays(amount));
+                }
+            }
+        }
+    }
+
+    private void checkDaysPast() {
+        if (LocalDate.now().getDayOfMonth() > this.getDueDate().getDayOfMonth()) {
+            if (LocalDate.now().getMonthValue() == this.getDueDate().getMonthValue()) {
+                if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
+                    if (this.getType().equals("week")) {
+                        long amount = ChronoUnit.WEEKS.between(this.getDueDate(), LocalDate.now());
+                        setNextDates(this.getStartDate().plusWeeks(amount + 1),
+                                this.getDueDate().plusWeeks(amount + 1));
+                    } else {
+                        long amount = ChronoUnit.DAYS.between(this.getStartDate(), LocalDate.now());
+                        System.out.println("" + amount);
+                        setNextDates(this.getStartDate().plusDays(amount),
+                                this.getDueDate().plusDays(amount));
+                        //System.out.println(this.getStartDate());
+                    }
+                }
+            }
+        }
+    }
+
+    private void setNextDates(LocalDate startDate, LocalDate endDate) {
+        setStartDate(startDate);
+        setEndDate(endDate);
     }
 
     @Override
