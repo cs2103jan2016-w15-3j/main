@@ -68,7 +68,7 @@ public class AddTaskTest {
     @Test
     // A user could have undo add
     public void testUndoAfterAdding() throws Exception {
-        logic.commandMap.get(Commands.CREATE_TASK).undo((ArrayList<Task>) Logic.list);
+        logic.commandMap.get(Commands.CREATE_TASK).undo((ArrayList<Task>) logic.list);
         assertEquals(logic.getSize(), 1);
     }
 }
