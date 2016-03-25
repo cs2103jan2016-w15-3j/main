@@ -11,9 +11,6 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.ocpsoft.prettytime.shade.com.joestelmach.natty.generated.DateParser.formal_date_return;
-import org.ocpsoft.prettytime.shade.net.fortuna.ical4j.util.Strings;
-
 /**
  * @author A0121558H Dawson
  */
