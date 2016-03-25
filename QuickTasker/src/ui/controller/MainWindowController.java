@@ -18,6 +18,7 @@ import model.RecurringTask;
 import model.Task;
 import parser.Commands;
 import parser.ParserInterface;
+import parser.RecurringParser;
 import parser.UserInputParser;
 import ui.model.TaskListCell;
 
@@ -36,6 +37,7 @@ public class MainWindowController implements Initializable {
     private static MainWindowController mainWindowController;
     private Main main;
     private ParserInterface parser = new UserInputParser();
+    private RecurringParser recurringParser;
     private Logic operations = new Logic();
 
     @FXML private Label label;
@@ -66,6 +68,7 @@ public class MainWindowController implements Initializable {
         setMain(main);
         operations = new Logic();
         parser = new UserInputParser();
+        recurringParser = new RecurringParser();
         initPlanner();
         setCellFactory();
         initLogger();
@@ -131,7 +134,7 @@ public class MainWindowController implements Initializable {
                 editTask(userInput);
             } else if (userInput.contains("mark")) {
                 markTaskCompleted(userInput);
-            } else if (userInput.contains("recur")) {
+            } else if (parser.getCommand(userInput) == Commands.RECUR_TASK) {
                 createRecurringTask(userInput);
             }
         } catch (Exception e) {
@@ -218,7 +221,8 @@ public class MainWindowController implements Initializable {
     }
 
     private void createRecurringTask(String userInput) throws Exception {
-        Task newTask = makeRecurringTask("taskName", LocalDate.of(2016, 03, 20), LocalDate.of(2016, 03, 23),
+        System.out.println(recurringParser.getTaskName(userInput));
+        Task newTask = makeRecurringTask(recurringParser.getTaskName(userInput), LocalDate.of(2016, 03, 20), LocalDate.of(2016, 03, 23),
                 "week");
         plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();

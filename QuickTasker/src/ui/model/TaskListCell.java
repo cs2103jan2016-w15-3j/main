@@ -22,11 +22,13 @@ import java.time.format.DateTimeFormatter;
 import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
 public class TaskListCell extends JFXListCell<Task> {
-    private final Label taskStartDate = new Label();
-    private final Label taskDeadLine = new Label();
     private final Label taskName = new Label();
     private final Label taskIndex = new Label();
     private final Label taskId = new Label();
+    private final Label taskStartDate = new Label();
+    private final Label taskDeadLine = new Label();
+    private final Label taskStartTime = new Label();
+    private final Label taskEndTime = new Label();
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final GridPane grid = new GridPane();
     private ObservableList<Task> tasks;
@@ -75,6 +77,8 @@ public class TaskListCell extends JFXListCell<Task> {
         setTaskId(task);
         setTaskStartDate(task);
         setTaskDueDate(task);
+        setTaskStartTime(task);
+        setTaskEndTime(task);
         setGraphic(grid);
     }
 
@@ -91,7 +95,7 @@ public class TaskListCell extends JFXListCell<Task> {
         if (task.getStartDate() != null) {
             LocalDate startDate = task.getStartDate();
             // from here
-            if (startDate == LocalDate.MIN || startDate==LocalDate.MAX) {
+            if (startDate == LocalDate.MIN || startDate == LocalDate.MAX) {
                 taskStartDate.setText("Not Specified");
             } else {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -107,7 +111,7 @@ public class TaskListCell extends JFXListCell<Task> {
         if (task.getStartDate() != null) {
             LocalDate dueDate = task.getDueDate();
             // from here
-            if (dueDate == LocalDate.MIN || dueDate==LocalDate.MAX) {
+            if (dueDate == LocalDate.MIN || dueDate == LocalDate.MAX) {
                 taskDeadLine.setText("Not Specified");
             } else {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -116,6 +120,17 @@ public class TaskListCell extends JFXListCell<Task> {
             }
         } else
             taskDeadLine.setText("");
+    }
+
+    protected void setTaskStartTime(Task task) {
+        /* if (task.getTime() != null) */
+        final int offset = 1;
+        taskStartTime.setText("start time here");
+    }
+
+    protected void setTaskEndTime(Task task) {
+        final int offset = 1;
+        taskEndTime.setText("end time here");
     }
 
     /**
@@ -159,15 +174,23 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void configureIcon() {
         // todo : implement awesome font icons and custom css
-        // icons to be applied to relevant tasks
+        // if (taskDeadLine.getText() < LocalDate.now().) {
+
+    }
+
+    private void setOverdue() {
+
     }
 
     private void addControlsToGrid() {
         grid.add(taskId, 0, 0);
         grid.add(checkBox, 1, 0);
         grid.add(new HBox(taskName), 2, 0); // add(Node child, int columnIndex,
-                                            // int
+        // int
         grid.add(taskStartDate, 3, 0); // rowIndex, int colspan, int
+        grid.add(taskStartTime, 3, 1);
         grid.add(taskDeadLine, 4, 0);
+        grid.add(taskEndTime, 4, 1);
+
     }
 }

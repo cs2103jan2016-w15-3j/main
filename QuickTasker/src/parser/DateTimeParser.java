@@ -154,14 +154,13 @@ public class DateTimeParser {
     public ArrayList<Integer> indicesToDetermineDate(String[] input) {
 
         ArrayList<Integer> indices = new ArrayList<Integer>();
-        int counter = 0;
 
         for (int i = input.length; i > 1; i--) {
-            System.out.println("index-1: " + (i - 1));
+          //  System.out.println("index-1: " + (i - 1));
 
             String toCheck = input[i - 2] + " " + input[i - 1];
-            System.out.println("input[i-1]: " + input[i - 1]);
-            System.out.println("input[i-2] + input[i-1]: " + "" + input[i - 2] + input[i - 1]);
+         //   System.out.println("input[i-1]: " + input[i - 1]);
+         //   System.out.println("input[i-2] + input[i-1]: " + toCheck);
 
             if (isDate(input[i - 1])) {
                 indices.add(i - 1);

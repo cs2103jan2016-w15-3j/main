@@ -199,6 +199,7 @@ public class UserInputParser implements ParserInterface {
     }
 
     public void setAttributesForUpdates(String input) {
+        //TODO update date only 
         DateTimeParser dateTimeParser = new DateTimeParser();
         removeWhiteSpaces(input);
         command = userCommand[0];
@@ -206,7 +207,6 @@ public class UserInputParser implements ParserInterface {
         userCommand = removeIndexToUpdate();
 
         if (!isFloatingUpdate()) {
-
             setTime(userCommand);
             userCommand = dateTimeParser.removeTime(userCommand);
             determineLengthOfInput();
@@ -286,10 +286,13 @@ public class UserInputParser implements ParserInterface {
             startDate = endDate = stringToLocalDate(
                     userCommand[length - 2] + " " + userCommand[length - 1]);
         } else if (numToSetDate == 3) {// floating task
-            startDate = LocalDate.MIN;
-            endDate = LocalDate.MIN;// placeholder for null
+            startDate = LocalDate.MAX;
+            endDate = LocalDate.MAX;// placeholder for null
         } else if (numToSetDate == 4) {
             startDate = endDate = stringToLocalDate("today");
+        } else if(numToSetDate==5) {
+            startDate=stringToLocalDate(userCommand[length -1]);
+            endDate= LocalDate.MIN;
         }
     }
 
@@ -308,6 +311,9 @@ public class UserInputParser implements ParserInterface {
         DateTimeParser parser = new DateTimeParser();
         ArrayList<Integer> indicesTime = parser.indicesToDetermineTime(input);
 
+        for (Integer i : indicesTime)
+            System.out.println("i: " + i);
+
         if (indicesTime.size() == 0) {
             return;
         }
@@ -323,12 +329,14 @@ public class UserInputParser implements ParserInterface {
         }
     }
 
-    private int isEnglishDate() {
+    private void isEnglishDate() {
         // 1 is tmr
         // 2 is either next day or day after
         // 3 is floating task
-        // 0 is not english
+        // 0 is not two dates
         // 4 is today
+        //5 is only one date
+        DateTimeParser parser = new DateTimeParser();
         String toCheck = userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1];
         numToUse = 0;
 
@@ -340,8 +348,10 @@ public class UserInputParser implements ParserInterface {
             numToUse = 3;
         } else if (userCommand[lengthOfInput - 1].equals("today")) {
             numToUse = 4;
+        }else if (parser.isDate(userCommand[lengthOfInput-1])
+                && !parser.isDate(userCommand[lengthOfInput-2])) {
+            numToUse=5;
         }
-        return numToUse;
     }
 
     public String setTaskNameForUpdates() {
@@ -353,4 +363,14 @@ public class UserInputParser implements ParserInterface {
         }
         return output.trim();
     }
+
+    private void print() {
+        System.out.print("IN PRINT()");
+
+        for (String s : userCommand) {
+            System.out.print(s);
+            System.out.print(" ");
+        }
+    }
+
 }
