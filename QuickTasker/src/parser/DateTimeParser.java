@@ -3,14 +3,8 @@ package parser;
 /**
  * author A0121558H
  */
+
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Arrays;
-
-import java.util.Collections;
-
-import com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException;
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -93,6 +87,7 @@ public class DateTimeParser {
     }
 
     public boolean isDate(String input) {
+
 
         if (input.equals("today") || input.equals("tomorrow") || input.equals("day after")
                 || input.equals("next day")) {

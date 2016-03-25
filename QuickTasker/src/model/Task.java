@@ -82,15 +82,15 @@ public class Task implements Comparable {
     public boolean isDone() {
         return isDone;
     }
-    
+
     public void setStartDate(LocalDate date) {
         this.startDate = date;
     }
-    
+
     public void setEndDate(LocalDate date) {
         this.endDate = date;
     }
-    
+
     public void setDone(boolean done) {
         isDone = done;
     }
@@ -100,54 +100,28 @@ public class Task implements Comparable {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-        result = prime * result + id;
-        result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
-        return prime * result + ((taskName == null) ? 0 : taskName.hashCode());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+
+        Task task = (Task) o;
+
+        if (id != task.id) return false;
+        if (!taskName.equals(task.taskName)) return false;
+        if (endDate != null ? !endDate.equals(task.endDate) : task.endDate != null) return false;
+        return startDate != null ? startDate.equals(task.startDate) : task.startDate == null;
+
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Task other = (Task) obj;
-        if (endDate == null) {
-            if (other.endDate != null) {
-                return false;
-            }
-        } else if (!endDate.equals(other.endDate)) {
-            return false;
-        }
-        if (id != other.id) {
-            return false;
-        }
-        if (startDate == null) {
-            if (other.startDate != null) {
-                return false;
-            }
-        } else if (!startDate.equals(other.startDate)) {
-            return false;
-        }
-        if (taskName == null) {
-            if (other.taskName != null) {
-                return false;
-            }
-        } else if (!taskName.equals(other.taskName)) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        int result = taskName.hashCode();
+        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
+        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+        result = 31 * result + id;
+        return result;
     }
-    
+
     @Override
     public int compareTo(Object task) {
         Task comparedTask = (Task) task;
@@ -169,9 +143,10 @@ public class Task implements Comparable {
         if (this.getDueDate().getYear() > comparedTask.getDueDate().getYear()) {
             return 1;
         }
-        
+
         if (this.getStartDate().getDayOfMonth() > comparedTask.getStartDate().getDayOfMonth()) {
-            if (this.getStartDate().getMonthValue() >= comparedTask.getStartDate().getMonthValue()) {
+            if (this.getStartDate().getMonthValue() >= comparedTask.getStartDate()
+                    .getMonthValue()) {
                 if (this.getStartDate().getYear() >= comparedTask.getStartDate().getYear()) {
                     return 1;
                 }

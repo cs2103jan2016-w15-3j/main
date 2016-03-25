@@ -1,7 +1,7 @@
 package logic;
 
 import data.JsonTaskDataAccess;
-import model.RecurringTask;
+import data.TaskDataAccessObject;
 import model.Task;
 import parser.Commands;
 
@@ -18,7 +18,7 @@ import java.util.TreeMap;
 public class Logic {
     protected static List<Task> list;
     protected TreeMap<Commands, Command> commandMap;
-    private JsonTaskDataAccess storage;
+    private TaskDataAccessObject storage;
     protected Stack<Commands> undoStack;
     protected Stack<Commands> redoStack;
 
@@ -53,6 +53,10 @@ public class Logic {
         commandMap.put(Commands.SEARCH_TASK, new Search());
         commandMap.put(Commands.SORT_TASK, new Sort());
         //commandMap.put(Commands.RECUR_TASK, new AddRecurTask());
+    }
+
+    public List<Task> loadSavedTask() {
+        return storage.getTasks();
     }
 
     public void exit() {
@@ -105,9 +109,9 @@ public class Logic {
         commandMap.get(command).redo((ArrayList<Task>) list);
         return (ArrayList<Task>) list;
     }
-    
+
     public ArrayList<Task> sort() {
         commandMap.get(Commands.SORT_TASK).execute(list, "");
-        return (ArrayList<Task>) list;        
+        return (ArrayList<Task>) list;
     }
 }

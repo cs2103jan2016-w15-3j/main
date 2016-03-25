@@ -2,7 +2,6 @@ package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-import data.JsonTaskDataAccess;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +34,6 @@ public class MainWindowController implements Initializable {
 
     private static Logger logger;
     private static MainWindowController mainWindowController;
-    private JsonTaskDataAccess storage;
     private Main main;
     private ParserInterface parser = new UserInputParser();
     private Logic operations = new Logic();
@@ -43,9 +41,17 @@ public class MainWindowController implements Initializable {
     @FXML private Label label;
     @FXML private AnchorPane container;
     @FXML private JFXTextField commandBox;
-    @FXML private JFXListView<Task> taskListView;
-
-    private ObservableList<Task> guiList = FXCollections.observableArrayList();
+    /* Naming explanation for team : To be removed */
+    /* this naming theme is based on the idea that
+       variable names should be abstractions resembling real life objects ,
+       such that they make sense even to a layman and could be read like a story/procedure/manual
+     */
+    @FXML private JFXListView<Task> printedPlanner;
+    // a printed planner presents plannerEntries in formatted manner
+    private ObservableList<Task> plannerEntries;
+    // planner entries are raw entries of tasks/events,
+    // think of them as those stuff you wrote on toilet paper but not translated into a
+    // printedPlanner yet
 
     // Display messages as visual feedback for users
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
@@ -57,16 +63,22 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        setCellFactory();
         setMain(main);
+        operations = new Logic();
+        parser = new UserInputParser();
+        initPlanner();
+        setCellFactory();
         initLogger();
-
-
     }
 
     private void initLogger() {
         logger = Logger.getLogger("UILogger");
         logger.setLevel(Level.INFO);
+    }
+
+    private void initPlanner() {
+        plannerEntries = FXCollections.observableArrayList(operations.loadSavedTask());
+        printedPlanner.setItems(plannerEntries);
     }
 
     void setMain(Main main) {
@@ -99,10 +111,6 @@ public class MainWindowController implements Initializable {
     }
 
     private void performOperations(String userInput) throws UIOperationException {
-        String taskName;
-        LocalDate startDate;
-        LocalDate dueDate;
-        int taskIndex;
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
                 createTask(userInput);
@@ -127,7 +135,6 @@ public class MainWindowController implements Initializable {
         } catch (Exception e) {
             throw new UIOperationException();
         }
-        assert (false); // execution should not reach here
     }
 
     private void editTask(String userInput) throws Exception {
@@ -135,24 +142,18 @@ public class MainWindowController implements Initializable {
         int indexToEdit;
         boolean editAll = false;
         Task taskToEdit;
-
-        // if it's edit all
-        if (userInput.toLowerCase().contains("all")) {
-
-        }
         int taskIndex = parser.getTaskIndex(userInput);
-
         refresh();
     }
 
     private void markTaskCompleted(String userInput) throws Exception {
 
         int i = parser.getIndexForDone(userInput);
-        Task task = guiList.get(i);
+        Task task = plannerEntries.get(i);
         task.setDone(true); // logic should handle
-        taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        taskListView.getSelectionModel().select(i);
-        taskListView.fireEvent(new TaskDoneEvent());
+        printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        printedPlanner.getSelectionModel().select(i);
+        printedPlanner.fireEvent(new TaskDoneEvent());
         javafx.concurrent.Task<Void> sleeper = new javafx.concurrent.Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -165,33 +166,33 @@ public class MainWindowController implements Initializable {
             }
         };
         sleeper.setOnSucceeded(event -> {
-            taskListView.getSelectionModel().clearSelection();
+            printedPlanner.getSelectionModel().clearSelection();
             commandBox.clear();
         });
         new Thread(sleeper).start();
         // Do not refresh entire list to avoid stack overflow of Event object
     }
-    
+
     private void sortTask(String userInput) {
         System.out.println("Sorting");
-        guiList = FXCollections.observableArrayList(operations.sort());
-        afterOperation(); 
+        plannerEntries = FXCollections.observableArrayList(operations.sort());
+        afterOperation();
     }
-    
+
     private void redoTask() {
-        guiList = FXCollections.observableArrayList(operations.redo());
+        plannerEntries = FXCollections.observableArrayList(operations.redo());
         afterOperation();
     }
 
     private void undoTask() {
-        guiList = FXCollections.observableArrayList(operations.undo());
+        plannerEntries = FXCollections.observableArrayList(operations.undo());
         afterOperation();
     }
 
     private void updateTask(String userInput) throws Exception {
         Task newTask = new Task(parser.getTaskNameForUpdate(userInput),
                 parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput));
-        guiList = FXCollections.observableArrayList(
+        plannerEntries = FXCollections.observableArrayList(
                 operations.updateTask(newTask, parser.getIndexForUpdate(userInput)));
         afterOperation();
     }
@@ -199,24 +200,25 @@ public class MainWindowController implements Initializable {
     private void deleteTask(String userInput) throws Exception {
         int taskIndex;
         taskIndex = parser.getTaskIndex(userInput);
-        guiList = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
+        plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
         afterOperation();
     }
 
     private void refresh() {
-        taskListView.setItems(guiList);
+        printedPlanner.setItems(plannerEntries);
     }
 
     private void createTask(String userInput) throws Exception {
         Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
                 parser.getEndDate(userInput));
-        guiList = FXCollections.observableArrayList(operations.addTask(newTask));
+        plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
     }
-    
+
     private void createRecurringTask(String userInput) throws Exception {
-        RecurringTask newTask = makeRecurringTask("taskName", LocalDate.now(), LocalDate.now(), "week");
-        guiList = FXCollections.observableArrayList(operations.addTask(newTask));
+        RecurringTask newTask = makeRecurringTask("taskName", LocalDate.now(), LocalDate.now(),
+                "week");
+        plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
     }
 
@@ -230,14 +232,14 @@ public class MainWindowController implements Initializable {
             throws Exception {
         return new Task(taskName, startDate, dueDate);
     }
-    
-    private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate, String type)
-            throws Exception {
+
+    private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
+            String type) throws Exception {
         return new RecurringTask(taskName, startDate, dueDate, type);
     }
 
     private void setCellFactory() {
-        taskListView.setCellFactory(param -> new TaskListCell(guiList));
+        printedPlanner.setCellFactory(param -> new TaskListCell(plannerEntries));
     }
 
     class SearchHighlightedTextCell extends ListCell<String> {

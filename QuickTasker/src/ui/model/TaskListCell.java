@@ -144,8 +144,8 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureDate() {
-        taskStartDate.setStyle("-fx-font-weightt:bold;-fx-padding:10px");
-        taskDeadLine.setStyle("-fx-font-weightt:bold;-fx-padding:10px");
+        taskStartDate.setStyle("-fx-font-weight:bold;-fx-padding:10px");
+        taskDeadLine.setStyle("-fx-font-weight:bold;-fx-padding:10px");
     }
 
     private void configureCheckBox() {

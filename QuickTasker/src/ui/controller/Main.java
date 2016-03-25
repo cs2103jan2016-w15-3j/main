@@ -1,5 +1,6 @@
 package ui.controller;
 
+import data.SettingManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,7 +26,6 @@ public class Main extends Application {
         // Do not remove these 2 lines of comments:
         /*Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
         Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);*/
-
         mainWindow();
     }
 
@@ -46,8 +46,8 @@ public class Main extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainWindowView.fxml"));
             AnchorPane pane = loader.load();
-
             MainWindowController mainWindowController = new MainWindowController();
+            SettingManager settings = new SettingManager();
             mainWindowController.setMain(this);
             primaryStage.getIcons().add(new Image(IMAGE_ICON));
             Scene scene = new Scene(pane);
@@ -64,6 +64,5 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
-
     }
 }

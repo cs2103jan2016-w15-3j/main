@@ -1,11 +1,8 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import model.Task;
 
 public class Sort<E> implements Command {
 
@@ -22,14 +19,13 @@ public class Sort<E> implements Command {
     @Override
     public void undo(ArrayList list) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void redo(ArrayList list) {
         // TODO Auto-generated method stub
-        
+
     }
-    
 
 }
