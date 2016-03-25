@@ -23,17 +23,21 @@ public class UpdateTask<E> implements Command<Object> {
 
     public void executeUpdate(int taskIndex, List<Task> list) {
         Task newTask = list.remove(list.size() - 1);
-        list.set(taskIndex, checkAttributes(newTask, taskIndex, list));
+        checkAttributes(newTask, taskIndex, list);
     }
 
-    private Task checkAttributes(Task updatedTask, int taskIndex, List<Task> list) {
-        if (updatedTask.getStartDate() == LocalDate.MIN) {
-            updatedTask.setStartDate(list.get(taskIndex).getStartDate());
-            updatedTask.setEndDate(list.get(taskIndex).getDueDate());
-        } else if (updatedTask.getName().equals("")) {
-            updatedTask.setName(list.get(taskIndex).getName());
+    private void checkAttributes(Task updatedTask, int taskIndex, List<Task> list) {
+        if (updatedTask.getStartDate() != LocalDate.MIN) {
+            list.get(taskIndex).setStartDate(updatedTask.getStartDate());
         }
-        return updatedTask;
+        
+        if (updatedTask.getDueDate() != LocalDate.MIN) {
+            list.get(taskIndex).setEndDate(updatedTask.getDueDate());
+        }
+        
+        if (!updatedTask.getName().equals("")) {
+            list.get(taskIndex).setName(updatedTask.getName());
+        }
     }
 
     @Override
