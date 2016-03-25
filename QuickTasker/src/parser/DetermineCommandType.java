@@ -34,10 +34,12 @@ public class DetermineCommandType {
                 return Commands.DISPLAY_TASK;
             case "undo":
                 return Commands.UNDO_TASK;
+            case "recur":
+                return Commands.RECUR_TASK;
             case "exit":
                 return Commands.EXIT;
-            case "c":
-                return Commands.COMPLETE_TASK;
+/*            case "c":
+                return Commands.COMPLETE_TASK;*/
             case "redo":
                 return Commands.REDO;
             default:
