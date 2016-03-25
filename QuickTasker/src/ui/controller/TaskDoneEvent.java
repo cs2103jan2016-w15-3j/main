@@ -11,7 +11,6 @@ public class TaskDoneEvent extends Event {
             "TASK_COMPLETE");
 
     private Task task;
-    private int index;
 
     public TaskDoneEvent(Task task) {
         this(TASK_COMPLETE);
@@ -21,10 +20,6 @@ public class TaskDoneEvent extends Event {
     public Task getTask() {
 
         return task;
-    }
-
-    public int getIndex() {
-        return this.index;
     }
 
     public TaskDoneEvent(EventType<? extends Event> arg0) {

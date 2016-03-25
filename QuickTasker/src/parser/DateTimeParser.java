@@ -1,5 +1,9 @@
 package parser;
 
+/**
+ * author A0121558H
+ */
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -84,7 +88,8 @@ public class DateTimeParser {
 
     public boolean isDate(String input) {
 
-        if (input.equals("tomorrow") || input.equals("day after") || input.equals("next day")) {
+        if (input.equals("today") || input.equals("tomorrow") || input.equals("day after") || input
+                .equals("next day")) {
             return true;
 
         } else {
@@ -157,17 +162,11 @@ public class DateTimeParser {
             System.out.println("input[i-2] + input[i-1]: " + "" + input[i - 2] + input[i - 1]);
 
             if (isDate(input[i - 1])) {
-                System.out.println("ZZZZZZ");
                 indices.add(i - 1);
             } else if (isDate(toCheck)) {
-                System.out.println("CBCBCB");
                 indices.add(i - 2);
                 indices.add(i - 1);
             }
-        }
-
-        for (Integer z : indices) {
-            System.out.println("Inside indices " + z);
         }
         return indices;
     }

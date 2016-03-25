@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Search<E> implements Command<Object> {
+    // For dear Yong Hao
+    // http://www.tutorialspoint.com/design_pattern/filter_pattern.htm
 
     @Override
     public void execute(List<Task> list, Object task) {

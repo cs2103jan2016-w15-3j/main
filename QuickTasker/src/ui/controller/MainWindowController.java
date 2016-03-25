@@ -13,6 +13,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import logic.Logic;
+import model.RecurringTask;
 import model.Task;
 import parser.Commands;
 import parser.ParserInterface;
@@ -38,9 +39,8 @@ public class MainWindowController implements Initializable {
     private final Logic operations = new Logic();
 
     @FXML private JFXTextField commandBox;
-    @FXML private JFXListView<Task> taskListView;
-
-    private ObservableList<Task> guiList = FXCollections.observableArrayList();
+    @FXML private JFXListView<Task> printedPlanner;
+    private ObservableList<Task> plannerEntries;
 
     // Display messages as visual feedback for users
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
@@ -52,14 +52,20 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        setCellFactory();
         setMain(main);
+        initPlanner();
+        setCellFactory();
         initLogger();
     }
 
     private void initLogger() {
         logger = Logger.getLogger("UILogger");
         logger.setLevel(Level.INFO);
+    }
+
+    private void initPlanner() {
+        plannerEntries = FXCollections.observableArrayList(operations.getTasks());
+        printedPlanner.setItems(plannerEntries);
     }
 
     void setMain(Main main) {
@@ -78,13 +84,14 @@ public class MainWindowController implements Initializable {
     private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
+            logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
             try {
                 performOperations(userInput);
             } catch (UIOperationException e) {
                 logger.log(Level.SEVERE, "Error occured at " + this.getClass().getName()
-                        + " within performOperation method.");
+                        + " within performOperation method. \n");
             }
-            logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
+
         }
     }
 
@@ -92,10 +99,6 @@ public class MainWindowController implements Initializable {
     }
 
     private void performOperations(String userInput) throws UIOperationException {
-        String taskName;
-        LocalDate startDate;
-        LocalDate dueDate;
-        int taskIndex;
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
                 createTask(userInput);
@@ -109,6 +112,9 @@ public class MainWindowController implements Initializable {
                 redoTask();
             } else if (parser.getCommand(userInput) == Commands.EXIT) {
                 operations.exit();
+            } else if (parser.getCommand(userInput) == Commands.SORT_TASK) {
+                System.out.println("getting the command");
+                sortTask(userInput);
             } else if (userInput.contains("edit")) {
                 editTask(userInput);
             } else if (userInput.contains("mark")) {
@@ -117,7 +123,6 @@ public class MainWindowController implements Initializable {
         } catch (Exception e) {
             throw new UIOperationException();
         }
-        assert (false); // execution should not reach here
     }
 
     private void editTask(String userInput) throws Exception {
@@ -125,33 +130,25 @@ public class MainWindowController implements Initializable {
         int indexToEdit;
         boolean editAll = false;
         Task taskToEdit;
-
-        // if it's edit all
-        if (userInput.toLowerCase().contains("all")) {
-
-        }
         int taskIndex = parser.getTaskIndex(userInput);
-
         refresh();
     }
 
     private void markTaskCompleted(String userInput) throws Exception {
-
         int i = parser.getIndexForDone(userInput);
-        Task task = guiList.get(i);
-        task.setDone(true);
-        taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        taskListView.getSelectionModel().select(i);
-        taskListView.fireEvent(new TaskDoneEvent(task));
-
+        Task task = plannerEntries.get(i);
+        task.setDone(true); // logic should handle
+        printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        printedPlanner.getSelectionModel().select(i);
+        printedPlanner.fireEvent(new TaskDoneEvent(task));
         javafx.concurrent.Task<Void> sleeper;
-        sleeper = makeSleeper(400);
+        sleeper = makeSleeper(500);
         sleeper.setOnSucceeded(event -> {
-            taskListView.getSelectionModel().clearSelection();
+            printedPlanner.getSelectionModel().clearSelection();
             commandBox.clear();
         });
         new Thread(sleeper).start();
-        // Do not refresh entire list to avoid stack overflow of Event object
+
     }
 
     private javafx.concurrent.Task<Void> makeSleeper(int duration) {
@@ -168,41 +165,64 @@ public class MainWindowController implements Initializable {
         };
     }
 
+    private void sortTask(String userInput) {
+        System.out.println("Sorting");
+        plannerEntries = FXCollections.observableArrayList(operations.sort());
+        afterOperation();
+    }
+
     private void redoTask() {
-        guiList = FXCollections.observableArrayList(operations.redo());
+        plannerEntries = FXCollections.observableArrayList(operations.redo());
         afterOperation();
     }
 
     private void undoTask() {
-        guiList = FXCollections.observableArrayList(operations.undo());
+        plannerEntries = FXCollections.observableArrayList(operations.undo());
         afterOperation();
     }
 
     private void updateTask(String userInput) throws Exception {
+        int indexOfTask = parser.getIndexForUpdate(userInput);
+        printedPlanner.getSelectionModel().select(indexOfTask);
         Task newTask = new Task(parser.getTaskNameForUpdate(userInput),
                 parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput));
-        guiList = FXCollections.observableArrayList(
-                operations.updateTask(newTask, parser.getIndexForUpdate(userInput)));
+    /*    plannerEntries.remove(indexOfTask);
+        plannerEntries.add(indexOfTask,newTask);*/
+
+        plannerEntries = FXCollections
+                .observableArrayList(operations.updateTask(newTask, indexOfTask));
+        printedPlanner.getSelectionModel().clearSelection();
         afterOperation();
     }
 
     private void deleteTask(String userInput) throws Exception {
         int taskIndex;
         taskIndex = parser.getTaskIndex(userInput);
-        guiList = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
+        //plannerEntries.remove(taskIndex);
+        plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
         afterOperation();
     }
 
     private void refresh() {
-        taskListView.setItems(guiList);
+        printedPlanner.setItems(plannerEntries);
     }
 
     private void createTask(String userInput) throws Exception {
         Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
                 parser.getEndDate(userInput));
-        guiList.add(newTask);
-        taskListView.setItems(guiList);
+     /*   plannerEntries.add(newTask);
+        printedPlanner.setItems(plannerEntries);
         commandBox.clear();
+        operations.addTask(newTask);*/
+        plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+        afterOperation();
+    }
+
+    private void createRecurringTask(String userInput) throws Exception {
+        RecurringTask newTask = makeRecurringTask("taskName", LocalDate.now(), LocalDate.now(),
+                "week");
+        plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+        afterOperation();
     }
 
     private void afterOperation() {
@@ -216,15 +236,28 @@ public class MainWindowController implements Initializable {
         return new Task(taskName, startDate, dueDate);
     }
 
+    private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
+            String type) throws Exception {
+        return new RecurringTask(taskName, startDate, dueDate, type);
+    }
+
     private void setCellFactory() {
-        taskListView.setCellFactory(param -> {
-            TaskListCell listCell = new TaskListCell(guiList);
-            taskListView.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
+        printedPlanner.setCellFactory(param -> {
+
+            TaskListCell listCell = new TaskListCell(plannerEntries);
+            printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
                 Thread.currentThread().setUncaughtExceptionHandler(
                         (t, e) -> Platform.runLater(System.out::println));
                 if (listCell.getTask().equals(event.getTask())) listCell.getCheckBox().fire();
             }).start());
+        /*    plannerEntries.addListener(new ListChangeListener<Task>() {
+                @Override
+                public void onChanged(Change<? extends Task> c) {
+                    listCell.updateIndex(plannerEntries);
+                }
+            });*/
             return listCell;
+
         });
     }
 

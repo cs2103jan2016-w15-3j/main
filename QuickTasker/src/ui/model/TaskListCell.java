@@ -59,6 +59,11 @@ public class TaskListCell extends JFXListCell<Task> {
         setGraphic(grid);
     }
 
+    /*public void updateIndex(ObservableList<Task> tasks){
+        setTaskId(myTask);
+        System.out.println(this.indexProperty());
+    }*/
+
     protected void setTaskId(Task task) {
         final int offset = 1;
         taskId.setText(String.valueOf(tasks.indexOf(task) + offset));
@@ -66,7 +71,6 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskName(Task task) {
         taskName.setText(task.getName());
-
     }
 
     protected void setTaskStartDate(Task task) {

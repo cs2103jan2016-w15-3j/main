@@ -3,19 +3,27 @@ package data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import model.RecurringTask;
 import model.Task;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JsonTaskDataAccess implements TaskDataAccessObject {
+    private final String DEFAULT_FILENAME = "tasks.json";
+    private final Path DEFAULT_SAVE_PATH = Paths.get(DEFAULT_FILENAME);
+    private Logger logger;
+
     private Path pathOfSaveFile;
-    private final Path DEFAULT_PATH = Paths.get("tasks.json");
     private SettingManager settings = new SettingManager();
 
     public JsonTaskDataAccess() {
@@ -27,7 +35,7 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         if (p != null) {
             pathOfSaveFile = Paths.get(p);
         } else {
-            pathOfSaveFile = DEFAULT_PATH;
+            pathOfSaveFile = DEFAULT_SAVE_PATH;
         }
         if (Files.notExists(pathOfSaveFile)) {
             createNewSaveFile();
@@ -43,16 +51,20 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     }
 
     @Override
-    public List<Task> getTasks() throws GetTasksException {
+    public List<Task> getTasks() throws LoadTasksException {
+        RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
+                .registerSubtype(Task.class).registerSubtype(RecurringTask.class, "RecurringTask");
+        Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter)
+                .create();
+        List<Task> tasks;
         try {
             BufferedReader reader = Files.newBufferedReader(pathOfSaveFile);
-            Gson gson = new Gson();
-            List<Task> tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {
+            tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {
             }.getType());
             reader.close();
-            return tasks;
+            return tasks == null ? new ArrayList<>() : tasks;
         } catch (IOException e) {
-            throw new GetTasksException();
+            throw new LoadTasksException();
         }
     }
 
@@ -72,7 +84,11 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     @Override
     public void save(List<Task> tasks) throws SaveTasksException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
+                .registerSubtype(Task.class).registerSubtype(RecurringTask.class);
+        Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter)
+                .create();
         String json = gson.toJson(tasks);
         try {
             BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile);
@@ -86,17 +102,31 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     @Override
     public void reset() {
-
+        Path p = Paths.get(settings.getPathOfSaveFile());
+        try {
+            Files.deleteIfExists(p);
+        } catch (DirectoryNotEmptyException e) {
+            logger.log(Level.WARNING, "Try to delete non-empty directory " + p.getFileName() +
+                    " at reset() method in < " + this.getClass().getName() + "> class");
+        } catch (SecurityException se) {
+            logger.log(Level.WARNING, "Permission error while deleting " + p.getFileName() +
+                    " at reset() method in < " + this.getClass().getName() + "> class");
+        } catch (IOException ioe) {
+            logger.log(Level.WARNING,
+                    "Unknow IOException occurs while deleting " + p.getFileName() +
+                            "at reset() method in <" + this.getClass().getName() + "> class");
+        }
+        initialize();
     }
 
-    Path getFilePath() {
+    protected Path getFilePath() {
         return this.pathOfSaveFile;
     }
 
     private static class CreateSaveFileException extends RuntimeException {
     }
 
-    private static class GetTasksException extends RuntimeException {
+    private static class LoadTasksException extends RuntimeException {
     }
 
     private static class SaveTasksException extends RuntimeException {
