@@ -2,22 +2,16 @@ package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-import data.JsonTaskDataAccess;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.util.Callback;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
@@ -47,8 +41,6 @@ public class MainWindowController implements Initializable {
     private RecurringParser recurringParser;
     private Logic operations = new Logic();
 
-    @FXML private Label label;
-    @FXML private AnchorPane container;
     @FXML private JFXTextField commandBox;
     /* Naming explanation for team : To be removed */
     /* this naming theme is based on the idea that
@@ -166,23 +158,28 @@ public class MainWindowController implements Initializable {
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         printedPlanner.getSelectionModel().select(i);
         printedPlanner.fireEvent(new TaskDoneEvent(task));
-        javafx.concurrent.Task<Void> sleeper = new javafx.concurrent.Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    Thread.sleep(400);
-                } catch (InterruptedException e) {
-                    // do nothing. handles libray bug
-                }
-                return null;
-            }
-        };
+        javafx.concurrent.Task<Void> sleeper;
+        sleeper = makeSleeper(400);
         sleeper.setOnSucceeded(event -> {
             printedPlanner.getSelectionModel().clearSelection();
             commandBox.clear();
         });
         new Thread(sleeper).start();
         // Do not refresh entire list to avoid stack overflow of Event object
+    }
+
+    private javafx.concurrent.Task<Void> makeSleeper(int duration) {
+        return new javafx.concurrent.Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(duration);
+                } catch (InterruptedException e) {
+                    // do nothing. handles library bug
+                }
+                return null;
+            }
+        };
     }
 
     private void sortTask(String userInput) {

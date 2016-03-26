@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 
 public class TaskListCell extends JFXListCell<Task> {
+
     private final Label taskName = new Label();
     private final Label taskId = new Label();
     private final Label taskStartDate = new Label();
@@ -30,8 +31,8 @@ public class TaskListCell extends JFXListCell<Task> {
     private final Label taskEndTime = new Label();
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final GridPane grid = new GridPane();
-    private ObservableList<Task> tasks;
-    private Task task;
+    private final ObservableList<Task> tasks;
+    private Task myTask;
 
     public TaskListCell(ObservableList<Task> list) {
         configureGrid();
@@ -49,33 +50,14 @@ public class TaskListCell extends JFXListCell<Task> {
         if (empty) {
             clearContent();
         } else {
-            //if (task.isDone()) checkBox.fire();
-/*            if (!checkBox.isSelected()) {
-                getListView().addEventHandler(TASK_COMPLETE, event -> {
-                    int selected = getListView().getSelectionModel().getSelectedIndex();
-                    System.out.println("The task name is :" + task.getName());
-                    System.out.println("Event task name is :" + event.getTask().getName());
-                    System.out.println("===================");
-                    //checkBox.setAllowIndeterminate(false);
-                    new Thread(() -> {
-                        Thread.currentThread().setUncaughtExceptionHandler(
-                                (t, e) -> Platform.runLater(System.out::println));
-                        checkBox.fire();
-                        // event.getTask should be right
-                        // however the problem is checkbox, checkbox moves around different cells.
-                        // bind checkout to task ?
-                    }).start();
-                });
-            }*/
+            this.myTask = task;
             addContent(task);
             setGraphic(grid);
         }
-
     }
 
     protected void addContent(Task task) {
-        setCheckBox(task);
-        //setTaskName(task);
+        setTaskName(task);
         setTaskId(task);
         setTaskStartDate(task);
         setTaskDueDate(task);
@@ -89,12 +71,9 @@ public class TaskListCell extends JFXListCell<Task> {
         taskId.setText(String.valueOf(tasks.indexOf(task) + offset));
     }
 
-    public JFXCheckBox getCheckbox() {
-        return checkBox;
-    }
-
     protected void setTaskName(Task task) {
         taskName.setText(task.getName());
+
     }
 
     protected void setTaskStartDate(Task task) {
@@ -176,22 +155,23 @@ public class TaskListCell extends JFXListCell<Task> {
      * https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/
      * GridPane.html
      */
+    
     private void configureGrid() {
         grid.setHgap(10); // horizontal gap between grids
         grid.setVgap(5); // vertical gap between grids
-        grid.setPadding(new Insets(0, 10, 0, 10));// set custom columns
+        grid.setPadding(new Insets(0, 5, 0, 5));// set custom columns
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setMaxWidth(5);
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setMaxWidth(20);
         ColumnConstraints column3 = new ColumnConstraints();
         column3.setHgrow(Priority.ALWAYS);
-        grid.getColumnConstraints().addAll(column1, column3);
+        grid.getColumnConstraints().addAll(column1, column2, column3);
 
     }
 
     private void configureTaskName() {
-        taskName.setPrefWidth(230);
+
         taskName.setWrapText(true);
         taskName.setStyle("-fx-font-weight:bold; -fx-font-family: sans-serif; -fx-padding:10px");
     }
@@ -218,6 +198,14 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void setOverdue() {
 
+    }
+
+    public JFXCheckBox getCheckBox() {
+        return checkBox;
+    }
+
+    public Task getTask() {
+        return myTask;
     }
 
     private void addControlsToGrid() {
