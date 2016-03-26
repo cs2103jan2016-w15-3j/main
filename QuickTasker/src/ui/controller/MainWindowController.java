@@ -2,17 +2,16 @@ package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
@@ -27,31 +26,21 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
+
 /**
  * Author: A0133333U/A0130949Y/A0126077E
  */
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-    private static MainWindowController mainWindowController;
     private Main main;
-    private ParserInterface parser = new UserInputParser();
-    private Logic operations = new Logic();
+    private final ParserInterface parser = new UserInputParser();
+    private final Logic operations = new Logic();
 
-    @FXML private Label label;
-    @FXML private AnchorPane container;
     @FXML private JFXTextField commandBox;
-    /* Naming explanation for team : To be removed */
-    /* this naming theme is based on the idea that
-       variable names should be abstractions resembling real life objects ,
-       such that they make sense even to a layman and could be read like a story/procedure/manual
-     */
     @FXML private JFXListView<Task> printedPlanner;
-    // a printed planner presents plannerEntries in formatted manner
     private ObservableList<Task> plannerEntries;
-    // planner entries are raw entries of tasks/events,
-    // think of them as those stuff you wrote on toilet paper but not translated into a
-    // printedPlanner yet
 
     // Display messages as visual feedback for users
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
@@ -60,12 +49,9 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
     private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @Override public void initialize(URL location, ResourceBundle resources) {
 
         setMain(main);
-        operations = new Logic();
-        parser = new UserInputParser();
         initPlanner();
         setCellFactory();
         initLogger();
@@ -77,7 +63,7 @@ public class MainWindowController implements Initializable {
     }
 
     private void initPlanner() {
-        plannerEntries = FXCollections.observableArrayList(operations.loadSavedTask());
+        plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         printedPlanner.setItems(plannerEntries);
     }
 
@@ -93,17 +79,17 @@ public class MainWindowController implements Initializable {
         return KeyCode.ENTER.equals(event.getCode());
     }
 
-    @FXML
-    private void handleEnterKeyPressed(KeyEvent event) {
+    @FXML private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
+            logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
             try {
                 performOperations(userInput);
             } catch (UIOperationException e) {
                 logger.log(Level.SEVERE, "Error occured at " + this.getClass().getName()
-                        + " within performOperation method.");
+                        + " within performOperation method. \n");
             }
-            logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
+
         }
     }
 
@@ -149,30 +135,33 @@ public class MainWindowController implements Initializable {
     }
 
     private void markTaskCompleted(String userInput) throws Exception {
-
         int i = parser.getIndexForDone(userInput);
         Task task = plannerEntries.get(i);
         task.setDone(true); // logic should handle
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         printedPlanner.getSelectionModel().select(i);
-        printedPlanner.fireEvent(new TaskDoneEvent());
-        javafx.concurrent.Task<Void> sleeper = new javafx.concurrent.Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    Thread.sleep(400);
-                } catch (InterruptedException e) {
-                    // do nothing. handles libray bug
-                }
-                return null;
-            }
-        };
+        printedPlanner.fireEvent(new TaskDoneEvent(task));
+        javafx.concurrent.Task<Void> sleeper;
+        sleeper = makeSleeper(500);
         sleeper.setOnSucceeded(event -> {
             printedPlanner.getSelectionModel().clearSelection();
             commandBox.clear();
         });
         new Thread(sleeper).start();
-        // Do not refresh entire list to avoid stack overflow of Event object
+
+    }
+
+    private javafx.concurrent.Task<Void> makeSleeper(int duration) {
+        return new javafx.concurrent.Task<Void>() {
+            @Override protected Void call() throws Exception {
+                try {
+                    Thread.sleep(duration);
+                } catch (InterruptedException e) {
+                    // do nothing. handles library bug
+                }
+                return null;
+            }
+        };
     }
 
     private void sortTask(String userInput) {
@@ -192,16 +181,23 @@ public class MainWindowController implements Initializable {
     }
 
     private void updateTask(String userInput) throws Exception {
+        int indexOfTask = parser.getIndexForUpdate(userInput);
+        printedPlanner.getSelectionModel().select(indexOfTask);
         Task newTask = new Task(parser.getTaskNameForUpdate(userInput),
                 parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput));
-        plannerEntries = FXCollections.observableArrayList(
-                operations.updateTask(newTask, parser.getIndexForUpdate(userInput)));
+    /*    plannerEntries.remove(indexOfTask);
+        plannerEntries.add(indexOfTask,newTask);*/
+
+        plannerEntries = FXCollections
+                .observableArrayList(operations.updateTask(newTask, indexOfTask));
+        printedPlanner.getSelectionModel().clearSelection();
         afterOperation();
     }
 
     private void deleteTask(String userInput) throws Exception {
         int taskIndex;
         taskIndex = parser.getTaskIndex(userInput);
+        //plannerEntries.remove(taskIndex);
         plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
         afterOperation();
     }
@@ -213,6 +209,10 @@ public class MainWindowController implements Initializable {
     private void createTask(String userInput) throws Exception {
         Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
                 parser.getEndDate(userInput));
+     /*   plannerEntries.add(newTask);
+        printedPlanner.setItems(plannerEntries);
+        commandBox.clear();
+        operations.addTask(newTask);*/
         plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
     }
@@ -241,7 +241,23 @@ public class MainWindowController implements Initializable {
     }
 
     private void setCellFactory() {
-        printedPlanner.setCellFactory(param -> new TaskListCell(plannerEntries));
+        printedPlanner.setCellFactory(param -> {
+
+            TaskListCell listCell = new TaskListCell(plannerEntries);
+            printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
+                Thread.currentThread().setUncaughtExceptionHandler(
+                        (t, e) -> Platform.runLater(System.out::println));
+                if (listCell.getTask().equals(event.getTask())) listCell.getCheckBox().fire();
+            }).start());
+        /*    plannerEntries.addListener(new ListChangeListener<Task>() {
+                @Override
+                public void onChanged(Change<? extends Task> c) {
+                    listCell.updateIndex(plannerEntries);
+                }
+            });*/
+            return listCell;
+
+        });
     }
 
     class SearchHighlightedTextCell extends ListCell<String> {

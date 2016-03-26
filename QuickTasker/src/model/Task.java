@@ -29,9 +29,9 @@ public class Task implements Comparable {
      * Default constructor *.
      */
     public Task() {
-        taskName = "";
-        endDate = LocalDate.MIN;
-        setStartDateAsNow();
+        this.taskName = "";
+        this.endDate = LocalDate.MIN;
+        this.setStartDateAsNow();
         generateId();
     }
 
@@ -212,8 +212,7 @@ public class Task implements Comparable {
         setEndDate(endDate);
     }
 
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
 
@@ -226,8 +225,7 @@ public class Task implements Comparable {
 
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         int result = taskName.hashCode();
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
@@ -235,8 +233,7 @@ public class Task implements Comparable {
         return result;
     }
 
-    @Override
-    public int compareTo(Object task) {
+    @Override public int compareTo(Object task) {
         Task comparedTask = (Task) task;
         if (this.getDueDate() == LocalDate.MIN) {
             return -1;
@@ -275,4 +272,5 @@ public class Task implements Comparable {
         }
         return -1;
     }
+
 }

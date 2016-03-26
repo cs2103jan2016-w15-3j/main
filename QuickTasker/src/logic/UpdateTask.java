@@ -13,8 +13,7 @@ public class UpdateTask<E> implements Command<Object> {
     private Stack<Task> redoStackTask = new Stack<Task>();
     private Stack<Integer> redoStackInt = new Stack<Integer>();
 
-    @Override
-    public void execute(List<Task> list, Object index) {
+    @Override public void execute(List<Task> list, Object index) {
         int taskIndex = (int) index;
         undoStackTask.push(list.get(taskIndex));
         undoStackInt.push(taskIndex);
@@ -40,8 +39,7 @@ public class UpdateTask<E> implements Command<Object> {
         }
     }
 
-    @Override
-    public void undo(ArrayList<Task> list) {
+    @Override public void undo(ArrayList<Task> list) {
         int undoIndex = undoStackInt.pop();
         Task undoTask = undoStackTask.pop();
         redoStackInt.push(undoIndex);
@@ -49,8 +47,7 @@ public class UpdateTask<E> implements Command<Object> {
         list.set(undoIndex, undoTask);
     }
 
-    @Override
-    public void redo(ArrayList<Task> list) {
+    @Override public void redo(ArrayList<Task> list) {
         int redoIndex = redoStackInt.pop();
         Task redoTask = redoStackTask.pop();
         undoStackInt.push(redoIndex);

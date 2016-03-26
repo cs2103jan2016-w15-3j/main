@@ -20,8 +20,7 @@ public class Main extends Application {
     private static final int STAGE_MINIMUM_HEIGHT = 200;
     private static final int STAGE_MINIMUM_WIDTH = 560;
 
-    @Override
-    public void start(Stage primaryStage) {
+    @Override public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         // Do not remove these 2 lines of comments:
         /*Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
