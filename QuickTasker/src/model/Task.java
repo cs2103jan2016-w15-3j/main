@@ -3,6 +3,8 @@ package model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import javax.print.attribute.ResolutionSyntax;
+
 /**
  * .
  *
@@ -17,6 +19,7 @@ public class Task implements Comparable {
     private int id;
     private boolean isRecurring = false;
     private String type;
+    private int numToRecur;
 
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
@@ -62,12 +65,13 @@ public class Task implements Comparable {
         generateId();
     }
     
-    public Task(String taskName, LocalDate startDate, LocalDate endDate, String type) {
+    public Task(String taskName, LocalDate startDate, LocalDate endDate, String type, int numToRecur) {
         this.taskName = taskName;
         this.endDate = endDate;
         this.startDate = startDate;
         generateId();
         this.type = type;
+        this.numToRecur = numToRecur;
         setRecurring();
     }
 
@@ -119,23 +123,52 @@ public class Task implements Comparable {
         this.id = ++IdGenerator;
     }
     
+    public int getNumberToRecur() {
+        return this.numToRecur;
+    }
+    
     public void adjustDate() {
         this.checkYearsPast();
         this.checkMonthsPast();
         this.checkDaysPast();
     }
 
+    private int calculateOffsetForWeeks(int differenceInTimes, int iteration) {
+        int amount = iteration * 7;
+        int numberOfWeeks = differenceInTimes;
+        System.out.println("differnece = " + differenceInTimes);
+        if (differenceInTimes % amount != 0) {
+            for (int i = differenceInTimes; i % amount != 0; i++) {
+                System.out.print("number of weeks = " + numberOfWeeks);
+                numberOfWeeks = i;
+            }
+        }
+        return (numberOfWeeks + 1) / 7;    
+    }
+    
+    private int calculateOffsetForDays(int differenceInTimes, int iteration) {
+        int amount = iteration;
+        int numberOfDays = differenceInTimes;
+        System.out.println("differnece = " + differenceInTimes);
+        if (differenceInTimes % amount != 0) {
+            for (int i = differenceInTimes; i % amount != 0; i++) {
+                System.out.print("number of weeks = " + numberOfDays);
+                numberOfDays = i;
+            }
+            numberOfDays++;
+        }
+        return (numberOfDays);    
+    }
+    
     private void checkYearsPast() {
         if (LocalDate.now().getYear() > this.getDueDate().getYear()) {
+            long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.DAYS);
             if (this.getType().equals("week")) {
-                long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.WEEKS);
-                setNextDates(this.getStartDate().plusWeeks(amount + 1),
-                        this.getDueDate().plusWeeks(amount + 1));
+                int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
+                setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
             } else {
-                long amount = this.getStartDate().until(LocalDate.now(), ChronoUnit.DAYS);
-                setNextDates(this.getStartDate().plusDays(amount),
-                        this.getDueDate().plusDays(amount));
-            }
+                int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
+                setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));           }
         }
     }
 
@@ -146,15 +179,13 @@ public class Task implements Comparable {
     private void checkMonthsPast() {
         if (LocalDate.now().getMonthValue() > this.getDueDate().getMonthValue()) {
             if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
+                long amount = this.getStartDate().until(LocalDate.now(), ChronoUnit.DAYS);
                 if (this.getType().equals("week")) {
-                    long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.WEEKS);
-                    setNextDates(this.getStartDate().plusWeeks(amount + 1),
-                            this.getDueDate().plusWeeks(amount + 1));
+                    int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
+                    setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
                 } else {
-                    long amount = this.getStartDate().until(LocalDate.now(), ChronoUnit.DAYS);
-                    setNextDates(this.getStartDate().plusDays(amount),
-                            this.getDueDate().plusDays(amount));
-                }
+                    int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
+                    setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));               }
             }
         }
     }
@@ -163,16 +194,13 @@ public class Task implements Comparable {
         if (LocalDate.now().getDayOfMonth() > this.getDueDate().getDayOfMonth()) {
             if (LocalDate.now().getMonthValue() == this.getDueDate().getMonthValue()) {
                 if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
+                    long amount = ChronoUnit.DAYS.between(this.getDueDate(), LocalDate.now());
                     if (this.getType().equals("week")) {
-                        long amount = ChronoUnit.WEEKS.between(this.getDueDate(), LocalDate.now());
-                        setNextDates(this.getStartDate().plusWeeks(amount + 1),
-                                this.getDueDate().plusWeeks(amount + 1));
+                        int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
+                        setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
                     } else {
-                        long amount = ChronoUnit.DAYS.between(this.getStartDate(), LocalDate.now());
-                        System.out.println("" + amount);
-                        setNextDates(this.getStartDate().plusDays(amount),
-                                this.getDueDate().plusDays(amount));
-                        //System.out.println(this.getStartDate());
+                        int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
+                        setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));
                     }
                 }
             }
