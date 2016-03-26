@@ -13,8 +13,7 @@ import java.util.List;
 
 public class DisplayTask<E> implements Command<E> {
 
-    @Override
-    public void execute(List list, Object task) {
+    @Override public void execute(List list, Object task) {
         executeDisplay(list);
 
     }
@@ -23,14 +22,12 @@ public class DisplayTask<E> implements Command<E> {
         return (ArrayList<Task>) list;
     }
 
-    @Override
-    public void undo(ArrayList<Task> list) {
+    @Override public void undo(ArrayList<Task> list) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
-    public void redo(ArrayList<Task> list) {
+    @Override public void redo(ArrayList<Task> list) {
         // TODO Auto-generated method stub
 
     }

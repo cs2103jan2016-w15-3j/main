@@ -21,18 +21,17 @@ public class DeleteTaskTest {
     Logic logic;
     SettingManager settings;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         settings = new SettingManager();
         settings.setPathOfSaveFile("test.json");
         init();
     }
 
-    @After
-    public void tearDown(){
+    @After public void tearDown() {
         settings.resetDefaultSettings();
         logic.clear();
     }
+
     private void init() {
         logic = new Logic();
         for (int i = 0; i < 10; i++) {
@@ -41,8 +40,7 @@ public class DeleteTaskTest {
         }
     }
 
-    @Test
-    public void test() throws Exception {
+    @Test public void test() throws Exception {
         assertEquals(logic.getSize(), 10);
         logic.deleteTask(0);
         assertEquals(logic.getSize(), 9);
