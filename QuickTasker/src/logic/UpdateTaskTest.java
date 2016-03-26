@@ -1,6 +1,8 @@
 package logic;
 
+import data.SettingManager;
 import model.Task;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,10 +12,18 @@ import static org.junit.Assert.assertEquals;
 
 public class UpdateTaskTest {
     Logic logic;
+    SettingManager settings;
 
     @Before
     public void setUp() throws Exception {
+        settings = new SettingManager();
+        settings.setPathOfSaveFile("test.json");
         init();
+    }
+    @After
+    public void tearDown(){
+        settings.resetDefaultSettings();
+        logic.clear();
     }
 
     private void init() {

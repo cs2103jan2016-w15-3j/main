@@ -56,6 +56,12 @@ public class Logic {
         //commandMap.put(Commands.RECUR_TASK, new AddRecurTask());
     }
 
+    public List<Task> clear(){
+        list = new ArrayList<>();
+        storage.reset();
+        return list;
+    }
+
     public void loadSavedTask() {
         list = storage.getTasks();
     }
