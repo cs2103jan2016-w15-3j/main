@@ -13,14 +13,13 @@ import static org.junit.Assert.assertEquals;
 
 public class TaskListCellTest {
 
-//ObservableList<Task> guiList; 
+    //ObservableList<Task> guiList;
 
     Task t1;
     private TaskListCell taskListCell;
     private ObservableList<Task> testTasks;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
 
         //ObservableList<Task> guiList = FXCollections.observableArrayList();
         //taskListCell = new TaskListCell(testTasks);
@@ -37,8 +36,7 @@ public class TaskListCellTest {
 
     }*/
 
-    @Test
-    public void testSetTaskName() {
+    @Test public void testSetTaskName() {
         String taskName = "Buy bananas";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
 
@@ -52,15 +50,13 @@ public class TaskListCellTest {
         assertEquals("buy fruits", t1.getName());
     }
 
-    @Test
-    public void testSetTaskStartDate() {
+    @Test public void testSetTaskStartDate() {
         String taskName = "Buy bananas";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         assertEquals(LocalDate.now(), testTask.getStartDate());
     }
 
-    @Test
-    public void testSetTaskDueDate() {
+    @Test public void testSetTaskDueDate() {
         String taskName = "Buy bananas";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         assertEquals(LocalDate.now(), testTask.getDueDate());

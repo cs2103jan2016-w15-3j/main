@@ -1,7 +1,6 @@
 package logic;
 
 import data.SettingManager;
-import data.TaskDataAccessObject;
 import model.Task;
 import org.junit.After;
 import org.junit.Before;
@@ -23,8 +22,7 @@ public class AddTaskTest {
     Logic logic;
     private SettingManager settings;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         settings = new SettingManager();
         settings.setPathOfSaveFile("test.json");
         logic = new Logic();
@@ -32,24 +30,21 @@ public class AddTaskTest {
     }
 
     private void createEmptyTasks(int n) {
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             logic.addTask(new Task());
         }
     }
 
-    @After
-    public void tearDown(){
+    @After public void tearDown() {
         settings.resetDefaultSettings();
         logic.clear();
     }
 
-    @Test
-    public void testSizeOfListAfterAdd() throws Exception {
+    @Test public void testSizeOfListAfterAdd() throws Exception {
         assertEquals(logic.getSize(), 2);
     }
 
-    @Test
-    public void testSizeOfListAfterAddingNull() throws Exception {
+    @Test public void testSizeOfListAfterAddingNull() throws Exception {
         logic.addTask(new Task(null, null, null));
         assertEquals(logic.getSize(), 3);
     }
