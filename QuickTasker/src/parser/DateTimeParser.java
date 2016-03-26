@@ -3,7 +3,6 @@ package parser;
 /**
  * author A0121558H
  */
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -159,8 +158,11 @@ public class DateTimeParser {
           //  System.out.println("index-1: " + (i - 1));
 
             String toCheck = input[i - 2] + " " + input[i - 1];
-         //   System.out.println("input[i-1]: " + input[i - 1]);
+
+/*         //   System.out.println("input[i-1]: " + input[i - 1]);
          //   System.out.println("input[i-2] + input[i-1]: " + toCheck);
+            System.out.println("input[i-1]: " + input[i - 1]);
+            System.out.println("input[i-2] + input[i-1]: " + "" + input[i - 2] + input[i - 1]);*/
 
             if (isDate(input[i - 1])) {
                 indices.add(i - 1);

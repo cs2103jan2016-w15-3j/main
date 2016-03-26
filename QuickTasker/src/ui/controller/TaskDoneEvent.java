@@ -3,13 +3,28 @@ package ui.controller;
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;
+import model.Task;
 
 public class TaskDoneEvent extends Event {
+
     public static final EventType<TaskDoneEvent> TASK_COMPLETE = new EventType(ANY,
             "TASK_COMPLETE");
 
-    public TaskDoneEvent() {
+    private Task task;
+    private int index;
+
+    public TaskDoneEvent(Task task) {
         this(TASK_COMPLETE);
+        this.task = task;
+    }
+
+    public Task getTask() {
+
+        return task;
+    }
+
+    public int getIndex() {
+        return this.index;
     }
 
     public TaskDoneEvent(EventType<? extends Event> arg0) {

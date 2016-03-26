@@ -2,17 +2,22 @@ package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
+import data.JsonTaskDataAccess;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
@@ -27,6 +32,8 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
 /**
  * Author: A0133333U/A0130949Y/A0126077E
@@ -158,7 +165,7 @@ public class MainWindowController implements Initializable {
         task.setDone(true); // logic should handle
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         printedPlanner.getSelectionModel().select(i);
-        printedPlanner.fireEvent(new TaskDoneEvent());
+        printedPlanner.fireEvent(new TaskDoneEvent(task));
         javafx.concurrent.Task<Void> sleeper = new javafx.concurrent.Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -246,6 +253,25 @@ public class MainWindowController implements Initializable {
 
     private void setCellFactory() {
         printedPlanner.setCellFactory(param -> new TaskListCell(plannerEntries));
+/*        taskListView.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
+            @Override
+            public ListCell<Task> call(ListView<Task> param) {
+                TaskListCell listCell = new TaskListCell(guiList);
+                taskListView.addEventFilter(TASK_COMPLETE, new EventHandler<TaskDoneEvent>() {
+                    @Override
+                    public void handle(TaskDoneEvent event) {
+                        new Thread(() -> {
+                            Thread.currentThread().setUncaughtExceptionHandler(
+                                    (t, e) -> Platform.runLater(System.out::println));
+                            if (listCell.getCheckbox().getText().equals(event.getTask().getName()))
+                                listCell.getCheckbox().fire();
+                        }).start();
+
+                    }
+                });
+                return listCell;
+            }
+        });*/
     }
 
     class SearchHighlightedTextCell extends ListCell<String> {

@@ -37,7 +37,7 @@ public class UserInputParser implements ParserInterface {
     }
 
     public void setAttributes(String userInput) {
-        // UPDATED AS OF 23/3/2016
+
         DateTimeParser dateTimeParser = new DateTimeParser();
 
         removeWhiteSpaces(userInput);

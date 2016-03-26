@@ -17,6 +17,21 @@ public class Task implements Comparable {
     private LocalDate endDate;
     private LocalTime startTime;
     private LocalTime endTime;
+
+/*    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Task task = (Task) o;
+
+        if (id != task.id) return false;
+        if (!taskName.equals(task.taskName)) return false;
+        if (endDate != null ? !endDate.equals(task.endDate) : task.endDate != null) return false;
+        return startDate != null ? startDate.equals(task.startDate) : task.startDate == null;
+
+    }*/
+
     private int id;
     private boolean isRecurring = false;
     private String type;
@@ -234,7 +249,7 @@ public class Task implements Comparable {
         return startDate != null ? startDate.equals(task.startDate) : task.startDate == null;
 
     }
-
+    
     @Override
     public int hashCode() {
         int result = taskName.hashCode();
