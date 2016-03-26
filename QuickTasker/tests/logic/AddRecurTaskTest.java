@@ -1,6 +1,8 @@
 package logic;
 
+import data.SettingManager;
 import model.RecurringTask;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,9 +12,12 @@ import static org.junit.Assert.assertEquals;
 
 public class AddRecurTaskTest {
     Logic logic;
+    SettingManager settings;
 
     @Before
     public void setUp() throws Exception {
+        settings = new SettingManager();
+        settings.setPathOfSaveFile("test.json");
         logic = new Logic();
         logic.addTask(
                 new RecurringTask("name", LocalDate.of(2016, 03, 23), LocalDate.of(2016, 03, 24),
@@ -20,6 +25,14 @@ public class AddRecurTaskTest {
         logic.addTask(
                 new RecurringTask("name", LocalDate.of(2016, 03, 23), LocalDate.of(2016, 03, 24),
                         "day"));
+        settings = new SettingManager();
+
+    }
+
+    @After
+    public void tearDown(){
+        logic.clear();
+        settings.resetDefaultSettings();
     }
 
     @Test
