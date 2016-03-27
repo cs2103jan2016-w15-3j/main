@@ -22,7 +22,8 @@ public class AddTaskTest {
     Logic logic;
     private SettingManager settings;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         settings = new SettingManager();
         settings.setPathOfSaveFile("test.json");
         logic = new Logic();
@@ -35,16 +36,19 @@ public class AddTaskTest {
         }
     }
 
-    @After public void tearDown() {
+    @After
+    public void tearDown() {
         settings.resetDefaultSettings();
         logic.clear();
     }
 
-    @Test public void testSizeOfListAfterAdd() throws Exception {
+    @Test
+    public void testSizeOfListAfterAdd() throws Exception {
         assertEquals(logic.getSize(), 2);
     }
 
-    @Test public void testSizeOfListAfterAddingNull() throws Exception {
+    @Test
+    public void testSizeOfListAfterAddingNull() throws Exception {
         logic.addTask(new Task(null, null, null));
         assertEquals(logic.getSize(), 3);
     }

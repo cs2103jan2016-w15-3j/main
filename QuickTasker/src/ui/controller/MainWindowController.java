@@ -47,7 +47,8 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
     private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
 
-    @Override public void initialize(URL location, ResourceBundle resources) {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
         setMain(main);
         initPlanner();
@@ -77,7 +78,8 @@ public class MainWindowController implements Initializable {
         return KeyCode.ENTER.equals(event.getCode());
     }
 
-    @FXML private void handleEnterKeyPressed(KeyEvent event) {
+    @FXML
+    private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
@@ -148,7 +150,8 @@ public class MainWindowController implements Initializable {
 
     private javafx.concurrent.Task<Void> makeSleeper(int duration) {
         return new javafx.concurrent.Task<Void>() {
-            @Override protected Void call() throws Exception {
+            @Override
+            protected Void call() throws Exception {
                 try {
                     Thread.sleep(duration);
                 } catch (InterruptedException e) {

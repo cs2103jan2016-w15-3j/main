@@ -14,13 +14,15 @@ public class UpdateTaskTest {
     Logic logic;
     SettingManager settings;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         settings = new SettingManager();
         settings.setPathOfSaveFile("test.json");
         init();
     }
 
-    @After public void tearDown() {
+    @After
+    public void tearDown() {
         settings.resetDefaultSettings();
         logic.clear();
     }
@@ -52,14 +54,16 @@ public class UpdateTaskTest {
         assertEquals("name longer by alot", logic.getTasks().get(1).getName());
     }
 
-    @Test public void testUpdatingOnlyWithName() throws Exception {
+    @Test
+    public void testUpdatingOnlyWithName() throws Exception {
         logic.updateTask(new Task("name longer by alot", LocalDate.MIN, LocalDate.MIN), 0);
         assertEquals("name longer by alot", logic.getTasks().get(0).getName());
         assertEquals(LocalDate.now(), logic.getTasks().get(0).getStartDate());
         assertEquals(LocalDate.now(), logic.getTasks().get(0).getDueDate());
     }
 
-    @Test public void testUpdatingOnlyWithDates() throws Exception {
+    @Test
+    public void testUpdatingOnlyWithDates() throws Exception {
         logic.updateTask(new Task("", LocalDate.of(2016, 4, 1), LocalDate.of(2016, 5, 1)), 0);
         assertEquals("hello", logic.getTasks().get(0).getName());
         assertEquals(LocalDate.of(2016, 4, 1), logic.getTasks().get(0).getStartDate());
