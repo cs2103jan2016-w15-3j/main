@@ -2,6 +2,7 @@ package logic;
 
 import data.JsonTaskDataAccess;
 import data.TaskDataAccessObject;
+import model.RecurringTask;
 import model.Task;
 import parser.Commands;
 
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
+
+import org.hamcrest.core.IsInstanceOf;
 
 /**
  * Author A0130949 Soh Yonghao
@@ -62,20 +65,21 @@ public class Logic {
         return list;
     }
 
-/*    public void adjustmentForRecurringTasks() {
+    public void adjustmentForRecurringTasks() {
         for (int i = 0; i < list.size(); i++) {
-            System.out.println("changing recurring task");
-            if (list.get(i).getRecurring()) {
+            if (list.get(i) instanceof RecurringTask) {
                 System.out.println(list.get(i).getName() + " " + list.get(i).getStartDate());
-                list.get(i).adjustDate();
-                ;
+                ((RecurringTask) list.get(i)).adjustDate();
+                ((RecurringTask) list.get(i)).setRecurType();
                 System.out.println(list.get(i).getName() + " " + list.get(i).getStartDate());
             }
         }
-    }*/
+    }
 
     public void loadSavedTask() {
         list = storage.getTasks();
+        adjustmentForRecurringTasks();
+        saveList();
     }
 
     public void exit() {
@@ -85,7 +89,7 @@ public class Logic {
     public ArrayList<Task> addTask(Task task) {
         commandMap.get(Commands.CREATE_TASK).execute(list, task);
         undoStack.push(Commands.CREATE_TASK);
-        storage.save(list);
+        saveList();
         return (ArrayList<Task>) list;
     }
     
@@ -100,7 +104,7 @@ public class Logic {
         System.out.println("deleting " + list.size());
         commandMap.get(Commands.DELETE_TASK).execute(list, index);
         undoStack.push(Commands.DELETE_TASK);
-        storage.save(list);
+        saveList();
         return (ArrayList<Task>) list;
     }
 
@@ -112,7 +116,7 @@ public class Logic {
         list.add(task);
         commandMap.get(Commands.UPDATE_TASK).execute(list, index);
         undoStack.push(Commands.UPDATE_TASK);
-        storage.save(list);
+        saveList();
         return (ArrayList<Task>) list;
     }
 
@@ -120,6 +124,7 @@ public class Logic {
         Commands command = undoStack.pop();
         redoStack.push(command);
         commandMap.get(command).undo((ArrayList<Task>) list);
+        saveList();
         return (ArrayList<Task>) list;
     }
 
@@ -127,11 +132,17 @@ public class Logic {
         Commands command = redoStack.pop();
         undoStack.push(command);
         commandMap.get(command).redo((ArrayList<Task>) list);
+        saveList();
         return (ArrayList<Task>) list;
     }
 
     public ArrayList<Task> sort() {
         commandMap.get(Commands.SORT_TASK).execute(list, "");
+        saveList();
         return (ArrayList<Task>) list;
+    }
+    
+    private void saveList() {
+        storage.save(list);
     }
 }
