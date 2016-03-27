@@ -19,12 +19,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JsonTaskDataAccess implements TaskDataAccessObject {
-    private final String DEFAULT_FILENAME = "tasks.json";
-    private final Path DEFAULT_SAVE_PATH = Paths.get(DEFAULT_FILENAME);
-    private Logger logger;
+    private static final String DEFAULT_FILENAME = "tasks.json";
+    private static final Path DEFAULT_SAVE_PATH = Paths.get(DEFAULT_FILENAME);
 
-    private Path pathOfSaveFile;
     private SettingManager settings = new SettingManager();
+    private Logger logger;
+    private Path pathOfSaveFile;
 
     public JsonTaskDataAccess() {
         initialize();
@@ -67,8 +67,7 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     private Gson getGson() {
         RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
-                .registerSubtype(Task.class, "Task")
-                .registerSubtype(RecurringTask.class, "RecurringTask");
+                .registerSubtype(Task.class).registerSubtype(RecurringTask.class);
         return new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter).create();
     }
 

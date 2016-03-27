@@ -68,7 +68,7 @@ public class Logic {
             if (list.get(i) instanceof RecurringTask) {
                 System.out.println(list.get(i).getName() + " " + list.get(i).getStartDate());
                 ((RecurringTask) list.get(i)).adjustDate();
-                ((RecurringTask) list.get(i)).setRecurType();
+                //((RecurringTask) list.get(i)).setRecurType();
                 System.out.println(list.get(i).getName() + " " + list.get(i).getStartDate());
             }
         }
@@ -90,13 +90,13 @@ public class Logic {
         saveList();
         return (ArrayList<Task>) list;
     }
-    
-/*    public ArrayList<Task> addRecurTask(RecurringTask task) {
+
+    public ArrayList<Task> addRecurTask(RecurringTask task) {
         commandMap.get(Commands.CREATE_TASK).execute(list, task);
         undoStack.push(Commands.CREATE_TASK);
         storage.save(list);
         return (ArrayList<Task>) list;
-    }*/
+    }
 
     public ArrayList<Task> deleteTask(int index) {
         System.out.println("deleting " + list.size());

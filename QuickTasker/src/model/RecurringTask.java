@@ -7,14 +7,12 @@ public class RecurringTask extends Task {
     private LocalDate nextStartDate;
     private LocalDate nextEndDate;
     private String recurType;
-    private String type;
     int numberToRecur;
 
     public RecurringTask(String taskName, LocalDate startDate, LocalDate endDate, String recurType,
             int numberToRecur) {
         super(taskName, startDate, endDate);
         this.recurType = recurType;
-        this.type = "RecurringTask";
         this.numberToRecur = numberToRecur;
     }
 
@@ -22,10 +20,6 @@ public class RecurringTask extends Task {
         this.checkYearsPast();
         this.checkMonthsPast();
         this.checkDaysPast();
-    }
-
-    public void setRecurType() {
-        this.type = "RecurringTask";
     }
 
     public String getRecurType() {

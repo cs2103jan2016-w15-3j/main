@@ -88,6 +88,18 @@ public class JsonTaskDataAccessTest {
     }
 
     @Test
+    public void canSaveOneRecurrTask() {
+        Task normalTask = new Task("NormalTask");
+        RecurringTask task = new RecurringTask("RecurringTask11", LocalDate.MIN, LocalDate.MAX,
+                "week", 1);
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(task);
+        dataHandler.save(tasks);
+        Task t = dataHandler.getTasks().get(0);
+        assertEquals(t.getName(),task.getName());
+    }
+
+    @Test
     public void ifTaskSaveFileHasNoTaskGetTasksShouldNotReturnNull() throws IOException {
         dataHandler.reset();
         assertNotNull(dataHandler.getTasks());
@@ -104,9 +116,39 @@ public class JsonTaskDataAccessTest {
     }
 
     @Test
-    public void canReadMixedTasks() {
+    public void allDeserializedTasksShouldBeEqualToOriginal() {
         List<Task> tasks = create30TasksWithDifferentAttributes();
+        Object[] taskArr = tasks.toArray();
         dataHandler.save(tasks);
+
+        List<Task> result = dataHandler.getTasks();
+        Object[] resultArr = result.toArray();
+        assertArrayEquals(taskArr, resultArr);
+
+    }
+
+    @Test
+    public void deserilizedTasksShouldHaveCorrectType() {
+        List<Task> expected = create30TasksWithDifferentAttributes(); // last 10 are recurr tasks
+        dataHandler.save(expected);
+        List<Task> result = dataHandler.getTasks();
+        for (int i = 0; i < expected.size(); i++) {
+            assertEquals(expected.get(i).getClass(), result.get(i).getClass());
+        }
+    }
+
+    @Test
+    public void deserilizedRecurTaskShouldContainTypeAttribute() {
+        List<Task> expected = create30TasksWithDifferentAttributes();
+        dataHandler.save(expected);
+        List<Task> result = dataHandler.getTasks();
+
+        String expectedTypeValue = "RecurringTask";
+        for (int i = 20; i < expected.size(); i++) {
+            RecurringTask resultT = (RecurringTask) result.get(i);
+            RecurringTask expectedT = (RecurringTask) expected.get(i);
+            assertEquals(resultT.getClass(), expectedT.getClass());
+        }
 
     }
 

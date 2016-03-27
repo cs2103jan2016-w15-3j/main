@@ -13,9 +13,6 @@ public class Task implements Comparable {
     private boolean isDone = false;
     private int id;
     private boolean isRecurring = false;
-    /*
-    private String type; // type attrib
-    private int numToRecur;*/
 
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
