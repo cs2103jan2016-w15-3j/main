@@ -218,8 +218,8 @@ public class MainWindowController implements Initializable {
     }
 
     private void createRecurringTask(String userInput) throws Exception {
-        RecurringTask newTask = makeRecurringTask("taskName", LocalDate.now(), LocalDate.now(),
-                "week");
+        RecurringTask newTask = makeRecurringTask("taskName", LocalDate.of(2016, 03, 19), LocalDate.of(2016, 03, 19),
+                "week", 1);
         plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
     }
@@ -236,8 +236,8 @@ public class MainWindowController implements Initializable {
     }
 
     private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
-            String type) throws Exception {
-        return new RecurringTask(taskName, startDate, dueDate, type);
+            String type, int numberToRecur) throws Exception {
+        return new RecurringTask(taskName, startDate, dueDate, type, numberToRecur);
     }
 
     private void setCellFactory() {
