@@ -32,7 +32,6 @@ public class Logic {
         list = new ArrayList<Task>();
         assert (list != null);
         storage = new JsonTaskDataAccess();
-        loadSavedTask();
         undoStack = new Stack<Commands>();
         redoStack = new Stack<Commands>();
     }
@@ -42,7 +41,7 @@ public class Logic {
         return list.size();
     }
 
-    public ArrayList<Task> getTasks() {
+    public ArrayList<Task> getList() {
         return (ArrayList<Task>) list;
     }
 

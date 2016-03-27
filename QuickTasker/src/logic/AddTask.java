@@ -18,7 +18,8 @@ public class AddTask<E> implements Command<Object> {
     private Stack<Task> undoStack = new Stack<Task>();
     private Stack<Task> redoStack = new Stack<Task>();
 
-    @Override public void execute(List<Task> list, Object task) {
+    @Override
+    public void execute(List<Task> list, Object task) {
         assert (list.size() >= 0);
         undoStack.push((Task) task);
         executeAdd(list, (Task) task);
@@ -40,7 +41,8 @@ public class AddTask<E> implements Command<Object> {
         loggerAdd.log(Level.INFO, "END");
     }
 
-    @Override public void undo(ArrayList<Task> list) {
+    @Override
+    public void undo(ArrayList<Task> list) {
         Task undoTask = undoStack.pop();
         redoStack.push(undoTask);
         int index = findTask(undoTask.getId(), list);
@@ -61,7 +63,8 @@ public class AddTask<E> implements Command<Object> {
         return position;
     }
 
-    @Override public void redo(ArrayList<Task> list) {
+    @Override
+    public void redo(ArrayList<Task> list) {
         Task redoTask = redoStack.pop();
         undoStack.push(redoTask);
         list.add(redoTask);

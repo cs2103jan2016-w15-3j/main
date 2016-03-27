@@ -6,14 +6,11 @@ import java.time.temporal.ChronoUnit;
 public class RecurringTask extends Task {
     private LocalDate nextStartDate;
     private LocalDate nextEndDate;
-    private String recurType;
     private String type;
 
-    public RecurringTask(String taskName, LocalDate startDate, LocalDate endDate,
-            String recurType) {
+    public RecurringTask(String taskName, LocalDate startDate, LocalDate endDate, String type) {
         super(taskName, startDate, endDate);
-        this.recurType = recurType;
-        this.type = "RecurringTask";
+        this.type = type;
     }
 
     public void adjustDate() {
@@ -24,7 +21,7 @@ public class RecurringTask extends Task {
 
     private void checkYearsPast() {
         if (LocalDate.now().getYear() > this.getDueDate().getYear()) {
-            if (this.getRecurType().equals("week")) {
+            if (this.getType().equals("week")) {
                 long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.WEEKS);
                 setNextDates(this.getStartDate().plusWeeks(amount + 1),
                         this.getDueDate().plusWeeks(amount + 1));
@@ -36,14 +33,14 @@ public class RecurringTask extends Task {
         }
     }
 
-    public String getRecurType() {
-        return this.recurType;
+    public String getType() {
+        return this.type;
     }
 
     private void checkMonthsPast() {
         if (LocalDate.now().getMonthValue() > this.getDueDate().getMonthValue()) {
             if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
-                if (this.getRecurType().equals("week")) {
+                if (this.getType().equals("week")) {
                     long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.WEEKS);
                     setNextDates(this.getStartDate().plusWeeks(amount + 1),
                             this.getDueDate().plusWeeks(amount + 1));
@@ -60,7 +57,7 @@ public class RecurringTask extends Task {
         if (LocalDate.now().getDayOfMonth() > this.getDueDate().getDayOfMonth()) {
             if (LocalDate.now().getMonthValue() == this.getDueDate().getMonthValue()) {
                 if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
-                    if (this.getRecurType().equals("week")) {
+                    if (this.getType().equals("week")) {
                         long amount = ChronoUnit.WEEKS.between(this.getDueDate(), LocalDate.now());
                         setNextDates(this.getStartDate().plusWeeks(amount + 1),
                                 this.getDueDate().plusWeeks(amount + 1));

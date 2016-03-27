@@ -10,7 +10,8 @@ import static org.junit.Assert.assertEquals;
 
 public class RecurringTaskTest {
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         ArrayList<Task> list = new ArrayList<Task>();
         RecurringTask task = new RecurringTask("name", LocalDate.now(), LocalDate.now(), "week");
         RecurringTask taskk = new RecurringTask("name1", LocalDate.now(), LocalDate.now(), "day");
@@ -18,7 +19,8 @@ public class RecurringTaskTest {
         list.add(taskk);
     }
 
-    @Test public void test() {
+    @Test
+    public void test() {
         ArrayList<Task> list = new ArrayList<Task>();
         RecurringTask task = new RecurringTask("name", LocalDate.now(), LocalDate.now(), "week");
         RecurringTask taskk = new RecurringTask("name1", LocalDate.now(), LocalDate.now(), "day");

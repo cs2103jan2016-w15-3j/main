@@ -10,18 +10,21 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class SettingManagerTest {
-    private SettingManager settingManager;
-    private static final File file = new File("settings.properties");
+    SettingManager settingManager;
+    File file = new File("settings.properties");
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         settingManager = new SettingManager();
     }
 
-    @Test public void settingsFileShouldAlwaysExist() {
+    @Test
+    public void settingsFileShouldAlwaysExist() {
         assertTrue(file.exists());
     }
 
-    @Test public void ifSettingsFileIsEmptyShouldSetDefault() {
+    @Test
+    public void ifSettingsFileIsEmptyShouldSetDefault() {
         Configuration settings = null;
         removeEverythingFromSettingsFile();
 

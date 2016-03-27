@@ -1,11 +1,9 @@
 package data;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import model.RecurringTask;
 import model.Task;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,42 +17,39 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class JsonTaskDataAccessTest {
-    private JsonTaskDataAccess dataHandler;
-    private SettingManager settings;
     private List<Task> plannerNotebook;
+    private JsonTaskDataAccess dataHandler;
 
-    @Before public void setUp() throws Exception {
-        settings = new SettingManager();
-        settings.setPathOfSaveFile("test.json");
+    @Before
+    public void setUp() throws Exception {
         plannerNotebook = new ArrayList<>();
         dataHandler = new JsonTaskDataAccess();
     }
 
-    @After public void tearDown() {
-        settings.resetDefaultSettings();
-        dataHandler.reset();
-    }
-
-    @Test public void whenNewHandlerCreatedPathShouldNotBeNull() {
+    @Test
+    public void whenNewHandlerCreatedPathShouldNotBeNull() {
         assertNotNull(dataHandler.getFilePath());
     }
 
-    @Test public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
+    @Test
+    public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
 
     }
 
-    @Test public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
+    @Test
+    public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
         Files.deleteIfExists(dataHandler.getFilePath());
         dataHandler = new JsonTaskDataAccess();
         assertTrue(hasSaveFile());
     }
 
-    @Test public void canSaveListOfTasksToJsonFile() {
+    @Test
+    public void canSaveListOfTasksToJsonFile() {
         List<Task> tasks = createTasksWithStartAndEnd(20);
         dataHandler.save(tasks);
         try {
             BufferedReader reader = Files.newBufferedReader(dataHandler.getFilePath());
-            Gson gson = getGson();
+            Gson gson = new Gson();
             List<Task> testObj = gson.fromJson(reader, new TypeToken<List<Task>>() {
             }.getType());
             assertEquals(testObj, tasks);
@@ -64,7 +59,8 @@ public class JsonTaskDataAccessTest {
         }
     }
 
-    @Test public void canSaveOneTaskIntoJsonFile() {
+    @Test
+    public void canSaveOneTaskIntoJsonFile() {
         String taskName = "Task 1";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         dataHandler.save(testTask);
@@ -72,37 +68,24 @@ public class JsonTaskDataAccessTest {
         assertEquals(testTask, resultTask);
     }
 
-    @Test public void canReadsavedTasksFromJsonFile() {
+    @Test
+    public void canReadsavedTasksFromJsonFile() {
         plannerNotebook = create30TasksWithDifferentAttributes();
         dataHandler.save(plannerNotebook);
         List<Task> tasksRead = dataHandler.getTasks();
         assertEquals(plannerNotebook, tasksRead);
     }
 
-    @Test public void ifTaskSaveFileHasNoTaskGetTasksShouldNotReturnNull() throws IOException {
+    @Test
+    public void ifTaskSaveFileHasNoTaskGetTasksShouldNotReturnNull() throws IOException {
         dataHandler.reset();
         assertNotNull(dataHandler.getTasks());
-    }
-
-    @Test public void deserializedRecurringTasksShouldHaveCorrectType() {
-        Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week");
-        List<Task> tasks = new ArrayList<>();
-        tasks.add(t);
-        dataHandler.save(tasks);
-        dataHandler.getTasks().get(0);
-        assertEquals(RecurringTask.class, dataHandler.getTasks().get(0).getClass());
-    }
-
-    @Test public void canReadMixedTasks() {
-        List<Task> tasks = create30TasksWithDifferentAttributes();
-        dataHandler.save(tasks);
-
     }
 
     private Task readOneTask() {
         try {
             BufferedReader reader = Files.newBufferedReader(dataHandler.getFilePath());
-            Gson gson = getGson();
+            Gson gson = new Gson();
             Task testObj = gson.fromJson(reader, Task.class);
             reader.close();
             return testObj;
@@ -153,13 +136,6 @@ public class JsonTaskDataAccessTest {
 
     private boolean hasSaveFile() {
         return Files.exists(dataHandler.getFilePath());
-    }
-
-    private Gson getGson() {
-        RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
-                .registerSubtype(Task.class, "Task")
-                .registerSubtype(RecurringTask.class, "RecurringTask");
-        return new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter).create();
     }
 
 }

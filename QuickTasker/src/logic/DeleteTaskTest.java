@@ -1,8 +1,6 @@
 package logic;
 
-import data.SettingManager;
 import model.Task;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import parser.Commands;
@@ -19,17 +17,10 @@ import static org.junit.Assert.assertEquals;
 
 public class DeleteTaskTest {
     Logic logic;
-    SettingManager settings;
 
-    @Before public void setUp() throws Exception {
-        settings = new SettingManager();
-        settings.setPathOfSaveFile("test.json");
+    @Before
+    public void setUp() throws Exception {
         init();
-    }
-
-    @After public void tearDown() {
-        settings.resetDefaultSettings();
-        logic.clear();
     }
 
     private void init() {
@@ -40,7 +31,8 @@ public class DeleteTaskTest {
         }
     }
 
-    @Test public void test() throws Exception {
+    @Test
+    public void test() throws Exception {
         assertEquals(logic.getSize(), 10);
         logic.deleteTask(0);
         assertEquals(logic.getSize(), 9);

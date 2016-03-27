@@ -14,7 +14,8 @@ public class DeleteTask<E> implements Command<Object> {
     private Stack<Task> undoStack = new Stack<Task>();
     private Stack<Task> redoStack = new Stack<Task>();
 
-    @Override public void execute(List<Task> list, Object task) {
+    @Override
+    public void execute(List<Task> list, Object task) {
         undoStack.push(list.get((int) task));
         executeDelete(list, (int) task);
     }
@@ -23,13 +24,15 @@ public class DeleteTask<E> implements Command<Object> {
         list.remove(index);
     }
 
-    @Override public void undo(ArrayList<Task> list) {
+    @Override
+    public void undo(ArrayList<Task> list) {
         Task deletedTask = undoStack.pop();
         redoStack.push(deletedTask);
         list.add(deletedTask.getId() - 1, deletedTask);
     }
 
-    @Override public void redo(ArrayList<Task> list) {
+    @Override
+    public void redo(ArrayList<Task> list) {
         // TODO Auto-generated method stub
         Task redoTask = redoStack.pop();
         undoStack.push(redoTask);

@@ -16,16 +16,19 @@ public class UserInputParserTest {
     LocalTime endTime;
     String userCommand = "add biology class tomorrow 13:00 15:00";
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         parser = new UserInputParser();
     }
 
-    @Test public void testSetDate() {
+    @Test
+    public void testSetDate() {
         parser.setDate(1, 4);
         assertEquals(LocalDate.now().plusDays(1), parser.getStartDate(userCommand));
     }
 
-    @Test public void testSetTime() {
+    @Test
+    public void testSetTime() {
         assertEquals(LocalTime.of(13, 00), parser.getStartTime(userCommand));
         assertEquals(LocalTime.of(15, 00), parser.getEndTime(userCommand));
     }
