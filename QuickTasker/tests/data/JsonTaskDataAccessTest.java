@@ -95,7 +95,7 @@ public class JsonTaskDataAccessTest {
 
     @Test
     public void deserializedRecurringTasksShouldHaveCorrectType() {
-        Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week");
+        Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week", 1);
         List<Task> tasks = new ArrayList<>();
         tasks.add(t);
         dataHandler.save(tasks);
@@ -136,7 +136,7 @@ public class JsonTaskDataAccessTest {
         for (int i = 0; i < numberOfTasks; i++) {
             String taskName = "Recurring Task " + i;
             Task recurringTask = new RecurringTask(taskName, LocalDate.now(),
-                    LocalDate.now().plusMonths(1), "week");
+                    LocalDate.now().plusMonths(1), "week", 1);
             tasks.add(recurringTask);
         }
         return tasks;
