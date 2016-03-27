@@ -14,6 +14,8 @@ public class Main extends Application {
 
     private static final String APP_TITLE = "Welcome to QuickTasker!";
     private static final String IMAGE_ICON = "img/home.png";
+	private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
+
 
     private Stage primaryStage;
     // private RootLayoutController rootLayoutController;
@@ -48,6 +50,7 @@ public class Main extends Application {
             MainWindowController mainWindowController = new MainWindowController();
             SettingManager settings = new SettingManager();
             mainWindowController.setMain(this);
+           // mainWindowController.setFeedback(MESSAGE_WELCOME);
             primaryStage.getIcons().add(new Image(IMAGE_ICON));
             Scene scene = new Scene(pane);
             primaryStage.setScene(scene);

@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  * .
@@ -12,6 +13,8 @@ public class Task implements Comparable {
     private String taskName;
     private LocalDate endDate;
     private LocalDate startDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private boolean isDone = false;
     private int id;
 
@@ -58,6 +61,17 @@ public class Task implements Comparable {
         this.startDate = startDate;
         generateId();
     }
+    
+    // @author: A0133333U
+    public Task(String taskName, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        this.taskName = taskName;
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        generateId();
+    }
+
 
     public String getName() {
         return taskName;
@@ -69,6 +83,14 @@ public class Task implements Comparable {
 
     public LocalDate getStartDate() {
         return startDate;
+    }
+    
+    public LocalTime getStartTime() {
+    	return startTime;
+    }
+    
+    public LocalTime getEndTime() {
+    	return endTime;
     }
 
     public void setName(String newName) {
