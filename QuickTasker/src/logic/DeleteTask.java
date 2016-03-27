@@ -11,13 +11,16 @@ import java.util.Stack;
  */
 
 public class DeleteTask<E> implements Command<Object> {
-    private Stack<Task> undoStack = new Stack<Task>();
-    private Stack<Task> redoStack = new Stack<Task>();
+    private static Stack<Task> undoStackTask = new Stack<Task>();
+    private static Stack<Integer> undoStackIndex = new Stack<Integer>();
+    private static Stack<Task> redoStackTask = new Stack<Task>();
+    private static Stack<Integer> redoStackIndex = new Stack<Integer>();
 
     @Override
-    public void execute(List<Task> list, Object task) {
-        undoStack.push(list.get((int) task));
-        executeDelete(list, (int) task);
+    public void execute(List<Task> list, Object op) {
+        undoStackTask.push(list.get((int) op));
+        undoStackIndex.push((int) op); 
+        executeDelete(list, (int) op);
     }
 
     private void executeDelete(List<Task> list, int index) {
@@ -26,21 +29,25 @@ public class DeleteTask<E> implements Command<Object> {
 
     @Override
     public void undo(ArrayList<Task> list) {
-        Task deletedTask = undoStack.pop();
-        redoStack.push(deletedTask);
-        list.add(deletedTask.getId() - 1, deletedTask);
+        Task deletedTask = undoStackTask.pop();
+        int indexToUndo = undoStackIndex.pop();
+        redoStackTask.push(deletedTask);
+        redoStackIndex.push(indexToUndo);
+        list.add(indexToUndo, deletedTask);
     }
 
     @Override
     public void redo(ArrayList<Task> list) {
         // TODO Auto-generated method stub
-        Task redoTask = redoStack.pop();
-        undoStack.push(redoTask);
-        int index = findTask(redoTask.getId(), list);
-        list.remove(index);
+        Task redoTask = redoStackTask.pop();
+        int indexToRedo = redoStackIndex.pop();
+        undoStackTask.push(redoTask);
+        undoStackIndex.push(indexToRedo);
+        //int index = findTask(redoTask.getId(), list);
+        list.remove(indexToRedo);
     }
 
-    private int findTask(int index, ArrayList<Task> list) {
+/*    private int findTask(int index, ArrayList<Task> list) {
         int position = -1;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId() == index) {
@@ -48,5 +55,5 @@ public class DeleteTask<E> implements Command<Object> {
             }
         }
         return position;
-    }
+    }*/
 }
