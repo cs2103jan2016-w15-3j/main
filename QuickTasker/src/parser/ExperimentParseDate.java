@@ -1,4 +1,4 @@
-package parser;
+/*package parser;
 
 import org.ocpsoft.prettytime.PrettyTime;
 import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
@@ -32,3 +32,4 @@ public class ExperimentParseDate {
         System.out.println(dates);
     }
 }
+*/
