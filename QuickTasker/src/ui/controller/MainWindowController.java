@@ -3,12 +3,10 @@ package ui.controller;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -89,7 +87,6 @@ public class MainWindowController implements Initializable {
                 logger.log(Level.SEVERE, "Error occured at " + this.getClass().getName()
                         + " within performOperation method. \n");
             }
-
         }
     }
 
@@ -254,16 +251,6 @@ public class MainWindowController implements Initializable {
                 }
             });*/
             return listCell;
-
         });
-    }
-
-    class SearchHighlightedTextCell extends ListCell<String> {
-        private static final String HIGHLIGHT_CLASS = "search-highlight";
-        private final StringProperty searchText;
-
-        SearchHighlightedTextCell(StringProperty searchText) {
-            this.searchText = searchText;
-        }
     }
 }
