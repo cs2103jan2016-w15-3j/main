@@ -20,16 +20,17 @@ import model.Task;
 
 import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import org.ocpsoft.prettytime.shade.com.joestelmach.natty.generated.DateParser.range_direction_return;
 
 public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartDate = new Label();
-    private final Label taskEndDate = new Label();
+    private final Label taskDueDate = new Label();
     private final Label taskName = new Label();
     private final Label taskStartTime = new Label();
-    private final Label taskEndTime = new Label();
+    private final Label taskDueTime = new Label();
     private final Label taskId = new Label();
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final JFXPopup searchBox = new JFXPopup();
@@ -47,6 +48,7 @@ public class TaskListCell extends JFXListCell<Task> {
         tasks = list;
     }
 
+    
     @Override public void updateItem(Task task, boolean empty) {
         super.updateItem(task, empty);
         if (empty) {
@@ -62,7 +64,9 @@ public class TaskListCell extends JFXListCell<Task> {
         setTaskName(task);
         setTaskId(task);
         setTaskStartDate(task);
+        setTaskStartTime(task);
         setTaskDueDate(task);
+        setTaskDueTime(task);
         setGraphic(grid);
     }
 
@@ -71,11 +75,13 @@ public class TaskListCell extends JFXListCell<Task> {
         System.out.println(this.indexProperty());
     }*/
 
+    /* This method will display the task ID of the listed task upon "add" command by user*/
     protected void setTaskId(Task task) {
         final int offset = 1;
         taskId.setText(String.valueOf(tasks.indexOf(task) + offset));
     }
 
+    /* This method will display the task name of the listed task upon "add" command by user*/
     protected void setTaskName(Task task) {
         taskName.setText(task.getName());
     }
@@ -86,7 +92,7 @@ public class TaskListCell extends JFXListCell<Task> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String dateString = formatter.format(startDate);
             taskStartDate.setText(dateString);
-        } else taskStartDate.setText("");
+        } else taskStartDate.setText("Date not specified");
     }
 
     protected void setTaskDueDate(Task task) {
@@ -94,8 +100,32 @@ public class TaskListCell extends JFXListCell<Task> {
             LocalDate dueDate = task.getDueDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String dateString = formatter.format(dueDate);
-            taskEndDate.setText(dateString);
-        } else taskEndDate.setText("");
+            taskDueDate.setText(dateString);
+        } else taskDueDate.setText("Date not specified");
+    }
+    
+    protected void setTaskStartTime(Task task) {
+    	if (task.getStartTime() != null) {
+    		LocalTime startTime = task.getStartTime();
+    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+    		String timeString = formatter.format(startTime);
+    		taskStartTime.setText(timeString);
+    	} else {
+    		taskStartTime.setText("Time not specified");
+    	}
+    	
+    }
+    
+    protected void setTaskDueTime(Task task) {
+    	if (task.getStartTime() != null) {
+    		LocalTime dueTime = task.getDueTime();
+    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+    		String timeString = formatter.format(dueTime);
+    		taskdueTime.setText(timeString);
+    	} else {
+    		taskDueTime.setText("Time not specified");
+    	}
+    	
     }
 
     private void configureGrid() {
@@ -120,9 +150,10 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void configureDate() {
         taskStartDate.getStyleClass().add("start-date");
-        taskEndDate.getStyleClass().add("end-date");
+        taskDueDate.getStyleClass().add("end-date");
     }
 
+    
     private void configureCheckBox() {
         checkBox.getStyleClass().add("task-check-box");
     }
@@ -159,6 +190,9 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.add(checkBox, 1, 0);
         grid.add(new HBox(taskName), 2, 0);
         grid.add(taskStartDate, 3, 0);
-        grid.add(taskEndDate, 4, 0);
+        grid.add(taskStartTime, 3, 1);
+        grid.add(taskDueDate, 4, 0);
+        grid.add(taskDueTime, 4, 1);
+        
     }
 }
