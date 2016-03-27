@@ -6,6 +6,9 @@ package ui.model;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
+import com.jfoenix.controls.JFXPopup;
+import com.sun.istack.internal.FinalArrayList;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -15,16 +18,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import model.Task;
 
+import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import org.ocpsoft.prettytime.shade.com.joestelmach.natty.generated.DateParser.range_direction_return;
 
 public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartDate = new Label();
     private final Label taskEndDate = new Label();
     private final Label taskName = new Label();
-    private final Label taskIndex = new Label();
+    private final Label taskStartTime = new Label();
+    private final Label taskEndTime = new Label();
     private final Label taskId = new Label();
     private final JFXCheckBox checkBox = new JFXCheckBox();
+    private final JFXPopup searchBox = new JFXPopup();
     private final GridPane grid = new GridPane();
     private final ObservableList<Task> tasks;
     private Task myTask;
@@ -125,8 +133,17 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureIcon() {
-        // todo : implement awesome font icons and custom css
-        // icons to be applied to relevant tasks
+        // lateIcon.getStyleClass().add("late-icon");
+    	
+    }
+    
+    private void configureSearchBox() {
+    	// searchBox.getStyleClass.().add("search-box");
+    	
+    }
+    
+    public JFXPopup getSearchBox() {
+    	return searchBox;
     }
 
     public JFXCheckBox getCheckBox() {

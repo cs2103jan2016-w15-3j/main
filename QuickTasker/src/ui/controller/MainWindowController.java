@@ -113,8 +113,6 @@ public class MainWindowController implements Initializable {
             } else if (parser.getCommand(userInput) == Commands.SORT_TASK) {
                 System.out.println("getting the command");
                 sortTask(userInput);
-            } else if (userInput.contains("edit")) {
-                editTask(userInput);
             } else if (userInput.contains("mark")) {
                 markTaskCompleted(userInput);
             }
@@ -123,14 +121,6 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    private void editTask(String userInput) throws Exception {
-        String[] input;
-        int indexToEdit;
-        boolean editAll = false;
-        Task taskToEdit;
-        int taskIndex = parser.getTaskIndex(userInput);
-        refresh();
-    }
 
     private void markTaskCompleted(String userInput) throws Exception {
         int i = parser.getIndexForDone(userInput);
