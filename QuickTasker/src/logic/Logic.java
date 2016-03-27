@@ -2,7 +2,6 @@ package logic;
 
 import data.JsonTaskDataAccess;
 import data.TaskDataAccessObject;
-import model.RecurringTask;
 import model.Task;
 import parser.Commands;
 
@@ -32,6 +31,7 @@ public class Logic {
         list = new ArrayList<Task>();
         assert (list != null);
         storage = new JsonTaskDataAccess();
+        loadSavedTask();
         undoStack = new Stack<Commands>();
         redoStack = new Stack<Commands>();
     }
@@ -41,7 +41,7 @@ public class Logic {
         return list.size();
     }
 
-    public ArrayList<Task> getList() {
+    public ArrayList<Task> getTasks() {
         return (ArrayList<Task>) list;
     }
 
@@ -56,22 +56,26 @@ public class Logic {
         //commandMap.put(Commands.RECUR_TASK, new AddRecurTask());
     }
 
-    public ArrayList<Task> loadSavedTask() {
-        this.list = storage.getTasks();
-        System.out.println(list.size());
-        adjustmentForRecurringTasks();
-        return (ArrayList<Task>) list;
+    public List<Task> clear() {
+        list = new ArrayList<>();
+        storage.reset();
+        return list;
     }
-    
-    public void adjustmentForRecurringTasks() {
+
+/*    public void adjustmentForRecurringTasks() {
         for (int i = 0; i < list.size(); i++) {
             System.out.println("changing recurring task");
             if (list.get(i).getRecurring()) {
                 System.out.println(list.get(i).getName() + " " + list.get(i).getStartDate());
-                list.get(i).adjustDate();;
+                list.get(i).adjustDate();
+                ;
                 System.out.println(list.get(i).getName() + " " + list.get(i).getStartDate());
             }
         }
+    }*/
+
+    public void loadSavedTask() {
+        list = storage.getTasks();
     }
 
     public void exit() {

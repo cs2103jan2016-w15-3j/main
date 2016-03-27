@@ -30,11 +30,11 @@ public class UpdateTask<E> implements Command<Object> {
         if (updatedTask.getStartDate() != LocalDate.MIN) {
             list.get(taskIndex).setStartDate(updatedTask.getStartDate());
         }
-        
+
         if (updatedTask.getDueDate() != LocalDate.MIN) {
             list.get(taskIndex).setEndDate(updatedTask.getDueDate());
         }
-        
+
         if (!updatedTask.getName().equals("")) {
             list.get(taskIndex).setName(updatedTask.getName());
         }
@@ -57,5 +57,4 @@ public class UpdateTask<E> implements Command<Object> {
         undoStackTask.push(list.get(redoIndex));
         list.set(redoIndex, redoTask);
     }
-
 }

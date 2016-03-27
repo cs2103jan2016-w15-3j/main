@@ -1,13 +1,8 @@
 package model;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-
-import javax.print.attribute.ResolutionSyntax;
 
 /**
- * .
- *
  * @author A0121558H/A0130949
  */
 public class Task implements Comparable {
@@ -18,8 +13,9 @@ public class Task implements Comparable {
     private boolean isDone = false;
     private int id;
     private boolean isRecurring = false;
-    private String type;
-    private int numToRecur;
+    /*
+    private String type; // type attrib
+    private int numToRecur;*/
 
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
@@ -29,9 +25,9 @@ public class Task implements Comparable {
      * Default constructor *.
      */
     public Task() {
-        taskName = "";
-        endDate = LocalDate.MIN;
-        setStartDateAsNow();
+        this.taskName = "";
+        this.endDate = LocalDate.MIN;
+        this.setStartDateAsNow();
         generateId();
     }
 
@@ -64,8 +60,9 @@ public class Task implements Comparable {
         this.startDate = startDate;
         generateId();
     }
-    
-    public Task(String taskName, LocalDate startDate, LocalDate endDate, String type, int numToRecur) {
+
+/*    public Task(String taskName, LocalDate startDate, LocalDate endDate, String type,
+            int numToRecur) {
         this.taskName = taskName;
         this.endDate = endDate;
         this.startDate = startDate;
@@ -73,7 +70,7 @@ public class Task implements Comparable {
         this.type = type;
         this.numToRecur = numToRecur;
         setRecurring();
-    }
+    }*/
 
     public String getName() {
         return taskName;
@@ -108,26 +105,26 @@ public class Task implements Comparable {
     }
 
     public void setDone(boolean done) {
-        isDone = done;   
+        isDone = done;
     }
-    
-    public void setRecurring() {
+
+/*    public void setRecurring() {
         this.isRecurring = true;
     }
-    
+
     public boolean getRecurring() {
         return isRecurring;
-    }
+    }*/
 
     private void generateId() {
         this.id = ++IdGenerator;
     }
-    
-    public int getNumberToRecur() {
+
+ /*   public int getNumberToRecur() {
         return this.numToRecur;
-    }
-    
-    public void adjustDate() {
+    }*/
+
+/*    public void adjustDate() {
         this.checkYearsPast();
         this.checkMonthsPast();
         this.checkDaysPast();
@@ -143,9 +140,9 @@ public class Task implements Comparable {
                 numberOfWeeks = i;
             }
         }
-        return (numberOfWeeks + 1) / 7;    
+        return (numberOfWeeks + 1) / 7;
     }
-    
+
     private int calculateOffsetForDays(int differenceInTimes, int iteration) {
         int amount = iteration;
         int numberOfDays = differenceInTimes;
@@ -157,18 +154,21 @@ public class Task implements Comparable {
             }
             numberOfDays++;
         }
-        return (numberOfDays);    
+        return (numberOfDays);
     }
-    
+
     private void checkYearsPast() {
         if (LocalDate.now().getYear() > this.getDueDate().getYear()) {
             long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.DAYS);
             if (this.getType().equals("week")) {
                 int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
-                setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
+                setNextDates(this.getStartDate().plusWeeks(offset),
+                        this.getDueDate().plusWeeks(offset));
             } else {
                 int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
-                setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));           }
+                setNextDates(this.getStartDate().plusDays(offset),
+                        this.getDueDate().plusDays(offset));
+            }
         }
     }
 
@@ -182,10 +182,13 @@ public class Task implements Comparable {
                 long amount = this.getStartDate().until(LocalDate.now(), ChronoUnit.DAYS);
                 if (this.getType().equals("week")) {
                     int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
-                    setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
+                    setNextDates(this.getStartDate().plusWeeks(offset),
+                            this.getDueDate().plusWeeks(offset));
                 } else {
                     int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
-                    setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));               }
+                    setNextDates(this.getStartDate().plusDays(offset),
+                            this.getDueDate().plusDays(offset));
+                }
             }
         }
     }
@@ -197,10 +200,12 @@ public class Task implements Comparable {
                     long amount = ChronoUnit.DAYS.between(this.getDueDate(), LocalDate.now());
                     if (this.getType().equals("week")) {
                         int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
-                        setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
+                        setNextDates(this.getStartDate().plusWeeks(offset),
+                                this.getDueDate().plusWeeks(offset));
                     } else {
                         int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
-                        setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));
+                        setNextDates(this.getStartDate().plusDays(offset),
+                                this.getDueDate().plusDays(offset));
                     }
                 }
             }
@@ -210,7 +215,7 @@ public class Task implements Comparable {
     private void setNextDates(LocalDate startDate, LocalDate endDate) {
         setStartDate(startDate);
         setEndDate(endDate);
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {

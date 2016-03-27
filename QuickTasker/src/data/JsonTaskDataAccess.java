@@ -3,6 +3,7 @@ package data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import model.RecurringTask;
 import model.Task;
 
 import java.io.BufferedReader;
@@ -51,10 +52,10 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     @Override
     public List<Task> getTasks() throws LoadTasksException {
+        Gson gson = getGson();
         List<Task> tasks;
         try {
             BufferedReader reader = Files.newBufferedReader(pathOfSaveFile);
-            Gson gson = new Gson();
             tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {
             }.getType());
             reader.close();
@@ -64,9 +65,16 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
+    private Gson getGson() {
+        RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
+                .registerSubtype(Task.class, "Task")
+                .registerSubtype(RecurringTask.class, "RecurringTask");
+        return new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter).create();
+    }
+
     @Override
     public void save(Task task) throws SaveTasksException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = getGson();
         String json = gson.toJson(task);
         try {
             BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile);
@@ -80,7 +88,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     @Override
     public void save(List<Task> tasks) throws SaveTasksException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        Gson gson = getGson();
         String json = gson.toJson(tasks);
         try {
             BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile);

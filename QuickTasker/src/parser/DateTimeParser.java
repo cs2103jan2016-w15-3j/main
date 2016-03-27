@@ -88,9 +88,8 @@ public class DateTimeParser {
 
     public boolean isDate(String input) {
 
-
-        if (input.equals("today") || input.equals("tomorrow") || input.equals("day after")
-                || input.equals("next day")) {
+        if (input.equals("today") || input.equals("tomorrow") || input.equals("day after") || input
+                .equals("next day")) {
             return true;
 
         } else {
