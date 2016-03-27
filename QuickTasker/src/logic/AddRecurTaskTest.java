@@ -21,10 +21,10 @@ public class AddRecurTaskTest {
         logic = new Logic();
         logic.addTask(
                 new RecurringTask("name", LocalDate.of(2016, 03, 23), LocalDate.of(2016, 03, 24),
-                        "week"));
+                        "week", 1));
         logic.addTask(
                 new RecurringTask("name", LocalDate.of(2016, 03, 23), LocalDate.of(2016, 03, 24),
-                        "day"));
+                        "day", 1));
     }
 
     @After
