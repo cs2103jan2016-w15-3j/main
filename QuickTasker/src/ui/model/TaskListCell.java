@@ -65,9 +65,10 @@ public class TaskListCell extends JFXListCell<Task> {
 		setTaskName(task);
 		setTaskId(task);
 		setTaskStartDate(task);
+		setTaskDueDate(task);
 		setTaskStartTime(task);
 		setTaskDueTime(task);
-		setTaskDueDate(task);
+
 		setGraphic(grid);
 	}
 
@@ -95,6 +96,8 @@ public class TaskListCell extends JFXListCell<Task> {
 
 	protected void setTaskStartDate(Task task) {
 		if (task.getStartDate() != null) {
+			System.out.println("A");
+
 			LocalDate startDate = task.getStartDate();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
 			String dateString = formatter.format(startDate);
@@ -104,7 +107,10 @@ public class TaskListCell extends JFXListCell<Task> {
 	}
 
 	protected void setTaskDueDate(Task task) {
+
 		if (task.getStartDate() != null) {
+			System.out.println("B");
+
 			LocalDate dueDate = task.getDueDate();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
 			String dateString = formatter.format(dueDate);
@@ -114,26 +120,33 @@ public class TaskListCell extends JFXListCell<Task> {
 	}
 
 	protected void setTaskStartTime(Task task) {
-		/*if (task.getStartTime() != null) {
+
+		if (task.getStartTime() != null) {
+			System.out.println("C");
+
 			LocalTime startTime = task.getStartTime();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 			String timeString = formatter.format(startTime);
 			taskStartTime.setText(timeString);
 		} else {
-			*/taskStartTime.setText("Time not specified");
-		//}
+			taskStartTime.setText("Time not specified");
+		}
 
 	}
 
 	protected void setTaskDueTime(Task task) {
-		/*if (task.getStartTime() != null) {
+
+		if (task.getStartTime() != null) {
+			System.out.println("D");
+
 			LocalTime endTime = task.getEndTime();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 			String timeString = formatter.format(endTime);
+			System.out.println(timeString);
 			taskDueTime.setText(timeString);
 		} else {
-			*/taskDueTime.setText("Time not specified");
-		//}
+		taskDueTime.setText("Time not specified");
+		}
 
 	}
 

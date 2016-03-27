@@ -75,6 +75,8 @@ public class UserInputParser implements ParserInterface {
     public LocalDate setStartDate() {
         return stringToLocalDate(userCommand[lengthOfInput - 2]);
     }
+    
+
 
     // LOGGING
     public void setTaskName() {
@@ -126,6 +128,13 @@ public class UserInputParser implements ParserInterface {
         DateTimeParser parser = new DateTimeParser();
         return parser.parseDate(date);
     }
+    
+/*    //@author: A0133333U
+    public static LocalTime stringToLocalTime(String time) {
+
+        DateTimeParser parser = new DateTimeParser();
+        return parser.parseTime(time, LocalTime times);
+    }*/
 
     public LocalDate getStartDate(String userInput) {
         setAttributes(userInput);

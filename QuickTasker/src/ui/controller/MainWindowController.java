@@ -264,13 +264,18 @@ public class MainWindowController implements Initializable {
 	}
 
 	private void createTask(String userInput) throws Exception {
+		System.out.println("A");
 		Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
 				parser.getEndDate(userInput), parser.getStartTime(userInput), parser.getEndTime(userInput));
+		System.out.println("B");
+
 		/*
 		 * plannerEntries.add(newTask); printedPlanner.setItems(plannerEntries);
 		 * commandBox.clear(); operations.addTask(newTask);
 		 */
 		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+		System.out.println("C");
+
 		afterOperation();
 	}
 
@@ -287,6 +292,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate, LocalTime startTime, LocalTime endTime) throws Exception {
+		System.out.println("D");
 		return new Task(taskName, startDate, dueDate, startTime, endTime);
 	}
 

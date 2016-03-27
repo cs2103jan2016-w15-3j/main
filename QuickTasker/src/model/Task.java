@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.concurrent.BlockingDeque;
 
 /**
  * .
@@ -111,6 +112,14 @@ public class Task implements Comparable {
 
     public void setEndDate(LocalDate date) {
         this.endDate = date;
+    }
+    
+    public void setStartTime(LocalTime time) {
+    	this.startTime = time;
+    }
+    
+    public void setEndTime(LocalTime time) {
+    	this.endTime = time;
     }
 
     public void setDone(boolean done) {
