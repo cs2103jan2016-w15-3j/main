@@ -23,6 +23,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
         this.baseType = baseType;
         this.typeFieldName = typeFieldName;
     }
+
     public static <T> RuntimeTypeAdapterFactory<T> of(Class<T> baseType, String typeFieldName) {
         return new RuntimeTypeAdapterFactory<T>(baseType, typeFieldName);
     }
@@ -30,7 +31,6 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
     public static <T> RuntimeTypeAdapterFactory<T> of(Class<T> baseType) {
         return new RuntimeTypeAdapterFactory<T>(baseType, "type");
     }
-
 
     public RuntimeTypeAdapterFactory<T> registerSubtype(Class<? extends T> type, String label) {
         if (type == null || label == null) {
@@ -43,7 +43,6 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
         subtypeToLabel.put(type, label);
         return this;
     }
-
 
     public RuntimeTypeAdapterFactory<T> registerSubtype(Class<? extends T> type) {
         return registerSubtype(type, type.getSimpleName());

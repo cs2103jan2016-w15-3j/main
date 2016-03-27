@@ -52,10 +52,7 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     @Override
     public List<Task> getTasks() throws LoadTasksException {
-        RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
-                .registerSubtype(Task.class).registerSubtype(RecurringTask.class, "RecurringTask");
-        Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter)
-                .create();
+        Gson gson = getGson();
         List<Task> tasks;
         try {
             BufferedReader reader = Files.newBufferedReader(pathOfSaveFile);
@@ -68,9 +65,16 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
+    private Gson getGson() {
+        RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
+                .registerSubtype(Task.class, "Task")
+                .registerSubtype(RecurringTask.class, "RecurringTask");
+        return new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter).create();
+    }
+
     @Override
     public void save(Task task) throws SaveTasksException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = getGson();
         String json = gson.toJson(task);
         try {
             BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile);
@@ -85,12 +89,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     @Override
     public void save(List<Task> tasks) throws SaveTasksException {
 
-        RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
-                .registerSubtype(Task.class).registerSubtype(RecurringTask.class);
-        Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter)
-                .create();
+        Gson gson = getGson();
         String json = gson.toJson(tasks);
-        System.out.println(json);
         try {
             BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile);
             writer.write(json);

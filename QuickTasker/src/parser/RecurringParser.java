@@ -5,8 +5,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.sound.midi.VoiceStatus;
-
 /*
  * author A0121558H
  * 
@@ -118,7 +116,8 @@ public class RecurringParser {
         } else if (numToSetDate == 1) {
             startDate = endDate = stringToLocalDate("tomorrow");
         } else if (numToSetDate == 2) {
-            startDate = endDate = stringToLocalDate(userCommand[length - 2] + " " + userCommand[length - 1]);
+            startDate = endDate = stringToLocalDate(
+                    userCommand[length - 2] + " " + userCommand[length - 1]);
         } else if (numToSetDate == 3) {// floating task
             startDate = LocalDate.MIN;
             endDate = LocalDate.MIN;// placeholder for null
@@ -168,7 +167,8 @@ public class RecurringParser {
             numToUse = 3;
         } else if (userCommand[lengthOfInput - 1].equals("today")) {
             numToUse = 4;
-        } else if (parser.isDate(userCommand[lengthOfInput - 1]) && !parser.isDate(userCommand[lengthOfInput - 2])) {
+        } else if (parser.isDate(userCommand[lengthOfInput - 1]) && !parser
+                .isDate(userCommand[lengthOfInput - 2])) {
             numToUse = 5;
         }
     }
@@ -180,7 +180,8 @@ public class RecurringParser {
 
     private boolean isFloating() {
         DateTimeParser parser = new DateTimeParser();
-        return (!parser.isDate(userCommand[lengthOfInput - 1]) && !parser.isDate(userCommand[lengthOfInput - 2]));
+        return (!parser.isDate(userCommand[lengthOfInput - 1]) && !parser
+                .isDate(userCommand[lengthOfInput - 2]));
     }
 
     public int getNumToRecur(String userInput) { // for controller

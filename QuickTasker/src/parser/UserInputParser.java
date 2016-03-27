@@ -1,9 +1,11 @@
 package parser;
 
-/**TODO
+/**
+ * TODO
  * FIX "edge of tomorrow" tomorrow
  * scan from behind. stop once hit date
  */
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -290,9 +292,9 @@ public class UserInputParser implements ParserInterface {
             endDate = LocalDate.MAX;// placeholder for null
         } else if (numToSetDate == 4) {
             startDate = endDate = stringToLocalDate("today");
-        } else if(numToSetDate==5) {
-            startDate=stringToLocalDate(userCommand[length -1]);
-            endDate= LocalDate.MIN;
+        } else if (numToSetDate == 5) {
+            startDate = stringToLocalDate(userCommand[length - 1]);
+            endDate = LocalDate.MIN;
         }
     }
 
@@ -348,9 +350,9 @@ public class UserInputParser implements ParserInterface {
             numToUse = 3;
         } else if (userCommand[lengthOfInput - 1].equals("today")) {
             numToUse = 4;
-        }else if (parser.isDate(userCommand[lengthOfInput-1])
-                && !parser.isDate(userCommand[lengthOfInput-2])) {
-            numToUse=5;
+        } else if (parser.isDate(userCommand[lengthOfInput - 1]) && !parser
+                .isDate(userCommand[lengthOfInput - 2])) {
+            numToUse = 5;
         }
     }
 

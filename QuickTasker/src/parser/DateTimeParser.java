@@ -3,6 +3,7 @@ package parser;
 /**
  * author A0121558H
  */
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -87,9 +88,8 @@ public class DateTimeParser {
 
     public boolean isDate(String input) {
 
-
-        if (input.equals("today") || input.equals("tomorrow") || input.equals("day after")
-                || input.equals("next day")) {
+        if (input.equals("today") || input.equals("tomorrow") || input.equals("day after") || input
+                .equals("next day")) {
             return true;
 
         } else {
@@ -155,7 +155,7 @@ public class DateTimeParser {
         ArrayList<Integer> indices = new ArrayList<Integer>();
 
         for (int i = input.length; i > 1; i--) {
-          //  System.out.println("index-1: " + (i - 1));
+            //  System.out.println("index-1: " + (i - 1));
 
             String toCheck = input[i - 2] + " " + input[i - 1];
 

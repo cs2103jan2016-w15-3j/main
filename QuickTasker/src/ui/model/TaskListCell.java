@@ -16,17 +16,14 @@ import javafx.scene.layout.Priority;
 import model.Task;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 
 public class TaskListCell extends JFXListCell<Task> {
 
     private final Label taskName = new Label();
     private final Label taskId = new Label();
     private final Label taskStartDate = new Label();
-    private final Label taskDeadLine = new Label();
+    private final Label taskEndDate = new Label();
     private final Label taskStartTime = new Label();
     private final Label taskEndTime = new Label();
     private final JFXCheckBox checkBox = new JFXCheckBox();
@@ -66,6 +63,11 @@ public class TaskListCell extends JFXListCell<Task> {
         setGraphic(grid);
     }
 
+    /*public void updateIndex(ObservableList<Task> tasks){
+        setTaskId(myTask);
+        System.out.println(this.indexProperty());
+    }*/
+
     protected void setTaskId(Task task) {
         final int offset = 1;
         taskId.setText(String.valueOf(tasks.indexOf(task) + offset));
@@ -73,7 +75,6 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskName(Task task) {
         taskName.setText(task.getName());
-
     }
 
     protected void setTaskStartDate(Task task) {
@@ -83,13 +84,12 @@ public class TaskListCell extends JFXListCell<Task> {
             if (startDate == LocalDate.MIN || startDate == LocalDate.MAX) {
                 taskStartDate.setText("Not Specified");
             } else {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
                 String dateString = formatter.format(startDate);
                 taskStartDate.setText(dateString);
             }
             // stop here
-        } else
-            taskStartDate.setText("");
+        } else taskStartDate.setText("");
     }
 
     protected void setTaskDueDate(Task task) {
@@ -97,41 +97,38 @@ public class TaskListCell extends JFXListCell<Task> {
             LocalDate dueDate = task.getDueDate();
             // from here
             if (dueDate == LocalDate.MIN || dueDate == LocalDate.MAX) {
-                taskDeadLine.setText("Not Specified");
+                taskEndDate.setText("Not Specified");
             } else {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
                 String dateString = formatter.format(dueDate);
-                taskDeadLine.setText(dateString);
+                taskEndDate.setText(dateString);
             }
-        } else
-            taskDeadLine.setText("");
+        } else taskEndDate.setText("");
     }
 
     protected void setTaskStartTime(Task task) {
-    	if (task.getStartTime() != null) {
-            String startTime = task.getStartTime().toString();
-            System.out.println("start time is " +startTime);
+        if (task.getStartDate() != null) {
+            String startTime = task.getStartDate().toString();
+            System.out.println("start time is " + startTime);
             // from here
 /*            if (startTime == LocalTime.MIN || startTime == LocalTime.MAX) {
                 taskStartTime.setText("Not specified here");
             } else {*/
-               // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-              //  String timeString = formatter.toFormat(startTime);
+            // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            //  String timeString = formatter.toFormat(startTime);
             String timeString = startTime;
-                taskStartTime.setText(timeString);
-         //} 
+            taskStartTime.setText(timeString);
+            //}
             // stop here
         } else
-        	
+
             taskStartTime.setText("Not specified");
-    
-}
-    
-    
+
+    }
 
     protected void setTaskEndTime(Task task) {
-    	if (task.getEndTime() != null) {
-           String endTime = task.getEndTime().toString();
+        if (task.getDueDate() != null) {
+            String endTime = task.getDueDate().toString();
             System.out.println("end time is " + endTime);
             // from here
             /*if (endTime == LocalTime.MIN || endTime == LocalTime.MAX) {
@@ -139,23 +136,12 @@ public class TaskListCell extends JFXListCell<Task> {
             } else {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
                 */
-                String timeString = endTime;
-             taskEndTime.setText(timeString);
-           // }
-        } else
-            taskEndTime.setText("Not specified");
-    }
-    
-    public void fireCheckBox() {
-        checkBox.fire();
+            String timeString = endTime;
+            taskEndTime.setText(timeString);
+            // }
+        } else taskEndTime.setText("Not specified");
     }
 
-    /**
-     * Http://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
-     * https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/
-     * GridPane.html
-     */
-    
     private void configureGrid() {
         grid.setHgap(10); // horizontal gap between grids
         grid.setVgap(5); // vertical gap between grids
@@ -177,8 +163,8 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureDate() {
-        taskStartDate.setStyle("-fx-font-weight:bold;-fx-padding:10px");
-        taskDeadLine.setStyle("-fx-font-weight:bold;-fx-padding:10px");
+        taskStartDate.getStyleClass().add("start-date");
+        taskEndDate.getStyleClass().add("end-date");
     }
 
     private void configureCheckBox() {
@@ -215,12 +201,7 @@ public class TaskListCell extends JFXListCell<Task> {
         // int
         grid.add(taskStartDate, 3, 0); // rowIndex, int colspan, int
         grid.add(taskStartTime, 3, 1);
-        grid.add(taskDeadLine, 4, 0);
+        grid.add(taskEndDate, 4, 0);
         grid.add(taskEndTime, 4, 1);
-    }
-
-    public void setCheckBox(Task task) {
-        checkBox.setText(task.getName());
-        if (task.isDone()) checkBox.fire();
     }
 }

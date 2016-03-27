@@ -35,24 +35,14 @@ import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-    private static MainWindowController mainWindowController;
     private Main main;
-    private ParserInterface parser = new UserInputParser();
-    private RecurringParser recurringParser;
-    private Logic operations = new Logic();
+    private final ParserInterface parser = new UserInputParser();
+    private RecurringParser recurringParser = new RecurringParser();
+    private final Logic operations = new Logic();
 
     @FXML private JFXTextField commandBox;
-    /* Naming explanation for team : To be removed */
-    /* this naming theme is based on the idea that
-       variable names should be abstractions resembling real life objects ,
-       such that they make sense even to a layman and could be read like a story/procedure/manual
-     */
     @FXML private JFXListView<Task> printedPlanner;
-    // a printed planner presents plannerEntries in formatted manner
     private ObservableList<Task> plannerEntries;
-    // planner entries are raw entries of tasks/events,
-    // think of them as those stuff you wrote on toilet paper but not translated into a
-    // printedPlanner yet
 
     // Display messages as visual feedback for users
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
@@ -65,9 +55,6 @@ public class MainWindowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         setMain(main);
-        operations = new Logic();
-        parser = new UserInputParser();
-        recurringParser = new RecurringParser();
         initPlanner();
         setCellFactory();
         initLogger();
@@ -79,7 +66,7 @@ public class MainWindowController implements Initializable {
     }
 
     private void initPlanner() {
-        plannerEntries = FXCollections.observableArrayList(operations.loadSavedTask());
+        plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         printedPlanner.setItems(plannerEntries);
     }
 
@@ -99,13 +86,13 @@ public class MainWindowController implements Initializable {
     private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
+            logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
             try {
                 performOperations(userInput);
             } catch (UIOperationException e) {
                 logger.log(Level.SEVERE, "Error occured at " + this.getClass().getName()
-                        + " within performOperation method.");
+                        + " within performOperation method. \n");
             }
-            logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
         }
     }
 
@@ -159,13 +146,12 @@ public class MainWindowController implements Initializable {
         printedPlanner.getSelectionModel().select(i);
         printedPlanner.fireEvent(new TaskDoneEvent(task));
         javafx.concurrent.Task<Void> sleeper;
-        sleeper = makeSleeper(400);
+        sleeper = makeSleeper(500);
         sleeper.setOnSucceeded(event -> {
             printedPlanner.getSelectionModel().clearSelection();
             commandBox.clear();
         });
         new Thread(sleeper).start();
-        // Do not refresh entire list to avoid stack overflow of Event object
     }
 
     private javafx.concurrent.Task<Void> makeSleeper(int duration) {
@@ -199,16 +185,23 @@ public class MainWindowController implements Initializable {
     }
 
     private void updateTask(String userInput) throws Exception {
+        int indexOfTask = parser.getIndexForUpdate(userInput);
+        printedPlanner.getSelectionModel().select(indexOfTask);
         Task newTask = new Task(parser.getTaskNameForUpdate(userInput),
                 parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput));
-        plannerEntries = FXCollections.observableArrayList(
-                operations.updateTask(newTask, parser.getIndexForUpdate(userInput)));
+    /*    plannerEntries.remove(indexOfTask);
+        plannerEntries.add(indexOfTask,newTask);*/
+
+        plannerEntries = FXCollections
+                .observableArrayList(operations.updateTask(newTask, indexOfTask));
+        printedPlanner.getSelectionModel().clearSelection();
         afterOperation();
     }
 
     private void deleteTask(String userInput) throws Exception {
         int taskIndex;
         taskIndex = parser.getTaskIndex(userInput);
+        //plannerEntries.remove(taskIndex);
         plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
         afterOperation();
     }
@@ -220,14 +213,17 @@ public class MainWindowController implements Initializable {
     private void createTask(String userInput) throws Exception {
         Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
                 parser.getEndDate(userInput));
+     /*   plannerEntries.add(newTask);
+        printedPlanner.setItems(plannerEntries);
+        commandBox.clear();
+        operations.addTask(newTask);*/
         plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
     }
 
     private void createRecurringTask(String userInput) throws Exception {
-        System.out.println(recurringParser.getTaskName(userInput));
-        Task newTask = makeRecurringTask(recurringParser.getTaskName(userInput), LocalDate.of(2016, 03, 20), LocalDate.of(2016, 03, 23),
-                "week");
+        RecurringTask newTask = makeRecurringTask("taskName", LocalDate.of(2016, 03, 19),
+                LocalDate.of(2016, 03, 19), "week", 1);
         plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
     }
@@ -243,32 +239,28 @@ public class MainWindowController implements Initializable {
         return new Task(taskName, startDate, dueDate);
     }
 
-    private Task makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
-            String type) throws Exception {
-        return new Task(taskName, startDate, dueDate, type);
+    private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
+            String type, int numberToRecur) throws Exception {
+        return new RecurringTask(taskName, startDate, dueDate, type, numberToRecur);
     }
 
     private void setCellFactory() {
-        printedPlanner.setCellFactory(param -> new TaskListCell(plannerEntries));
-/*        taskListView.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
-            @Override
-            public ListCell<Task> call(ListView<Task> param) {
-                TaskListCell listCell = new TaskListCell(guiList);
-                taskListView.addEventFilter(TASK_COMPLETE, new EventHandler<TaskDoneEvent>() {
-                    @Override
-                    public void handle(TaskDoneEvent event) {
-                        new Thread(() -> {
-                            Thread.currentThread().setUncaughtExceptionHandler(
-                                    (t, e) -> Platform.runLater(System.out::println));
-                            if (listCell.getCheckbox().getText().equals(event.getTask().getName()))
-                                listCell.getCheckbox().fire();
-                        }).start();
+        printedPlanner.setCellFactory(param -> {
 
-                    }
-                });
-                return listCell;
-            }
-        });*/
+            TaskListCell listCell = new TaskListCell(plannerEntries);
+            printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
+                Thread.currentThread().setUncaughtExceptionHandler(
+                        (t, e) -> Platform.runLater(System.out::println));
+                if (listCell.getTask().equals(event.getTask())) listCell.getCheckBox().fire();
+            }).start());
+        /*    plannerEntries.addListener(new ListChangeListener<Task>() {
+                @Override
+                public void onChanged(Change<? extends Task> c) {
+                    listCell.updateIndex(plannerEntries);
+        }
+            });*/
+            return listCell;
+        });
     }
 
     class SearchHighlightedTextCell extends ListCell<String> {
@@ -279,4 +271,5 @@ public class MainWindowController implements Initializable {
             this.searchText = searchText;
         }
     }
+
 }
