@@ -79,7 +79,6 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
             BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile);
             writer.write(json);
             writer.close();
-
         } catch (IOException e) {
             throw new SaveTasksException();
         }

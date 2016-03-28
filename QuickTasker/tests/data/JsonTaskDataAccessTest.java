@@ -96,7 +96,7 @@ public class JsonTaskDataAccessTest {
         tasks.add(task);
         dataHandler.save(tasks);
         Task t = dataHandler.getTasks().get(0);
-        assertEquals(t.getName(),task.getName());
+        assertEquals(t.getName(), task.getName());
     }
 
     @Test
