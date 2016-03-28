@@ -171,16 +171,16 @@ public class UserInputParser implements ParserInterface {
         return DetermineCommandType.getCommand(command);
     }
 
+    public int getIndexForDone(String userInput) {
+        removeWhiteSpaces(userInput);
+        return Integer.parseInt(userCommand[1]) - 1;
+    }
+
     /**
      * Methods for updates
      **/
 
     public int getIndexForUpdate(String userInput) {
-        removeWhiteSpaces(userInput);
-        return Integer.parseInt(userCommand[1]) - 1;
-    }
-
-    public int getIndexForDone(String userInput) {
         removeWhiteSpaces(userInput);
         return Integer.parseInt(userCommand[1]) - 1;
     }
@@ -198,6 +198,16 @@ public class UserInputParser implements ParserInterface {
     public LocalDate getEndDateForUpdate(String userInput) {
         setAttributesForUpdates(userInput);
         return endDate;
+    }
+
+    public LocalTime getStartTimeForUpdate(String userInput) {
+        setAttributesForUpdates(userInput);
+        return startTime;
+    }
+
+    public LocalTime getEndTimeForUpdate(String userInput) {
+        setAttributesForUpdates(userInput);
+        return endTime;
     }
 
     public void setAttributesForUpdates(String input) {
@@ -279,6 +289,8 @@ public class UserInputParser implements ParserInterface {
     /* Methods for updates end */
 
     public void setDate(int numToSetDate, int length) {
+        System.out.println("NUMTOSETDATE " + numToSetDate);
+
         if (numToSetDate == 0) {
             startDate = stringToLocalDate(userCommand[length - 2]);
             endDate = stringToLocalDate(userCommand[length - 1]);
@@ -342,7 +354,8 @@ public class UserInputParser implements ParserInterface {
         String toCheck = userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1];
         numToUse = 0;
 
-        if (userCommand[lengthOfInput - 1].equals("tomorrow")) {
+        if (userCommand[lengthOfInput - 1].equals("tomorrow") || userCommand[lengthOfInput - 1]
+                .equals("tmr")) {
             numToUse = 1;
         } else if (toCheck.equals("next day") || toCheck.equals("day after")) {
             numToUse = 2;

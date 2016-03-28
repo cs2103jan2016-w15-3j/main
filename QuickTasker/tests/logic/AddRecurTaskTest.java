@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,10 +22,10 @@ public class AddRecurTaskTest {
         logic = new Logic();
         logic.addTask(
                 new RecurringTask("name", LocalDate.of(2016, 03, 23), LocalDate.of(2016, 03, 24),
-                        "week", 1));
+                        "week", LocalTime.NOON, LocalTime.MIDNIGHT, 1));
         logic.addTask(
                 new RecurringTask("name", LocalDate.of(2016, 03, 23), LocalDate.of(2016, 03, 24),
-                        "day", 1));
+                        "day", LocalTime.NOON, LocalTime.MIDNIGHT, 1));
     }
 
     @After

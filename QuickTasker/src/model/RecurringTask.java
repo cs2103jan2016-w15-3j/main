@@ -1,17 +1,20 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public class RecurringTask extends Task {
     private LocalDate nextStartDate;
     private LocalDate nextEndDate;
+    private LocalTime nextStartTime;
+    private LocalTime nextEndTime;
     private String recurType;
     int numberToRecur;
 
     public RecurringTask(String taskName, LocalDate startDate, LocalDate endDate, String recurType,
-            int numberToRecur) {
-        super(taskName, startDate, endDate);
+            LocalTime startTime, LocalTime endTime, int numberToRecur) {
+        super(taskName, startDate, endDate, startTime, endTime);
         this.recurType = recurType;
         this.numberToRecur = numberToRecur;
     }

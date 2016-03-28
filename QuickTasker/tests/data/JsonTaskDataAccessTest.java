@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,9 +90,9 @@ public class JsonTaskDataAccessTest {
 
     @Test
     public void canSaveOneRecurrTask() {
-        Task normalTask = new Task("NormalTask");
+
         RecurringTask task = new RecurringTask("RecurringTask11", LocalDate.MIN, LocalDate.MAX,
-                "week", 1);
+                "week", LocalTime.NOON, LocalTime.now(), 1);
         List<Task> tasks = new ArrayList<>();
         tasks.add(task);
         dataHandler.save(tasks);
@@ -107,7 +108,8 @@ public class JsonTaskDataAccessTest {
 
     @Test
     public void deserializedRecurringTasksShouldHaveCorrectType() {
-        Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week", 1);
+        Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week",
+                LocalTime.NOON, LocalTime.MIDNIGHT, 1);
         List<Task> tasks = new ArrayList<>();
         tasks.add(t);
         dataHandler.save(tasks);
@@ -178,7 +180,7 @@ public class JsonTaskDataAccessTest {
         for (int i = 0; i < numberOfTasks; i++) {
             String taskName = "Recurring Task " + i;
             Task recurringTask = new RecurringTask(taskName, LocalDate.now(),
-                    LocalDate.now().plusMonths(1), "week", 1);
+                    LocalDate.now().plusMonths(1), "week", LocalTime.NOON, LocalTime.MIDNIGHT, 1);
             tasks.add(recurringTask);
         }
         return tasks;

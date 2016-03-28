@@ -49,6 +49,7 @@ public class Main extends Application {
             MainWindowController mainWindowController = new MainWindowController();
             SettingManager settings = new SettingManager();
             mainWindowController.setMain(this);
+            // mainWindowController.setFeedback(MESSAGE_WELCOME);
             primaryStage.getIcons().add(new Image(IMAGE_ICON));
             Scene scene = new Scene(pane);
             primaryStage.setScene(scene);

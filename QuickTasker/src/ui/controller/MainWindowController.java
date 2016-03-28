@@ -23,6 +23,7 @@ import ui.model.TaskListCell;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -187,10 +188,13 @@ public class MainWindowController implements Initializable {
     private void updateTask(String userInput) throws Exception {
         int indexOfTask = parser.getIndexForUpdate(userInput);
         printedPlanner.getSelectionModel().select(indexOfTask);
-        Task newTask = new Task(parser.getTaskNameForUpdate(userInput),
-                parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput));
-    /*    plannerEntries.remove(indexOfTask);
-        plannerEntries.add(indexOfTask,newTask);*/
+        Task newTask = makeTask(parser.getTaskNameForUpdate(userInput),
+                parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput),
+                parser.getStartTimeForUpdate(userInput), parser.getEndTimeForUpdate(userInput));
+        /*
+         * plannerEntries.remove(indexOfTask);
+         * plannerEntries.add(indexOfTask,newTask);
+         */
 
         plannerEntries = FXCollections
                 .observableArrayList(operations.updateTask(newTask, indexOfTask));
@@ -212,7 +216,9 @@ public class MainWindowController implements Initializable {
 
     private void createTask(String userInput) throws Exception {
         Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
-                parser.getEndDate(userInput));
+                parser.getEndDate(userInput), parser.getStartTime(userInput),
+                parser.getEndTime(userInput));
+
      /*   plannerEntries.add(newTask);
         printedPlanner.setItems(plannerEntries);
         commandBox.clear();
@@ -222,8 +228,13 @@ public class MainWindowController implements Initializable {
     }
 
     private void createRecurringTask(String userInput) throws Exception {
-        RecurringTask newTask = makeRecurringTask("taskName", LocalDate.of(2016, 03, 19),
-                LocalDate.of(2016, 03, 19), "week", 1);
+        RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
+                recurringParser.getTaskStartDate(userInput),
+                recurringParser.getTaskEndDate(userInput),
+                recurringParser.getRecurDuration(userInput),
+                recurringParser.getTaskStartTime(userInput),
+                recurringParser.getTaskEndTime(userInput),
+                recurringParser.getNumToRecur(userInput));
         plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
     }
@@ -234,14 +245,17 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate)
-            throws Exception {
-        return new Task(taskName, startDate, dueDate);
+    private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate,
+            LocalTime startTime, LocalTime endTime) throws Exception {
+        System.out.println("D");
+        return new Task(taskName, startDate, dueDate, startTime, endTime);
     }
 
     private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
-            String type, int numberToRecur) throws Exception {
-        return new RecurringTask(taskName, startDate, dueDate, type, numberToRecur);
+            String type, LocalTime startTime, LocalTime endTime, int numberToRecur)
+            throws Exception {
+        return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime,
+                numberToRecur);
     }
 
     private void setCellFactory() {
@@ -271,5 +285,4 @@ public class MainWindowController implements Initializable {
             this.searchText = searchText;
         }
     }
-
 }
