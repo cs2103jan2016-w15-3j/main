@@ -36,8 +36,7 @@ public class DeleteTask<E> implements Command<Object> {
         list.add(indexToUndo, deletedTask);
     }
 
-    @Override
-    public void redo(ArrayList<Task> list) {
+    @Override public void redo(ArrayList<Task> list) {
         // TODO Auto-generated method stub
         Task redoTask = redoStackTask.pop();
         int indexToRedo = redoStackIndex.pop();

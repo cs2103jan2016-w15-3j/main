@@ -14,14 +14,15 @@ public class Main extends Application {
 
     private static final String APP_TITLE = "Welcome to QuickTasker!";
     private static final String IMAGE_ICON = "img/home.png";
+	private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
+
 
     private Stage primaryStage;
     // private RootLayoutController rootLayoutController;
     private static final int STAGE_MINIMUM_HEIGHT = 200;
     private static final int STAGE_MINIMUM_WIDTH = 560;
 
-    @Override
-    public void start(Stage primaryStage) {
+    @Override public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         // Do not remove these 2 lines of comments:
         /*Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
@@ -49,6 +50,7 @@ public class Main extends Application {
             MainWindowController mainWindowController = new MainWindowController();
             SettingManager settings = new SettingManager();
             mainWindowController.setMain(this);
+           // mainWindowController.setFeedback(MESSAGE_WELCOME);
             primaryStage.getIcons().add(new Image(IMAGE_ICON));
             Scene scene = new Scene(pane);
             primaryStage.setScene(scene);

@@ -2,16 +2,25 @@ package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
+
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
@@ -23,6 +32,7 @@ import ui.model.TaskListCell;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -211,8 +221,11 @@ public class MainWindowController implements Initializable {
     }
 
     private void createTask(String userInput) throws Exception {
+/*        Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
+                parser.getEndDate(userInput));*/
         Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
-                parser.getEndDate(userInput));
+                parser.getEndDate(userInput), parser.getStartTime(userInput), parser.getEndTime(userInput));
+
      /*   plannerEntries.add(newTask);
         printedPlanner.setItems(plannerEntries);
         commandBox.clear();
@@ -234,9 +247,9 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate)
-            throws Exception {
-        return new Task(taskName, startDate, dueDate);
+    private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate, LocalTime startTime, LocalTime endTime) throws Exception {
+        System.out.println("D");
+        return new Task(taskName, startDate, dueDate, startTime, endTime);
     }
 
     private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
@@ -271,5 +284,4 @@ public class MainWindowController implements Initializable {
             this.searchText = searchText;
         }
     }
-
 }

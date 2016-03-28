@@ -23,39 +23,48 @@ public class JsonTaskDataAccessTest {
     private SettingManager settings;
     private List<Task> plannerNotebook;
 
+<<<<<<< HEAD
     @Before
     public void setUp() throws Exception {
+=======
+    @Before public void setUp() throws Exception {
+>>>>>>> jialin3
         settings = new SettingManager();
         settings.setPathOfSaveFile("test.json");
         plannerNotebook = new ArrayList<>();
         dataHandler = new JsonTaskDataAccess();
     }
 
+<<<<<<< HEAD
     @After
     public void tearDown() {
+=======
+    @After public void tearDown() {
+>>>>>>> jialin3
         settings.resetDefaultSettings();
         dataHandler.reset();
     }
 
+<<<<<<< HEAD
     @Test
     public void whenNewHandlerCreatedPathShouldNotBeNull() {
+=======
+    @Test public void whenNewHandlerCreatedPathShouldNotBeNull() {
+>>>>>>> jialin3
         assertNotNull(dataHandler.getFilePath());
     }
 
-    @Test
-    public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
+    @Test public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
 
     }
 
-    @Test
-    public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
+    @Test public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
         Files.deleteIfExists(dataHandler.getFilePath());
         dataHandler = new JsonTaskDataAccess();
         assertTrue(hasSaveFile());
     }
 
-    @Test
-    public void canSaveListOfTasksToJsonFile() {
+    @Test public void canSaveListOfTasksToJsonFile() {
         List<Task> tasks = createTasksWithStartAndEnd(20);
         dataHandler.save(tasks);
         try {
@@ -70,8 +79,7 @@ public class JsonTaskDataAccessTest {
         }
     }
 
-    @Test
-    public void canSaveOneTaskIntoJsonFile() {
+    @Test public void canSaveOneTaskIntoJsonFile() {
         String taskName = "Task 1";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         dataHandler.save(testTask);
@@ -79,23 +87,26 @@ public class JsonTaskDataAccessTest {
         assertEquals(testTask, resultTask);
     }
 
-    @Test
-    public void canReadsavedTasksFromJsonFile() {
+    @Test public void canReadsavedTasksFromJsonFile() {
         plannerNotebook = create30TasksWithDifferentAttributes();
         dataHandler.save(plannerNotebook);
         List<Task> tasksRead = dataHandler.getTasks();
         assertEquals(plannerNotebook, tasksRead);
     }
 
-    @Test
-    public void ifTaskSaveFileHasNoTaskGetTasksShouldNotReturnNull() throws IOException {
+    @Test public void ifTaskSaveFileHasNoTaskGetTasksShouldNotReturnNull() throws IOException {
         dataHandler.reset();
         assertNotNull(dataHandler.getTasks());
     }
 
+<<<<<<< HEAD
     @Test
     public void deserializedRecurringTasksShouldHaveCorrectType() {
         Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week", 1);
+=======
+    @Test public void deserializedRecurringTasksShouldHaveCorrectType() {
+        Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week");
+>>>>>>> jialin3
         List<Task> tasks = new ArrayList<>();
         tasks.add(t);
         dataHandler.save(tasks);
@@ -103,8 +114,12 @@ public class JsonTaskDataAccessTest {
         assertEquals(RecurringTask.class, dataHandler.getTasks().get(0).getClass());
     }
 
+<<<<<<< HEAD
     @Test
     public void canReadMixedTasks() {
+=======
+    @Test public void canReadMixedTasks() {
+>>>>>>> jialin3
         List<Task> tasks = create30TasksWithDifferentAttributes();
         dataHandler.save(tasks);
 

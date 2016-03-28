@@ -1,6 +1,7 @@
 package parser;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public interface ParserInterface {
 
@@ -13,6 +14,10 @@ public interface ParserInterface {
     LocalDate getStartDate(String userInput) throws Exception;
 
     LocalDate getEndDate(String userInput) throws Exception;
+    
+    LocalTime getStartTime(String userInput) throws Exception;
+    
+    LocalTime getEndTime(String userInput) throws Exception;
 
     Commands getCommand(String userInput) throws Exception;
 

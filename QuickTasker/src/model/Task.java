@@ -1,6 +1,8 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.concurrent.BlockingDeque;
 
 /**
  * @author A0121558H/A0130949
@@ -10,6 +12,8 @@ public class Task implements Comparable {
     private String taskName;
     private LocalDate startDate;
     private LocalDate endDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private boolean isDone = false;
     private int id;
     private boolean isRecurring = false;
@@ -60,6 +64,17 @@ public class Task implements Comparable {
         this.startDate = startDate;
         generateId();
     }
+    
+    // @author: A0133333U
+    public Task(String taskName, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        this.taskName = taskName;
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        generateId();
+    }
+
 
 /*    public Task(String taskName, LocalDate startDate, LocalDate endDate, String type,
             int numToRecur) {
@@ -83,6 +98,14 @@ public class Task implements Comparable {
     public LocalDate getStartDate() {
         return startDate;
     }
+    
+    public LocalTime getStartTime() {
+    	return startTime;
+    }
+    
+    public LocalTime getEndTime() {
+    	return endTime;
+    }
 
     public void setName(String newName) {
         taskName = newName;
@@ -102,6 +125,14 @@ public class Task implements Comparable {
 
     public void setEndDate(LocalDate date) {
         this.endDate = date;
+    }
+    
+    public void setStartTime(LocalTime time) {
+    	this.startTime = time;
+    }
+    
+    public void setEndTime(LocalTime time) {
+    	this.endTime = time;
     }
 
     public void setDone(boolean done) {
@@ -231,8 +262,7 @@ public class Task implements Comparable {
 
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         int result = taskName.hashCode();
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
@@ -240,8 +270,7 @@ public class Task implements Comparable {
         return result;
     }
 
-    @Override
-    public int compareTo(Object task) {
+    @Override public int compareTo(Object task) {
         Task comparedTask = (Task) task;
         if (this.getDueDate() == LocalDate.MIN) {
             return -1;

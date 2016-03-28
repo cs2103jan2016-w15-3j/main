@@ -21,15 +21,23 @@ public class DeleteTaskTest {
     Logic logic;
     SettingManager settings;
 
+<<<<<<< HEAD:QuickTasker/src/logic/DeleteTaskTest.java
     @Before
     public void setUp() throws Exception {
+=======
+    @Before public void setUp() throws Exception {
+>>>>>>> jialin3:QuickTasker/tests/logic/DeleteTaskTest.java
         settings = new SettingManager();
         settings.setPathOfSaveFile("test.json");
         init();
     }
 
+<<<<<<< HEAD:QuickTasker/src/logic/DeleteTaskTest.java
     @After
     public void tearDown() {
+=======
+    @After public void tearDown() {
+>>>>>>> jialin3:QuickTasker/tests/logic/DeleteTaskTest.java
         settings.resetDefaultSettings();
         logic.clear();
     }
@@ -42,8 +50,7 @@ public class DeleteTaskTest {
         }
     }
 
-    @Test
-    public void test() throws Exception {
+    @Test public void test() throws Exception {
         assertEquals(logic.getSize(), 10);
         logic.deleteTask(0);
         assertEquals(logic.getSize(), 9);
