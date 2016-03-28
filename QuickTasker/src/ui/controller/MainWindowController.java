@@ -219,12 +219,14 @@ public class MainWindowController implements Initializable {
                 parser.getEndDate(userInput), parser.getStartTime(userInput),
                 parser.getEndTime(userInput));
 
+
      /*   plannerEntries.add(newTask);
         printedPlanner.setItems(plannerEntries);
         commandBox.clear();
         operations.addTask(newTask);*/
         plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
+        printedPlanner.scrollTo(printedPlanner.getItems().size() - 1);
     }
 
     private void createRecurringTask(String userInput) throws Exception {

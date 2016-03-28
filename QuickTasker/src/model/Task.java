@@ -79,7 +79,7 @@ public class Task implements Comparable {
     public void setTaskType() {
         if (this.startDate == LocalDate.MAX && this.endDate == LocalDate.MAX)
             this.taskType = "floating";
-        else if (this.startTime == LocalTime.MIN || this.endTime == LocalTime.MIN)
+        else if (this.startTime == LocalTime.MIN && this.endTime == LocalTime.MIN)
             this.taskType = "wholeDayEvent";
         else this.taskType = "task";
     }

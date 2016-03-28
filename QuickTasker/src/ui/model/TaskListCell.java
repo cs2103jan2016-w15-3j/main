@@ -8,6 +8,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXPopup;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
@@ -26,7 +27,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private final Label taskDueDate = new Label();
     private final Label taskName = new Label();
     private final Label taskStartTime = new Label();
-    private final Label taskDueTime = new Label();
+    private final Label taskEndTime = new Label();
     private final Label taskId = new Label();
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final JFXPopup searchBox = new JFXPopup();
@@ -64,7 +65,7 @@ public class TaskListCell extends JFXListCell<Task> {
         setTaskDueDate(task);
 
         setTaskStartTime(task);
-        setTaskDueTime(task);
+        setTaskEndTime(task);
 
         setGraphic(grid);
     }
@@ -105,7 +106,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     protected void setTaskStartTime(Task task) {
-        if (!task.getTaskType().equals("floating") && !task.getTaskType().equals("event")) {
+        if (!task.getTaskType().equals("floating") && !task.getTaskType().equals("wholeDayEvent")) {
             LocalTime startTime = task.getStartTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(startTime);
@@ -116,16 +117,16 @@ public class TaskListCell extends JFXListCell<Task> {
 
     }
 
-    protected void setTaskDueTime(Task task) {
+    protected void setTaskEndTime(Task task) {
 
-        if (!task.getTaskType().equals("floating") && !task.getTaskType().equals("event")) {
+        if (!task.getTaskType().equals("floating") && !task.getTaskType().equals("wholeDayEvent")) {
             LocalTime endTime = task.getEndTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(endTime);
             System.out.println(timeString);
-            taskDueTime.setText(timeString);
+            taskEndTime.setText(timeString);
         } else {
-            taskDueTime.setText("");
+            taskEndTime.setText("");
         }
 
     }
@@ -133,9 +134,10 @@ public class TaskListCell extends JFXListCell<Task> {
     private void configureGrid() {
         grid.setHgap(10); // horizontal gap between grids
         grid.setVgap(5); // vertical gap between grids
-        grid.setPadding(new Insets(0, 5, 0, 5));// set custom columns
+        grid.setPadding(new Insets(0, 10, 0, 10));// set custom columns
         ColumnConstraints column1 = new ColumnConstraints();
-        column1.setMaxWidth(5);
+        column1.setMinWidth(25);
+        column1.setMaxWidth(25);
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setMaxWidth(20);
         ColumnConstraints column3 = new ColumnConstraints();
@@ -145,14 +147,21 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureTaskName() {
-
         taskName.setWrapText(true);
-        taskName.setStyle("-fx-font-weight:bold; -fx-font-family: sans-serif; -fx-padding:10px");
+        taskName.getStyleClass().add("task-name");
     }
 
     private void configureDate() {
         taskStartDate.getStyleClass().add("start-date");
         taskDueDate.getStyleClass().add("end-date");
+        GridPane.setHalignment(taskStartDate, HPos.RIGHT);
+        GridPane.setHalignment(taskDueDate, HPos.RIGHT);
+    }
+
+    private void configureTime() {
+        taskStartDate.getStyleClass().add("start-time");
+        GridPane.setHalignment(taskStartTime, HPos.RIGHT);
+        GridPane.setHalignment(taskEndTime, HPos.RIGHT);
     }
 
     private void configureCheckBox() {
@@ -193,7 +202,7 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.add(taskStartDate, 3, 0);
         grid.add(taskStartTime, 3, 1);
         grid.add(taskDueDate, 4, 0);
-        grid.add(taskDueTime, 4, 1);
+        grid.add(taskEndTime, 4, 1);
 
     }
 }
