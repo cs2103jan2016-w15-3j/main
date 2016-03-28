@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,34 +24,22 @@ public class JsonTaskDataAccessTest {
     private SettingManager settings;
     private List<Task> plannerNotebook;
 
-<<<<<<< HEAD
     @Before
     public void setUp() throws Exception {
-=======
-    @Before public void setUp() throws Exception {
->>>>>>> jialin3
         settings = new SettingManager();
         settings.setPathOfSaveFile("test.json");
         plannerNotebook = new ArrayList<>();
         dataHandler = new JsonTaskDataAccess();
     }
 
-<<<<<<< HEAD
     @After
     public void tearDown() {
-=======
-    @After public void tearDown() {
->>>>>>> jialin3
         settings.resetDefaultSettings();
         dataHandler.reset();
     }
 
-<<<<<<< HEAD
     @Test
     public void whenNewHandlerCreatedPathShouldNotBeNull() {
-=======
-    @Test public void whenNewHandlerCreatedPathShouldNotBeNull() {
->>>>>>> jialin3
         assertNotNull(dataHandler.getFilePath());
     }
 
@@ -99,27 +88,18 @@ public class JsonTaskDataAccessTest {
         assertNotNull(dataHandler.getTasks());
     }
 
-<<<<<<< HEAD
     @Test
     public void deserializedRecurringTasksShouldHaveCorrectType() {
-        Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week", 1);
-=======
-    @Test public void deserializedRecurringTasksShouldHaveCorrectType() {
-        Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week");
->>>>>>> jialin3
+        Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week", LocalTime.now(), LocalTime.now(), 1);
         List<Task> tasks = new ArrayList<>();
         tasks.add(t);
         dataHandler.save(tasks);
         dataHandler.getTasks().get(0);
         assertEquals(RecurringTask.class, dataHandler.getTasks().get(0).getClass());
     }
-
-<<<<<<< HEAD
+    
     @Test
     public void canReadMixedTasks() {
-=======
-    @Test public void canReadMixedTasks() {
->>>>>>> jialin3
         List<Task> tasks = create30TasksWithDifferentAttributes();
         dataHandler.save(tasks);
 
@@ -151,7 +131,7 @@ public class JsonTaskDataAccessTest {
         for (int i = 0; i < numberOfTasks; i++) {
             String taskName = "Recurring Task " + i;
             Task recurringTask = new RecurringTask(taskName, LocalDate.now(),
-                    LocalDate.now().plusMonths(1), "week", 1);
+                    LocalDate.now().plusMonths(1), "week", LocalTime.now(), LocalTime.now(), 1);
             tasks.add(recurringTask);
         }
         return tasks;

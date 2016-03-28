@@ -197,10 +197,12 @@ public class MainWindowController implements Initializable {
     private void updateTask(String userInput) throws Exception {
         int indexOfTask = parser.getIndexForUpdate(userInput);
         printedPlanner.getSelectionModel().select(indexOfTask);
-        Task newTask = new Task(parser.getTaskNameForUpdate(userInput),
-                parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput));
-    /*    plannerEntries.remove(indexOfTask);
-        plannerEntries.add(indexOfTask,newTask);*/
+        Task newTask = makeTask(parser.getTaskNameForUpdate(userInput), parser.getStartDateForUpdate(userInput),
+                parser.getEndDateForUpdate(userInput), parser.getStartTimeForUpdate(userInput), parser.getEndTimeForUpdate(userInput));
+        /*
+         * plannerEntries.remove(indexOfTask);
+         * plannerEntries.add(indexOfTask,newTask);
+         */
 
         plannerEntries = FXCollections
                 .observableArrayList(operations.updateTask(newTask, indexOfTask));
@@ -235,8 +237,10 @@ public class MainWindowController implements Initializable {
     }
 
     private void createRecurringTask(String userInput) throws Exception {
-        RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput), recurringParser.getTaskStartDate(userInput),
-                recurringParser.getTaskEndDate(userInput), recurringParser.getRecurDuration(userInput), recurringParser.getNumToRecur(userInput));
+        RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
+                recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
+                recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
+                recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
         plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
     }
@@ -252,9 +256,9 @@ public class MainWindowController implements Initializable {
         return new Task(taskName, startDate, dueDate, startTime, endTime);
     }
 
-    private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
-            String type, int numberToRecur) throws Exception {
-        return new RecurringTask(taskName, startDate, dueDate, type, numberToRecur);
+    private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate, 
+            String type, LocalTime startTime, LocalTime endTime, int numberToRecur) throws Exception {
+        return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
     }
 
     private void setCellFactory() {

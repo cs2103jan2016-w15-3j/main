@@ -3,6 +3,7 @@ package logic;
 import model.Task;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -37,6 +38,16 @@ public class UpdateTask<E> implements Command<Object> {
 
         if (updatedTask.getName().isEmpty() && !list.get(taskIndex).getName().isEmpty()) {
             updatedTask.setName(list.get(taskIndex).getName());
+        }
+        
+        if (updatedTask.getStartTime() == LocalTime.MAX && !list.get(taskIndex).getStartTime().equals(LocalTime.MAX)) {
+            System.out.println("AA");
+            updatedTask.setStartTime(list.get(taskIndex).getStartTime());
+        }
+        
+        if (updatedTask.getEndTime() == LocalTime.MAX && !list.get(taskIndex).getEndTime().equals(LocalTime.MAX)) {
+            System.out.println("BB");
+            updatedTask.setEndTime(list.get(taskIndex).getEndTime());
         }
     }
 

@@ -1,17 +1,14 @@
 package parser;
 
-/**
- * TODO
+/**TODO
  * FIX "edge of tomorrow" tomorrow
  * scan from behind. stop once hit date
  */
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 /**
  * @author A0121558H Dawson
@@ -39,7 +36,7 @@ public class UserInputParser implements ParserInterface {
     }
 
     public void setAttributes(String userInput) {
-
+        // UPDATED AS OF 23/3/2016
         DateTimeParser dateTimeParser = new DateTimeParser();
 
         removeWhiteSpaces(userInput);
@@ -81,8 +78,6 @@ public class UserInputParser implements ParserInterface {
     public LocalDate setStartDate() {
         return stringToLocalDate(userCommand[lengthOfInput - 2]);
     }
-    
-
 
     // LOGGING
     public void setTaskName() {
@@ -125,8 +120,7 @@ public class UserInputParser implements ParserInterface {
 
         DateTimeParser parser = new DateTimeParser();
 
-        return (!parser.isDate(userCommand[lengthOfInput - 1]) && !parser
-                .isDate(userCommand[lengthOfInput - 2]));
+        return (!parser.isDate(userCommand[lengthOfInput - 1]) && !parser.isDate(userCommand[lengthOfInput - 2]));
     }
 
     public static LocalDate stringToLocalDate(String date) {
@@ -134,13 +128,6 @@ public class UserInputParser implements ParserInterface {
         DateTimeParser parser = new DateTimeParser();
         return parser.parseDate(date);
     }
-    
-/*    //@author: A0133333U
-    public static LocalTime stringToLocalTime(String time) {
-
-        DateTimeParser parser = new DateTimeParser();
-        return parser.parseTime(time, LocalTime times);
-    }*/
 
     public LocalDate getStartDate(String userInput) {
         setAttributes(userInput);
@@ -158,8 +145,7 @@ public class UserInputParser implements ParserInterface {
 
         return startTime;
     }
-
-    public LocalTime getEndTime(String userInput) {
+ public LocalTime getEndTime(String userInput) {
         setAttributes(userInput);
 
         return endTime;
@@ -179,17 +165,16 @@ public class UserInputParser implements ParserInterface {
         setAttributesForGetCommands(userInput);
         return DetermineCommandType.getCommand(command);
     }
+    public int getIndexForDone(String userInput) {
+        removeWhiteSpaces(userInput);
+        return Integer.parseInt(userCommand[1]) - 1;
+    }
 
     /**
      * Methods for updates
      **/
 
     public int getIndexForUpdate(String userInput) {
-        removeWhiteSpaces(userInput);
-        return Integer.parseInt(userCommand[1]) - 1;
-    }
-
-    public int getIndexForDone(String userInput) {
         removeWhiteSpaces(userInput);
         return Integer.parseInt(userCommand[1]) - 1;
     }
@@ -208,7 +193,14 @@ public class UserInputParser implements ParserInterface {
         setAttributesForUpdates(userInput);
         return endDate;
     }
-
+    public LocalTime getStartTimeForUpdate(String userInput) {
+        setAttributesForUpdates(userInput);
+        return startTime;
+    }
+    public LocalTime getEndTimeForUpdate(String userInput) {
+        setAttributesForUpdates(userInput);
+        return endTime;
+    }
     public void setAttributesForUpdates(String input) {
         //TODO update date only 
         DateTimeParser dateTimeParser = new DateTimeParser();
@@ -279,8 +271,7 @@ public class UserInputParser implements ParserInterface {
         }
         return index;
     }
-
-    private String[] removeIndexToUpdate() {
+ private String[] removeIndexToUpdate() {
         ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList((userCommand)));
         tempUserCommand.remove(1);
         return tempUserCommand.toArray(new String[tempUserCommand.size()]);
@@ -288,22 +279,23 @@ public class UserInputParser implements ParserInterface {
     /* Methods for updates end */
 
     public void setDate(int numToSetDate, int length) {
+        System.out.println("NUMTOSETDATE " + numToSetDate);
+
         if (numToSetDate == 0) {
             startDate = stringToLocalDate(userCommand[length - 2]);
             endDate = stringToLocalDate(userCommand[length - 1]);
         } else if (numToSetDate == 1) {
             startDate = endDate = stringToLocalDate("tomorrow");
         } else if (numToSetDate == 2) {
-            startDate = endDate = stringToLocalDate(
-                    userCommand[length - 2] + " " + userCommand[length - 1]);
+            startDate = endDate = stringToLocalDate(userCommand[length - 2] + " " + userCommand[length - 1]);
         } else if (numToSetDate == 3) {// floating task
             startDate = LocalDate.MAX;
             endDate = LocalDate.MAX;// placeholder for null
         } else if (numToSetDate == 4) {
             startDate = endDate = stringToLocalDate("today");
-        } else if (numToSetDate == 5) {
-            startDate = stringToLocalDate(userCommand[length - 1]);
-            endDate = LocalDate.MIN;
+        } else if(numToSetDate==5) {
+            startDate=stringToLocalDate(userCommand[length -1]);
+            endDate= LocalDate.MIN;
         }
     }
 
@@ -351,7 +343,7 @@ public class UserInputParser implements ParserInterface {
         String toCheck = userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1];
         numToUse = 0;
 
-        if (userCommand[lengthOfInput - 1].equals("tomorrow")) {
+        if (userCommand[lengthOfInput - 1].equals("tomorrow") || userCommand[lengthOfInput - 1].equals("tmr")) {
             numToUse = 1;
         } else if (toCheck.equals("next day") || toCheck.equals("day after")) {
             numToUse = 2;
@@ -359,9 +351,9 @@ public class UserInputParser implements ParserInterface {
             numToUse = 3;
         } else if (userCommand[lengthOfInput - 1].equals("today")) {
             numToUse = 4;
-        } else if (parser.isDate(userCommand[lengthOfInput - 1]) && !parser
-                .isDate(userCommand[lengthOfInput - 2])) {
-            numToUse = 5;
+        }else if (parser.isDate(userCommand[lengthOfInput-1])
+                && !parser.isDate(userCommand[lengthOfInput-2])) {
+            numToUse=5;
         }
     }
 

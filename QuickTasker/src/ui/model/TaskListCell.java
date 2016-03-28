@@ -94,8 +94,7 @@ public class TaskListCell extends JFXListCell<Task> {
 	}
 
 	protected void setTaskStartDate(Task task) {
-		if (task.getStartDate() != null) {
-			System.out.println("A");
+		if (task.getStartDate() != null && task.getStartDate() != LocalDate.MAX) {
 
 			LocalDate startDate = task.getStartDate();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
@@ -107,8 +106,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
 	protected void setTaskDueDate(Task task) {
 
-		if (task.getStartDate() != null) {
-			System.out.println("B");
+		if (task.getStartDate() != null && task.getStartDate() != LocalDate.MAX) {
 
 			LocalDate dueDate = task.getDueDate();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
@@ -120,8 +118,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
 	protected void setTaskStartTime(Task task) {
 
-		if (task.getStartTime() != null) {
-			System.out.println("C");
+		if (task.getStartTime() != null && task.getStartTime() != LocalTime.MIN) {
 
 			LocalTime startTime = task.getStartTime();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -135,8 +132,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
 	protected void setTaskDueTime(Task task) {
 
-		if (task.getEndTime() != null) {
-			System.out.println("D");
+		if (task.getEndTime() != null && task.getEndTime() != LocalTime.MIN) {
 
 			LocalTime endTime = task.getEndTime();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");

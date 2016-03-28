@@ -20,6 +20,10 @@ public interface ParserInterface {
     LocalTime getEndTime(String userInput) throws Exception;
 
     Commands getCommand(String userInput) throws Exception;
+    
+    LocalTime getStartTimeForUpdate(String userInput) throws Exception;
+    
+    LocalTime getEndTimeForUpdate(String userInput) throws Exception;
 
     String getTaskName(String userInput) throws Exception;
 

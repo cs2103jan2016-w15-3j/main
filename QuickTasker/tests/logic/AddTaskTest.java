@@ -22,17 +22,12 @@ public class AddTaskTest {
     Logic logic;
     private SettingManager settings;
 
-<<<<<<< HEAD:QuickTasker/src/logic/AddTaskTest.java
     @Before
     public void setUp() throws Exception {
-=======
-    @Before public void setUp() throws Exception {
->>>>>>> jialin3:QuickTasker/tests/logic/AddTaskTest.java
         settings = new SettingManager();
         settings.setPathOfSaveFile("test.json");
         logic = new Logic();
         createEmptyTasks(2);
-<<<<<<< HEAD:QuickTasker/src/logic/AddTaskTest.java
     }
 
     private void createEmptyTasks(int n) {
@@ -45,8 +40,6 @@ public class AddTaskTest {
     public void tearDown() {
         settings.resetDefaultSettings();
         logic.clear();
-=======
->>>>>>> jialin3:QuickTasker/tests/logic/AddTaskTest.java
     }
 
     private void createEmptyTasks(int n) {
