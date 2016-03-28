@@ -10,7 +10,6 @@ import java.util.Arrays;
  * 
  * normal task to recurring task
  * addition of recurring task
- * recur x days/weeks/years must be together anywhere in string
  */
 public class RecurringParser {
 
@@ -54,33 +53,19 @@ public class RecurringParser {
         return userCommand;
     }
 
-    private int indexOfRecur() {
-        int num = 0;
-
-        for (int i = lengthOfInput; i > 1; i--) {
-            if (userCommand[i - 1].equals("recur")) {
-                num = i - 1;
-                break;
-            }
-        }
-        return num;
-    }
-
     private String[] removeNumAndDuration() {
-        int index = indexOfRecur();
         ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList(userCommand));
-        tempUserCommand.remove(index);
-        tempUserCommand.remove(index);
-        tempUserCommand.remove(index);
+        tempUserCommand.remove(lengthOfInput-1);
+        tempUserCommand.remove(lengthOfInput-2);
         return tempUserCommand.toArray(new String[tempUserCommand.size()]);
     }
 
     public int setNumToRecur() { // here might have error if format wrong
-        return Integer.parseInt(userCommand[indexOfRecur() + 1]);
+        return Integer.parseInt(userCommand[lengthOfInput- 2]);
     }
 
     public String setRecurDuration() { // similar to above
-        return userCommand[indexOfRecur() + 2];
+        return userCommand[lengthOfInput-1];
     }
 
     public boolean isRecurring(String[] userCommand) {
@@ -116,8 +101,7 @@ public class RecurringParser {
         } else if (numToSetDate == 1) {
             startDate = endDate = stringToLocalDate("tomorrow");
         } else if (numToSetDate == 2) {
-            startDate = endDate = stringToLocalDate(
-                    userCommand[length - 2] + " " + userCommand[length - 1]);
+            startDate = endDate = stringToLocalDate(userCommand[length - 2] + " " + userCommand[length - 1]);
         } else if (numToSetDate == 3) {// floating task
             startDate = LocalDate.MIN;
             endDate = LocalDate.MIN;// placeholder for null
@@ -137,8 +121,7 @@ public class RecurringParser {
             return;
         }
         ArrayList<LocalTime> localTimes = parser.parseTime(input, indicesTime);
-
-        if (indicesTime.size() == 1) {
+ if (indicesTime.size() == 1) {
             startTime = localTimes.get(0);
             endTime = null;
         }
@@ -167,8 +150,7 @@ public class RecurringParser {
             numToUse = 3;
         } else if (userCommand[lengthOfInput - 1].equals("today")) {
             numToUse = 4;
-        } else if (parser.isDate(userCommand[lengthOfInput - 1]) && !parser
-                .isDate(userCommand[lengthOfInput - 2])) {
+        } else if (parser.isDate(userCommand[lengthOfInput - 1]) && !parser.isDate(userCommand[lengthOfInput - 2])) {
             numToUse = 5;
         }
     }
@@ -180,8 +162,7 @@ public class RecurringParser {
 
     private boolean isFloating() {
         DateTimeParser parser = new DateTimeParser();
-        return (!parser.isDate(userCommand[lengthOfInput - 1]) && !parser
-                .isDate(userCommand[lengthOfInput - 2]));
+        return (!parser.isDate(userCommand[lengthOfInput - 1]) && !parser.isDate(userCommand[lengthOfInput - 2]));
     }
 
     public int getNumToRecur(String userInput) { // for controller
@@ -220,19 +201,4 @@ public class RecurringParser {
         setAttributesRecurring(userInput);
         return endTime;
     }
-    // for testing
-
-    public static void main(String[] args) {
-        String input = "add buy dog tomorrow 13:00 15:00 recur 3 days";
-        RecurringParser parser = new RecurringParser();
-
-        System.out.println("task name:" + parser.getTaskName(input));
-        System.out.println("parser startdate " + parser.getTaskStartDate(input));
-        System.out.println("parser enddate " + parser.getTaskEndDate(input));
-        System.out.println("parser starttime " + parser.getTaskStartTime(input));
-        System.out.println("parser endtime " + parser.getTaskEndTime(input));
-        System.out.println("parser recur x= " + parser.getNumToRecur(input));
-        System.out.println("parser recur duration " + parser.getRecurDuration(input));
-    }
-
 }
