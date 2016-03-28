@@ -75,53 +75,57 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     protected void setTaskName(Task task) {
+
         taskName.setText(task.getName());
     }
+    // From Kenan banana:
+    // right now, we use "-" rather than "not specified" because it helps covers up the problem that
+    // when task name is too long, scroll bar appear, which doesnt look good
+    // It will be shortly replaced with icons in the next iterat
 
     protected void setTaskStartDate(Task task) {
-        if (task.getStartDate() != null && task.getStartDate() != LocalDate.MAX) {
+        if (!task.getTaskType().equals("floating")) {
 
             LocalDate startDate = task.getStartDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String dateString = formatter.format(startDate);
             taskStartDate.setText(dateString);
-        } else taskStartDate.setText("Date not specified");
+        } else taskStartDate.setText("-");
     }
 
     protected void setTaskDueDate(Task task) {
 
-        if (task.getStartDate() != null && task.getStartDate() != LocalDate.MAX) {
+        if (!task.getTaskType().equals("floating")) {
 
             LocalDate dueDate = task.getDueDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String dateString = formatter.format(dueDate);
             taskDueDate.setText(dateString);
-        } else taskDueDate.setText("Date not specified");
+        } else taskDueDate.setText("");
     }
 
     protected void setTaskStartTime(Task task) {
-        if (task.getStartTime() != null && task.getStartTime() != LocalTime.MIN) {
+        if (!task.getTaskType().equals("floating") && !task.getTaskType().equals("event")) {
             LocalTime startTime = task.getStartTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(startTime);
             taskStartTime.setText(timeString);
         } else {
-            taskStartTime.setText("Time not specified");
+            taskStartTime.setText("-");
         }
 
     }
 
     protected void setTaskDueTime(Task task) {
 
-        if (task.getEndTime() != null && task.getEndTime() != LocalTime.MIN) {
-
+        if (!task.getTaskType().equals("floating") && !task.getTaskType().equals("event")) {
             LocalTime endTime = task.getEndTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(endTime);
             System.out.println(timeString);
             taskDueTime.setText(timeString);
         } else {
-            taskDueTime.setText("Time not specified");
+            taskDueTime.setText("");
         }
 
     }
@@ -183,9 +187,9 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void addControlsToGrid() {
-        grid.add(taskId, 0, 0);
-        grid.add(checkBox, 1, 0);
-        grid.add(new HBox(taskName), 2, 0);
+        grid.add(taskId, 0, 0, 1, 2);
+        grid.add(checkBox, 1, 0, 1, 2);
+        grid.add(new HBox(taskName), 2, 0, 1, 2);
         grid.add(taskStartDate, 3, 0);
         grid.add(taskStartTime, 3, 1);
         grid.add(taskDueDate, 4, 0);

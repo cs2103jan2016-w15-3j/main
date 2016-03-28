@@ -16,6 +16,7 @@ public class Task implements Comparable {
     private boolean isDone = false;
     private int id;
     private boolean isRecurring = false;
+    private String taskType;
 
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
@@ -62,6 +63,8 @@ public class Task implements Comparable {
     }
 
     // @author: A0133333U
+    // this is the only constructor being used, with the rest bypassed
+    // There need to be a way to determine the correct task type and call the respective constructor
     public Task(String taskName, LocalDate startDate, LocalDate endDate, LocalTime startTime,
             LocalTime endTime) {
         this.taskName = taskName;
@@ -69,7 +72,20 @@ public class Task implements Comparable {
         this.startDate = startDate;
         this.startTime = startTime;
         this.endTime = endTime;
+        setTaskType();
         generateId();
+    }
+
+    public void setTaskType() {
+        if (this.startDate == LocalDate.MAX && this.endDate == LocalDate.MAX)
+            this.taskType = "floating";
+        else if (this.startTime == LocalTime.MIN || this.endTime == LocalTime.MIN)
+            this.taskType = "wholeDayEvent";
+        else this.taskType = "task";
+    }
+
+    public String getTaskType() {
+        return this.taskType;
     }
 
 

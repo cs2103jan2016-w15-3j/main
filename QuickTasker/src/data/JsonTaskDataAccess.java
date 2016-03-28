@@ -1,5 +1,6 @@
 package data;
 
+import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -68,8 +69,9 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     private Gson getGson() {
         RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
                 .registerSubtype(Task.class).registerSubtype(RecurringTask.class);
-        return new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                .registerTypeAdapterFactory(adapter).create();
+
+        return Converters.registerLocalDateTime(
+                new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter)).create();
     }
 
     @Override
