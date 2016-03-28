@@ -222,8 +222,8 @@ public class MainWindowController implements Initializable {
     }
 
     private void createRecurringTask(String userInput) throws Exception {
-        RecurringTask newTask = makeRecurringTask("taskName", LocalDate.of(2016, 03, 19),
-                LocalDate.of(2016, 03, 19), "week", 1);
+        RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput), recurringParser.getTaskStartDate(userInput),
+                recurringParser.getTaskEndDate(userInput), recurringParser.getRecurDuration(userInput), recurringParser.getNumToRecur(userInput));
         plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
         afterOperation();
     }
