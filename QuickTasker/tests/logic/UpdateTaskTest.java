@@ -27,6 +27,7 @@ public class UpdateTaskTest {
         logic.clear();
     }
 
+
     private void init() {
         logic = new Logic();
         logic.addTask(new Task("hello", LocalDate.now(), LocalDate.now()));

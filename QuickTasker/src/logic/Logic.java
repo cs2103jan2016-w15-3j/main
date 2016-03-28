@@ -99,7 +99,6 @@ public class Logic {
     }
 
     public ArrayList<Task> deleteTask(int index) {
-        System.out.println("deleting " + list.size());
         commandMap.get(Commands.DELETE_TASK).execute(list, index);
         undoStack.push(Commands.DELETE_TASK);
         saveList();
