@@ -12,6 +12,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
@@ -36,6 +37,7 @@ import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
+    public AnchorPane container;
     private Main main;
     private final ParserInterface parser = new UserInputParser();
     private RecurringParser recurringParser = new RecurringParser();
