@@ -1,6 +1,5 @@
 package ui.controller;
 
-import com.jfoenix.controls.JFXDrawersStack;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
@@ -14,6 +13,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
@@ -39,16 +39,16 @@ public class MainWindowController implements Initializable {
 
     private static Logger logger;
 
+
     private Main main;
     private final ParserInterface parser = new UserInputParser();
     private RecurringParser recurringParser = new RecurringParser();
     private final Logic operations = new Logic();
 
     @FXML public AnchorPane root;
-    @FXML public JFXDrawersStack notificationDrawer;
-    @FXML public AnchorPane commandBoxContainer;
     @FXML private JFXTextField commandBox;
     @FXML private JFXListView<Task> printedPlanner;
+    @FXML private StackPane mainContent;
     private ObservableList<Task> plannerEntries;
 
     // Display messages as visual feedback for users
