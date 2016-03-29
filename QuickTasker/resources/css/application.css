@@ -2,7 +2,7 @@
 /* Please refer to https://www.google.com/design/spec/style/color.html#color-color-palette for colors */
 
 @font-face {
-    font-family: 'Roboto';
+    -fx-font-family: 'Roboto';
     src: url('/fonts/Roboto-Medium.ttf');
 }
 
