@@ -17,12 +17,13 @@
     -fx-border-width:0 4 4 4;
 }
 
-#container{
+.root{
         -fx-background-color: white;
         -fx-alignment: center;
         -fx-padding: 0;
         -fx-effect: dropshadow(two-pass-box , darkslategray, 3, 0.1, 0, 0);
 }
+
 /* List View */
 
 .list-view {
@@ -83,6 +84,13 @@
       -fx-unchecked-color: BLACK;
       -fx-checked-color : RED;
       -fx-font-weight : BOLD;
+}
+
+.text-field{
+    -fx-background-color :WHITE;
+    -fx-focus-color: #808080;
+    -fx-unfocus-color: #4d4d4d;
+    -fx-font-weight: BOLD;
 }
 
 

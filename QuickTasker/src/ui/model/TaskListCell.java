@@ -83,7 +83,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void configureTime() {
         taskStartDate.getStyleClass().add("task-time");
-        taskEndTime.getStyleClass().add(".task-time");
+        taskEndTime.getStyleClass().add("task-time");
         GridPane.setHalignment(taskStartTime, HPos.RIGHT);
         GridPane.setHalignment(taskEndTime, HPos.RIGHT);
     }
