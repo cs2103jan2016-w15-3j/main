@@ -1,7 +1,12 @@
 /******************************
         Global Style
 ******************************/
-
+.text-field{
+    -fx-background-color :WHITE;
+    -fx-focus-color: #808080;
+    -fx-unfocus-color: #4d4d4d;
+    -fx-font-weight: BOLD;
+}
 
 /* Main Container */
 .jfx-decorator{
@@ -26,8 +31,13 @@
 
 /* List View */
 
+
 .list-view {
     -fx-padding: 3px ;
+    -fx-background-insets: 0.0 ;
+    -fx-cell-horizontal-margin: 0.0;
+    -fx-cell-vertical-margin: 5.0;
+    -fx-vertical-gap:10.0;
 }
 
 .list-view .scroll-bar:horizontal .track,
@@ -65,24 +75,33 @@
 }
 
 .task-name{
+    -fx-font-family : "Roboto";
     -fx-font-weight:bold; -fx-padding:10px;
+}
+
+.jfx-list-cell-content-container{
+    -fx-alignment:center-left;
+}
+
+.jfx-list-cell-container> .label{
+    -fx-text-fill : BLACK;
 }
 
 .jfx-list-cell {
     -fx-padding: 10px ;
-    -fx-background-color: transparent, -fx-background ;
-}
-
-.jfx-list-cell .jfx-rippler{
-   -fx-rippler-fill :transparent;
+    -fx-background-insets:0.0;
+    -fx-text-fill:black;
 }
 
 .jfx-list-cell:empty {
     -fx-padding: 10px ;
-    -fx-background-color: transparent ;
     -fx-background-insets: 0 ;
+    -fx-background-color: transparent ;
 }
 
+.jfx-list-cell .jfx-rippler{
+   -fx-rippler-fill : transparent;
+}
 
 .task-check-box{
       -fx-unchecked-color: BLACK;
@@ -90,12 +109,7 @@
       -fx-font-weight : BOLD;
 }
 
-.text-field{
-    -fx-background-color :WHITE;
-    -fx-focus-color: #808080;
-    -fx-unfocus-color: #4d4d4d;
-    -fx-font-weight: BOLD;
-}
+
 
 
 

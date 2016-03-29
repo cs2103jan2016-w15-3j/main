@@ -1,8 +1,6 @@
 package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXPopup;
-import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
@@ -10,13 +8,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
@@ -75,6 +71,7 @@ public class MainWindowController implements Initializable {
     private void initPlanner() {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         printedPlanner.setItems(plannerEntries);
+        printedPlanner.setDepthProperty(1);
         commandBox.requestFocus();
     }
 
@@ -227,15 +224,7 @@ public class MainWindowController implements Initializable {
         Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
                 parser.getEndDate(userInput), parser.getStartTime(userInput),
                 parser.getEndTime(userInput));
-        JFXPopup popup = new JFXPopup();
 
-        Label label = new Label("hi");
-        StackPane pane = new StackPane();
-        root.getChildren().add(pane);
-        JFXSnackbar snackBar = new JFXSnackbar();
-        pane.getChildren().add(snackBar);
-        snackBar.registerSnackbarContainer(pane);
-        snackBar.fireEvent(new JFXSnackbar.SnackbarEvent("hi"));
 
 
 
