@@ -126,9 +126,10 @@ public class TaskListCell extends JFXListCell<Task> {
         if (empty) {
             clearContent();
         } else {
+
             this.myTask = task;
             addContent(task);
-            setGraphic(rippler);
+            setGraphic(grid);
         }
     }
 
