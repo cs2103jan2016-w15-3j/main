@@ -61,7 +61,7 @@ public class TaskListCell extends JFXListCell<Task> {
         column4.setMinWidth(80);
         ColumnConstraints column5 = new ColumnConstraints();
         column5.setMinWidth(80);
-        grid.getColumnConstraints().addAll(column1, column2, column3,column4,column5);
+        grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5);
     }
 
     private void configureTaskName() {
@@ -147,28 +147,32 @@ public class TaskListCell extends JFXListCell<Task> {
     // It will be shortly replaced with icons in the next iterat
 
     protected void setTaskStartDate(Task task) {
-        if (!task.getTaskType().equals("floating")) {
+        if (task != null && !isFloatingTask(task)) {
 
             LocalDate startDate = task.getStartDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
             String dateString = formatter.format(startDate);
             taskStartDate.setText(dateString);
         } else taskStartDate.setText("");
     }
 
+    private boolean isFloatingTask(Task task) {
+        return task.getTaskType().equals("floating");
+    }
+
     protected void setTaskDueDate(Task task) {
 
-        if (!task.getTaskType().equals("floating")) {
+        if (task != null && !isFloatingTask(task)) {
 
             LocalDate dueDate = task.getDueDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
             String dateString = formatter.format(dueDate);
             taskDueDate.setText(dateString);
         } else taskDueDate.setText("-");
     }
 
     protected void setTaskStartTime(Task task) {
-        if (!task.getTaskType().equals("floating") && !task.getTaskType().equals("wholeDayEvent")) {
+        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task)) {
             LocalTime startTime = task.getStartTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(startTime);
@@ -180,7 +184,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskEndTime(Task task) {
 
-        if (!task.getTaskType().equals("floating") && !task.getTaskType().equals("wholeDayEvent")) {
+        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task)) {
             LocalTime endTime = task.getEndTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(endTime);
@@ -189,6 +193,11 @@ public class TaskListCell extends JFXListCell<Task> {
         } else {
             taskEndTime.setText("-");
         }
+    }
+
+    private boolean isWholeDayEvent(Task task) {
+        return task.getTaskType()
+                .equals("wholeDayEvent");
     }
 
     public JFXPopup getSearchBox() {
