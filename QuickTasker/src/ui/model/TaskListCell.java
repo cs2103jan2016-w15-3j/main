@@ -58,7 +58,6 @@ public class TaskListCell extends JFXListCell<Task> {
         ColumnConstraints column3 = new ColumnConstraints();
         column3.setHgrow(Priority.ALWAYS);
         grid.getColumnConstraints().addAll(column1, column2, column3);
-
     }
 
     private void configureTaskName() {
@@ -174,7 +173,6 @@ public class TaskListCell extends JFXListCell<Task> {
         } else {
             taskStartTime.setText("");
         }
-
     }
 
     protected void setTaskEndTime(Task task) {
@@ -188,7 +186,6 @@ public class TaskListCell extends JFXListCell<Task> {
         } else {
             taskEndTime.setText("-");
         }
-
     }
 
     public JFXPopup getSearchBox() {
