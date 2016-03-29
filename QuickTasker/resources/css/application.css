@@ -11,7 +11,10 @@
 }
 
 #container{
-    background:#FFFFFF;
+        -fx-background-color: white;
+        -fx-alignment: center;
+        -fx-padding: 0;
+        -fx-effect: dropshadow(two-pass-box , darkslategray, 3, 0.1, 0, 0);
 }
 
 .list-view {

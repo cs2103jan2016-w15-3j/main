@@ -39,10 +39,64 @@ public class TaskListCell extends JFXListCell<Task> {
         configureGrid();
         configureTaskName();
         configureDate();
+        configureTime();
         configureIcon();
         configureCheckBox();
         addControlsToGrid();
         tasks = list;
+    }
+
+    private void configureGrid() {
+        grid.setHgap(10); // horizontal gap between grids
+        grid.setVgap(5); // vertical gap between grids
+        grid.setPadding(new Insets(0, 10, 0, 10));// set custom columns
+        ColumnConstraints column1 = new ColumnConstraints();
+        column1.setMinWidth(25);
+        column1.setMaxWidth(25);
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setMaxWidth(20);
+        ColumnConstraints column3 = new ColumnConstraints();
+        column3.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().addAll(column1, column2, column3);
+
+    }
+
+    private void configureTaskName() {
+        taskName.setWrapText(true);
+        taskName.getStyleClass().add("task-name");
+    }
+
+    private void configureDate() {
+        taskStartDate.getStyleClass().add("task-date");
+        taskDueDate.getStyleClass().add("task-date");
+        GridPane.setHalignment(taskStartDate, HPos.RIGHT);
+        GridPane.setHalignment(taskDueDate, HPos.RIGHT);
+    }
+
+    private void configureTime() {
+        taskStartDate.getStyleClass().add("task-time");
+        taskEndTime.getStyleClass().add(".task-time");
+        GridPane.setHalignment(taskStartTime, HPos.RIGHT);
+        GridPane.setHalignment(taskEndTime, HPos.RIGHT);
+    }
+
+    private void configureIcon() {
+        // lateIcon.getStyleClass().add("late-icon");
+
+    }
+
+    private void configureCheckBox() {
+        checkBox.getStyleClass().add("task-check-box");
+    }
+
+    private void clearContent() {
+        setText(null);
+        setGraphic(null);
+    }
+
+    private void configureSearchBox() {
+        // searchBox.getStyleClass.().add("search-box");
+
     }
 
     @Override
@@ -91,7 +145,7 @@ public class TaskListCell extends JFXListCell<Task> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String dateString = formatter.format(startDate);
             taskStartDate.setText(dateString);
-        } else taskStartDate.setText("-");
+        } else taskStartDate.setText("");
     }
 
     protected void setTaskDueDate(Task task) {
@@ -102,7 +156,7 @@ public class TaskListCell extends JFXListCell<Task> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String dateString = formatter.format(dueDate);
             taskDueDate.setText(dateString);
-        } else taskDueDate.setText("");
+        } else taskDueDate.setText("-");
     }
 
     protected void setTaskStartTime(Task task) {
@@ -112,7 +166,7 @@ public class TaskListCell extends JFXListCell<Task> {
             String timeString = formatter.format(startTime);
             taskStartTime.setText(timeString);
         } else {
-            taskStartTime.setText("-");
+            taskStartTime.setText("");
         }
 
     }
@@ -126,60 +180,8 @@ public class TaskListCell extends JFXListCell<Task> {
             System.out.println(timeString);
             taskEndTime.setText(timeString);
         } else {
-            taskEndTime.setText("");
+            taskEndTime.setText("-");
         }
-
-    }
-
-    private void configureGrid() {
-        grid.setHgap(10); // horizontal gap between grids
-        grid.setVgap(5); // vertical gap between grids
-        grid.setPadding(new Insets(0, 10, 0, 10));// set custom columns
-        ColumnConstraints column1 = new ColumnConstraints();
-        column1.setMinWidth(25);
-        column1.setMaxWidth(25);
-        ColumnConstraints column2 = new ColumnConstraints();
-        column2.setMaxWidth(20);
-        ColumnConstraints column3 = new ColumnConstraints();
-        column3.setHgrow(Priority.ALWAYS);
-        grid.getColumnConstraints().addAll(column1, column2, column3);
-
-    }
-
-    private void configureTaskName() {
-        taskName.setWrapText(true);
-        taskName.getStyleClass().add("task-name");
-    }
-
-    private void configureDate() {
-        taskStartDate.getStyleClass().add("start-date");
-        taskDueDate.getStyleClass().add("end-date");
-        GridPane.setHalignment(taskStartDate, HPos.RIGHT);
-        GridPane.setHalignment(taskDueDate, HPos.RIGHT);
-    }
-
-    private void configureTime() {
-        taskStartDate.getStyleClass().add("start-time");
-        GridPane.setHalignment(taskStartTime, HPos.RIGHT);
-        GridPane.setHalignment(taskEndTime, HPos.RIGHT);
-    }
-
-    private void configureCheckBox() {
-        checkBox.getStyleClass().add("task-check-box");
-    }
-
-    private void clearContent() {
-        setText(null);
-        setGraphic(null);
-    }
-
-    private void configureIcon() {
-        // lateIcon.getStyleClass().add("late-icon");
-
-    }
-
-    private void configureSearchBox() {
-        // searchBox.getStyleClass.().add("search-box");
 
     }
 
