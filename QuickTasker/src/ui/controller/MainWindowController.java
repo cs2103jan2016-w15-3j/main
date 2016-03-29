@@ -37,7 +37,7 @@ import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-    public AnchorPane container;
+    public AnchorPane ListViewcontainer;
     private Main main;
     private final ParserInterface parser = new UserInputParser();
     private RecurringParser recurringParser = new RecurringParser();
@@ -152,6 +152,7 @@ public class MainWindowController implements Initializable {
         sleeper = makeSleeper(500);
         sleeper.setOnSucceeded(event -> {
             printedPlanner.getSelectionModel().clearSelection();
+
             commandBox.clear();
         });
         new Thread(sleeper).start();
@@ -270,6 +271,7 @@ public class MainWindowController implements Initializable {
                 Thread.currentThread().setUncaughtExceptionHandler(
                         (t, e) -> Platform.runLater(System.out::println));
                 if (listCell.getTask().equals(event.getTask())) listCell.getCheckBox().fire();
+                listCell.removeEventFilter(TASK_COMPLETE, null);
             }).start());
         /*    plannerEntries.addListener(new ListChangeListener<Task>() {
                 @Override

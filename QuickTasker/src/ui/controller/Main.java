@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 // @author:  A0133333U
 
@@ -23,7 +24,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        SettingManager settings = new SettingManager();
         this.primaryStage = primaryStage;
+
         // Do not remove these 2 lines of comments:
         /*Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
         Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);*/
@@ -48,14 +51,20 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainWindowView.fxml"));
             AnchorPane mainContainer = loader.load();
             MainWindowController mainWindowController = new MainWindowController();
-            SettingManager settings = new SettingManager();
+
             mainWindowController.setMain(this);
+
+            Scene scene = new Scene(new JFXDecorator(primaryStage, mainContainer), 560, 400);
+            scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
+            scene.getStylesheets()
+                    .add(Main.class.getResource("/css/application.css").toExternalForm());
+
+            primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.getIcons().add(new Image(IMAGE_ICON));
-            Scene scene = new Scene(new JFXDecorator(primaryStage,mainContainer),560,400);
-            primaryStage.setScene(scene);
             primaryStage.setTitle(APP_TITLE);
             primaryStage.setMinWidth(STAGE_MINIMUM_WIDTH);
             primaryStage.setMinHeight(STAGE_MINIMUM_HEIGHT);
+            primaryStage.setScene(scene);
             primaryStage.show();
 
         } catch (Exception e) {

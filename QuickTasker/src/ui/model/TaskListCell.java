@@ -196,8 +196,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private boolean isWholeDayEvent(Task task) {
-        return task.getTaskType()
-                .equals("wholeDayEvent");
+        return task.getTaskType().equals("wholeDayEvent");
     }
 
     public JFXPopup getSearchBox() {
