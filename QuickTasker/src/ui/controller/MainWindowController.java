@@ -37,7 +37,7 @@ import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-    public AnchorPane ListViewcontainer;
+    public AnchorPane root;
     private Main main;
     private final ParserInterface parser = new UserInputParser();
     private RecurringParser recurringParser = new RecurringParser();
@@ -71,6 +71,7 @@ public class MainWindowController implements Initializable {
     private void initPlanner() {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         printedPlanner.setItems(plannerEntries);
+        commandBox.requestFocus();
     }
 
     void setMain(Main main) {
@@ -152,7 +153,6 @@ public class MainWindowController implements Initializable {
         sleeper = makeSleeper(500);
         sleeper.setOnSucceeded(event -> {
             printedPlanner.getSelectionModel().clearSelection();
-
             commandBox.clear();
         });
         new Thread(sleeper).start();

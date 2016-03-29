@@ -2,24 +2,15 @@
 
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.scene.layout.*?>
-<AnchorPane fx:id="container" minHeight="189.0" minWidth="500.0" prefHeight="300.0"
-            prefWidth="394.0" stylesheets="@/css/application.css"
-            xmlns="http://javafx.com/javafx/8.0.65"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controller.MainWindowController">
-    <JFXListView fx:id="printedPlanner" minHeight="200.0"
-                 prefHeight="250.0" prefWidth="600.0" stylesheets="@/css/application.css"
-                 AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0"
-                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-    <AnchorPane layoutX="10.0" layoutY="255.0"
-                AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0"
-                AnchorPane.rightAnchor="0.0">
-        <JFXTextField fx:id="commandBox" focusColor="lightgrey"
-                      layoutX="4.0" maxWidth="500.0" minWidth="100.0"
-                      onKeyPressed="#handleEnterKeyPressed"
-                      prefHeight="30.0" prefWidth="500.0" promptText="Enter command:"
-                      AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="4.0"
-                      AnchorPane.rightAnchor="3.0"/>
+<?import javafx.scene.layout.AnchorPane?>
 
-    </AnchorPane>
+
+<AnchorPane fx:id="root" minHeight="200.0" minWidth="500.0" prefHeight="300.0" prefWidth="400.0" stylesheets="@/css/application.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controller.MainWindowController">
+
+            
+                <JFXListView fx:id="printedPlanner" minHeight="200.0" prefHeight="250.0" prefWidth="600.0" stylesheets="@/css/application.css" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    <AnchorPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <JFXTextField fx:id="commandBox" focusColor="lightgrey" layoutX="4.0" maxWidth="500.0" minWidth="100.0" onKeyPressed="#handleEnterKeyPressed" prefHeight="30.0" prefWidth="500.0" promptText="Enter command:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+
+                   </AnchorPane>
 </AnchorPane>
