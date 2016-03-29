@@ -62,8 +62,14 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private void configureTaskName() {
-        taskName.setWrapText(true);
+        setWrapIfTaskNameLong();
         taskName.getStyleClass().add("task-name");
+    }
+
+    private void setWrapIfTaskNameLong() {
+        taskName.setWrapText(true);
+        taskName.wrapTextProperty().bind(grid.widthProperty().greaterThan(10));
+        setPrefWidth(0);
     }
 
     private void configureDate() {
