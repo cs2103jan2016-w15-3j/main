@@ -1,5 +1,6 @@
 package ui.controller;
 
+import com.jfoenix.controls.JFXDrawersStack;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
@@ -37,12 +38,15 @@ import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-    public AnchorPane root;
+
     private Main main;
     private final ParserInterface parser = new UserInputParser();
     private RecurringParser recurringParser = new RecurringParser();
     private final Logic operations = new Logic();
 
+    @FXML public AnchorPane root;
+    @FXML public JFXDrawersStack notificationDrawer;
+    @FXML public AnchorPane commandBoxContainer;
     @FXML private JFXTextField commandBox;
     @FXML private JFXListView<Task> printedPlanner;
     private ObservableList<Task> plannerEntries;
@@ -89,6 +93,7 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) {
+
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
