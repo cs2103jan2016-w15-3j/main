@@ -1,5 +1,6 @@
 package ui.controller;
 
+import com.jfoenix.controls.JFXDecorator;
 import data.SettingManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -45,13 +46,12 @@ public class Main extends Application {
 
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainWindowView.fxml"));
-            AnchorPane pane = loader.load();
+            AnchorPane mainContainer = loader.load();
             MainWindowController mainWindowController = new MainWindowController();
             SettingManager settings = new SettingManager();
             mainWindowController.setMain(this);
-            // mainWindowController.setFeedback(MESSAGE_WELCOME);
             primaryStage.getIcons().add(new Image(IMAGE_ICON));
-            Scene scene = new Scene(pane);
+            Scene scene = new Scene(new JFXDecorator(primaryStage,mainContainer),560,400);
             primaryStage.setScene(scene);
             primaryStage.setTitle(APP_TITLE);
             primaryStage.setMinWidth(STAGE_MINIMUM_WIDTH);
