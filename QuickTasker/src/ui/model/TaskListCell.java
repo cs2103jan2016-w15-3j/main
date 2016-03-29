@@ -34,7 +34,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private final JFXPopup searchBox = new JFXPopup();
     private final GridPane grid = new GridPane();
     private final ObservableList<Task> tasks;
-    private final JFXRippler rippler = new JFXRippler();
+    private JFXRippler rippler = new JFXRippler();
     private Task myTask;
 
     public TaskListCell(ObservableList<Task> list) {
@@ -129,7 +129,8 @@ public class TaskListCell extends JFXListCell<Task> {
 
             this.myTask = task;
             addContent(task);
-            setGraphic(grid);
+            rippler = new JFXRippler(grid);
+            setGraphic(rippler);
         }
     }
 
