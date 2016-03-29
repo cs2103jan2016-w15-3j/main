@@ -7,6 +7,7 @@ package ui.model;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXPopup;
+import com.jfoenix.controls.JFXRippler;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -33,6 +34,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private final JFXPopup searchBox = new JFXPopup();
     private final GridPane grid = new GridPane();
     private final ObservableList<Task> tasks;
+    private final JFXRippler rippler = new JFXRippler();
     private Task myTask;
 
     public TaskListCell(ObservableList<Task> list) {
@@ -44,7 +46,18 @@ public class TaskListCell extends JFXListCell<Task> {
         configureCheckBox();
         addControlsToGrid();
         tasks = list;
+        addGridToRippler();
+
     }
+
+    private void addGridToRippler() {
+        rippler.setControl(grid);
+    }
+
+    public JFXRippler getRippler(){
+        return this.rippler;
+    }
+
 
     private void configureGrid() {
         grid.setHgap(10); // horizontal gap between grids
@@ -115,7 +128,7 @@ public class TaskListCell extends JFXListCell<Task> {
         } else {
             this.myTask = task;
             addContent(task);
-            setGraphic(grid);
+            setGraphic(rippler);
         }
     }
 
