@@ -5,43 +5,34 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToolbar?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.*?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ui.controller.MainWindowController">
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controller.MainWindowController">
     <center>
         <StackPane fx:id="mainContent" BorderPane.alignment="BOTTOM_CENTER">
             <children>
-                <AnchorPane fx:id="root" minHeight="150.0" minWidth="500.0" prefHeight="300.0"
-                            prefWidth="400.0" styleClass="root">
-                    <AnchorPane fx:id="printedPlannerContainer" AnchorPane.bottomAnchor="20.0"
-                                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                AnchorPane.topAnchor="1.0">
+                <AnchorPane fx:id="root" minHeight="150.0" minWidth="500.0" prefHeight="300.0" prefWidth="400.0" styleClass="root">
+                    <AnchorPane fx:id="printedPlannerContainer" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
                         <children>
-                            <JFXListView fx:id="printedPlanner" minHeight="150.0" prefHeight="250.0"
-                                         prefWidth="600.0" styleClass="list-view"
-                                         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0"
-                                         AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0"/>
+                            <JFXListView fx:id="printedPlanner" cache="true" cacheHint="SPEED" minHeight="150.0" prefHeight="250.0" prefWidth="600.0" styleClass="list-view" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0" />
                         </children>
                     </AnchorPane>
                 </AnchorPane>
                 <JFXToolbar fx:id="snackbarContainer" StackPane.alignment="BOTTOM_CENTER">
                     <bottom>
-                        <JFXSnackbar fx:id="snackbar" BorderPane.alignment="CENTER"/>
+                        <JFXSnackbar fx:id="snackbar" BorderPane.alignment="CENTER" />
                     </bottom>
                 </JFXToolbar>
             </children>
         </StackPane>
     </center>
     <bottom>
-        <AnchorPane fx:id="commandBoxContainer" styleClass="container"
-                    BorderPane.alignment="BOTTOM_RIGHT">
-            <JFXTextField fx:id="commandBox" alignment="CENTER" maxWidth="500.0" minWidth="100.0"
-                          onKeyPressed="#handleEnterKeyPressed" prefHeight="30.0" prefWidth="500.0"
-                          promptText="Enter command:" styleClass="text-box"
-                          AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0"
-                          AnchorPane.rightAnchor="0.0"/>
+        <AnchorPane fx:id="commandBoxContainer" styleClass="container" BorderPane.alignment="BOTTOM_CENTER">
+            <JFXTextField fx:id="commandBox" alignment="BOTTOM_CENTER" cache="true" cacheHint="SPEED" labelFloat="true" maxWidth="500.0" minWidth="100.0" onKeyPressed="#handleEnterKeyPressed" prefHeight="30.0" prefWidth="500.0" promptText="Enter command :" styleClass="text-box" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
             <BorderPane.margin>
-                <Insets/>
+                <Insets />
             </BorderPane.margin>
 
         </AnchorPane>
