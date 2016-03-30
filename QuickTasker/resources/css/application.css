@@ -1,77 +1,139 @@
-/* Please refer to https://www.google.com/design/spec/material-design/introduction.html for styling */
-/* Please refer to https://www.google.com/design/spec/style/color.html#color-color-palette for colors */
-
-@font-face {
-    font-family: 'Roboto';
-    src: url('/fonts/Roboto-Medium.ttf');
+/******************************
+        Global Style
+******************************/
+.text-field{
+    -fx-background-color :WHITE;
+    -fx-focus-color: #808080;
+    -fx-unfocus-color: #4d4d4d;
+    -fx-font-weight: BOLD;
 }
 
-.text {
-    -fx-font-family: "Roboto";
+/* Main Container */
+.jfx-decorator{
+    -fx-decorator-color: derive(BLACK,-20%);
 }
 
-#container{
+.jfx-decorator .jfx-decorator-buttons-container{
+    -fx-background-color:-fx-decorator-color;
+}
+
+.jfx-decorator .resize-border{
+    -fx-border-color : -fx-decorator-color;
+    -fx-border-width:0 4 4 4;
+}
+
+.root{
         -fx-background-color: white;
         -fx-alignment: center;
         -fx-padding: 0;
         -fx-effect: dropshadow(two-pass-box , darkslategray, 3, 0.1, 0, 0);
 }
 
+/* List View */
+
+
 .list-view {
     -fx-padding: 3px ;
-}
-.task-name{
-    -fx-font-weight:bold; -fx-padding:10px;
-}
-
-.list-cell {
-    -fx-padding: 10px ;
-    -fx-background-color: transparent, -fx-background ;
+    -fx-background-insets: 0.0 ;
+    -fx-cell-horizontal-margin: 0.0;
+    -fx-cell-vertical-margin: 5.0;
+    -fx-vertical-gap:10.0;
 }
 
-.list-cell:empty {
-    -fx-padding: 10px ;
-    -fx-background-color: transparent ;
-    -fx-background-insets: 0 ;
-}
-
-.task-check-box{
-      -fx-unchecked-color: BLACK;
-      -fx-checked-color : #CC0000;
-}
-
-#taskListView .scroll-bar:horizontal .track,
-#taskListView .scroll-bar:vertical .track{
+.list-view .scroll-bar:horizontal .track,
+ .live-view.scroll-bar:vertical .track{
     -fx-background-color:transparent;
     -fx-border-color:transparent;
     -fx-background-radius: 0em;
-    -fx-border-radius:2em;
+    -fx-border-radius:0em;
 }
- 
-#taskListView .scroll-bar:horizontal .increment-button ,
+
+.list-view .scroll-bar:horizontal .increment-button ,
 #taskListView .scroll-bar:horizontal .decrement-button {
     -fx-background-color:transparent;
     -fx-background-radius: 0em;
     -fx-padding:0 0 10 0;
 }
- 
-#taskListView .scroll-bar:vertical .increment-button ,
-#taskListView .scroll-bar:vertical .decrement-button {
+
+.list-view .scroll-bar:vertical .increment-button ,
+.list-view .scroll-bar:vertical .decrement-button {
     -fx-background-color:transparent;
     -fx-background-radius: 0em;
     -fx-padding:0 10 0 0;
 }
-#taskListView  .scroll-bar .increment-arrow,
-#taskListView  .scroll-bar .decrement-arrow{
-    -fx-shape:" ";  
+.list-view  .scroll-bar .increment-arrow,
+.list-view  .scroll-bar .decrement-arrow{
+    -fx-shape:" ";
     -fx-padding:0;
 }
- 
-#taskListView .scroll-bar:horizontal .thumb,
-#taskListView .scroll-bar:vertical .thumb {
-    -fx-background-color:derive(black,90%);
+
+.list-view .scroll-bar:horizontal .thumb,
+.list-view .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,80%);
     -fx-background-insets: 2, 0, 0;
     -fx-background-radius: 2em;
 }
 
+.task-name{
+    -fx-font-family : "Roboto";
+    -fx-font-weight:bold; -fx-padding:10px;
+}
 
+.jfx-list-cell-content-container{
+    -fx-alignment:center-left;
+}
+
+.jfx-list-cell-container> .label{
+    -fx-text-fill : BLACK;
+}
+
+.jfx-list-cell {
+    -fx-padding: 10px ;
+    -fx-background-insets:0.0;
+    -fx-text-fill:black;
+}
+
+.jfx-list-cell:empty {
+    -fx-padding: 10px ;
+    -fx-background-insets: 0 ;
+    -fx-background-color: transparent ;
+}
+
+.jfx-list-cell .jfx-rippler{
+   -fx-rippler-fill : transparent;
+}
+
+.task-check-box{
+      -fx-unchecked-color: BLACK;
+      -fx-checked-color : RED;
+      -fx-font-weight : BOLD;
+}
+
+/* Snackbar */
+.jfx-snackbar-content{
+    -fx-background-color: rgba(76,175,80 ,1);
+    -fx-padding: -10 100;
+
+}
+
+.jfx-snackbar-toast{
+   -fx-text-fill:WHITE;
+}
+
+.jfx-snackbar-action{
+    -fx-text-fill: #ff4081;
+}
+
+
+.warning{
+    -fx-background-color: RED;
+}
+
+ .jfx-rippler{
+    -fx-rippler-fill : RED;
+    -fx-background-color : RED;
+}
+
+.header .label{
+
+}
