@@ -1,7 +1,9 @@
 package ui.controller;
 
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToolbar;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -38,7 +40,8 @@ import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-
+    public JFXSnackbar snackbar;
+    public JFXToolbar snackbarContainer;
 
     private Main main;
     private final ParserInterface parser = new UserInputParser();
@@ -70,12 +73,14 @@ public class MainWindowController implements Initializable {
     private void initLogger() {
         logger = Logger.getLogger("UILogger");
         logger.setLevel(Level.INFO);
+
     }
 
     private void initPlanner() {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         printedPlanner.setItems(plannerEntries);
         printedPlanner.setDepthProperty(1);
+        snackbar.registerSnackbarContainer(snackbarContainer);
         commandBox.requestFocus();
     }
 
@@ -229,6 +234,8 @@ public class MainWindowController implements Initializable {
         Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
                 parser.getEndDate(userInput), parser.getStartTime(userInput),
                 parser.getEndTime(userInput));
+        snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("New task created", "", 1500, (b) -> {
+        }));
 
 
 

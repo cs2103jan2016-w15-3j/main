@@ -54,10 +54,9 @@ public class TaskListCell extends JFXListCell<Task> {
         rippler.setControl(grid);
     }
 
-    public JFXRippler getRippler(){
+    public JFXRippler getRippler() {
         return this.rippler;
     }
-
 
     private void configureGrid() {
         grid.setHgap(10); // horizontal gap between grids
