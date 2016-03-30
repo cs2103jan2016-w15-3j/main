@@ -224,6 +224,14 @@ public class MainWindowController implements Initializable {
         //plannerEntries.remove(taskIndex);
         plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
         afterOperation();
+
+        snackbar.getStyle().replace("-fx-background-color: rgba(76,175,80 ,1);",
+                " -fx-background-color: RED;");
+        System.out.println(snackbar.getStyle().toString());
+        snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Task Removed.", "", 1500, (b) -> {
+        }));
+
+
     }
 
     private void refresh() {
