@@ -1,6 +1,11 @@
 /******************************
         Global Style
 ******************************/
+.root{
+	-fx-font-family: Roboto;
+}
+
+
 .text-field{
     -fx-background-color :WHITE;
     -fx-focus-color: #808080;
@@ -10,7 +15,7 @@
 
 /* Main Container */
 .jfx-decorator{
-    -fx-decorator-color: derive(BLACK,-20%);
+    -fx-decorator-color: derive(#f44336,-20%);
 }
 
 .jfx-decorator .jfx-decorator-buttons-container{
@@ -104,14 +109,45 @@
 }
 
 .task-check-box{
+
+
       -fx-unchecked-color: BLACK;
       -fx-checked-color : RED;
       -fx-font-weight : BOLD;
 }
 
+/* Header */
+
+.title-label{
+	-fx-font-size: 16.0px;
+	-fx-padding	: 14.0px;
+	-fx-text-fill: rgba(0.0, 0.0, 0.0, 0.87);
+}
+
+.jfx-tool-bar{
+	-fx-font-size: 20.0;
+	-fx-font-weight: BOLD;
+	-fx-background-color: #f44336;
+	-fx-pref-width: 100.0%;
+	-fx-max-height: 20.0px;
+}
+
+.jfx-tool-bar HBox {
+	-fx-alignment:center;
+	-fx-spacing: 20.0;
+	-fx-padding: 0.0 10.0;
+}
+
+.jfx-tool-bar Label{
+	-fx-text-fill: WHITE;
+}
+
+
 /* Snackbar */
 .jfx-snackbar-content{
-    -fx-background-color: rgba(76,175,80 ,0.7);
+    -fx-font-family: Roboto;
+    -fx-font-weight: BOLD;
+    -fx-background-color: rgba(0,200,83 ,0.75);
     -fx-padding: -10 100;
 
 }
@@ -124,19 +160,53 @@
     -fx-text-fill: #ff4081;
 }
 
-
 .warning{
     -fx-background-color: RED;
 }
 
- .jfx-rippler{
-    -fx-rippler-fill : RED;
-    -fx-background-color : RED;
+/* Icons */
+.icon{
+    -fx-fill:WHITE;
+	-fx-padding: 10.0;
+	-fx-cursor: hand;
+	-fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.8) , 4 , 0.0 , 1 , 1 );
+
 }
 
-.header .label{
-
+.icons-rippler{
+	-fx-rippler-fill: #FE774D;
+	-fx-mask-type: CIRCLE;
 }
+
+
+.icons-rippler:hover{
+	-fx-cursor: hand;
+}
+
+.icons-badge{
+	-fx-spacing: 5px;
+	-fx-cursor: hand;
+}
+
+
+.badge-container{
+-fx-padding: 0 0 0 17;
+}
+
+.icons-badge .badge-pane {
+	-fx-background-color:WHITE;
+	-fx-background-radius: 23;
+	-fx-pref-width: 12;
+	-fx-pref-height: 10;
+	-fx-alignment: center;
+}
+
+.icons-badge Label{
+	-fx-font-weight: BOLD;
+	-fx-font-size: 10.0px;
+	-fx-text-fill:#f44336;
+}
+
 
 
 

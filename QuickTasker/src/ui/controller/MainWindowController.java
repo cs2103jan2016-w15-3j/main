@@ -7,13 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.Logic;
 import model.RecurringTask;
@@ -39,13 +40,6 @@ import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
-    public JFXSnackbar snackbar;
-    public JFXToolbar snackbarContainer;
-    public JFXRippler headerRippler;
-    public Label headerLabel;
-    public AnchorPane printedPlannerContainer;
-    public AnchorPane commandBoxContainer;
-    public AnchorPane headerContainer;
 
     private Main main;
     private Stage stage;
@@ -57,6 +51,12 @@ public class MainWindowController implements Initializable {
     @FXML private JFXTextField commandBox;
     @FXML private JFXListView<Task> printedPlanner;
     @FXML private StackPane mainContent;
+    @FXML private JFXSnackbar snackbar;
+    @FXML private AnchorPane commandBoxContainer;
+    @FXML private VBox headerWrapper;
+    @FXML private JFXToolbar headerContainer;
+    @FXML private JFXRippler headerTitleContainer;
+
     private ObservableList<Task> plannerEntries;
 
     // Display messages as visual feedback for users
