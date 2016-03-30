@@ -129,6 +129,18 @@
     -fx-background-color: RED;
 }
 
+ .jfx-rippler{
+    -fx-rippler-fill : RED;
+    -fx-background-color : RED;
+}
+
+.header .label{
+
+}
+
+
+
+
 
 
 

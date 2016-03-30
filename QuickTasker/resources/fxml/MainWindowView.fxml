@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXRippler?>
 <?import com.jfoenix.controls.JFXSnackbar?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToolbar?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -37,5 +39,16 @@
 
         </AnchorPane>
     </bottom>
+   <top>
+      <AnchorPane fx:id="headerContainer" maxHeight="50.0" prefHeight="50.0" prefWidth="50.0" BorderPane.alignment="CENTER">
+         <children>
+            <JFXRippler fx:id="headerRippler" styleClass="header" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label fx:id="headerLabel" text="All Tasks" />
+               </children>
+            </JFXRippler>
+         </children>
+      </AnchorPane>
+   </top>
 
 </BorderPane>

@@ -1,20 +1,19 @@
 package ui.controller;
 
-import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXSnackbar;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXToolbar;
+import com.jfoenix.controls.*;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import logic.Logic;
 import model.RecurringTask;
@@ -42,6 +41,8 @@ public class MainWindowController implements Initializable {
     private static Logger logger;
     public JFXSnackbar snackbar;
     public JFXToolbar snackbarContainer;
+    public JFXRippler headerRippler;
+    public Label headerLabel;
 
     private Main main;
     private final ParserInterface parser = new UserInputParser();
