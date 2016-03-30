@@ -13,7 +13,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import logic.Logic;
 import model.RecurringTask;
@@ -43,6 +42,9 @@ public class MainWindowController implements Initializable {
     public JFXToolbar snackbarContainer;
     public JFXRippler headerRippler;
     public Label headerLabel;
+    public AnchorPane printedPlannerContainer;
+    public AnchorPane commandBoxContainer;
+    public AnchorPane headerContainer;
 
     private Main main;
     private final ParserInterface parser = new UserInputParser();
@@ -81,7 +83,7 @@ public class MainWindowController implements Initializable {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         printedPlanner.setItems(plannerEntries);
         printedPlanner.setDepthProperty(1);
-        snackbar.registerSnackbarContainer(snackbarContainer);
+        snackbar.registerSnackbarContainer(mainContent);
         commandBox.requestFocus();
     }
 
@@ -225,13 +227,8 @@ public class MainWindowController implements Initializable {
         //plannerEntries.remove(taskIndex);
         plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
         afterOperation();
-
-        snackbar.getStyle().replace("-fx-background-color: rgba(76,175,80 ,1);",
-                " -fx-background-color: RED;");
-        System.out.println(snackbar.getStyle().toString());
         snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Task Removed.", "", 1500, (b) -> {
         }));
-
 
     }
 
