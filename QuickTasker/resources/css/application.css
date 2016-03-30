@@ -111,7 +111,7 @@
 
 /* Snackbar */
 .jfx-snackbar-content{
-    -fx-background-color: rgba(76,175,80 ,1);
+    -fx-background-color: rgba(76,175,80 ,0.7);
     -fx-padding: -10 100;
 
 }
@@ -137,10 +137,6 @@
 .header .label{
 
 }
-
-
-
-
 
 
 

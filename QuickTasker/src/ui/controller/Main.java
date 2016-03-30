@@ -53,6 +53,7 @@ public class Main extends Application {
             MainWindowController mainWindowController = new MainWindowController();
 
             mainWindowController.setMain(this);
+            mainWindowController.setStage(primaryStage);
 
             Scene scene = new Scene(new JFXDecorator(primaryStage, mainContainer), 560, 400);
             scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
@@ -70,6 +71,10 @@ public class Main extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void quickShow() {
+
     }
 
     public static void main(String[] args) {

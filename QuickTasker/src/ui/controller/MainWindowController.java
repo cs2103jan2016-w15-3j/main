@@ -14,6 +14,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
@@ -47,6 +48,7 @@ public class MainWindowController implements Initializable {
     public AnchorPane headerContainer;
 
     private Main main;
+    private Stage stage;
     private final ParserInterface parser = new UserInputParser();
     private RecurringParser recurringParser = new RecurringParser();
     private final Logic operations = new Logic();
@@ -85,6 +87,10 @@ public class MainWindowController implements Initializable {
         printedPlanner.setDepthProperty(1);
         snackbar.registerSnackbarContainer(mainContent);
         commandBox.requestFocus();
+    }
+
+    void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     void setMain(Main main) {
