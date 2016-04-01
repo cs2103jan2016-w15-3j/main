@@ -18,16 +18,23 @@ import java.util.logging.Logger;
  */
 public class UserInputParser implements ParserInterface {
 
-    private String taskName;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private String command;
-    private String[] userCommand;
+	protected String taskName;
+	protected LocalDate startDate;
+	protected LocalDate endDate;
+	protected LocalTime startTime;
+	protected LocalTime endTime;
+    protected String command;
+    protected String[] userCommand;
     private int lengthOfInput;
     private int numToUse;
     private static Logger loggerTaskName = Logger.getLogger("setTaskName");
+    
+    private static final int NUMBER_NORMAL =0;
+    private static final int NUMBER_TOMORROW=1;
+    private static final int NUMBER_NEXT_DAY_DAY_AFTER=2;
+    private static final int NUMBER_FLOATING=3;
+    private static final int NUMBER_TODAY=4;
+    private static final int NUMBER_ONLY_ONE_DATE=5;
 
     public UserInputParser() {
         this.taskName = "";
@@ -289,22 +296,20 @@ public class UserInputParser implements ParserInterface {
     /* Methods for updates end */
 
     public void setDate(int numToSetDate, int length) {
-        System.out.println("NUMTOSETDATE " + numToSetDate);
-
-        if (numToSetDate == 0) {
+        if (numToSetDate == NUMBER_NORMAL) {
             startDate = stringToLocalDate(userCommand[length - 2]);
             endDate = stringToLocalDate(userCommand[length - 1]);
-        } else if (numToSetDate == 1) {
+        } else if (numToSetDate == NUMBER_TOMORROW) {
             startDate = endDate = stringToLocalDate("tomorrow");
-        } else if (numToSetDate == 2) {
+        } else if (numToSetDate == NUMBER_NEXT_DAY_DAY_AFTER) {
             startDate = endDate = stringToLocalDate(
                     userCommand[length - 2] + " " + userCommand[length - 1]);
-        } else if (numToSetDate == 3) {// floating task
+        } else if (numToSetDate == NUMBER_FLOATING) {// floating task
             startDate = LocalDate.MAX;
             endDate = LocalDate.MAX;// placeholder for null
-        } else if (numToSetDate == 4) {
+        } else if (numToSetDate == NUMBER_TODAY) {
             startDate = endDate = stringToLocalDate("today");
-        } else if (numToSetDate == 5) {
+        } else if (numToSetDate == NUMBER_ONLY_ONE_DATE) {
             startDate = stringToLocalDate(userCommand[length - 1]);
             endDate = LocalDate.MIN;
         }
@@ -349,23 +354,22 @@ public class UserInputParser implements ParserInterface {
         // 3 is floating task
         // 0 is not two dates
         // 4 is today
-        //5 is only one date
+        // 5 is only one date
         DateTimeParser parser = new DateTimeParser();
         String toCheck = userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1];
         numToUse = 0;
 
-        if (userCommand[lengthOfInput - 1].equals("tomorrow") || userCommand[lengthOfInput - 1]
-                .equals("tmr")) {
-            numToUse = 1;
+        if (userCommand[lengthOfInput - 1].equals("tomorrow")) {
+            numToUse = NUMBER_TOMORROW;
         } else if (toCheck.equals("next day") || toCheck.equals("day after")) {
-            numToUse = 2;
+            numToUse = NUMBER_NEXT_DAY_DAY_AFTER;
         } else if (isFloating()) {
-            numToUse = 3;
+            numToUse = NUMBER_FLOATING;
         } else if (userCommand[lengthOfInput - 1].equals("today")) {
-            numToUse = 4;
+            numToUse = NUMBER_TODAY;
         } else if (parser.isDate(userCommand[lengthOfInput - 1]) && !parser
                 .isDate(userCommand[lengthOfInput - 2])) {
-            numToUse = 5;
+            numToUse = NUMBER_ONLY_ONE_DATE;
         }
     }
 
