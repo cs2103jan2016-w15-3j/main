@@ -76,10 +76,7 @@ public class Logic {
     public void adjustmentForRecurringTasks() {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i) instanceof RecurringTask) {
-                System.out.println(list.get(i).getName() + " " + list.get(i).getStartDate());
                 ((RecurringTask) list.get(i)).adjustDate();
-                //((RecurringTask) list.get(i)).setRecurType();
-                System.out.println(list.get(i).getName() + " " + list.get(i).getStartDate());
             }
         }
     }

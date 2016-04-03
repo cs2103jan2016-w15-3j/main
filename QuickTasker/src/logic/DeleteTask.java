@@ -40,7 +40,6 @@ public class DeleteTask<E> implements Command<Object> {
 
     @Override
     public void redo(ArrayList<Task> list) {
-        // TODO Auto-generated method stub
         Task redoTask = redoStackTask.pop();
         int indexToRedo = redoStackIndex.pop();
         undoStackTask.push(redoTask);
@@ -51,7 +50,6 @@ public class DeleteTask<E> implements Command<Object> {
 
     @Override
     public int findTask(Task task, ArrayList<Task> list) {
-        // TODO Auto-generated method stub
         return 0;
     }
 }
