@@ -4,6 +4,7 @@ import model.RecurringTask;
 import model.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 /*import java.util.logging.Level;
@@ -11,9 +12,7 @@ import java.util.logging.Logger;*/
 
 public class SkipRecurTask<E> implements Command<Object> {
     //private static Logger loggerSkip = Logger.getLogger("log");
-    private Stack<model.RecurringTask> undoRecurStack = new Stack<model.RecurringTask>();
     private Stack<Integer> undoStackInt = new Stack<Integer>();
-    private Stack<model.RecurringTask> redoRecurStack = new Stack<model.RecurringTask>();
     private Stack<Integer> redoStackInt = new Stack<Integer>();
 
     @Override
@@ -23,12 +22,12 @@ public class SkipRecurTask<E> implements Command<Object> {
 
     private void executeSkip(List<Task> list, int index) {
         RecurringTask recurringTask = (RecurringTask) list.get(index);
-        undoRecurStack.push(clone(recurringTask));
-        undoStackInt.push(index);
-        moveDate(recurringTask);
+        moveDateForward(recurringTask);
+        Collections.sort(list);
+        undoStackInt.push(findTask(recurringTask, (ArrayList<Task>) list));
     }
     
-    private void moveDate(RecurringTask task) {
+    private void moveDateForward(RecurringTask task) {
         task.adjustDate();
         if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
             task.setStartDate(task.getStartDate().plusWeeks(task.getNumberToRecur()));
@@ -39,30 +38,49 @@ public class SkipRecurTask<E> implements Command<Object> {
         }
     }
     
+    private void moveDateBackward(RecurringTask task) {
+        task.adjustDate();
+        if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
+            task.setStartDate(task.getStartDate().minusWeeks(task.getNumberToRecur()));
+            task.setEndDate(task.getDueDate().minusWeeks(task.getNumberToRecur()));
+        } else {
+            task.setStartDate(task.getStartDate().minusDays(task.getNumberToRecur()));
+            task.setEndDate(task.getDueDate().minusDays(task.getNumberToRecur()));
+        }
+    }
+    
     @Override
     public void undo(ArrayList<Task> list) {
         int undoIndex = undoStackInt.pop();
-        RecurringTask undoRecurTask = undoRecurStack.pop();
-        redoStackInt.push(undoIndex);
-        redoRecurStack.push(clone((RecurringTask) list.get(undoIndex)));
-        list.set(undoIndex, undoRecurTask);
+        RecurringTask recurringTask = (RecurringTask) list.get(undoIndex);
+        moveDateBackward((RecurringTask) list.get(undoIndex));
+        Collections.sort(list);
+        redoStackInt.push(findTask(recurringTask, list));
 
     }
 
     @Override
     public void redo(ArrayList<Task> list) {
         int redoIndex = redoStackInt.pop();
-        Task redoRecurTask = redoRecurStack.pop();
-        undoStackInt.push(redoIndex);
-        undoRecurStack.push(clone((RecurringTask) list.get(redoIndex)));
-        list.set(redoIndex, redoRecurTask);
+        RecurringTask recurringTask = (RecurringTask) list.get(redoIndex);
+        moveDateForward(recurringTask); 
+        Collections.sort(list);
+        undoStackInt.push(findTask(recurringTask, list));
     }
     
-    private RecurringTask clone(RecurringTask recurringTask) {
-        RecurringTask clone = new RecurringTask(recurringTask.getName(), recurringTask.getStartDate(), 
-                recurringTask.getDueDate(), recurringTask.getRecurType(), recurringTask.getStartTime(), 
-                recurringTask.getEndTime(), recurringTask.getNumberToRecur());
-        return clone;
+    @Override
+    public int findTask(Task task, ArrayList<Task> list) {
+        int position = -1;
+        if (task instanceof RecurringTask) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) instanceof RecurringTask) {
+                    if (((RecurringTask)list.get(i)).equals(task)) {
+                        position = i;
+                        break;
+                    }
+                }
+            }
+        } 
+        return position;
     }
-
 }

@@ -53,8 +53,9 @@ public class MarkTask<E> implements Command {
             archivedList.add(redoTask);
         }
     }
-    
-    private int findTask(Task task, ArrayList<Task> list) {
+
+    @Override
+    public int findTask(Task task, ArrayList list) {
         int position = -1;
         if (task instanceof RecurringTask) {
             for (int i = 0; i < list.size(); i++) {
@@ -75,5 +76,4 @@ public class MarkTask<E> implements Command {
         }
         return position;
     }
-
 }

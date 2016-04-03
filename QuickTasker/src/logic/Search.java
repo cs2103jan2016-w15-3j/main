@@ -25,4 +25,10 @@ public class Search<E> implements Command<Object> {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public int findTask(Task task, ArrayList<Task> list) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

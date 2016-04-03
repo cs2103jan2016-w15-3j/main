@@ -32,11 +32,7 @@ public class AddTask<E> implements Command<Object> {
             assert task != null;
             int size = list.size();
             list.add(task);
-            if (task instanceof RecurringTask) {
-                undoTaskStack.push(cloneRecurringTask((RecurringTask) task));
-            } else {
-                undoTaskStack.push(cloneTask(task));           
-            }
+            undoTaskStack.push(task);
             Collections.sort(list);
             int index = findTask(task, (ArrayList<Task>) list);
             undoStackInt.push(index);
@@ -63,16 +59,12 @@ public class AddTask<E> implements Command<Object> {
     }
 
     private void addRedoStack(Task undoTask, int index) {
-        if (undoTask instanceof RecurringTask) {
-            redoTaskStack.push(cloneRecurringTask((RecurringTask) undoTask));
-            redoStackInt.push(index);
-        } else {
-            redoTaskStack.push(cloneTask(undoTask));
-            redoStackInt.push(index);                
-        }
+        redoTaskStack.push(undoTask);
+        redoStackInt.push(index);
     }
 
-    private int findTask(Task task, ArrayList<Task> list) {
+    @Override
+    public int findTask(Task task, ArrayList<Task> list) {
         int position = -1;
         if (task instanceof RecurringTask) {
             for (int i = 0; i < list.size(); i++) {
@@ -109,25 +101,7 @@ public class AddTask<E> implements Command<Object> {
     }
 
     private void addUndoStack(Task redoTask, int index) {
-        if (redoTask instanceof RecurringTask) {
-            undoTaskStack.push(cloneRecurringTask((RecurringTask) redoTask));
-            undoStackInt.push(index);
-        } else {
-            undoTaskStack.push(cloneTask(redoTask));
-            undoStackInt.push(index);                
-        }
-    }
-    
-    private RecurringTask cloneRecurringTask(RecurringTask recurringTask) {
-        RecurringTask clone = new RecurringTask(recurringTask.getName(), recurringTask.getStartDate(), 
-                recurringTask.getDueDate(), recurringTask.getRecurType(), recurringTask.getStartTime(), 
-                recurringTask.getEndTime(), recurringTask.getNumberToRecur());
-        return clone;
-    }
-    
-    private Task cloneTask(Task task) {
-        Task clone = new Task(task.getName(), task.getStartDate(), 
-                task.getDueDate(), task.getStartTime(), task.getEndTime());
-        return clone;
+        undoTaskStack.push(redoTask);
+        undoStackInt.push(index);
     }
 }

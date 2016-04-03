@@ -48,4 +48,10 @@ public class DeleteTask<E> implements Command<Object> {
         //int index = findTask(redoTask.getId(), list);
         list.remove(indexToRedo);
     }
+
+    @Override
+    public int findTask(Task task, ArrayList<Task> list) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

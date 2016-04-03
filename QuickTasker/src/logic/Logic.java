@@ -160,7 +160,6 @@ public class Logic {
             undoStack.push(Commands.SKIP);
             saveList();
         }
-        sort();
         return (ArrayList<Task>) list;
     }
     

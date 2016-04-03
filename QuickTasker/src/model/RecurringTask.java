@@ -20,9 +20,12 @@ public class RecurringTask extends Task {
     }
 
     public void adjustDate() {
-        this.checkYearsPast();
+/*        this.checkYearsPast();
         this.checkMonthsPast();
-        this.checkDaysPast();
+        this.checkDaysPast();*/
+        if (LocalDate.now().isAfter(this.getDueDate())) {
+            addOffset();
+        }
     }
 
     public String getRecurType() {

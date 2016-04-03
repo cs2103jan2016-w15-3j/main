@@ -19,7 +19,6 @@ public class UpdateTask<E> implements Command<Object> {
     public void execute(List<Task> list, Object index) {
         int taskIndex = (int) index;
         undoStackTask.push(list.get(taskIndex));
-        undoStackInt.push(taskIndex);
         executeUpdate(taskIndex, list);
     }
 
@@ -27,7 +26,8 @@ public class UpdateTask<E> implements Command<Object> {
         Task newTask = list.remove(list.size() - 1);
         Task updatedTask = checkAttributes(newTask, taskIndex, list);
         list.set(taskIndex, updatedTask);
-        //Collections.sort(list);
+        Collections.sort(list);
+        undoStackInt.push(findTask(updatedTask, (ArrayList<Task>) list));
     }
     private Task checkAttributes (Task newTask, int taskIndex, List<Task> list) {
         if (list.get(taskIndex) instanceof RecurringTask) {
@@ -100,17 +100,42 @@ public class UpdateTask<E> implements Command<Object> {
     public void undo(ArrayList<Task> list) {
         int undoIndex = undoStackInt.pop();
         Task undoTask = undoStackTask.pop();
-        redoStackInt.push(undoIndex);
         redoStackTask.push(list.get(undoIndex));
         list.set(undoIndex, undoTask);
+        Collections.sort(list);
+        redoStackInt.push(findTask(undoTask, list));
     }
 
     @Override
     public void redo(ArrayList<Task> list) {
         int redoIndex = redoStackInt.pop();
         Task redoTask = redoStackTask.pop();
-        undoStackInt.push(redoIndex);
         undoStackTask.push(list.get(redoIndex));
         list.set(redoIndex, redoTask);
+        Collections.sort(list);
+        undoStackInt.push(findTask(redoTask, list));
+    }
+
+    @Override
+    public int findTask(Task task, ArrayList<Task> list) {
+        int position = -1;
+        if (task instanceof RecurringTask) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) instanceof RecurringTask) {
+                    if (((RecurringTask)list.get(i)).equals(task)) {
+                        position = i;
+                        break;
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).equals(task)) {
+                    position = i;
+                    break;
+                }
+            }
+        }
+        return position;
     }
 }

@@ -122,11 +122,11 @@ public class MainWindowController implements Initializable {
                 sortTask(userInput);
             } else if (userInput.contains("edit")) {
                 editTask(userInput);
-            } else if (userInput.contains("mark")) {
+            } else if (parser.getCommand(userInput) == Commands.MARK) {
                 markTaskCompleted(userInput);
             } else if (parser.getCommand(userInput) == Commands.RECUR_TASK) {
                 createRecurringTask(userInput);
-            } else if (userInput.contains("skip")) {
+            } else if (parser.getCommand(userInput) == Commands.SKIP) {
                 skipRecurringTask(userInput);
             } else if (userInput.contains("clear")) {
                 clearTasks(userInput);
