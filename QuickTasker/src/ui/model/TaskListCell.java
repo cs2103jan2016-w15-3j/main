@@ -147,7 +147,7 @@ public class TaskListCell extends JFXListCell<Task> {
     // It will be shortly replaced with icons in the next iterat
 
     protected void setTaskStartDate(Task task) {
-        if (task != null && !isFloatingTask(task)) {
+        if (task != null && !isFloatingTask(task) && task.getDueDate() != LocalDate.MIN) {
 
             LocalDate startDate = task.getStartDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
@@ -162,7 +162,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskDueDate(Task task) {
 
-        if (task != null && !isFloatingTask(task)) {
+        if (task != null && !isFloatingTask(task) && task.getDueDate() != LocalDate.MIN) {
 
             LocalDate dueDate = task.getDueDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
@@ -172,7 +172,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     protected void setTaskStartTime(Task task) {
-        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task)) {
+        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task) && timeCheck(task)) {
             LocalTime startTime = task.getStartTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(startTime);
@@ -184,7 +184,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskEndTime(Task task) {
 
-        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task)) {
+        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task) && timeCheck(task)) {
             LocalTime endTime = task.getEndTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(endTime);
@@ -193,6 +193,13 @@ public class TaskListCell extends JFXListCell<Task> {
         } else {
             taskEndTime.setText("-");
         }
+    }
+    
+    private boolean timeCheck(Task task) {
+        if (task.getStartTime() == null && task.getEndTime() == null) {
+            return false;
+        } 
+        return true;
     }
 
     private boolean isWholeDayEvent(Task task) {

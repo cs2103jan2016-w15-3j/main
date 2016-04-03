@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
+
 /**
  * Author A0130949 Soh Yonghao
  * .
@@ -18,6 +20,7 @@ import java.util.TreeMap;
 
 public class Logic {
     protected List<Task> list;
+    protected List<Task> archivedList;
     protected TreeMap<Commands, Command> commandMap;
     private TaskDataAccessObject storage;
     protected Stack<Commands> undoStack;
@@ -28,11 +31,16 @@ public class Logic {
     }
 
     private void initialize() {
-        populateCommandMap();
-        list = new ArrayList<Task>();
         assert (list != null);
-        storage = new JsonTaskDataAccess();
+        list = new ArrayList<Task>();
+        initializeVariables();
         loadSavedTask();
+    }
+
+    private void initializeVariables() {
+        populateCommandMap();
+        archivedList = new ArrayList<Task>();
+        storage = new JsonTaskDataAccess();
         undoStack = new Stack<Commands>();
         redoStack = new Stack<Commands>();
     }
@@ -54,13 +62,15 @@ public class Logic {
         commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
         commandMap.put(Commands.SEARCH_TASK, new Search());
         commandMap.put(Commands.SORT_TASK, new Sort());
-        //commandMap.put(Commands.RECUR_TASK, new AddRecurTask());
+        commandMap.put(Commands.SKIP, new SkipRecurTask());
+        commandMap.put(Commands.STOP, new StopRecurTask());
+        commandMap.put(Commands.MARK, new MarkTask());
     }
 
-    public List<Task> clear() {
-        list = new ArrayList<>();
+    public ArrayList<Task> clear() {
+        list.clear();
         storage.reset();
-        return list;
+        return (ArrayList<Task>) list;
     }
 
     public void adjustmentForRecurringTasks() {
@@ -81,6 +91,7 @@ public class Logic {
     }
 
     public void exit() {
+        saveList();
         System.exit(0);
     }
 
@@ -118,10 +129,13 @@ public class Logic {
     }
 
     public ArrayList<Task> undo() {
+        System.out.println(undoStack.size() + " before pop");
         Commands command = undoStack.pop();
+        System.out.println(undoStack.size() + " after pop");
         redoStack.push(command);
         commandMap.get(command).undo((ArrayList<Task>) list);
         saveList();
+        sort();
         return (ArrayList<Task>) list;
     }
 
@@ -130,6 +144,7 @@ public class Logic {
         undoStack.push(command);
         commandMap.get(command).redo((ArrayList<Task>) list);
         saveList();
+        sort();
         return (ArrayList<Task>) list;
     }
 
@@ -138,7 +153,51 @@ public class Logic {
         saveList();
         return (ArrayList<Task>) list;
     }
-
+    
+    public ArrayList<Task> skip(int index) {
+        if (list.get(index) instanceof RecurringTask) {
+            commandMap.get(Commands.SKIP).execute(list, index);
+            undoStack.push(Commands.SKIP);
+            saveList();
+        }
+        sort();
+        return (ArrayList<Task>) list;
+    }
+    
+    public void skipForMark(int index) {
+        if (list.get(index) instanceof RecurringTask) {
+            commandMap.get(Commands.SKIP).execute(list, index);
+            saveList();
+        }
+    }
+    
+    public void stopRecurring(int index) {
+        if (list.get(index) instanceof RecurringTask) {
+            commandMap.get(Commands.STOP).execute(list, index);
+            undoStack.push(Commands.STOP);
+            saveList();
+        }
+         saveList();  
+    }
+    
+    public void markAsDone(int index) {
+        Task completedTask = list.get(index);
+        completedTask.setDone(true);
+        if (list.get(index) instanceof RecurringTask) {
+            archivedList.add(new RecurringTask(completedTask.getName(), 
+                    completedTask.getStartDate(), completedTask.getDueDate(), 
+                    ((RecurringTask) completedTask).getRecurType(), completedTask.getStartTime(), 
+                    completedTask.getEndTime(), ((RecurringTask) completedTask).getNumberToRecur()));
+            skipForMark(index);
+        } else {
+            archivedList.add(list.get(index));
+            list.remove(index);
+        }
+        undoStack.push(Commands.MARK);
+        commandMap.get(Commands.MARK).execute(archivedList, index);
+        //sort();
+    }
+    
     private void saveList() {
         storage.save(list);
     }

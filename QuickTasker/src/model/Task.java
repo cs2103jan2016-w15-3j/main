@@ -175,7 +175,6 @@ public class Task implements Comparable {
         if (!taskName.equals(task.taskName)) return false;
         if (endDate != null ? !endDate.equals(task.endDate) : task.endDate != null) return false;
         return startDate != null ? startDate.equals(task.startDate) : task.startDate == null;
-
     }
 
     @Override
@@ -190,41 +189,16 @@ public class Task implements Comparable {
     @Override
     public int compareTo(Object task) {
         Task comparedTask = (Task) task;
-        if (this.getDueDate() == LocalDate.MIN) {
-            return -1;
+        int result = comparedTask.getDueDate().compareTo(this.getDueDate());
+        
+        if (result == 0) {
+            result = comparedTask.getStartDate().compareTo(this.getStartDate());
         }
-        if (this.getDueDate().getDayOfMonth() > comparedTask.getDueDate().getDayOfMonth()) {
-            if (this.getDueDate().getMonthValue() >= comparedTask.getDueDate().getMonthValue()) {
-                if (this.getDueDate().getYear() >= comparedTask.getDueDate().getYear()) {
-                    return 1;
-                }
-            }
+        
+        if (result == 0) {
+            result = this.getName().compareTo(comparedTask.getName());
         }
-        if (this.getDueDate().getMonthValue() > comparedTask.getDueDate().getMonthValue()) {
-            if (this.getDueDate().getYear() > comparedTask.getDueDate().getYear()) {
-                return 1;
-            }
-        }
-        if (this.getDueDate().getYear() > comparedTask.getDueDate().getYear()) {
-            return 1;
-        }
-
-        if (this.getStartDate().getDayOfMonth() > comparedTask.getStartDate().getDayOfMonth()) {
-            if (this.getStartDate().getMonthValue() >= comparedTask.getStartDate()
-                    .getMonthValue()) {
-                if (this.getStartDate().getYear() >= comparedTask.getStartDate().getYear()) {
-                    return 1;
-                }
-            }
-        }
-        if (this.getStartDate().getMonthValue() > comparedTask.getStartDate().getMonthValue()) {
-            if (this.getStartDate().getYear() > comparedTask.getStartDate().getYear()) {
-                return 1;
-            }
-        }
-        if (this.getStartDate().getYear() > comparedTask.getStartDate().getYear()) {
-            return 1;
-        }
-        return -1;
+        
+        return result;
     }
 }

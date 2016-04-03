@@ -29,6 +29,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.w3c.dom.css.ElementCSSInlineStyle;
+
 import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
 /**
@@ -94,7 +96,7 @@ public class MainWindowController implements Initializable {
                 performOperations(userInput);
             } catch (UIOperationException e) {
                 logger.log(Level.SEVERE, "Error occured at " + this.getClass().getName()
-                        + " within performOperation method. \n");
+                        + " within performOperation method. \n", e);
             }
         }
     }
@@ -117,7 +119,6 @@ public class MainWindowController implements Initializable {
             } else if (parser.getCommand(userInput) == Commands.EXIT) {
                 operations.exit();
             } else if (parser.getCommand(userInput) == Commands.SORT_TASK) {
-                System.out.println("getting the command");
                 sortTask(userInput);
             } else if (userInput.contains("edit")) {
                 editTask(userInput);
@@ -125,6 +126,12 @@ public class MainWindowController implements Initializable {
                 markTaskCompleted(userInput);
             } else if (parser.getCommand(userInput) == Commands.RECUR_TASK) {
                 createRecurringTask(userInput);
+            } else if (userInput.contains("skip")) {
+                skipRecurringTask(userInput);
+            } else if (userInput.contains("clear")) {
+                clearTasks(userInput);
+            } else if (userInput.contains("stop")) {
+                stopRecurringTask(userInput);
             }
         } catch (Exception e) {
             throw new UIOperationException();
@@ -144,9 +151,10 @@ public class MainWindowController implements Initializable {
 
         int i = parser.getIndexForDone(userInput);
         Task task = plannerEntries.get(i);
+        operations.markAsDone(i);
         task.setDone(true); // logic should handle
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        printedPlanner.getSelectionModel().select(i);
+        //printedPlanner.getSelectionModel().select(i); // error here
         printedPlanner.fireEvent(new TaskDoneEvent(task));
         javafx.concurrent.Task<Void> sleeper;
         sleeper = makeSleeper(500);
@@ -174,6 +182,21 @@ public class MainWindowController implements Initializable {
     private void sortTask(String userInput) {
         System.out.println("Sorting");
         plannerEntries = FXCollections.observableArrayList(operations.sort());
+        afterOperation();
+    }
+    
+    private void clearTasks(String userInput) {
+        plannerEntries = FXCollections.observableArrayList(operations.clear());
+        afterOperation();
+    }
+    
+    private void skipRecurringTask(String userInput) throws Exception {
+        plannerEntries = FXCollections.observableArrayList(operations.skip(parser.getTaskIndex(userInput)));
+        afterOperation();
+    }
+    
+    private void stopRecurringTask(String userInput) throws Exception {
+        operations.stopRecurring(parser.getTaskIndex(userInput));
         afterOperation();
     }
 
@@ -232,6 +255,7 @@ public class MainWindowController implements Initializable {
     }
 
     private void createRecurringTask(String userInput) throws Exception {
+        System.out.println(recurringParser.getTaskStartTime(userInput));
         RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
                 recurringParser.getTaskStartDate(userInput),
                 recurringParser.getTaskEndDate(userInput),
