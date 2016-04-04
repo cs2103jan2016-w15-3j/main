@@ -1,4 +1,7 @@
+*.json
+.json
 # For OSX users
+
 _Store
 .AppleDouble
 .LSOverride

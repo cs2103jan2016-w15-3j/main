@@ -54,7 +54,6 @@ public class Main extends Application {
 
             mainWindowController.setMain(this);
             mainWindowController.setStage(primaryStage);
-
             Scene scene = new Scene(new JFXDecorator(primaryStage, mainContainer), 560, 400);
             scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
             scene.getStylesheets()

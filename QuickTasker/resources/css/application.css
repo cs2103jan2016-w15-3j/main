@@ -2,9 +2,11 @@
         Global Style
 ******************************/
 .root{
-	-fx-font-family: Roboto;
+        -fx-background-color: white;
+        -fx-alignment: center;
+        -fx-padding: 0;
+        -fx-effect: dropshadow(two-pass-box , darkslategray, 3, 0.1, 0, 0);
 }
-
 
 .text-field{
     -fx-background-color :WHITE;
@@ -27,12 +29,7 @@
     -fx-border-width:0 4 4 4;
 }
 
-.root{
-        -fx-background-color: white;
-        -fx-alignment: center;
-        -fx-padding: 0;
-        -fx-effect: dropshadow(two-pass-box , darkslategray, 3, 0.1, 0, 0);
-}
+
 
 /* List View */
 
@@ -80,8 +77,9 @@
 }
 
 .task-name{
-    -fx-font-family : "Roboto";
-    -fx-font-weight:bold; -fx-padding:10px;
+    -fx-font-family : 'Roboto';
+    -fx-font-weight:bold; 
+    -fx-padding:10px;
 }
 
 .jfx-list-cell-content-container{
@@ -93,6 +91,7 @@
 }
 
 .jfx-list-cell {
+	-fx-font-family: "Roboto";
     -fx-padding: 10px ;
     -fx-background-insets:0.0;
     -fx-text-fill:black;
@@ -120,11 +119,12 @@
 
 .title-label{
 	-fx-font-size: 16.0px;
-	-fx-padding	: 14.0px;
+	-fx-padding	: 10.0px;
 	-fx-text-fill: rgba(0.0, 0.0, 0.0, 0.87);
 }
 
 .jfx-tool-bar{
+	-fx-alignment: center ;
 	-fx-font-size: 20.0;
 	-fx-font-weight: BOLD;
 	-fx-background-color: #f44336;
@@ -190,7 +190,7 @@
 
 
 .badge-container{
--fx-padding: 0 0 0 17;
+-fx-padding: 0 0 8 17;
 }
 
 .icons-badge .badge-pane {

@@ -155,10 +155,6 @@ public class TaskListCell extends JFXListCell<Task> {
 
         taskName.setText(task.getName());
     }
-    // From Kenan banana:
-    // right now, we use "-" rather than "not specified" because it helps covers up the problem that
-    // when task name is too long, scroll bar appear, which doesnt look good
-    // It will be shortly replaced with icons in the next iterat
 
     protected void setTaskStartDate(Task task) {
         if (task != null && !isFloatingTask(task)) {
