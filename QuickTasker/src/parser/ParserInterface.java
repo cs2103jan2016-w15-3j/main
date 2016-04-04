@@ -39,7 +39,7 @@ public interface ParserInterface {
 
     LocalDate getEndDateForUpdate(String userInput) throws Exception;
 
-    void setAttributesForUpdates(String input) throws Exception;
+    //void setAttributesForUpdates(String input) throws Exception;
 
     int getTaskIndex(String userInput) throws Exception;
 

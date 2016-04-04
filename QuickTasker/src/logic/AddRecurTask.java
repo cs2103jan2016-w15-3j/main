@@ -14,7 +14,6 @@ public class AddRecurTask<RecurringTask> implements Command {
     private Stack<Task> undoStack = new Stack<Task>();
     private Stack<Task> redoStack = new Stack<Task>();
 
-    @Override
     public void execute(List list, Object op) {
         assert (list.size() >= 0);
         undoStack.push((model.RecurringTask) op);
@@ -35,13 +34,11 @@ public class AddRecurTask<RecurringTask> implements Command {
         loggerAdd.log(Level.INFO, "END");
     }
 
-    @Override
     public void undo(ArrayList list) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
     public void redo(ArrayList list) {
         // TODO Auto-generated method stub
 

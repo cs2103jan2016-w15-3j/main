@@ -99,7 +99,7 @@ public class UpdateParser extends UserInputParser{
 
 	private int getIndexForTaskNameUpdate() {
 		int index = 0;
-		for (int i = lengthOfInput; i >= 0; i--) {
+		for (int i = lengthOfInput; i > 0; i--) {
 
 			if (userCommand[i - 1].equals("floating")) {
 				index = i - 1;
