@@ -145,7 +145,6 @@ public class MainWindowController implements Initializable {
 
     private class UIOperationException extends RuntimeException {}
     private void performOperations(String userInput) throws UIOperationException {
-        System.out.println(main);
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
                 createTask(userInput);
@@ -170,7 +169,6 @@ public class MainWindowController implements Initializable {
                 showToday();
             } else if (userInput.equals("show tomorrow") || userInput.equals("view tomorrow")) {
                 showTomorrow();
-            } else if (userInput.equals("show all") || userInput.equals("view all")) {
                 showAll();
             } else if (userInput.equals("view floating") || userInput.equals("show floating")) {
                 showFloating();
@@ -181,7 +179,11 @@ public class MainWindowController implements Initializable {
                     try {
                         main.getDecorator().setStyle("-fx-decorator-color: derive(" + ApplicationColor.BLUE.getHexCode() + ",-20%);");
                         headerContainer.setStyle("-fx-background-color: " + ApplicationColor.BLUE.getHexCode());
+                        System.out.println(tasksCounter.getChildren());
                         commandBox.clear();
+                        JFXDatePicker datePicker = new JFXDatePicker();
+
+                        datePicker.show();
                         //an event with a button maybe
                     } catch (Exception e) {
                     }
