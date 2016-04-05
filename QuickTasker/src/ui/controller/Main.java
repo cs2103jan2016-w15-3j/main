@@ -49,8 +49,8 @@ public class Main extends Application {
 
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainWindowView.fxml"));
-            MainWindowController mainWindowController = loader.getController();
             BorderPane mainContainer = loader.load();
+            MainWindowController mainWindowController = loader.getController();
             mainWindowController.setMain(this);
             mainWindowController.setStage(primaryStage);
             decorator = new JFXDecorator(primaryStage,mainContainer);
