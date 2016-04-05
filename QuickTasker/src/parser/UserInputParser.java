@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author A0121558H
+ * @@author A0121558H
  */
 public class UserInputParser {
 

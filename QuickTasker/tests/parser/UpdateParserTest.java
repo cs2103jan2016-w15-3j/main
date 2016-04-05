@@ -21,12 +21,12 @@ public class UpdateParserTest {
 	@Test
 	public void testGetStartDate() {
 		
-		assertEquals(LocalDate.of(12, 12, 12), parser.getStartDate(stringToTest));
+		assertEquals(LocalDate.of(2012, 12, 12), parser.getStartDate(stringToTest));
 	}
 
 	@Test
 	public void testGetEndDate() {
-		assertEquals(LocalDate.of(12, 12, 13), parser.getEndDate(stringToTest));
+		assertEquals(LocalDate.of(2013, 12, 12), parser.getEndDate(stringToTest));
 	}
 
 	@Test
@@ -47,7 +47,7 @@ public class UpdateParserTest {
 	@Test
 	public void testGetIndex() {
 		parser.setAttributesForUpdates(stringToTest);
-		assertEquals(1, parser.getIndexForUpdate(stringToTest));
+		assertEquals(1, parser.getIndexForUpdates(stringToTest));
 	}
 
 

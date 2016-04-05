@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
 
-public class UpdateParser extends UserInputParser{
-	
-	
+public class UpdateParser extends UserInputParser {
+
 	public void setAttributesForUpdates(String input) {
 		DateTimeParser dateTimeParser = new DateTimeParser();
 		removeWhiteSpaces(input);
@@ -23,7 +23,7 @@ public class UpdateParser extends UserInputParser{
 			setDate(numToUse, lengthOfInput);
 			userCommand = dateTimeParser.removeDate(userCommand);
 			determineLengthOfInput();
-			setTaskName();
+			setTaskNameForUpdates();
 		} else {
 			determineLengthOfInput();
 			userCommand = removeFloatingWord(getIndexForTaskNameUpdate());
@@ -38,6 +38,7 @@ public class UpdateParser extends UserInputParser{
 		System.out.println("parser starttime " + startTime);
 		System.out.println("parser endtime " + endTime);
 	}
+
 	private void setDateFloating() {
 		startDate = LocalDate.MAX;
 		endDate = LocalDate.MAX;
@@ -47,10 +48,23 @@ public class UpdateParser extends UserInputParser{
 		startTime = LocalTime.MAX;
 		endTime = LocalTime.MAX;
 	}
-	
-	public int getIndex(String userInput) {
+
+	private void setTaskNameForUpdates() {
+		// UPDATED AS OF 23/3/2016
+
+		String output = "";
+
+		for (int i = 1; i < lengthOfInput; i++) {
+			System.out.println("I:  " + userCommand[i]);
+			output += userCommand[i] + " ";
+		}
+		output = output.trim();
+		taskName = output;
+	}
+
+	public int getIndexForUpdates(String userInput) {
 		removeWhiteSpaces(userInput);
-		return Integer.parseInt(userCommand[1]) - 1;
+		return Integer.parseInt(userCommand[1]);
 	}
 
 	public String getTaskName(String userInput) {
@@ -77,18 +91,17 @@ public class UpdateParser extends UserInputParser{
 		setAttributesForUpdates(userInput);
 		return endTime;
 	}
-	
+
 	private void setFloatingTaskNameUpdate() {
 		String output = "";
-		for (int i = 1; i < lengthOfInput; i++) {
+		for (int i = 2; i < lengthOfInput; i++) {
+			System.out.println("USERCOMMAND[i] " + userCommand[i]);
 			output += userCommand[i];
 			output += " ";
 		}
 		output = output.trim();
 		taskName = output;
 	}
-
-
 
 	private String[] removeFloatingWord(int indexToRemove) {
 		ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList(userCommand));
@@ -115,7 +128,7 @@ public class UpdateParser extends UserInputParser{
 		return tempUserCommand.toArray(new String[tempUserCommand.size()]);
 	}
 
-	protected boolean isFloatingUpdate() {
+	private boolean isFloatingUpdate() {
 		boolean check = false;
 
 		for (String s : userCommand) {

@@ -20,6 +20,7 @@ import parser.Commands;
 import parser.InputValidator;
 import parser.ParserInterface;
 import parser.RecurringParser;
+import parser.UpdateParser;
 import parser.UserInputParser;
 import ui.model.TaskListCell;
 
@@ -40,7 +41,8 @@ public class MainWindowController implements Initializable {
 	private static Logger logger;
 	public AnchorPane container;
 	private Main main;
-	private final ParserInterface parser = new UserInputParser();
+	private final UserInputParser parser = new UserInputParser();
+	private final UpdateParser updateParser= new UpdateParser();
 	private RecurringParser recurringParser = new RecurringParser();
 	private final Logic operations = new Logic();
 
@@ -195,11 +197,11 @@ public class MainWindowController implements Initializable {
 	}
 
 	private void updateTask(String userInput) throws Exception {
-		int indexOfTask = parser.getIndexForUpdate(userInput);
+		int indexOfTask = updateParser.getIndexForUpdates(userInput);
 		printedPlanner.getSelectionModel().select(indexOfTask);
-		Task newTask = makeTask(parser.getTaskNameForUpdate(userInput), parser.getStartDateForUpdate(userInput),
-				parser.getEndDateForUpdate(userInput), parser.getStartTimeForUpdate(userInput),
-				parser.getEndTimeForUpdate(userInput));
+		Task newTask = makeTask(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
+				updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
+				updateParser.getEndTime(userInput));
 		/*
 		 * plannerEntries.remove(indexOfTask);
 		 * plannerEntries.add(indexOfTask,newTask);
