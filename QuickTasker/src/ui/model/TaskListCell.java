@@ -147,13 +147,18 @@ public class TaskListCell extends JFXListCell<Task> {
     // It will be shortly replaced with icons in the next iterat
 
     protected void setTaskStartDate(Task task) {
-        if (task != null && !isFloatingTask(task) && task.getDueDate() != LocalDate.MIN) {
+        if (task != null && task.getStartDate() != LocalDate.MIN) {
+            setStartDateInText(task);
+        } else {
+            taskStartDate.setText("");
+        }
+    }
 
-            LocalDate startDate = task.getStartDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-            String dateString = formatter.format(startDate);
-            taskStartDate.setText(dateString);
-        } else taskStartDate.setText("");
+    private void setStartDateInText(Task task) {
+        LocalDate startDate = task.getStartDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        String dateString = formatter.format(startDate);
+        taskStartDate.setText(dateString);
     }
 
     private boolean isFloatingTask(Task task) {
@@ -162,13 +167,15 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskDueDate(Task task) {
 
-        if (task != null && !isFloatingTask(task) && task.getDueDate() != LocalDate.MIN) {
+        if (task != null && task.getDueDate() != LocalDate.MIN) {
 
             LocalDate dueDate = task.getDueDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
             String dateString = formatter.format(dueDate);
             taskDueDate.setText(dateString);
-        } else taskDueDate.setText("-");
+        } else {
+            taskDueDate.setText("-");
+        }
     }
 
     protected void setTaskStartTime(Task task) {
