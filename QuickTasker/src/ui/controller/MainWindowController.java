@@ -89,7 +89,7 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) {
-        String userInput = commandBox.getText();
+        String userInput = commandBox.getText().toLowerCase();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
             try {
