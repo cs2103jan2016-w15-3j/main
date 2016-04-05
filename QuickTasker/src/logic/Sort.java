@@ -13,9 +13,6 @@ public class Sort<E> implements Command {
         System.out.println("really sorting now");
         Collections.sort(list);
         System.out.println("finish sorting");
-/*        for(int i = 0; i < list.size(); i++) {   
-            System.out.println(list.get(i) + "\n");
-        } */
     }
 
     @Override
