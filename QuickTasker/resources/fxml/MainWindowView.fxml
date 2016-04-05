@@ -44,14 +44,14 @@
                 <left>
                     <JFXRippler alignment="BASELINE_LEFT" maskType="CIRCLE" ripplerFill="WHITE" style="-fx-ripple-color:WHITE;">
                         <StackPane styleClass="badge-container">
-                            <JFXBadge fx:id="badge1" position="TOP_RIGHT" styleClass="icons-badge" text="1" BorderPane.alignment="CENTER">
+                            <JFXBadge fx:id="tasksCounter" position="TOP_RIGHT" styleClass="icons-badge" text="1" BorderPane.alignment="CENTER">
                                 <MaterialDesignIconView glyphName="INBOX" size="2.5em" styleClass="icon" textAlignment="CENTER" textOrigin="CENTER" />
                             </JFXBadge>
                         </StackPane>
                     </JFXRippler>
                 </left>
                 <center>
-                    <Label alignment="CENTER" styleClass="title-label" textOverrun="CLIP" BorderPane.alignment="CENTER">All Tasks
+                    <Label fx:id="headerTitle" alignment="CENTER" styleClass="title-label" textOverrun="CLIP" BorderPane.alignment="CENTER">All Tasks
                     </Label>
                 </center>
                 <opaqueInsets>

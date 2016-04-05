@@ -53,10 +53,10 @@ public class AddTask<E> implements Command<Object> {
         }
     }
 
-    private int findTask(int index, ArrayList<Task> list) {
+    private int findTask(String id, ArrayList<Task> list) {
         int position = -1;
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId() == index) {
+            if (list.get(i).getId().equals(id)) {
                 position = i;
             }
         }
