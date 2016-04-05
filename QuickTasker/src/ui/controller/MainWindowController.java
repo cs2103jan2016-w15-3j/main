@@ -85,6 +85,9 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
     private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
 
+    public MainWindowController(){
+
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initPlanner();
@@ -111,7 +114,7 @@ public class MainWindowController implements Initializable {
         this.stage = stage;
     }
 
-    void setMain(Main main) {
+    public void setMain(Main main) {
         this.main = main;
     }
 
@@ -125,7 +128,7 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) {
-
+        System.out.println(this.main);
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
@@ -140,9 +143,7 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    private class UIOperationException extends RuntimeException {
-    }
-
+    private class UIOperationException extends RuntimeException {}
     private void performOperations(String userInput) throws UIOperationException {
         System.out.println(main);
         try {
@@ -179,7 +180,6 @@ public class MainWindowController implements Initializable {
                 Platform.runLater(() -> {
                     try {
                         //an event with a button maybe
-
                     } catch (Exception e) {
                     }
                 });

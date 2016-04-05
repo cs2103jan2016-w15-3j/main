@@ -19,7 +19,6 @@ public class Main extends Application {
     private JFXDecorator decorator;
     private Stage primaryStage;
     public static Scene scene;
-    // private RootLayoutController rootLayoutController;
     private static final int STAGE_MINIMUM_HEIGHT = 150;
     private static final int STAGE_MINIMUM_WIDTH = 560;
 
@@ -27,7 +26,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         SettingManager settings = new SettingManager();
         this.primaryStage = primaryStage;
-
         // Do not remove these 2 lines of comments:
         /*Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
         Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);*/
@@ -50,10 +48,10 @@ public class Main extends Application {
     private void mainWindow() {
 
         try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainWindowView.fxml"));
-            BorderPane mainContainer = loader.load();
             MainWindowController mainWindowController = new MainWindowController();
-
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainWindowView.fxml"));
+            loader.setController(mainWindowController);
+            BorderPane mainContainer = loader.load();
             mainWindowController.setMain(this);
             mainWindowController.setStage(primaryStage);
             decorator = new JFXDecorator(primaryStage,mainContainer);
