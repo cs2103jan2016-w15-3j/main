@@ -16,19 +16,20 @@ public class UpdateTaskTest {
 
     @Before
     public void setUp() throws Exception {
-        settings = new SettingManager();
-        settings.setPathOfSaveFile("test.json");
+/*        settings = new SettingManager();
+        settings.setPathOfSaveFile("test.json");*/
         init();
     }
 
-    @After
+/*    @After
     public void tearDown() {
         settings.resetDefaultSettings();
         logic.clear();
-    }
+    }*/
 
     private void init() {
         logic = new Logic();
+        logic.clear();
         logic.addTask(new Task("hello", LocalDate.now(), LocalDate.now()));
         logic.addTask(new Task());
     }
@@ -51,7 +52,7 @@ public class UpdateTaskTest {
     // A user could have changed the task to floating 
     public void testUpdatingWithFloating() throws Exception {
         logic.updateTask(new Task("name longer by alot", null, null), 1);
-        assertEquals("name longer by alot", logic.getTasks().get(1).getName());
+        assertEquals("name longer by alot", logic.getTasks().get(0).getName());
     }
 
     @Test
@@ -74,13 +75,13 @@ public class UpdateTaskTest {
     // A user could have changed name without start date
     public void testUpdatingWithoutStartDate() throws Exception {
         logic.updateTask(new Task("name longer by alot", null, LocalDate.now()), 1);
-        assertEquals("name longer by alot", logic.getTasks().get(1).getName());
+        assertEquals("name longer by alot", logic.getTasks().get(0).getName());
     }
 
     @Test
     // A user could have changed name without due date
     public void testUpdatingWithoutDueDate() throws Exception {
         logic.updateTask(new Task("name longer by alot", LocalDate.now(), null), 1);
-        assertEquals("name longer by alot", logic.getTasks().get(1).getName());
+        assertEquals("name longer by alot", logic.getTasks().get(0).getName());
     }
 }

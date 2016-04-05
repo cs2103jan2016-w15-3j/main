@@ -61,7 +61,7 @@ public class UserInputParser implements ParserInterface {
         System.out.println("parser starttime " + startTime);
         System.out.println("parser endtime " + endTime);
     }
-
+    
     public void setAttributesForGetCommands(String userInput) throws setAttributeException {
         removeWhiteSpaces(userInput);
         determineLengthOfInput();
@@ -253,8 +253,8 @@ public class UserInputParser implements ParserInterface {
     }
 
     private void setDateFloating() {
-        startDate = LocalDate.MAX;
-        endDate = LocalDate.MAX;
+        startDate = LocalDate.MIN;
+        endDate = LocalDate.MIN;
     }
 
     private void setTimeFloating() {
@@ -300,8 +300,8 @@ public class UserInputParser implements ParserInterface {
             startDate = endDate = stringToLocalDate(
                     userCommand[length - 2] + " " + userCommand[length - 1]);
         } else if (numToSetDate == 3) {// floating task
-            startDate = LocalDate.MAX;
-            endDate = LocalDate.MAX;// placeholder for null
+            startDate = LocalDate.MIN;
+            endDate = LocalDate.MIN;// placeholder for null
         } else if (numToSetDate == 4) {
             startDate = endDate = stringToLocalDate("today");
         } else if (numToSetDate == 5) {
@@ -329,7 +329,8 @@ public class UserInputParser implements ParserInterface {
             System.out.println("i: " + i);
 
         if (indicesTime.size() == 0) {
-            return;
+            startTime = null;
+            endTime = null;
         }
         ArrayList<LocalTime> localTimes = parser.parseTime(input, indicesTime);
 

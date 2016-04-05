@@ -42,6 +42,12 @@ public class DetermineCommandType {
                 return Commands.COMPLETE_TASK;*/
             case "redo":
                 return Commands.REDO;
+            case "skip":
+                return Commands.SKIP;
+            case "stop":
+                return Commands.STOP;
+            case "mark":
+                return Commands.MARK;
             default:
                 return Commands.ERROR;
         }

@@ -1,4 +1,4 @@
-package logic;
+/*package logic;
 
 import model.Task;
 import org.junit.Before;
@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-/**
+*//**
  * Author A0130949 Soh Yonghao
  * <p>
  * .
- */
+ *//*
 
 public class DisplayTaskTest {
     private ArrayList<Task> test;
@@ -33,4 +33,4 @@ public class DisplayTaskTest {
         assertEquals(dTask.executeDisplay(test), test);
     }
 
-}
+}*/

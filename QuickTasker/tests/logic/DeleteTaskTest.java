@@ -23,19 +23,20 @@ public class DeleteTaskTest {
 
     @Before
     public void setUp() throws Exception {
-        settings = new SettingManager();
-        settings.setPathOfSaveFile("test.json");
+/*        settings = new SettingManager();
+        settings.setPathOfSaveFile("test.json");*/
         init();
     }
 
-    @After
+/*    @After
     public void tearDown() {
         settings.resetDefaultSettings();
         logic.clear();
-    }
+    }*/
 
     private void init() {
         logic = new Logic();
+        logic.clear();
         for (int i = 0; i < 10; i++) {
             Task task = new Task();
             logic.list.add(task);

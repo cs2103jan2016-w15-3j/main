@@ -119,7 +119,8 @@ public class RecurringParser {
         ArrayList<Integer> indicesTime = parser.indicesToDetermineTime(input);
 
         if (indicesTime.size() == 0) {
-            return;
+            startTime = null;
+            endTime = null;
         }
         ArrayList<LocalTime> localTimes = parser.parseTime(input, indicesTime);
 

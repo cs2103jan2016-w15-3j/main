@@ -3,6 +3,7 @@ package logic;
 import model.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -25,6 +26,7 @@ public class DeleteTask<E> implements Command<Object> {
 
     private void executeDelete(List<Task> list, int index) {
         list.remove(index);
+       // Collections.sort(list);
     }
 
     @Override
@@ -38,7 +40,6 @@ public class DeleteTask<E> implements Command<Object> {
 
     @Override
     public void redo(ArrayList<Task> list) {
-        // TODO Auto-generated method stub
         Task redoTask = redoStackTask.pop();
         int indexToRedo = redoStackIndex.pop();
         undoStackTask.push(redoTask);
@@ -47,13 +48,8 @@ public class DeleteTask<E> implements Command<Object> {
         list.remove(indexToRedo);
     }
 
-/*    private int findTask(int index, ArrayList<Task> list) {
-        int position = -1;
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId() == index) {
-                position = i;
-            }
-        }
-        return position;
-    }*/
+    @Override
+    public int findTask(Task task, ArrayList<Task> list) {
+        return 0;
+    }
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import model.Task;
+
 public class Sort<E> implements Command {
 
     @Override
@@ -26,6 +28,12 @@ public class Sort<E> implements Command {
     public void redo(ArrayList list) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public int findTask(Task task, ArrayList list) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

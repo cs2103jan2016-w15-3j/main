@@ -17,4 +17,6 @@ public interface Command<E> {
     void undo(ArrayList<Task> list);
 
     void redo(ArrayList<Task> list);
+    
+    int findTask(Task task, ArrayList<Task> list);
 }

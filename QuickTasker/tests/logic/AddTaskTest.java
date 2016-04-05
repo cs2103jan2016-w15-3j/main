@@ -24,9 +24,10 @@ public class AddTaskTest {
 
     @Before
     public void setUp() throws Exception {
-        settings = new SettingManager();
-        settings.setPathOfSaveFile("test.json");
+/*        settings = new SettingManager();
+        settings.setPathOfSaveFile("test.json");*/
         logic = new Logic();
+        logic.clear();
         createEmptyTasks(2);
     }
 
@@ -36,11 +37,11 @@ public class AddTaskTest {
         }
     }
 
-    @After
+ /*   @After
     public void tearDown() {
         settings.resetDefaultSettings();
         logic.clear();
-    }
+    }*/
 
     @Test
     public void testSizeOfListAfterAdd() throws Exception {
@@ -57,14 +58,15 @@ public class AddTaskTest {
     // A user could have added normally
     public void testNameAfterAdding() throws Exception {
         logic.addTask(new Task("name", LocalDate.now(), LocalDate.now()));
-        assertEquals(logic.getTasks().get(2).getName(), "name");
+        System.out.println(logic.getSize());
+        assertEquals(logic.getTasks().get(0).getName(), "name");
     }
 
     @Test
     // A user could have added task without start date
     public void testNameAfterAddingWithoutStartDate() throws Exception {
         logic.addTask(new Task("name", null, LocalDate.now()));
-        assertEquals(logic.getTasks().get(2).getName(), "name");
+        assertEquals(logic.getTasks().get(0).getName(), "name");
     }
 
     @Test
