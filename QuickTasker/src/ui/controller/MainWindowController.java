@@ -54,7 +54,8 @@ public class MainWindowController implements Initializable {
     @FXML private JFXListView<Task> printedPlanner;
     @FXML private StackPane mainContent;
     private ObservableList<Task> plannerEntries;
-
+    private ObservableList<Task> filteredEntries;
+ 
     // Display messages as visual feedback for users
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
     private static final String MESSAGE_ADD_CONFIRMED = "Task added to list.";
@@ -79,6 +80,7 @@ public class MainWindowController implements Initializable {
 
     private void initPlanner() {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
+    	plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         printedPlanner.setItems(plannerEntries);
         printedPlanner.setDepthProperty(1);
         snackbar.registerSnackbarContainer(snackbarContainer);
@@ -129,6 +131,8 @@ public class MainWindowController implements Initializable {
                 undoTask();
             } else if (parser.getCommand(userInput) == Commands.REDO) {
                 redoTask();
+            } else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) {
+            	searchTask(userInput);
             } else if (parser.getCommand(userInput) == Commands.EXIT) {
                 operations.exit();
             } else if (parser.getCommand(userInput) == Commands.SORT_TASK) {
@@ -201,6 +205,34 @@ public class MainWindowController implements Initializable {
         plannerEntries = FXCollections.observableArrayList(operations.undo());
         afterOperation();
     }
+    
+    private void searchTask(String userInput) {
+		for (Task task : plannerEntries) {
+			String taskDescription = task.getName();
+			LocalDate taskStartDate = task.getStartDate();
+			LocalDate taskEndDate = task.getDueDate();
+			if (taskDescription.contains(userInput.toLowerCase())) {
+				//filteredEntries.clear();
+				filteredEntries.add(task);
+				System.out.println("filteredlist" + filteredEntries.size());
+				snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Search results returned.", "", 1500, (b) -> {
+				}));
+			} else {
+				snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Invalid search term!", "", 1500, (b) -> {
+				}));
+				
+			}
+		afterSearch();
+		
+		}
+	}
+    
+    private void showTasks() {
+    	
+    }
+
+    
+    
 
     private void updateTask(String userInput) throws Exception {
         int indexOfTask = parser.getIndexForUpdate(userInput);
@@ -232,11 +264,15 @@ public class MainWindowController implements Initializable {
         snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Task Removed.", "", 1500, (b) -> {
         }));
 
-
     }
 
+    
     private void refresh() {
         printedPlanner.setItems(plannerEntries);
+    }
+    
+    private void refreshSearch() {
+    	printedPlanner.setItems(filteredEntries);
     }
 
     private void createTask(String userInput) throws Exception {
@@ -274,6 +310,12 @@ public class MainWindowController implements Initializable {
         setCellFactory();
         refresh();
         commandBox.clear();
+    }
+    
+    private void afterSearch() {
+    	setCellFactory();
+    	refreshSearch();
+    	commandBox.clear();
     }
 
     private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate,
