@@ -189,10 +189,10 @@ public class Task implements Comparable {
     @Override
     public int compareTo(Object task) {
         Task comparedTask = (Task) task;
-        int result = comparedTask.getDueDate().compareTo(this.getDueDate());
+        int result = compareDueDate(this, comparedTask);
         
         if (result == 0) {
-            result = comparedTask.getStartDate().compareTo(this.getStartDate());
+            result = compareStartDate(this, comparedTask);
         }
         
         if (result == 0) {
@@ -200,5 +200,29 @@ public class Task implements Comparable {
         }
         
         return result;
+    }
+
+    private int compareDueDate(Task task, Task comparedTask) {
+        if (task.getDueDate() == null && comparedTask.getDueDate() == null) {
+            return 0;
+        } else if (task.getDueDate() != null && comparedTask.getDueDate() == null) {
+            return 1;
+        } else if (task.getDueDate() == null && comparedTask.getDueDate() != null) {
+            return -1;
+        } else {
+            return comparedTask.getDueDate().compareTo(this.getDueDate());
+        }
+    }
+
+    private int compareStartDate(Task task, Task comparedTask) {
+        if (task.getStartDate() == null && comparedTask.getStartDate() == null) {
+            return 0;
+        } else if (task.getStartDate() != null && comparedTask.getStartDate() == null) {
+            return 1;
+        } else if (task.getStartDate() == null && comparedTask.getStartDate() != null) {
+            return -1;
+        } else {
+            return comparedTask.getStartDate().compareTo(this.getStartDate());
+        }
     }
 }

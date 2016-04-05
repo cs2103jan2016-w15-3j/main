@@ -1,9 +1,11 @@
 package logic;
 
 import data.JsonTaskDataAccess;
+import data.SettingManager;
 import data.TaskDataAccessObject;
 import model.RecurringTask;
 import model.Task;
+import org.jetbrains.annotations.NotNull;
 import parser.Commands;
 
 import java.util.ArrayList;
@@ -25,20 +27,22 @@ public class Logic {
     private TaskDataAccessObject storage;
     protected Stack<Commands> undoStack;
     protected Stack<Commands> redoStack;
+    private SettingManager settings;
 
     public Logic() {
-        initialize();
+        init();
     }
 
-    private void initialize() {
-        assert (list != null);
-        list = new ArrayList<Task>();
+    private void init() {
         initializeVariables();
         loadSavedTask();
     }
 
     private void initializeVariables() {
         populateCommandMap();
+        list = new ArrayList<Task>();
+        assert (list != null);
+        settings = new SettingManager();
         archivedList = new ArrayList<Task>();
         storage = new JsonTaskDataAccess();
         undoStack = new Stack<Commands>();
@@ -99,22 +103,11 @@ public class Logic {
         return (ArrayList<Task>) list;
     }
 
-    public ArrayList<Task> addRecurTask(RecurringTask task) {
-        commandMap.get(Commands.CREATE_TASK).execute(list, task);
-        undoStack.push(Commands.CREATE_TASK);
-        storage.save(list);
-        return (ArrayList<Task>) list;
-    }
-
     public ArrayList<Task> deleteTask(int index) {
         commandMap.get(Commands.DELETE_TASK).execute(list, index);
         undoStack.push(Commands.DELETE_TASK);
         saveList();
         return (ArrayList<Task>) list;
-    }
-
-    public void displayTask() {
-        commandMap.get(Commands.DISPLAY_TASK).execute(list, null);
     }
 
     public ArrayList<Task> updateTask(Task task, int index) {
@@ -126,12 +119,9 @@ public class Logic {
     }
 
     public ArrayList<Task> undo() {
-        System.out.println(undoStack.size() + " before pop");
         Commands command = undoStack.pop();
-        System.out.println(undoStack.size() + " after pop");
         redoStack.push(command);
         commandMap.get(command).undo((ArrayList<Task>) list);
-        saveList();
         sort();
         return (ArrayList<Task>) list;
     }
@@ -140,7 +130,6 @@ public class Logic {
         Commands command = redoStack.pop();
         undoStack.push(command);
         commandMap.get(command).redo((ArrayList<Task>) list);
-        saveList();
         sort();
         return (ArrayList<Task>) list;
     }
@@ -180,10 +169,7 @@ public class Logic {
         Task completedTask = list.get(index);
         completedTask.setDone(true);
         if (list.get(index) instanceof RecurringTask) {
-            archivedList.add(new RecurringTask(completedTask.getName(), 
-                    completedTask.getStartDate(), completedTask.getDueDate(), 
-                    ((RecurringTask) completedTask).getRecurType(), completedTask.getStartTime(), 
-                    completedTask.getEndTime(), ((RecurringTask) completedTask).getNumberToRecur()));
+            archivedList.add(clone(completedTask));
             skipForMark(index);
         } else {
             archivedList.add(list.get(index));
@@ -193,7 +179,19 @@ public class Logic {
         commandMap.get(Commands.MARK).execute(archivedList, index);
         //sort();
     }
-    
+
+    // requires cloning to prevent the reucrring task from changing values
+    private RecurringTask clone(Task completedTask) {
+        return new RecurringTask(completedTask.getName(),
+                completedTask.getStartDate(), completedTask.getDueDate(),
+                ((RecurringTask) completedTask).getRecurType(), completedTask.getStartTime(),
+                completedTask.getEndTime(), ((RecurringTask) completedTask).getNumberToRecur());
+    }
+
+    public void changeDir(String path) {
+        settings.setPathOfSaveFile(path);
+    }
+
     private void saveList() {
         storage.save(list);
     }

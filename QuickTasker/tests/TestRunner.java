@@ -25,7 +25,7 @@ public class TestRunner {
 
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(JsonTaskDataAccessTest.class, SettingManagerTest.class,
-                AddTaskTest.class, DeleteTaskTest.class, DisplayTaskTest.class,
+                AddTaskTest.class, DeleteTaskTest.class,
                 UpdateTaskTest.class, RecurringTaskTest.class,
                 DateTimeParserTest.class, UserInputParserTest.class, TaskDoneEventTest.class,
                 TaskListCellTest.class);
