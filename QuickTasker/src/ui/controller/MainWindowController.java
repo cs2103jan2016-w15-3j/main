@@ -25,6 +25,7 @@ import parser.Commands;
 import parser.ParserInterface;
 import parser.RecurringParser;
 import parser.UserInputParser;
+import ui.model.ApplicationColor;
 import ui.model.TaskListCell;
 
 import java.net.URL;
@@ -128,7 +129,6 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) {
-        System.out.println(this.main);
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
@@ -179,6 +179,9 @@ public class MainWindowController implements Initializable {
             }else if (userInput.equals("hi")){
                 Platform.runLater(() -> {
                     try {
+                        main.getDecorator().setStyle("-fx-decorator-color: derive(" + ApplicationColor.BLUE.getHexCode() + ",-20%);");
+                        headerContainer.setStyle("-fx-background-color: " + ApplicationColor.BLUE.getHexCode());
+                        commandBox.clear();
                         //an event with a button maybe
                     } catch (Exception e) {
                     }

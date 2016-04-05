@@ -41,7 +41,7 @@
     </bottom>
     <top>
         <VBox fx:id="headerWrapper" spacing="20" styleClass="header-wrapper">
-            <JFXToolbar>
+            <JFXToolbar fx:id="headerContainer" styleClass="header-container">
                 <left>
                     <JFXRippler alignment="BASELINE_LEFT" maskType="CIRCLE" ripplerFill="WHITE" style="-fx-ripple-color:WHITE;">
                         <StackPane styleClass="badge-container">
