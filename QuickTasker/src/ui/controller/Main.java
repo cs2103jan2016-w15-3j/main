@@ -16,8 +16,9 @@ public class Main extends Application {
 
     private static final String APP_TITLE = "Welcome to QuickTasker!";
     private static final String IMAGE_ICON = "img/home.png";
-
+    private JFXDecorator decorator;
     private Stage primaryStage;
+    public static Scene scene;
     // private RootLayoutController rootLayoutController;
     private static final int STAGE_MINIMUM_HEIGHT = 150;
     private static final int STAGE_MINIMUM_WIDTH = 560;
@@ -40,10 +41,11 @@ public class Main extends Application {
                 r.run();
             } catch (Exception e) {
                 // call logger.log here to handle thread exception
-                System.out.println("Found an exception");
+
             }
         };
     }
+
 
     private void mainWindow() {
 
@@ -54,7 +56,8 @@ public class Main extends Application {
 
             mainWindowController.setMain(this);
             mainWindowController.setStage(primaryStage);
-            Scene scene = new Scene(new JFXDecorator(primaryStage, mainContainer), 560, 400);
+            decorator = new JFXDecorator(primaryStage,mainContainer);
+            scene = new Scene(decorator, 560, 400);
             scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
             scene.getStylesheets()
                     .add(Main.class.getResource("/css/application.css").toExternalForm());
@@ -74,6 +77,14 @@ public class Main extends Application {
 
     public void quickShow() {
 
+    }
+
+    public JFXDecorator getDecorator(){
+        return decorator;
+    }
+
+    public Scene getScene(){
+        return this.scene;
     }
 
     public static void main(String[] args) {

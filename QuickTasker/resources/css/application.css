@@ -1,6 +1,8 @@
 /******************************
         Global Style
 ******************************/
+/* Variables */
+
 .root{
         -fx-background-color: white;
         -fx-alignment: center;
@@ -28,7 +30,6 @@
     -fx-border-color : -fx-decorator-color;
     -fx-border-width:0 4 4 4;
 }
-
 
 
 /* List View */

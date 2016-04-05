@@ -4,7 +4,6 @@ import model.Task;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
-import java.time.Period;
 
 public class SearchHelper {
     private final String FLOATING_TASK = "floating";
@@ -33,7 +32,7 @@ public class SearchHelper {
         String[] keywWordsArr = keywords.split("\\s+");
         processKeyWords(keywWordsArr);
         String taskName = task.getName();
-        return contains(keywWordsArr,taskName);
+        return containsFuzzy(keywWordsArr,taskName);
     }
 
     private void processKeyWords(String [] keywords){
@@ -43,8 +42,9 @@ public class SearchHelper {
         }
     }
 
-    private boolean contains(String[] keywords,String taskName){
+    private boolean containsFuzzy(String[] keywords, String taskName){
         for (String s:keywords){
+            if (taskName.contains(s)) return true;
             if (compareStrings(taskName,s) > FUZZY_STRING_COMPARE_THRESHOLD ) return true;
         }
         return false;

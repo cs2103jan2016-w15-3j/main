@@ -1,6 +1,7 @@
 package ui.controller;
 
 import com.jfoenix.controls.*;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -30,9 +31,11 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static javafx.application.Application.setUserAgentStylesheet;
 import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
 /**
@@ -84,8 +87,6 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        setMain(main);
         initPlanner();
         setCellFactory();
         initLogger();
@@ -143,6 +144,7 @@ public class MainWindowController implements Initializable {
     }
 
     private void performOperations(String userInput) throws UIOperationException {
+        System.out.println(main);
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
                 createTask(userInput);
@@ -173,6 +175,14 @@ public class MainWindowController implements Initializable {
                 showFloating();
             } else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) {
                 searchTask(userInput);
+            }else if (userInput.equals("hi")){
+                Platform.runLater(() -> {
+                    try {
+                        //an event with a button maybe
+
+                    } catch (Exception e) {
+                    }
+                });
             }
         } catch (Exception e) {
             throw new UIOperationException();
