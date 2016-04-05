@@ -145,7 +145,6 @@ public class MainWindowController implements Initializable {
 
     private class UIOperationException extends RuntimeException {}
     private void performOperations(String userInput) throws UIOperationException {
-        System.out.println(main);
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
                 createTask(userInput);
@@ -170,10 +169,11 @@ public class MainWindowController implements Initializable {
                 showToday();
             } else if (userInput.equals("show tomorrow") || userInput.equals("view tomorrow")) {
                 showTomorrow();
-            } else if (userInput.equals("show all") || userInput.equals("view all")) {
                 showAll();
             } else if (userInput.equals("view floating") || userInput.equals("show floating")) {
                 showFloating();
+            } else if (userInput.equals("show all") || userInput.equals("view all")) {
+                showAll();
             } else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) {
                 searchTask(userInput);
             }else if (userInput.equals("hi")){
@@ -181,7 +181,11 @@ public class MainWindowController implements Initializable {
                     try {
                         main.getDecorator().setStyle("-fx-decorator-color: derive(" + ApplicationColor.BLUE.getHexCode() + ",-20%);");
                         headerContainer.setStyle("-fx-background-color: " + ApplicationColor.BLUE.getHexCode());
+                        System.out.println(tasksCounter.getChildren());
                         commandBox.clear();
+                        JFXDatePicker datePicker = new JFXDatePicker();
+
+                        datePicker.show();
                         //an event with a button maybe
                     } catch (Exception e) {
                     }
@@ -195,14 +199,18 @@ public class MainWindowController implements Initializable {
     private void showTomorrow() {
         printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTomorrowView(task)));
         headerTitle.setText("Tasks: Tomorrow");
-        tasksCounter.setText(printedPlanner.getItems().size() + "");
+        updateTaskCounter();
         commandBox.clear();
+    }
+
+    private void updateTaskCounter() {
+        tasksCounter.setText(printedPlanner.getItems().size() + "");
     }
 
     private void showFloating() {
         printedPlanner.setItems(plannerEntries.filtered(task -> util.isFloatingTask(task)));
         headerTitle.setText("Tasks: Floating");
-        tasksCounter.setText(printedPlanner.getItems().size() + "");
+        updateTaskCounter();
         commandBox.clear();
     }
 
@@ -212,7 +220,7 @@ public class MainWindowController implements Initializable {
             String taskName = parser.getTaskName(userInput);
             headerTitle.setText("Search Results  \"" + taskName + "\":");
             printedPlanner.setItems(plannerEntries.filtered(task -> util.containsKeyWord(task, taskName)));
-            tasksCounter.setText(printedPlanner.getItems().size() + "");
+            updateTaskCounter();
         }
 
         // other types of search
@@ -228,7 +236,7 @@ public class MainWindowController implements Initializable {
     private void showAll() {
         printedPlanner.setItems(plannerEntries);
         headerTitle.setText("Tasks: All");
-        tasksCounter.setText(printedPlanner.getItems().size() + "");
+        updateTaskCounter();
         commandBox.clear();
     }
 
@@ -236,7 +244,7 @@ public class MainWindowController implements Initializable {
 
         printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTodayView(task)));
         headerTitle.setText("Tasks: Today + Floating");
-        tasksCounter.setText(printedPlanner.getItems().size() + "");
+        updateTaskCounter();
         commandBox.clear();
     }
 
@@ -367,6 +375,7 @@ public class MainWindowController implements Initializable {
     private void afterOperation() {
         setCellFactory();
         refresh();
+        updateTaskCounter();
         commandBox.clear();
     }
 
