@@ -161,6 +161,8 @@ public class MainWindowController implements Initializable {
 				markTaskCompleted(userInput);
 			} else if (parser.getCommand(userInput) == Commands.RECUR_TASK) {
 				createRecurringTask(userInput);
+			} else if (userInput.equals("show today")){
+
 			}
 		} catch (Exception e) {
 			throw new UIOperationException();
@@ -230,8 +232,6 @@ public class MainWindowController implements Initializable {
 		}
 	}*/
 	
-	
-
 	private void undoTask() {
 		plannerEntries = FXCollections.observableArrayList(operations.undo());
 		afterOperation();
