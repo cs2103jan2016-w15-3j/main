@@ -11,17 +11,18 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
     ArrayList<Task> archivedList;
     private Stack<Task> undoStack = new Stack<Task>();
     private Stack<Task> redoStack = new Stack<Task>();
-    private Stack<Integer> undoStackInt = new Stack<Integer>();
-    private Stack<Integer> redoStackInt = new Stack<Integer>();
+    private Stack<String> undoStackId = new Stack<String>();
+    private Stack<String> redoStackId = new Stack<String>();
 
     @Override
     public void execute(List list, Object op) {
         archivedList = (ArrayList<Task>) list;
-        int index = (int) op;
-        if (archivedList.get(archivedList.size() - 1) instanceof RecurringTask) {
-            undoStackInt.push(index);
+        String taskId = (String) op;
+        Task archivedTask = archivedList.get(archivedList.size() - 1);
+        if (archivedTask instanceof RecurringTask) {
+            undoStackId.push(taskId);
         }
-        undoStack.push(archivedList.get(archivedList.size() - 1));
+        undoStack.push(archivedTask);
     }
 
     @Override
@@ -29,10 +30,10 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
         archivedList.remove(archivedList.size() - 1);
         Task undoTask = undoStack.pop();
         if (undoTask instanceof RecurringTask) {
-            int index = undoStackInt.pop();
-            redoStackInt.push(index);
+            String taskId = undoStackId.pop();
+            redoStackId.push(taskId);
             redoStack.push((undoTask));
-            int positionOfRecurringTask = findTask(Integer.toString(index), list);
+            int positionOfRecurringTask = findTask(taskId, list);
             moveDateBackward((RecurringTask) list.get(positionOfRecurringTask));
         } else {
             redoStack.push(undoTask);
@@ -48,9 +49,9 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
         undoStack.push(redoTask);
         archivedList.add(redoTask);
         if (redoTask instanceof RecurringTask) {
-            int index = redoStackInt.pop();
-            undoStackInt.push(index);
-            int positionOfRecurringTask = findTask(Integer.toString(index), list);
+            String taskId = redoStackId.pop();
+            undoStackId.push(taskId);
+            int positionOfRecurringTask = findTask(taskId, list);
             undoStack.push((RecurringTask) list.get(positionOfRecurringTask));
             moveDateForward((RecurringTask) list.get(positionOfRecurringTask));
         } else {

@@ -173,6 +173,7 @@ public class Logic {
             list.remove(index);
         }
         undoStack.push(Commands.MARK);
+        String stink = completedTask.getId();
         commandMap.get(Commands.MARK).execute(archivedList, completedTask.getId());
         //sort();
     }

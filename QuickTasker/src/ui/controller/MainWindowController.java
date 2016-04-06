@@ -137,8 +137,8 @@ public class MainWindowController implements Initializable {
                 performOperations(userInput);
             } catch (UIOperationException e) {
                 logger.log(Level.SEVERE,
-                        "Error occured at " + this.getClass().getName() + " within performOperation method.\n");
-                e.printStackTrace();
+                        "Error occured at " + this.getClass().getName() + " within performOperation method.\n", e);
+                //e.printStackTrace();
             }
         }
     }
