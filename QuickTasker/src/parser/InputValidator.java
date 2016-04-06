@@ -1,50 +1,43 @@
 package parser;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 /**
  * 
  * @@author A0121558H
  * 
  */
 public class InputValidator extends UserInputParser {
-	
-	private boolean isUndoRedo;
-	private boolean isNull;
-	private boolean isCommandValid;
-	private boolean isTaskNameValid;
-	private boolean isDateValid;
-	private boolean isTimeValid;
 
-	public InputValidator(String userCommand) {
-		isUndoRedo=checkUndoRedo(userCommand);
-		isNull = checkIfNull(userCommand);
-		isCommandValid = checkCommand(userCommand);
-		isTaskNameValid = checkTaskName(userCommand);
-		isDateValid = checkDate(userCommand);
-		isTimeValid = checkTime(userCommand);
-	}
-	public static boolean isAllValid(String input) {
-		InputValidator inputValidator= new InputValidator(input);
-		
-		if(inputValidator.isUndoRedo){
-			return true;			
-		}		
-		return inputValidator.isNull || inputValidator.isCommandValid ||
-				inputValidator.isDateValid || inputValidator.isTaskNameValid 
-				||inputValidator.isTimeValid;
+	public boolean isAllValid(String input) {
+		boolean check = false;
+
+		if (checkUndoRedo(input)) {
+			return true;
+		}
+
+		check = checkIfNull(input);
+		check = checkCommand(input);
+		check = checkTaskName(input);
+		check = checkDate(input);
+		check = checkTime(input);
+
+		return check;
 	}
 
-	private boolean checkIfNull(String input) {
+	private static boolean checkIfNull(String input) {
 		return input.isEmpty();
 	}
+
 	private boolean checkUndoRedo(String input) {
-		setAttributes(input);
-		Commands cmd = DetermineCommandType.getCommand(command);
-		
-		if(cmd==Commands.UNDO_TASK || cmd==Commands.REDO) {
+		Commands cmd = getCommand(input);
+
+		if (cmd == Commands.UNDO_TASK || cmd == Commands.REDO) {
 			return true;
 		}
 		return false;
-		}
+	}
 
 	private boolean checkCommand(String input) {
 		setAttributes(input);
@@ -69,23 +62,43 @@ public class InputValidator extends UserInputParser {
 
 		setAttributes(input);
 
-		if (isEqualDate(input)) {
-			return endTime.isAfter(startTime);
+		if (isTimeAvailable()) {
+			if (isEqualDate(input)) {
+				return endTime.isAfter(startTime);
+			}
+			return false;
+		} else {
+			return true;
 		}
-		return false;
 	}
 
 	private boolean checkDate(String input) {
 
 		setAttributes(input);
 
-		return endDate.isAfter(startDate) || endDate.isEqual(startDate);
+		if (isDateAvailable()) {
+			return endDate.isAfter(startDate) || endDate.isEqual(startDate);
+		} else {
+			return true;
+		}
 	}
 
 	private boolean isEqualDate(String input) {
 		setAttributes(input);
 
 		return endDate.isEqual(startDate);
+	}
+
+	private boolean isTimeAvailable() {
+		return !(startTime == LocalTime.MIN) || !(endTime == LocalTime.MIN);
+	}
+
+	private boolean isDateAvailable() {
+		return !(startDate == LocalDate.MAX) || !(endDate == LocalDate.MAX);
+	}
+
+	public boolean checkAllValid(String userInput) {
+		return isAllValid(userInput);
 	}
 
 }

@@ -108,7 +108,9 @@ public class MainWindowController implements Initializable {
 	}
 
 	private void performOperations(String userInput) throws UIOperationException {
-		if (InputValidator.isAllValid(userInput)) {
+		InputValidator inputValidator= new InputValidator();
+		System.out.println("inputValidator.checkAllValid(userInput) " +inputValidator.checkAllValid(userInput));
+		if (inputValidator.checkAllValid(userInput)) {
 			try {
 				if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
 					createTask(userInput);
