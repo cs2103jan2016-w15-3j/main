@@ -27,7 +27,7 @@ public class Search<E> implements Command<Object> {
     }
 
     @Override
-    public int findTask(Task task, ArrayList<Task> list) {
+    public int findTask(String id, ArrayList<Task> list) {
         // TODO Auto-generated method stub
         return 0;
     }

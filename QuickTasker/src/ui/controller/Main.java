@@ -16,9 +16,9 @@ public class Main extends Application {
 
     private static final String APP_TITLE = "Welcome to QuickTasker!";
     private static final String IMAGE_ICON = "img/home.png";
-
+    private JFXDecorator decorator;
     private Stage primaryStage;
-    // private RootLayoutController rootLayoutController;
+    public static Scene scene;
     private static final int STAGE_MINIMUM_HEIGHT = 150;
     private static final int STAGE_MINIMUM_WIDTH = 560;
 
@@ -26,7 +26,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         SettingManager settings = new SettingManager();
         this.primaryStage = primaryStage;
-
         // Do not remove these 2 lines of comments:
         /*Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
         Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);*/
@@ -40,22 +39,23 @@ public class Main extends Application {
                 r.run();
             } catch (Exception e) {
                 // call logger.log here to handle thread exception
-                System.out.println("Found an exception");
+
             }
         };
     }
+
 
     private void mainWindow() {
 
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainWindowView.fxml"));
             BorderPane mainContainer = loader.load();
-            MainWindowController mainWindowController = new MainWindowController();
-
+            MainWindowController mainWindowController = loader.getController();
             mainWindowController.setMain(this);
-
-            Scene scene = new Scene(new JFXDecorator(primaryStage, mainContainer), 560, 400);
-            //scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
+            mainWindowController.setStage(primaryStage);
+            decorator = new JFXDecorator(primaryStage,mainContainer);
+            scene = new Scene(decorator, 560, 400);
+            scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
             scene.getStylesheets()
                     .add(Main.class.getResource("/css/application.css").toExternalForm());
 
@@ -70,6 +70,18 @@ public class Main extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void quickShow() {
+
+    }
+
+    public JFXDecorator getDecorator(){
+        return decorator;
+    }
+
+    public Scene getScene(){
+        return this.scene;
     }
 
     public static void main(String[] args) {

@@ -18,5 +18,5 @@ public interface Command<E> {
 
     void redo(ArrayList<Task> list);
     
-    int findTask(Task task, ArrayList<Task> list);
+    int findTask(String id, ArrayList<Task> list);
 }

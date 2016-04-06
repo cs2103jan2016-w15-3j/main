@@ -28,7 +28,7 @@ public class Sort<E> implements Command {
     }
 
     @Override
-    public int findTask(Task task, ArrayList list) {
+    public int findTask(String id, ArrayList list) {
         // TODO Auto-generated method stub
         return 0;
     }

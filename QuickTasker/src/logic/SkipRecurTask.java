@@ -24,7 +24,7 @@ public class SkipRecurTask<E> implements Command<Object> {
         RecurringTask recurringTask = (RecurringTask) list.get(index);
         moveDateForward(recurringTask);
         Collections.sort(list);
-        undoStackInt.push(findTask(recurringTask, (ArrayList<Task>) list));
+        undoStackInt.push(findTask(recurringTask.getId(), (ArrayList<Task>) list));
     }
     
     protected void moveDateForward(RecurringTask task) {
@@ -55,7 +55,7 @@ public class SkipRecurTask<E> implements Command<Object> {
         RecurringTask recurringTask = (RecurringTask) list.get(undoIndex);
         moveDateBackward((RecurringTask) list.get(undoIndex));
         Collections.sort(list);
-        redoStackInt.push(findTask(recurringTask, list));
+        redoStackInt.push(findTask(recurringTask.getId(), list));
 
     }
 
@@ -65,11 +65,11 @@ public class SkipRecurTask<E> implements Command<Object> {
         RecurringTask recurringTask = (RecurringTask) list.get(redoIndex);
         moveDateForward(recurringTask); 
         Collections.sort(list);
-        undoStackInt.push(findTask(recurringTask, list));
+        undoStackInt.push(findTask(recurringTask.getId(), list));
     }
     
-    @Override
-    public int findTask(Task task, ArrayList<Task> list) {
+/*    @Override
+    public int findingTask(Task task, ArrayList<Task> list) {
         int position = -1;
         if (task instanceof RecurringTask) {
             for (int i = 0; i < list.size(); i++) {
@@ -81,6 +81,17 @@ public class SkipRecurTask<E> implements Command<Object> {
                 }
             }
         } 
+        return position;
+    }*/
+
+    @Override
+    public int findTask(String id, ArrayList<Task> list) {
+        int position = -1;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId().equals(id)) {
+                position = i;
+            }
+        }
         return position;
     }
 }

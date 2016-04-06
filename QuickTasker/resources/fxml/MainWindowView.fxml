@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXBadge?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXRippler?>
 <?import com.jfoenix.controls.JFXSnackbar?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToolbar?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controller.MainWindowController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65"
+            fx:controller="ui.controller.MainWindowController">
     <center>
         <StackPane fx:id="mainContent" BorderPane.alignment="BOTTOM_CENTER">
             <children>
@@ -22,11 +26,7 @@
                         </children>
                     </AnchorPane>
                 </AnchorPane>
-                <JFXToolbar fx:id="snackbarContainer" StackPane.alignment="BOTTOM_CENTER">
-                    <bottom>
-                        <JFXSnackbar fx:id="snackbar" BorderPane.alignment="CENTER" />
-                    </bottom>
-                </JFXToolbar>
+                <JFXSnackbar fx:id="snackbar" />
             </children>
         </StackPane>
     </center>
@@ -39,16 +39,32 @@
 
         </AnchorPane>
     </bottom>
-   <top>
-      <AnchorPane fx:id="headerContainer" maxHeight="50.0" prefHeight="50.0" prefWidth="50.0" BorderPane.alignment="CENTER">
-         <children>
-            <JFXRippler fx:id="headerRippler" styleClass="header" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Label fx:id="headerLabel" text="All Tasks" />
-               </children>
-            </JFXRippler>
-         </children>
-      </AnchorPane>
-   </top>
-
+    <top>
+        <VBox fx:id="headerWrapper" spacing="20" styleClass="header-wrapper">
+            <JFXToolbar fx:id="headerContainer" styleClass="header-container">
+                <left>
+                    <JFXRippler alignment="BASELINE_LEFT" maskType="CIRCLE" ripplerFill="WHITE" style="-fx-ripple-color:WHITE;">
+                        <StackPane styleClass="badge-container">
+                            <JFXBadge fx:id="tasksCounter" position="TOP_RIGHT" styleClass="icons-badge" text="1" BorderPane.alignment="CENTER">
+                                <MaterialDesignIconView glyphName="INBOX" size="2.5em" styleClass="icon" textAlignment="CENTER" textOrigin="CENTER" />
+                            </JFXBadge>
+                        </StackPane>
+                    </JFXRippler>
+                </left>
+                <center>
+                    <Label fx:id="headerTitle" alignment="CENTER" styleClass="title-label" textOverrun="CLIP" BorderPane.alignment="CENTER">All Tasks
+                    </Label>
+                </center>
+                <opaqueInsets>
+                    <Insets />
+                </opaqueInsets>
+                <VBox.margin>
+                    <Insets />
+                </VBox.margin>
+                <padding>
+                    <Insets right="30.0" />
+                </padding>
+            </JFXToolbar>
+        </VBox>
+    </top>
 </BorderPane>

@@ -27,7 +27,7 @@ public class UpdateTask<E> implements Command<Object> {
         Task updatedTask = checkAttributes(newTask, taskIndex, list);
         list.set(taskIndex, updatedTask);
         Collections.sort(list);
-        undoStackInt.push(findTask(updatedTask, (ArrayList<Task>) list));
+        undoStackInt.push(findTask(updatedTask.getId(), (ArrayList<Task>) list));
     }
     private Task checkAttributes (Task newTask, int taskIndex, List<Task> list) {
         if (list.get(taskIndex) instanceof RecurringTask) {
@@ -103,7 +103,7 @@ public class UpdateTask<E> implements Command<Object> {
         redoStackTask.push(list.get(undoIndex));
         list.set(undoIndex, undoTask);
         Collections.sort(list);
-        redoStackInt.push(findTask(undoTask, list));
+        redoStackInt.push(findTask(undoTask.getId(), list));
     }
 
     @Override
@@ -113,11 +113,11 @@ public class UpdateTask<E> implements Command<Object> {
         undoStackTask.push(list.get(redoIndex));
         list.set(redoIndex, redoTask);
         Collections.sort(list);
-        undoStackInt.push(findTask(redoTask, list));
+        undoStackInt.push(findTask(redoTask.getId(), list));
     }
 
-    @Override
-    public int findTask(Task task, ArrayList<Task> list) {
+/*    @Override
+    public int findingTask(Task task, ArrayList<Task> list) {
         int position = -1;
         if (task instanceof RecurringTask) {
             for (int i = 0; i < list.size(); i++) {
@@ -134,6 +134,17 @@ public class UpdateTask<E> implements Command<Object> {
                     position = i;
                     break;
                 }
+            }
+        }
+        return position;
+    }*/
+
+    @Override
+    public int findTask(String id, ArrayList<Task> list) {
+        int position = -1;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId().equals(id)) {
+                position = i;
             }
         }
         return position;

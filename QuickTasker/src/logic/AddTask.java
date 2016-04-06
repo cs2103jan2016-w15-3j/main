@@ -34,7 +34,7 @@ public class AddTask<E> implements Command<Object> {
             list.add(task);
             undoTaskStack.push(task);
             Collections.sort(list);
-            int index = findTask(task, (ArrayList<Task>) list);
+            int index = findTask(task.getId(), (ArrayList<Task>) list);
             undoStackInt.push(index);
             assert ((size + 1) == list.size());
         } catch (Exception e) {
@@ -64,23 +64,11 @@ public class AddTask<E> implements Command<Object> {
     }
 
     @Override
-    public int findTask(Task task, ArrayList<Task> list) {
+    public int findTask(String id, ArrayList<Task> list) {
         int position = -1;
-        if (task instanceof RecurringTask) {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) instanceof RecurringTask) {
-                    if (((RecurringTask)list.get(i)).equals(task)) {
-                        position = i;
-                        break;
-                    }
-                }
-            }
-        } else {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).equals(task)) {
-                    position = i;
-                    break;
-                }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId().equals(id)) {
+                position = i;
             }
         }
         return position;

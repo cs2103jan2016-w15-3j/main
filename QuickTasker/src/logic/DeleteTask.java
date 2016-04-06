@@ -49,7 +49,13 @@ public class DeleteTask<E> implements Command<Object> {
     }
 
     @Override
-    public int findTask(Task task, ArrayList<Task> list) {
-        return 0;
+    public int findTask(String id, ArrayList<Task> list) {
+        int position = -1;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId().equals(id)) {
+                position = i;
+            }
+        }
+        return position;
     }
 }

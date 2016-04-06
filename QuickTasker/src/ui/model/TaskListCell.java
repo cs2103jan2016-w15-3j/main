@@ -63,8 +63,8 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.setVgap(5); // vertical gap between grids
         grid.setPadding(new Insets(0, 10, 0, 10));// set custom columns
         ColumnConstraints column1 = new ColumnConstraints();
-        column1.setMinWidth(25);
-        column1.setMaxWidth(25);
+        column1.setMinWidth(20);
+        column1.setMaxWidth(20);
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setMaxWidth(20);
         ColumnConstraints column3 = new ColumnConstraints();
@@ -155,10 +155,6 @@ public class TaskListCell extends JFXListCell<Task> {
 
         taskName.setText(task.getName());
     }
-    // From Kenan banana:
-    // right now, we use "-" rather than "not specified" because it helps covers up the problem that
-    // when task name is too long, scroll bar appear, which doesnt look good
-    // It will be shortly replaced with icons in the next iterat
 
     protected void setTaskStartDate(Task task) {
         if (task != null && task.getStartDate() != LocalDate.MIN) {

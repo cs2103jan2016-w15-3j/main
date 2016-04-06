@@ -2,34 +2,30 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 /**
  * @author A0121558H/A0130949
  */
 public class Task implements Comparable {
-    private static int IdGenerator;
     private String taskName;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean isDone = false;
-    private int id;
-    private boolean isRecurring = false;
+    private String id;
     private String taskType;
 
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
     }
 
-    /**
-     * Default constructor *.
-     */
     public Task() {
         this.taskName = "";
         this.endDate = LocalDate.MIN;
         this.setStartDateAsNow();
-        generateId();
+        this.id=generateId();
     }
 
     /**
@@ -39,7 +35,7 @@ public class Task implements Comparable {
         this.taskName = taskName;
         setStartDateAsNow();
         this.endDate = LocalDate.MIN;
-        generateId();
+        this.id=generateId();
     }
 
     /**
@@ -49,7 +45,8 @@ public class Task implements Comparable {
         this.taskName = taskName;
         this.endDate = LocalDate.MIN;
         this.startDate = startDate;
-        generateId();
+        this.id=generateId();
+
     }
 
     /**
@@ -59,7 +56,7 @@ public class Task implements Comparable {
         this.taskName = taskName;
         this.endDate = endDate;
         this.startDate = startDate;
-        generateId();
+        this.id=generateId();
     }
 
     // @author: A0133333U
@@ -73,7 +70,7 @@ public class Task implements Comparable {
         this.startTime = startTime;
         this.endTime = endTime;
         setTaskType();
-        generateId();
+        this.id=generateId();
     }
 
     public void setTaskType() {
@@ -87,18 +84,6 @@ public class Task implements Comparable {
     public String getTaskType() {
         return this.taskType;
     }
-
-
-/*    public Task(String taskName, LocalDate startDate, LocalDate endDate, String type,
-            int numToRecur) {
-        this.taskName = taskName;
-        this.endDate = endDate;
-        this.startDate = startDate;
-        generateId();
-        this.type = type;
-        this.numToRecur = numToRecur;
-        setRecurring();
-    }*/
 
     public String getName() {
         return taskName;
@@ -124,7 +109,7 @@ public class Task implements Comparable {
         taskName = newName;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -152,16 +137,8 @@ public class Task implements Comparable {
         isDone = done;
     }
 
-/*    public void setRecurring() {
-        this.isRecurring = true;
-    }
-
-    public boolean getRecurring() {
-        return isRecurring;
-    }*/
-
-    private void generateId() {
-        this.id = ++IdGenerator;
+    private String generateId() {
+        return UUID.randomUUID().toString();
     }
 
     @Override
@@ -182,7 +159,7 @@ public class Task implements Comparable {
         int result = taskName.hashCode();
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
-        result = 31 * result + id;
+        result = 31 * result + id.hashCode();
         return result;
     }
 

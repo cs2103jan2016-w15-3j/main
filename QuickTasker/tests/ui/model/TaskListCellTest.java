@@ -51,6 +51,14 @@ public class TaskListCellTest {
         Task t1 = new Task("buy fruits");
         assertEquals("buy fruits", t1.getName());
     }
+    
+/*    @Test 
+    public void testSearchTask() {
+    	Task task = new Task("Buy present");
+    	Task task2 = new Task("Buy bananas");
+    	testTasks.
+    	assertEquals(expected, actual);
+    }*/
 
     @Test
     public void testSetTaskStartDate() {

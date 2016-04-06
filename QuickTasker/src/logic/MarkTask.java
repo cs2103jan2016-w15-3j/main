@@ -13,7 +13,7 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
     private Stack<Task> redoStack = new Stack<Task>();
     private Stack<Integer> undoStackInt = new Stack<Integer>();
     private Stack<Integer> redoStackInt = new Stack<Integer>();
-    
+
     @Override
     public void execute(List list, Object op) {
         archivedList = (ArrayList<Task>) list;
@@ -32,7 +32,8 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
             int index = undoStackInt.pop();
             redoStackInt.push(index);
             redoStack.push((undoTask));
-            moveDateBackward((RecurringTask) list.get(index));
+            int positionOfRecurringTask = findTask(Integer.toString(index), list);
+            moveDateBackward((RecurringTask) list.get(positionOfRecurringTask));
         } else {
             redoStack.push(undoTask);
             list.add(undoTask);
@@ -49,31 +50,42 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
         if (redoTask instanceof RecurringTask) {
             int index = redoStackInt.pop();
             undoStackInt.push(index);
-            undoStack.push((RecurringTask) list.get(index));
-            moveDateForward((RecurringTask) list.get(index));
+            int positionOfRecurringTask = findTask(Integer.toString(index), list);
+            undoStack.push((RecurringTask) list.get(positionOfRecurringTask));
+            moveDateForward((RecurringTask) list.get(positionOfRecurringTask));
         } else {
-            list.remove(findTask(redoTask, list));
+            list.remove(findTask(redoTask.getId(), list));
         }
     }
 
-    @Override
-    public int findTask(Task task, ArrayList list) {
-        int position = -1;
-        if (task instanceof RecurringTask) {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) instanceof RecurringTask) {
-                    if ((list.get(i)).equals(task)) {
+    /*    @Override
+        public int findingTask(Task task, ArrayList list) {
+            int position = -1;
+            if (task instanceof RecurringTask) {
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i) instanceof RecurringTask) {
+                        if ((list.get(i)).equals(task)) {
+                            position = i;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).equals(task)) {
                         position = i;
                         break;
                     }
                 }
             }
-        } else {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).equals(task)) {
-                    position = i;
-                    break;
-                }
+            return position;
+        }*/
+    @Override
+    public int findTask(String id, ArrayList<Task> list) {
+        int position = -1;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId().equals(id)) {
+                position = i;
             }
         }
         return position;
