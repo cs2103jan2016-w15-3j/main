@@ -19,8 +19,6 @@ public class DetermineCommandType {
                 return Commands.DELETE_TASK;
             case "update":
                 return Commands.UPDATE_TASK;
-            case "change":
-                return Commands.UPDATE_TASK;
             case "sort":
                 return Commands.SORT_TASK;
             case "search":
@@ -35,10 +33,12 @@ public class DetermineCommandType {
                 return Commands.RECUR_TASK;
             case "exit":
                 return Commands.EXIT;
-/*            case "c":
-                return Commands.COMPLETE_TASK;*/
             case "redo":
                 return Commands.REDO_TASK;
+            case "change":
+            	return Commands.CHANGE_DIRECTORY;
+            case "switch":
+            	return Commands.CHANGE_DIRECTORY;
             default:
                 return Commands.ERROR;
         }
