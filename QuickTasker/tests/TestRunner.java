@@ -1,6 +1,8 @@
 import data.JsonTaskDataAccessTest;
 import data.SettingManagerTest;
-import logic.*;
+import logic.AddTaskTest;
+import logic.DeleteTaskTest;
+import logic.UpdateTaskTest;
 import model.RecurringTaskTest;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;

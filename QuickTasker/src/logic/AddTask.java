@@ -1,9 +1,9 @@
 package logic;
 
-import model.RecurringTask;
 import model.Task;
-import java.util.Collections;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 import java.util.logging.Level;

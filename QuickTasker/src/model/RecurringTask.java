@@ -13,7 +13,7 @@ public class RecurringTask extends Task {
     int numberToRecur;
 
     public RecurringTask(String taskName, LocalDate startDate, LocalDate endDate, String recurType,
-            LocalTime startTime, LocalTime endTime, int numberToRecur) {
+                         LocalTime startTime, LocalTime endTime, int numberToRecur) {
         super(taskName, startDate, endDate, startTime, endTime);
         this.recurType = recurType;
         this.numberToRecur = numberToRecur;
@@ -101,7 +101,7 @@ public class RecurringTask extends Task {
         }
         return (numberOfDays);
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -111,7 +111,8 @@ public class RecurringTask extends Task {
 
         if (this.getId() != task.getId()) return false;
         if (!this.getName().equals(task.getName())) return false;
-        if (this.getDueDate() != null ? !this.getDueDate().equals(task.getDueDate()) : task.getDueDate() != null) return false;
+        if (this.getDueDate() != null ? !this.getDueDate().equals(task.getDueDate()) : task.getDueDate() != null)
+            return false;
         return this.getStartDate() != null ? this.getStartDate().equals(task.getStartDate()) : task.getStartDate() == null;
 
     }

@@ -5,15 +5,12 @@ import data.SettingManager;
 import data.TaskDataAccessObject;
 import model.RecurringTask;
 import model.Task;
-import org.jetbrains.annotations.NotNull;
 import parser.Commands;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 
 /**
  * Author A0130949 Soh Yonghao
@@ -139,7 +136,7 @@ public class Logic {
         saveList();
         return (ArrayList<Task>) list;
     }
-    
+
     public ArrayList<Task> skip(int index) {
         if (list.get(index) instanceof RecurringTask) {
             commandMap.get(Commands.SKIP).execute(list, index);
@@ -148,23 +145,23 @@ public class Logic {
         }
         return (ArrayList<Task>) list;
     }
-    
+
     public void skipForMark(int index) {
         if (list.get(index) instanceof RecurringTask) {
             commandMap.get(Commands.SKIP).execute(list, index);
             saveList();
         }
     }
-    
+
     public void stopRecurring(int index) {
         if (list.get(index) instanceof RecurringTask) {
             commandMap.get(Commands.STOP).execute(list, index);
             undoStack.push(Commands.STOP);
             saveList();
         }
-         saveList();  
+        saveList();
     }
-    
+
     public void markAsDone(int index) {
         Task completedTask = list.get(index);
         completedTask.setDone(true);

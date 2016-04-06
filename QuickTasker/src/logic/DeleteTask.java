@@ -3,7 +3,6 @@ package logic;
 import model.Task;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -26,7 +25,7 @@ public class DeleteTask<E> implements Command<Object> {
 
     private void executeDelete(List<Task> list, int index) {
         list.remove(index);
-       // Collections.sort(list);
+        // Collections.sort(list);
     }
 
     @Override

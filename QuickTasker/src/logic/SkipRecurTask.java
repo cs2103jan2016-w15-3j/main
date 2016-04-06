@@ -26,7 +26,7 @@ public class SkipRecurTask<E> implements Command<Object> {
         Collections.sort(list);
         undoStackInt.push(findTask(recurringTask.getId(), (ArrayList<Task>) list));
     }
-    
+
     protected void moveDateForward(RecurringTask task) {
         task.adjustDate();
         if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
@@ -37,7 +37,7 @@ public class SkipRecurTask<E> implements Command<Object> {
             task.setEndDate(task.getDueDate().plusDays(task.getNumberToRecur()));
         }
     }
-    
+
     protected void moveDateBackward(RecurringTask task) {
         task.adjustDate();
         if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
@@ -48,7 +48,7 @@ public class SkipRecurTask<E> implements Command<Object> {
             task.setEndDate(task.getDueDate().minusDays(task.getNumberToRecur()));
         }
     }
-    
+
     @Override
     public void undo(ArrayList<Task> list) {
         int undoIndex = undoStackInt.pop();
@@ -63,7 +63,7 @@ public class SkipRecurTask<E> implements Command<Object> {
     public void redo(ArrayList<Task> list) {
         int redoIndex = redoStackInt.pop();
         RecurringTask recurringTask = (RecurringTask) list.get(redoIndex);
-        moveDateForward(recurringTask); 
+        moveDateForward(recurringTask);
         Collections.sort(list);
         undoStackInt.push(findTask(recurringTask.getId(), list));
     }

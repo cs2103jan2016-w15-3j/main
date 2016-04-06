@@ -61,7 +61,7 @@ public class UserInputParser implements ParserInterface {
         System.out.println("parser starttime " + startTime);
         System.out.println("parser endtime " + endTime);
     }
-    
+
     public void setAttributesForGetCommands(String userInput) throws setAttributeException {
         removeWhiteSpaces(userInput);
         determineLengthOfInput();

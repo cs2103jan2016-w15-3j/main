@@ -53,7 +53,7 @@ public class Main extends Application {
             MainWindowController mainWindowController = loader.getController();
             mainWindowController.setMain(this);
             mainWindowController.setStage(primaryStage);
-            decorator = new JFXDecorator(primaryStage,mainContainer);
+            decorator = new JFXDecorator(primaryStage, mainContainer);
             scene = new Scene(decorator, 560, 400);
             scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
             scene.getStylesheets()
@@ -76,11 +76,11 @@ public class Main extends Application {
 
     }
 
-    public JFXDecorator getDecorator(){
+    public JFXDecorator getDecorator() {
         return decorator;
     }
 
-    public Scene getScene(){
+    public Scene getScene() {
         return this.scene;
     }
 

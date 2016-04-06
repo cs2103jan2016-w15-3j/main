@@ -2,7 +2,6 @@ package logic;
 
 import data.SettingManager;
 import model.Task;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import parser.Commands;

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import model.Task;
-
 public class Sort<E> implements Command {
 
     @Override

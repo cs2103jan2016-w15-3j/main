@@ -10,9 +10,9 @@ public class DaysInWeek {
     private static LocalDate friday;
     private static LocalDate saturday;
     private static LocalDate sunday;
-    
+
     public DaysInWeek() {
-        switch(LocalDate.now().getDayOfWeek()) {
+        switch (LocalDate.now().getDayOfWeek()) {
             case MONDAY:
                 setMonday();
             case TUESDAY:
@@ -29,7 +29,7 @@ public class DaysInWeek {
                 setSunday();
         }
     }
-    
+
     private void setMonday() {
         monday = LocalDate.now();
         tuesday = LocalDate.now().plusDays(1);
@@ -39,7 +39,7 @@ public class DaysInWeek {
         saturday = LocalDate.now().plusDays(5);
         sunday = LocalDate.now().plusDays(6);
     }
-    
+
     private void setTuesday() {
         tuesday = LocalDate.now();
         wednesday = LocalDate.now().plusDays(1);
@@ -49,7 +49,7 @@ public class DaysInWeek {
         sunday = LocalDate.now().plusDays(5);
         monday = LocalDate.now().plusDays(6);
     }
-    
+
     private void setWednesday() {
         wednesday = LocalDate.now();
         thursday = LocalDate.now().plusDays(1);
@@ -59,7 +59,7 @@ public class DaysInWeek {
         monday = LocalDate.now().plusDays(5);
         tuesday = LocalDate.now().plusDays(6);
     }
-    
+
     private void setThursday() {
         thursday = LocalDate.now();
         friday = LocalDate.now().plusDays(1);
@@ -69,7 +69,7 @@ public class DaysInWeek {
         tuesday = LocalDate.now().plusDays(5);
         wednesday = LocalDate.now().plusDays(6);
     }
-    
+
     private void setFriday() {
         friday = LocalDate.now();
         saturday = LocalDate.now().plusDays(1);
@@ -79,7 +79,7 @@ public class DaysInWeek {
         wednesday = LocalDate.now().plusDays(5);
         thursday = LocalDate.now().plusDays(6);
     }
-    
+
     private void setSaturday() {
         saturday = LocalDate.now();
         sunday = LocalDate.now().plusDays(1);
@@ -89,7 +89,7 @@ public class DaysInWeek {
         thursday = LocalDate.now().plusDays(5);
         friday = LocalDate.now().plusDays(6);
     }
-    
+
     private void setSunday() {
         sunday = LocalDate.now();
         monday = LocalDate.now().plusDays(1);
@@ -99,31 +99,31 @@ public class DaysInWeek {
         friday = LocalDate.now().plusDays(5);
         saturday = LocalDate.now().plusDays(6);
     }
-    
+
     public LocalDate getMonday() {
         return this.monday;
     }
-    
+
     public LocalDate getTuesday() {
         return this.tuesday;
     }
-    
+
     public LocalDate getWednesday() {
         return this.wednesday;
     }
-    
+
     public LocalDate getThursday() {
         return this.thursday;
     }
-    
+
     public LocalDate getFriday() {
         return this.friday;
     }
-    
+
     public LocalDate getSaturday() {
         return this.saturday;
     }
-    
+
     public LocalDate getSunday() {
         return this.sunday;
     }

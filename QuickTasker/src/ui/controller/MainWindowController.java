@@ -1,7 +1,6 @@
 package ui.controller;
 
 import com.jfoenix.controls.*;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -32,11 +31,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.w3c.dom.css.ElementCSSInlineStyle;
-import static javafx.application.Application.setUserAgentStylesheet;
 
 import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
@@ -88,9 +84,10 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
     private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
 
-    public MainWindowController(){
+    public MainWindowController() {
 
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initPlanner();
@@ -106,7 +103,7 @@ public class MainWindowController implements Initializable {
 
     private void initPlanner() {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
-    	plannerEntries = FXCollections.observableArrayList(operations.getTasks());
+        plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         printedPlanner.setItems(plannerEntries);
         printedPlanner.setDepthProperty(1);
         snackbar.registerSnackbarContainer(mainContent);
@@ -146,7 +143,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    private class UIOperationException extends RuntimeException {}
+    private class UIOperationException extends RuntimeException {
+    }
+
     private void performOperations(String userInput) throws UIOperationException {
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
@@ -186,7 +185,7 @@ public class MainWindowController implements Initializable {
                 showAll();
             } else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) {
                 searchTask(userInput);
-            }else if (userInput.equals("hi")){
+            } else if (userInput.equals("hi")) {
                 Platform.runLater(() -> {
                     try {
                         main.getDecorator().setStyle("-fx-decorator-color: derive(" + ApplicationColor.BLUE.getHexCode() + ",-20%);");
@@ -294,17 +293,17 @@ public class MainWindowController implements Initializable {
         plannerEntries = FXCollections.observableArrayList(operations.sort());
         afterOperation();
     }
-    
+
     private void clearTasks(String userInput) {
         plannerEntries = FXCollections.observableArrayList(operations.clear());
         afterOperation();
     }
-    
+
     private void skipRecurringTask(String userInput) throws Exception {
         plannerEntries = FXCollections.observableArrayList(operations.skip(parser.getTaskIndex(userInput)));
         afterOperation();
     }
-    
+
     private void stopRecurringTask(String userInput) throws Exception {
         operations.stopRecurring(parser.getTaskIndex(userInput));
         afterOperation();
@@ -340,30 +339,30 @@ public class MainWindowController implements Initializable {
         plannerEntries = FXCollections.observableArrayList(operations.undo());
         afterOperation();
     }
-    
-/*    private void searchingTask(String userInput) {
-		for (Task task : plannerEntries) {
-			String taskDescription = task.getName();
-			LocalDate taskStartDate = task.getStartDate();
-			LocalDate taskEndDate = task.getDueDate();
-			if (taskDescription.contains(userInput.toLowerCase())) {
-				//filteredEntries.clear();
-				filteredEntries.add(task);
-				System.out.println("filteredlist" + filteredEntries.size());
-				snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Search results returned.", "", 1500, (b) -> {
-				}));
-			} else {
-				snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Invalid search term!", "", 1500, (b) -> {
-				}));
-				
-			}
-		afterSearch();
-		
-		}
-	}
-    */
+
+    /*    private void searchingTask(String userInput) {
+            for (Task task : plannerEntries) {
+                String taskDescription = task.getName();
+                LocalDate taskStartDate = task.getStartDate();
+                LocalDate taskEndDate = task.getDueDate();
+                if (taskDescription.contains(userInput.toLowerCase())) {
+                    //filteredEntries.clear();
+                    filteredEntries.add(task);
+                    System.out.println("filteredlist" + filteredEntries.size());
+                    snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Search results returned.", "", 1500, (b) -> {
+                    }));
+                } else {
+                    snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Invalid search term!", "", 1500, (b) -> {
+                    }));
+
+                }
+            afterSearch();
+
+            }
+        }
+        */
     private void showTasks() {
-    	
+
     }
 
     private void updateTask(String userInput) throws Exception {
@@ -372,8 +371,8 @@ public class MainWindowController implements Initializable {
         Task newTask = makeTask(parser.getTaskNameForUpdate(userInput), parser.getStartDateForUpdate(userInput),
                 parser.getEndDateForUpdate(userInput), parser.getStartTimeForUpdate(userInput),
                 parser.getEndTimeForUpdate(userInput));
-		/*
-		 * plannerEntries.remove(indexOfTask);
+        /*
+         * plannerEntries.remove(indexOfTask);
 		 * plannerEntries.add(indexOfTask,newTask);
 		 */
 
@@ -395,13 +394,13 @@ public class MainWindowController implements Initializable {
 
     }
 
-    
+
     private void refresh() {
         printedPlanner.setItems(plannerEntries);
     }
-    
+
     private void refreshSearch() {
-    	printedPlanner.setItems(filteredEntries);
+        printedPlanner.setItems(filteredEntries);
     }
 
     private void createTask(String userInput) throws Exception {
@@ -435,11 +434,11 @@ public class MainWindowController implements Initializable {
         updateTaskCounter();
         commandBox.clear();
     }
-    
+
     private void afterSearch() {
-    	setCellFactory();
-    	refreshSearch();
-    	commandBox.clear();
+        setCellFactory();
+        refreshSearch();
+        commandBox.clear();
     }
 
     private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate, LocalTime startTime,

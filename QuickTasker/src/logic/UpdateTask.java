@@ -1,9 +1,9 @@
 package logic;
 
-import model.Task;
 import model.RecurringTask;
+import model.Task;
+
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,14 +29,15 @@ public class UpdateTask<E> implements Command<Object> {
         Collections.sort(list);
         undoStackInt.push(findTask(updatedTask.getId(), (ArrayList<Task>) list));
     }
-    private Task checkAttributes (Task newTask, int taskIndex, List<Task> list) {
+
+    private Task checkAttributes(Task newTask, int taskIndex, List<Task> list) {
         if (list.get(taskIndex) instanceof RecurringTask) {
             return checkAttributesForRecurringTask(newTask, taskIndex, list);
         } else {
             return checkAttributesForTask(newTask, taskIndex, list);
         }
     }
-    
+
     private RecurringTask checkAttributesForRecurringTask(Task updatedTask, int taskIndex, List<Task> list) {
         if (updatedTask.getStartDate() == LocalDate.MIN
                 && list.get(taskIndex).getStartDate() != LocalDate.MIN) {
@@ -59,7 +60,7 @@ public class UpdateTask<E> implements Command<Object> {
         if (updatedTask.getEndTime() == null && list.get(taskIndex).getEndTime() != null) {
             updatedTask.setEndTime(list.get(taskIndex).getEndTime());
         }
-        
+
         return transferAttributes(updatedTask, taskIndex, list);
     }
 
@@ -92,7 +93,7 @@ public class UpdateTask<E> implements Command<Object> {
         if (updatedTask.getEndTime() == null && list.get(taskIndex).getEndTime() != null) {
             updatedTask.setEndTime(list.get(taskIndex).getEndTime());
         }
-        
+
         return updatedTask;
     }
 

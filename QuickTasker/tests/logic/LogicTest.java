@@ -2,7 +2,7 @@ package logic;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Created by User on 5/4/2016.

@@ -13,7 +13,7 @@ public class DateTimeParserTest {
     DateTimeParser parser;
     LocalDate date;
     LocalTime time;
-    String[] timeList = { "12:12" };
+    String[] timeList = {"12:12"};
     ArrayList<Integer> indices = new ArrayList<Integer>() {
         {
             add(0);

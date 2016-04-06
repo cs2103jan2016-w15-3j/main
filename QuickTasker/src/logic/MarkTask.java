@@ -1,11 +1,11 @@
 package logic;
 
+import model.RecurringTask;
+import model.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import model.RecurringTask;
-import model.Task;
 
 public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
     ArrayList<Task> archivedList;

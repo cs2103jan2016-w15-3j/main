@@ -211,11 +211,11 @@ public class TaskListCell extends JFXListCell<Task> {
             taskEndTime.setText("-");
         }
     }
-    
+
     private boolean timeCheck(Task task) {
         if (task.getStartTime() == null && task.getEndTime() == null) {
             return false;
-        } 
+        }
         return true;
     }
 

@@ -25,7 +25,7 @@ public class Task implements Comparable {
         this.taskName = "";
         this.endDate = LocalDate.MIN;
         this.setStartDateAsNow();
-        this.id=generateId();
+        this.id = generateId();
     }
 
     /**
@@ -35,7 +35,7 @@ public class Task implements Comparable {
         this.taskName = taskName;
         setStartDateAsNow();
         this.endDate = LocalDate.MIN;
-        this.id=generateId();
+        this.id = generateId();
     }
 
     /**
@@ -45,7 +45,7 @@ public class Task implements Comparable {
         this.taskName = taskName;
         this.endDate = LocalDate.MIN;
         this.startDate = startDate;
-        this.id=generateId();
+        this.id = generateId();
 
     }
 
@@ -56,21 +56,21 @@ public class Task implements Comparable {
         this.taskName = taskName;
         this.endDate = endDate;
         this.startDate = startDate;
-        this.id=generateId();
+        this.id = generateId();
     }
 
     // @author: A0133333U
     // this is the only constructor being used, with the rest bypassed
     // There need to be a way to determine the correct task type and call the respective constructor
     public Task(String taskName, LocalDate startDate, LocalDate endDate, LocalTime startTime,
-            LocalTime endTime) {
+                LocalTime endTime) {
         this.taskName = taskName;
         this.endDate = endDate;
         this.startDate = startDate;
         this.startTime = startTime;
         this.endTime = endTime;
         setTaskType();
-        this.id=generateId();
+        this.id = generateId();
     }
 
     public void setTaskType() {
@@ -167,15 +167,15 @@ public class Task implements Comparable {
     public int compareTo(Object task) {
         Task comparedTask = (Task) task;
         int result = compareDueDate(this, comparedTask);
-        
+
         if (result == 0) {
             result = compareStartDate(this, comparedTask);
         }
-        
+
         if (result == 0) {
             result = this.getName().compareTo(comparedTask.getName());
         }
-        
+
         return result;
     }
 
