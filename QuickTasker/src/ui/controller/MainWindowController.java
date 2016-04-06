@@ -158,8 +158,6 @@ public class MainWindowController implements Initializable {
                 operations.exit();
             } else if (parser.getCommand(userInput) == Commands.SORT_TASK) {
                 sortTask(userInput);
-/*            } else if (userInput.contains("edit")) {
-                editTask(userInput);*/
             } else if (parser.getCommand(userInput) == Commands.MARK) {
                 markTaskCompleted(userInput);
             } else if (parser.getCommand(userInput) == Commands.RECUR_TASK) {
