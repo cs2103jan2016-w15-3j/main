@@ -1,4 +1,5 @@
 package parser;
+//@@author A0121558H
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -29,7 +30,7 @@ public interface ParserInterface {
 
     String setTaskNameForUpdates() throws Exception;
 
-    int getIndexForUpdate(String userInput);
+    int getIndexForUpdates(String userInput);
 
     int getIndexForDone(String userInput);
 
@@ -38,9 +39,17 @@ public interface ParserInterface {
     LocalDate getStartDateForUpdate(String userInput) throws Exception;
 
     LocalDate getEndDateForUpdate(String userInput) throws Exception;
-
-    //void setAttributesForUpdates(String input) throws Exception;
+    int getIndexForTaskNameUpdate();
+    void setAttributesForUpdates(String input) throws Exception;
 
     int getTaskIndex(String userInput) throws Exception;
 
+    String getRecurDuration(String userInput);
+    
+    LocalDate getTaskStartDate(String userInput);
+    
+    LocalDate getTaskEndDate(String userInput);
+    LocalTime getTaskStartTime(String userInput);
+    LocalTime getTaskEndTime(String userInput);
+    
 }

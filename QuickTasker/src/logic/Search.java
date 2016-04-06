@@ -1,5 +1,5 @@
 package logic;
-
+//@@author A0130949
 import model.Task;
 
 import java.util.ArrayList;
@@ -24,5 +24,11 @@ public class Search<E> implements Command<Object> {
     public void redo(ArrayList<Task> list) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public int findTask(Task task, ArrayList<Task> list) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }

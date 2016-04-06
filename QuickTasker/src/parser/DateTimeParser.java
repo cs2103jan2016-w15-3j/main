@@ -1,8 +1,6 @@
 package parser;
 
-/**
- * author A0121558H
- */
+//@@author A0121558H
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -12,9 +10,6 @@ import java.util.Arrays;
 
 //import java.time.LocalTime;
 
-/**
- * @author A0121558H dawson
- */
 public class DateTimeParser {
 
     public LocalDate parseDate(String input) {

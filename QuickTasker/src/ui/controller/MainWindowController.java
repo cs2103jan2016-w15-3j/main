@@ -17,7 +17,6 @@ import logic.Logic;
 import model.RecurringTask;
 import model.Task;
 import parser.Commands;
-import parser.InputValidator;
 import parser.ParserInterface;
 import parser.RecurringParser;
 import parser.UpdateParser;
@@ -33,16 +32,15 @@ import java.util.logging.Logger;
 
 import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
-/**
- * Author: A0133333U/A0130949Y/A0126077E
- */
+//@@author  A0133333U
+
 public class MainWindowController implements Initializable {
 
 	private static Logger logger;
 	public AnchorPane container;
 	private Main main;
 	private final UserInputParser parser = new UserInputParser();
-	private final UpdateParser updateParser= new UpdateParser();
+	private final UpdateParser updateParser = new UpdateParser();
 	private RecurringParser recurringParser = new RecurringParser();
 	private final Logic operations = new Logic();
 
@@ -59,6 +57,7 @@ public class MainWindowController implements Initializable {
 	private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
 	private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
 
+	// @@author A0126077E
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -107,9 +106,10 @@ public class MainWindowController implements Initializable {
 	private class UIOperationException extends RuntimeException {
 	}
 
+	// @@author A0130949
 	private void performOperations(String userInput) throws UIOperationException {
-		InputValidator inputValidator= new InputValidator();
-		System.out.println("inputValidator.checkAllValid(userInput) " +inputValidator.checkAllValid(userInput));
+		InputValidator inputValidator = new InputValidator();
+		System.out.println("inputValidator.checkAllValid(userInput) " + inputValidator.checkAllValid(userInput));
 		if (inputValidator.checkAllValid(userInput)) {
 			try {
 				if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
@@ -120,7 +120,7 @@ public class MainWindowController implements Initializable {
 					updateTask(userInput);
 				} else if (parser.getCommand(userInput) == Commands.UNDO_TASK) {
 					undoTask();
-				} else if (parser.getCommand(userInput) == Commands.REDO) {
+				} else if (parser.getCommand(userInput) == Commands.REDO_TASK) {
 					redoTask();
 				} else if (parser.getCommand(userInput) == Commands.EXIT) {
 					operations.exit();
@@ -137,8 +137,8 @@ public class MainWindowController implements Initializable {
 			} catch (Exception e) {
 				throw new UIOperationException();
 			}
-		}else {
-			//TELL USER TO RETYPE THE INPUT
+		} else {
+			// TELL USER TO RETYPE THE INPUT
 		}
 	}
 
@@ -166,20 +166,6 @@ public class MainWindowController implements Initializable {
 			commandBox.clear();
 		});
 		new Thread(sleeper).start();
-	}
-
-	private javafx.concurrent.Task<Void> makeSleeper(int duration) {
-		return new javafx.concurrent.Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				try {
-					Thread.sleep(duration);
-				} catch (InterruptedException e) {
-					// do nothing. handles library bug
-				}
-				return null;
-			}
-		};
 	}
 
 	private void sortTask(String userInput) {
@@ -222,10 +208,6 @@ public class MainWindowController implements Initializable {
 		afterOperation();
 	}
 
-	private void refresh() {
-		printedPlanner.setItems(plannerEntries);
-	}
-
 	private void createTask(String userInput) throws Exception {
 		Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
 				parser.getEndDate(userInput), parser.getStartTime(userInput), parser.getEndTime(userInput));
@@ -239,21 +221,6 @@ public class MainWindowController implements Initializable {
 		printedPlanner.scrollTo(printedPlanner.getItems().size() - 1);
 	}
 
-	private void createRecurringTask(String userInput) throws Exception {
-		RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
-				recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
-				recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
-				recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
-		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
-		afterOperation();
-	}
-
-	private void afterOperation() {
-		setCellFactory();
-		refresh();
-		commandBox.clear();
-	}
-
 	private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate, LocalTime startTime,
 			LocalTime endTime) throws Exception {
 		System.out.println("D");
@@ -263,6 +230,26 @@ public class MainWindowController implements Initializable {
 	private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate, String type,
 			LocalTime startTime, LocalTime endTime, int numberToRecur) throws Exception {
 		return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
+	}
+
+	private void createRecurringTask(String userInput) throws Exception {
+		RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
+				recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
+				recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
+				recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
+		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+		afterOperation();
+	}
+	// @@author A0126077E
+
+	private void afterOperation() {
+		setCellFactory();
+		refresh();
+		commandBox.clear();
+	}
+
+	private void refresh() {
+		printedPlanner.setItems(plannerEntries);
 	}
 
 	private void setCellFactory() {
@@ -291,5 +278,19 @@ public class MainWindowController implements Initializable {
 		SearchHighlightedTextCell(StringProperty searchText) {
 			this.searchText = searchText;
 		}
+	}
+
+	private javafx.concurrent.Task<Void> makeSleeper(int duration) {
+		return new javafx.concurrent.Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				try {
+					Thread.sleep(duration);
+				} catch (InterruptedException e) {
+					// do nothing. handles library bug
+				}
+				return null;
+			}
+		};
 	}
 }

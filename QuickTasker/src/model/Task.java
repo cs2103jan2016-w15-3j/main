@@ -1,11 +1,9 @@
 package model;
-
+//@@author A0121558H
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-/**
- * @author A0121558H/A0130949
- */
+
 public class Task implements Comparable {
     private static int IdGenerator;
     private String taskName;
@@ -51,7 +49,6 @@ public class Task implements Comparable {
         this.startDate = startDate;
         generateId();
     }
-
     /**
      * Constructor with all fields filled *.
      */
@@ -62,9 +59,6 @@ public class Task implements Comparable {
         generateId();
     }
 
-    // @author: A0133333U
-    // this is the only constructor being used, with the rest bypassed
-    // There need to be a way to determine the correct task type and call the respective constructor
     public Task(String taskName, LocalDate startDate, LocalDate endDate, LocalTime startTime,
             LocalTime endTime) {
         this.taskName = taskName;
@@ -75,7 +69,6 @@ public class Task implements Comparable {
         setTaskType();
         generateId();
     }
-
     public void setTaskType() {
         if (this.startDate == LocalDate.MAX && this.endDate == LocalDate.MAX)
             this.taskType = "floating";
@@ -83,7 +76,6 @@ public class Task implements Comparable {
             this.taskType = "wholeDayEvent";
         else this.taskType = "task";
     }
-
     public String getTaskType() {
         return this.taskType;
     }
@@ -99,7 +91,6 @@ public class Task implements Comparable {
         this.numToRecur = numToRecur;
         setRecurring();
     }*/
-
     public String getName() {
         return taskName;
     }
@@ -115,7 +106,7 @@ public class Task implements Comparable {
     public LocalTime getStartTime() {
         return startTime;
     }
-
+  
     public LocalTime getEndTime() {
         return endTime;
     }
@@ -143,7 +134,6 @@ public class Task implements Comparable {
     public void setStartTime(LocalTime time) {
         this.startTime = time;
     }
-
     public void setEndTime(LocalTime time) {
         this.endTime = time;
     }
@@ -163,7 +153,7 @@ public class Task implements Comparable {
     private void generateId() {
         this.id = ++IdGenerator;
     }
-
+  //@@author A0130949
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

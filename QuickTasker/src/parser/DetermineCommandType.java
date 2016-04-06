@@ -1,9 +1,6 @@
 package parser;
 
-/**
- * @author A0121558H
- *         Dawson
- */
+//@@author A0121558H
 
 public class DetermineCommandType {
 
@@ -41,7 +38,7 @@ public class DetermineCommandType {
 /*            case "c":
                 return Commands.COMPLETE_TASK;*/
             case "redo":
-                return Commands.REDO;
+                return Commands.REDO_TASK;
             default:
                 return Commands.ERROR;
         }

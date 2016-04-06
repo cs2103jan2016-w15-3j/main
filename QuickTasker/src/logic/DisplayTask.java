@@ -1,15 +1,10 @@
 package logic;
-
+//@@author A0130949
 import model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author A0130949 Soh Yonghao
- * <p>
- * .
- */
 
 public class DisplayTask<E> implements Command<E> {
 
@@ -33,5 +28,11 @@ public class DisplayTask<E> implements Command<E> {
     public void redo(ArrayList<Task> list) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public int findTask(Task task, ArrayList<Task> list) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }

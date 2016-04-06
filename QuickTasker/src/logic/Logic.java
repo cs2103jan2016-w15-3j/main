@@ -11,10 +11,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
 
-/**
- * Author A0130949 Soh Yonghao
- * .
- */
+//@@author A0130949
 
 public class Logic {
     protected List<Task> list;

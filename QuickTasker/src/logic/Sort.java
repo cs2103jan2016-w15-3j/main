@@ -1,8 +1,10 @@
 package logic;
-
+//@@author A0130949
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import model.Task;
 
 public class Sort<E> implements Command {
 
@@ -11,9 +13,6 @@ public class Sort<E> implements Command {
         System.out.println("really sorting now");
         Collections.sort(list);
         System.out.println("finish sorting");
-/*        for(int i = 0; i < list.size(); i++) {   
-            System.out.println(list.get(i) + "\n");
-        } */
     }
 
     @Override
@@ -26,6 +25,12 @@ public class Sort<E> implements Command {
     public void redo(ArrayList list) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public int findTask(Task task, ArrayList list) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

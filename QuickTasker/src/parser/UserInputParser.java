@@ -1,4 +1,5 @@
 package parser;
+//@@author A0121558H
 
 /**
  * TODO
@@ -13,9 +14,6 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @@author A0121558H
- */
 public class UserInputParser {
 
 	protected String taskName;

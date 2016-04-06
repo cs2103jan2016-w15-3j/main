@@ -5,12 +5,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/*
- * author A0121558H
- * 
- * normal task to recurring task
- * addition of recurring task
- */
+//@@author A0121558H
+
 public class RecurringParser extends UserInputParser{
 
     private String[] userCommand;
