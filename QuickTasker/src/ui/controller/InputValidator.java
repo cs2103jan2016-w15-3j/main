@@ -110,7 +110,6 @@ public class InputValidator extends UserInputParser {
 		LocalDate endDate = task.getDueDate(); // TODO CHANGE TO ENDDATE
 		LocalTime startTime = task.getStartTime();
 		LocalTime endTime = task.getEndTime();
-
 		if (isNotTwoDates(startDate, endDate)) {
 			return false;
 		} else {
