@@ -75,7 +75,6 @@ public class MainWindowController implements Initializable {
 
     private ObservableList<Task> plannerEntries;
 
-    private ObservableList<Task> filteredEntries;
 
     // Display messages as visual feedback for users
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
@@ -87,7 +86,6 @@ public class MainWindowController implements Initializable {
     public MainWindowController() {
 
     }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initPlanner();
@@ -102,7 +100,6 @@ public class MainWindowController implements Initializable {
     }
 
     private void initPlanner() {
-        plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         printedPlanner.setItems(plannerEntries);
         printedPlanner.setDepthProperty(1);
@@ -130,7 +127,6 @@ public class MainWindowController implements Initializable {
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
-
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
             try {
@@ -139,13 +135,13 @@ public class MainWindowController implements Initializable {
                 logger.log(Level.SEVERE,
                         "Error occured at " + this.getClass().getName() + " within performOperation method.\n");
                 e.printStackTrace();
+
             }
         }
     }
 
     private class UIOperationException extends RuntimeException {
     }
-
     private void performOperations(String userInput) throws UIOperationException {
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
@@ -263,7 +259,7 @@ public class MainWindowController implements Initializable {
         operations.markAsDone(i);
         task.setDone(true); // logic should handle
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        //printedPlanner.getSelectionModel().select(i); // error here
+        printedPlanner.getSelectionModel().select(i);
         printedPlanner.fireEvent(new TaskDoneEvent(task));
         javafx.concurrent.Task<Void> sleeper;
         sleeper = makeSleeper(500);
@@ -372,7 +368,7 @@ public class MainWindowController implements Initializable {
                 parser.getEndDateForUpdate(userInput), parser.getStartTimeForUpdate(userInput),
                 parser.getEndTimeForUpdate(userInput));
         /*
-         * plannerEntries.remove(indexOfTask);
+		 * plannerEntries.remove(indexOfTask);
 		 * plannerEntries.add(indexOfTask,newTask);
 		 */
 
@@ -394,13 +390,8 @@ public class MainWindowController implements Initializable {
 
     }
 
-
     private void refresh() {
         printedPlanner.setItems(plannerEntries);
-    }
-
-    private void refreshSearch() {
-        printedPlanner.setItems(filteredEntries);
     }
 
     private void createTask(String userInput) throws Exception {
@@ -419,7 +410,6 @@ public class MainWindowController implements Initializable {
     }
 
     private void createRecurringTask(String userInput) throws Exception {
-        System.out.println(recurringParser.getTaskStartTime(userInput));
         RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
                 recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
                 recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
@@ -432,12 +422,6 @@ public class MainWindowController implements Initializable {
         setCellFactory();
         refresh();
         updateTaskCounter();
-        commandBox.clear();
-    }
-
-    private void afterSearch() {
-        setCellFactory();
-        refreshSearch();
         commandBox.clear();
     }
 
