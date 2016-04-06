@@ -6,7 +6,8 @@ package parser;
  * 
  */
 public class InputValidator extends UserInputParser {
-
+	
+	private boolean isUndoRedo;
 	private boolean isNull;
 	private boolean isCommandValid;
 	private boolean isTaskNameValid;
@@ -14,6 +15,7 @@ public class InputValidator extends UserInputParser {
 	private boolean isTimeValid;
 
 	public InputValidator(String userCommand) {
+		isUndoRedo=checkUndoRedo(userCommand);
 		isNull = checkIfNull(userCommand);
 		isCommandValid = checkCommand(userCommand);
 		isTaskNameValid = checkTaskName(userCommand);
@@ -23,6 +25,9 @@ public class InputValidator extends UserInputParser {
 	public static boolean isAllValid(String input) {
 		InputValidator inputValidator= new InputValidator(input);
 		
+		if(inputValidator.isUndoRedo){
+			return true;			
+		}		
 		return inputValidator.isNull || inputValidator.isCommandValid ||
 				inputValidator.isDateValid || inputValidator.isTaskNameValid 
 				||inputValidator.isTimeValid;
@@ -31,6 +36,15 @@ public class InputValidator extends UserInputParser {
 	private boolean checkIfNull(String input) {
 		return input.isEmpty();
 	}
+	private boolean checkUndoRedo(String input) {
+		setAttributes(input);
+		Commands cmd = DetermineCommandType.getCommand(command);
+		
+		if(cmd==Commands.UNDO_TASK || cmd==Commands.REDO) {
+			return true;
+		}
+		return false;
+		}
 
 	private boolean checkCommand(String input) {
 		setAttributes(input);
