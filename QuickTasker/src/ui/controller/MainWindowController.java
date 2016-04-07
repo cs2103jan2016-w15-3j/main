@@ -184,6 +184,10 @@ public class MainWindowController implements Initializable {
                 searchTask(userInput);
             } else if (userInput.equals("change directory")) {
                 changeDirectory(userInput);
+            } else if (userInput.equals("view archived")) {
+                viewArchived();
+            } else if (userInput.equals("back")) {
+                viewTasks();
             } else if (userInput.equals("hi")) {
                 Platform.runLater(() -> {
                     try {
@@ -256,6 +260,7 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
+    //author A0130949Y
     private void markTaskCompleted(String userInput) throws Exception {
         try {
             int i = parser.getIndexForDone(userInput);
@@ -275,6 +280,7 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    // author kenan
     private void tickCheckBoxForMark(Task task, int i) {
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         printedPlanner.getSelectionModel().select(i);
@@ -302,6 +308,17 @@ public class MainWindowController implements Initializable {
         };
     }
 
+    // author A0130949Y
+    private void viewTasks() {
+        plannerEntries = FXCollections.observableArrayList(operations.getTasks());
+        afterOperation();
+    }
+
+    private void viewArchived() {
+        plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
+        afterOperation();
+        headerTitle.setText("Tasks: Archived");
+    }
     private void sortTask(String userInput) {
         System.out.println("Sorting");
         plannerEntries = FXCollections.observableArrayList(operations.sort());
@@ -371,6 +388,7 @@ public class MainWindowController implements Initializable {
 		}
 	}*/
 
+    // author A0130949Y
     private void undoTask() {
         try {
             plannerEntries = FXCollections.observableArrayList(operations.undo());
@@ -460,10 +478,6 @@ public class MainWindowController implements Initializable {
         operations.changeDir(userInput);
     }
 
-    private void refresh() {
-        printedPlanner.setItems(plannerEntries);
-    }
-
     private void createTask(String userInput) throws Exception {
         try {
             Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
@@ -522,6 +536,11 @@ public class MainWindowController implements Initializable {
     private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate, String type,
                                             LocalTime startTime, LocalTime endTime, int numberToRecur) throws Exception {
         return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
+    }
+
+    // author kenan
+    private void refresh() {
+        printedPlanner.setItems(plannerEntries);
     }
 
     private void setCellFactory() {

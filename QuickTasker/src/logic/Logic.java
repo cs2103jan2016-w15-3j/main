@@ -55,6 +55,10 @@ public class Logic {
         return (ArrayList<Task>) list;
     }
 
+    public ArrayList<Task> getArchivedTasks() {
+        return (ArrayList<Task>) archivedList;
+    }
+
     public void populateCommandMap() {
         commandMap = new TreeMap<Commands, Command>();
         commandMap.put(Commands.CREATE_TASK, new AddTask());
