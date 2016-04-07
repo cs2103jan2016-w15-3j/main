@@ -42,7 +42,7 @@ public class TestRunner {
         } else {
             List<Failure> failures = result.getFailures();
             for (Failure f : failures) {
-                System.out.println(ANSI_RED + f.toString() + ANSI_RESET);
+                System.out.println(ANSI_RED + f + ANSI_RESET);
             }
         }
     }

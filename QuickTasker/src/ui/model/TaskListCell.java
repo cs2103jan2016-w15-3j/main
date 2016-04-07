@@ -171,7 +171,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private boolean isFloatingTask(Task task) {
-        return task.getTaskType().equals("floating");
+        return "floating".equals(task.getTaskType());
     }
 
     protected void setTaskDueDate(Task task) {
@@ -212,14 +212,11 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     private boolean timeCheck(Task task) {
-        if (task.getStartTime() == null && task.getEndTime() == null) {
-            return false;
-        }
-        return true;
+        return task.getStartTime() != null || task.getEndTime() != null;
     }
 
     private boolean isWholeDayEvent(Task task) {
-        return task.getTaskType().equals("wholeDayEvent");
+        return "wholeDayEvent".equals(task.getTaskType());
     }
 
     public JFXCheckBox getCheckBox() {

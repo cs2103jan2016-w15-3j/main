@@ -11,8 +11,11 @@ public class SearchHelper {
 
     public boolean isItDisplayedInTodayView(Task task) {
         String taskType = task.getTaskType();
-        if (isFloatingTask(task)) return true;
-        else if (isDueToday(task)) return true;
+        if (isFloatingTask(task)) {
+            return true;
+        } else if (isDueToday(task)) {
+            return true;
+        }
         return false;
     }
 
@@ -24,8 +27,7 @@ public class SearchHelper {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         LocalDate today = LocalDate.now();
         LocalDate theDayAfterTomorrow = tomorrow.plusDays(1);
-        if (task.getDueDate().isAfter(today) && task.getDueDate().isBefore(theDayAfterTomorrow)) return true;
-        return false;
+        return task.getDueDate().isAfter(today) && task.getDueDate().isBefore(theDayAfterTomorrow);
     }
 
     public boolean containsKeyWord(Task task, String keywords) {
@@ -44,8 +46,12 @@ public class SearchHelper {
 
     private boolean containsFuzzy(String[] keywords, String taskName) {
         for (String s : keywords) {
-            if (taskName.contains(s)) return true;
-            if (compareStrings(taskName, s) > FUZZY_STRING_COMPARE_THRESHOLD) return true;
+            if (taskName.contains(s)) {
+                return true;
+            }
+            if (compareStrings(taskName, s) > FUZZY_STRING_COMPARE_THRESHOLD) {
+                return true;
+            }
         }
         return false;
     }
@@ -55,7 +61,7 @@ public class SearchHelper {
     }
 
     public boolean isFloatingTask(Task task) {
-        return task.getTaskType().equals(FLOATING_TASK);
+        return FLOATING_TASK.equals(task.getTaskType());
     }
 
     private boolean isDueToday(Task task) {

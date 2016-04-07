@@ -10,7 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-// @author:  A0133333U
+/** @author:  A0133333U */
 
 public class Main extends Application {
 
@@ -32,7 +32,7 @@ public class Main extends Application {
         mainWindow();
     }
 
-    // usage : Platform.runLater(getFxWrapper(yourRunnable));
+    /** Usage : Platform.runLater(getFxWrapper(yourRunnable)); */
     public static Runnable getFxWrapper(final Runnable r) {
         return () -> {
             try {

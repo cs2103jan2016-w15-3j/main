@@ -83,7 +83,7 @@ public class MainWindowController implements Initializable {
     private ObservableList<Task> plannerEntries;
 
 
-    // Display messages as visual feedback for users
+    /** Display messages as visual feedback for users. */
     private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
     private static final String MESSAGE_ADD_CONFIRMED = "Task added to list.";
     private static final String MESSAGE_DELETE_CONFIRMED = "Task deleted from list.";
@@ -141,7 +141,7 @@ public class MainWindowController implements Initializable {
                 performOperations(userInput);
             } catch (UIOperationException e) {
                 logger.log(Level.SEVERE,
-                        "Error occured at " + this.getClass().getName() + " within performOperation method.\n");
+                        "Error occured at " + getClass().getName() + " within performOperation method.\n");
                 e.printStackTrace();
 
             }
@@ -177,14 +177,14 @@ public class MainWindowController implements Initializable {
                 clearTasks(userInput);
             } else if (userInput.contains("stop")) {
                 stopRecurringTask(userInput);
-            } else if (userInput.equals("show today") || userInput.equals("view today")) {
+            } else if ("show today".equals(userInput) || "view today".equals(userInput)) {
                 showToday();
-            } else if (userInput.equals("show tomorrow") || userInput.equals("view tomorrow")) {
+            } else if ("show tomorrow".equals(userInput) || "view tomorrow".equals(userInput)) {
                 showTomorrow();
                 showAll();
-            } else if (userInput.equals("view floating") || userInput.equals("show floating")) {
+            } else if ("view floating".equals(userInput) || "show floating".equals(userInput)) {
                 showFloating();
-            } else if (userInput.equals("show all") || userInput.equals("view all")) {
+            } else if ("show all".equals(userInput) || "view all".equals(userInput)) {
                 showAll();
             } else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) {
                 searchTask(userInput);
@@ -199,11 +199,11 @@ public class MainWindowController implements Initializable {
                     } catch (Exception e) {
                     }
                 });
-            } else if (userInput.equals("change directory")) {
+            } else if ("change directory".equals(userInput)) {
                 changeDirectory(userInput);
-            } else if (userInput.equals("view archived")) {
+            } else if ("view archived".equals(userInput)) {
                 viewArchived();
-            } else if (userInput.equals("back")) {
+            } else if ("back".equals(userInput)) {
                 viewTasks();
             }
         } catch (Exception e) {
@@ -243,7 +243,7 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    // to be moved inside serach helper when tidy up
+    /** To be moved inside serach helper when tidy up. */
     private boolean isKeywordSearch() {
         return true;
     }
@@ -263,7 +263,7 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    //author A0130949Y
+    /** Author A0130949Y. */
     private void markTaskCompleted(String userInput) throws Exception {
         try {
             int i = parser.getIndexForDone(userInput);
@@ -283,7 +283,7 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    // author kenan
+    /** Author kenan. */
     private void tickCheckBoxForMark(Task task, int i) {
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         printedPlanner.getSelectionModel().select(i);
@@ -311,7 +311,7 @@ public class MainWindowController implements Initializable {
         };
     }
 
-    // author A0130949Y
+    /** Author A0130949Y. */
     private void viewTasks() {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         afterOperation();
@@ -393,7 +393,7 @@ public class MainWindowController implements Initializable {
 		}
 	}*/
 
-    // author A0130949Y
+    /** Author A0130949Y. */
     private void undoTask() {
         try {
             plannerEntries = FXCollections.observableArrayList(operations.undo());
@@ -404,7 +404,7 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    /*    private void searchingTask(String userInput) {
+    /**    Private void searchingTask(String userInput) {
             for (Task task : plannerEntries) {
                 String taskDescription = task.getName();
                 LocalDate taskStartDate = task.getStartDate();
@@ -543,7 +543,7 @@ public class MainWindowController implements Initializable {
         return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
     }
 
-    // author kenan
+    /** Author kenan. */
     private void refresh() {
         printedPlanner.setItems(plannerEntries);
     }

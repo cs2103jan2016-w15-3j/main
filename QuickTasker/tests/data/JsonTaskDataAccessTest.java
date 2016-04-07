@@ -168,8 +168,7 @@ public class JsonTaskDataAccessTest {
     }
 
     private List<Task> create30TasksWithDifferentAttributes() {
-        List<Task> tasks = new ArrayList<>();
-        tasks.addAll(createTasksWithStartAndEnd(10));
+        List<Task> tasks = new ArrayList<Task>(createTasksWithStartAndEnd(10));
         tasks.addAll(createTasksWithOnlyTaskNameAttribute(10));
         tasks.addAll(createRecurringTasks(10));
         return tasks;
