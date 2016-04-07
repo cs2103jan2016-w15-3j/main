@@ -31,7 +31,7 @@ public class SkipRecurTask<E> implements Command<Object> {
     }
 
     protected void moveDateForward(RecurringTask task) {
-        assert(task != null);
+        assert (task != null);
         task.adjustDate();
         if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
             task.setStartDate(task.getStartDate().plusWeeks(task.getNumberToRecur()));
@@ -43,7 +43,7 @@ public class SkipRecurTask<E> implements Command<Object> {
     }
 
     protected void moveDateBackward(RecurringTask task) {
-        assert(task != null);
+        assert (task != null);
         task.adjustDate();
         if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
             task.setStartDate(task.getStartDate().minusWeeks(task.getNumberToRecur()));

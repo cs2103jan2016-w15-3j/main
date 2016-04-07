@@ -93,6 +93,7 @@ public class MainWindowController implements Initializable {
     public MainWindowController() {
 
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initPlanner();
@@ -149,6 +150,7 @@ public class MainWindowController implements Initializable {
 
     private class UIOperationException extends RuntimeException {
     }
+
     private void performOperations(String userInput) throws UIOperationException {
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
@@ -320,6 +322,7 @@ public class MainWindowController implements Initializable {
         afterOperation();
         headerTitle.setText("Tasks: Archived");
     }
+
     private void sortTask(String userInput) {
         System.out.println("Sorting");
         plannerEntries = FXCollections.observableArrayList(operations.sort());
@@ -334,6 +337,7 @@ public class MainWindowController implements Initializable {
     private final String ERROR_MESSAGE_FOR_WRONG_INDEX = "Index is invalid!";
     private final String ERROR_MESSAGE_FOR_INVALID_INDEX = "Index is not a number!";
     private final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
+
     private void skipRecurringTask(String userInput) throws Exception {
         try {
             int index = parser.getTaskIndex(userInput);
@@ -485,7 +489,7 @@ public class MainWindowController implements Initializable {
                     parser.getEndDate(userInput), parser.getStartTime(userInput), parser.getEndTime(userInput));
 
 		/*
-		 * plannerEntries.add(newTask); printedPlanner.setItems(plannerEntries);
+         * plannerEntries.add(newTask); printedPlanner.setItems(plannerEntries);
 		 * commandBox.clear(); operations.addTask(newTask);
 		 */
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));

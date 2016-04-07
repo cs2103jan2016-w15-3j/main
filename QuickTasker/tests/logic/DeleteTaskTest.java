@@ -7,10 +7,8 @@ import org.junit.Test;
 import parser.Commands;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 /**
  * Author A0130949 Soh Yonghao
@@ -52,10 +50,10 @@ public class DeleteTaskTest {
         boolean testNegative = false;
         try {
             logic.deleteTask(-1);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             testNegative = true;
         }
-        assert(testNegative);
+        assert (testNegative);
     }
 
     @Test
@@ -66,6 +64,6 @@ public class DeleteTaskTest {
         } catch (NumberFormatException e) {
             testString = true;
         }
-        assert(testString);
+        assert (testString);
     }
 }

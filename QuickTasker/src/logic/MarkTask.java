@@ -23,7 +23,7 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
         archivedList = (ArrayList<Task>) list;
         String taskId = (String) op;
         Task archivedTask = archivedList.get(archivedList.size() - 1);
-        assert(archivedTask != null);
+        assert (archivedTask != null);
         loggerMark.log(Level.INFO, "Finish init of variables, Start the stack manipulation");
         executeArchive(taskId, archivedTask);
         loggerMark.log(Level.INFO, "End");
@@ -38,7 +38,7 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
 
     @Override
     public void undo(ArrayList<Task> list) {
-        assert(archivedList.size() > 0);
+        assert (archivedList.size() > 0);
         loggerMark.log(Level.INFO, "Start undo process for mark");
         try {
             archivedList.remove(archivedList.size() - 1);

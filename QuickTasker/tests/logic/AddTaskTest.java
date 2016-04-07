@@ -49,7 +49,7 @@ public class AddTaskTest {
             System.out.println("error is " + e);
             testResult = true;
         }
-        assert(testResult);
+        assert (testResult);
     }
 
     @Test

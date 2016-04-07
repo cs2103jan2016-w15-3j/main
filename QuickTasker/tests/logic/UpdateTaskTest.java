@@ -8,7 +8,6 @@ import org.junit.Test;
 import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 public class UpdateTaskTest {
     Logic logic;
@@ -85,7 +84,7 @@ public class UpdateTaskTest {
         } catch (IllegalArgumentException e) {
             testNegative = true;
         }
-        assert(testNegative);
+        assert (testNegative);
     }
 
     @Test
@@ -96,6 +95,6 @@ public class UpdateTaskTest {
         } catch (NumberFormatException e) {
             testString = true;
         }
-        assert(testString);
+        assert (testString);
     }
 }

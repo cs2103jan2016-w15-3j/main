@@ -104,7 +104,6 @@ public class TaskListCell extends JFXListCell<Task> {
         // lateIcon.getStyleClass().add("late-icon");
 
     }
-
     private void configureCheckBox() {
         checkBox.getStyleClass().add("task-check-box");
     }

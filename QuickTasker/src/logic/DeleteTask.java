@@ -2,7 +2,6 @@ package logic;
 
 import model.Task;
 
-import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -25,7 +24,7 @@ public class DeleteTask<E> implements Command<Object> {
         loggerDelete.log(Level.INFO, "Start logging for delete");
         try {
             int index = (int) op;
-            assert(index >= 0);
+            assert (index >= 0);
             executeDelete(list, index);
         } catch (AssertionError e) {
             loggerDelete.log(Level.WARNING, "Index is negative");
@@ -53,7 +52,7 @@ public class DeleteTask<E> implements Command<Object> {
             Task deletedTask = undoStackTask.pop();
             redoTaskStack.push(deletedTask);
             list.add(deletedTask);
-        } catch (Exception e)  {
+        } catch (Exception e) {
             loggerDelete.log(Level.WARNING, "Error in undo-ing the delete", e);
         }
         loggerDelete.log(Level.INFO, "End");
