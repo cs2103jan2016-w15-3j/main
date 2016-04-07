@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class UpdateTaskTest {
     Logic logic;
@@ -15,16 +16,8 @@ public class UpdateTaskTest {
 
     @Before
     public void setUp() throws Exception {
-/*        settings = new SettingManager();
-        settings.setPathOfSaveFile("test.json");*/
         init();
     }
-
-/*    @After
-    public void tearDown() {
-        settings.resetDefaultSettings();
-        logic.clear();
-    }*/
 
     private void init() {
         logic = new Logic();
@@ -82,5 +75,27 @@ public class UpdateTaskTest {
     public void testUpdatingWithoutDueDate() throws Exception {
         logic.updateTask(new Task("name longer by alot", LocalDate.now(), null), 1);
         assertEquals("name longer by alot", logic.getTasks().get(0).getName());
+    }
+
+    @Test
+    public void testUpdatingNegativeIndex() throws Exception {
+        boolean testNegative = false;
+        try {
+            logic.updateTask(new Task("name longer by alot", LocalDate.now(), null), -1);
+        } catch (IllegalArgumentException e) {
+            testNegative = true;
+        }
+        assert(testNegative);
+    }
+
+    @Test
+    public void testUpdatingWithString() throws Exception {
+        boolean testString = false;
+        try {
+            logic.updateTask(new Task("name longer by alot", LocalDate.now(), null), Integer.parseInt("hi"));
+        } catch (NumberFormatException e) {
+            testString = true;
+        }
+        assert(testString);
     }
 }

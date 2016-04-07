@@ -2,14 +2,17 @@ package logic;
 
 import data.SettingManager;
 import model.Task;
+import org.apache.commons.lang.NullArgumentException;
 import org.junit.Before;
 import org.junit.Test;
 import parser.Commands;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Author A0130949 Soh Yonghao
@@ -23,8 +26,6 @@ public class AddTaskTest {
 
     @Before
     public void setUp() throws Exception {
-/*        settings = new SettingManager();
-        settings.setPathOfSaveFile("test.json");*/
         logic = new Logic();
         logic.clear();
         createEmptyTasks(2);
@@ -36,15 +37,21 @@ public class AddTaskTest {
         }
     }
 
- /*   @After
-    public void tearDown() {
-        settings.resetDefaultSettings();
-        logic.clear();
-    }*/
-
     @Test
     public void testSizeOfListAfterAdd() throws Exception {
         assertEquals(logic.getSize(), 2);
+    }
+
+    @Test
+    public void testAddNull() throws Exception {
+        boolean testResult = false;
+        try {
+            logic.addTask(null);
+        } catch (NullArgumentException e) {
+            System.out.println("error is " + e);
+            testResult = true;
+        }
+        assert(testResult);
     }
 
     @Test
@@ -72,14 +79,14 @@ public class AddTaskTest {
     // A user could have added task without due date
     public void testNameAfterAddingWithoutDueDate() throws Exception {
         logic.addTask(new Task("name", LocalDate.now(), null));
-        assertEquals(logic.getTasks().get(2).getName(), "name");
+        assertEquals(logic.getTasks().get(0).getName(), "name");
     }
 
     @Test
     // A user could have added task without dates
     public void testNameAfterAddingWithoutDates() throws Exception {
         logic.addTask(new Task("name", null, null));
-        assertEquals(logic.getTasks().get(2).getName(), "name");
+        assertEquals(logic.getTasks().get(0).getName(), "name");
     }
 
     @Test

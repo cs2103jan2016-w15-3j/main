@@ -8,8 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UpdateTask<E> implements Command<Object> {
+    private static Logger loggerUpdate = Logger.getLogger("log");
     private static Stack<Task> undoStackTask = new Stack<Task>();
     private static Stack<Integer> undoStackInt = new Stack<Integer>();
     private static Stack<Task> redoStackTask = new Stack<Task>();
@@ -17,9 +20,19 @@ public class UpdateTask<E> implements Command<Object> {
 
     @Override
     public void execute(List<Task> list, Object index) {
-        int taskIndex = (int) index;
-        undoStackTask.push(list.get(taskIndex));
-        executeUpdate(taskIndex, list);
+        loggerUpdate.log(Level.INFO, "Start updating");
+        try {
+            int taskIndex = (int) index;
+            assert (taskIndex >= 0);
+            undoStackTask.push(list.get(taskIndex));
+            executeUpdate(taskIndex, list);
+        } catch (AssertionError e) {
+            loggerUpdate.log(Level.WARNING, "Cannot update negative index");
+            throw new IllegalArgumentException();
+        } catch (NumberFormatException e) {
+            loggerUpdate.log(Level.WARNING, "Cannot update an index thats not a number");
+            throw new NumberFormatException();
+        }
     }
 
     public void executeUpdate(int taskIndex, List<Task> list) {

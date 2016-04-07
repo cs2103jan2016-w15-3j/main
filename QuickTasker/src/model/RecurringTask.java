@@ -51,7 +51,6 @@ public class RecurringTask extends Task {
     }
 
     private void checkDaysPast() {
-        System.out.println("C");
         if (LocalDate.now().getDayOfMonth() > this.getDueDate().getDayOfMonth()) {
             if (LocalDate.now().getMonthValue() == this.getDueDate().getMonthValue()) {
                 if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
@@ -123,7 +122,7 @@ public class RecurringTask extends Task {
     }
 
     public Task stopRecurring() {
-        Task newTask = new Task(this.getName(), this.nextStartDate, this.getDueDate(), this.getStartTime(), this.getEndTime());
+        Task newTask = new Task(this.getName(), this.getStartDate(), this.getDueDate(), this.getStartTime(), this.getEndTime());
         return newTask;
     }
 

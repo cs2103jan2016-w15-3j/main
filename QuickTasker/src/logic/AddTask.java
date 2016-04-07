@@ -1,11 +1,9 @@
 package logic;
 
 import model.Task;
+import org.apache.commons.lang.NullArgumentException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,39 +19,39 @@ public class AddTask<E> implements Command<Object> {
     private Stack<Integer> redoStackInt = new Stack<Integer>();
 
     @Override
+    /*  adds the task into the list. task cannot be null. throwing NullArgumentException is for Junit test
+        uncomment the throwing of exception when running tests */
     public void execute(List<Task> list, Object task) {
-        assert (list.size() >= 0);
-        executeAddTask(list, (Task) task);
+        loggerAdd.log(Level.INFO, "Start adding task");
+        try {
+            assert (task != null);
+            executeAddTask(list, (Task) task);
+        } catch (AssertionError e) {
+            loggerAdd.log(Level.WARNING, "Task is null");
+            throw new NullArgumentException("For add test");
+        }
+        loggerAdd.log(Level.INFO, "End");
     }
 
     private void executeAddTask(List<Task> list, Task task) {
-        loggerAdd.log(Level.INFO, "START ADDING TASK");
-        try {
-            assert task != null;
-            int size = list.size();
-            list.add(task);
-            undoTaskStack.push(task);
-            Collections.sort(list);
-            int index = findTask(task.getId(), (ArrayList<Task>) list);
-            undoStackInt.push(index);
-            assert ((size + 1) == list.size());
-        } catch (Exception e) {
-            loggerAdd.log(Level.WARNING, "ERROR AT ADDING TASK", e);
-        }
-        loggerAdd.log(Level.INFO, "END");
+        list.add(task);
+        undoTaskStack.push(task);
+        Collections.sort(list);
+        int index = findTask(task.getId(), (ArrayList<Task>) list);
+        undoStackInt.push(index);
     }
 
     @Override
     public void undo(ArrayList<Task> list) {
-        loggerAdd.log(Level.INFO, "START UNDO PROCESS");
+        loggerAdd.log(Level.INFO, "START ADD UNDO PROCESS");
         try {
             Task undoTask = undoTaskStack.pop();
             int index = undoStackInt.pop();
             addRedoStack(undoTask, index);
             list.remove(index);
             loggerAdd.log(Level.INFO, "UNDO COMPELETED");
-        } catch (Exception e) {
-            loggerAdd.log(Level.WARNING, "ERROR, THERES NOTHING IN THE UNDOSTACK", e);
+        } catch (EmptyStackException e) {
+            loggerAdd.log(Level.WARNING, "ERROR, ADD UNDO HAS AN ERROR");
         }
         loggerAdd.log(Level.INFO, "END");
     }
@@ -82,8 +80,8 @@ public class AddTask<E> implements Command<Object> {
             int index = redoStackInt.pop();
             addUndoStack(redoTask, index);
             list.add(index, redoTask);
-        } catch (Exception e) {
-            loggerAdd.log(Level.WARNING, "ERROR, THERES NOTHING IN THE REDOSTACK", e);
+        } catch (EmptyStackException e) {
+            loggerAdd.log(Level.WARNING, "ERROR, ADD REDO HAS AN ERROR");
         }
         loggerAdd.log(Level.INFO, "FINISH REDO PROCESS");
     }

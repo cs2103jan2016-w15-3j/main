@@ -7,8 +7,10 @@ import org.junit.Test;
 import parser.Commands;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Author A0130949 Soh Yonghao
@@ -22,16 +24,8 @@ public class DeleteTaskTest {
 
     @Before
     public void setUp() throws Exception {
-/*        settings = new SettingManager();
-        settings.setPathOfSaveFile("test.json");*/
         init();
     }
-
-/*    @After
-    public void tearDown() {
-        settings.resetDefaultSettings();
-        logic.clear();
-    }*/
 
     private void init() {
         logic = new Logic();
@@ -44,12 +38,34 @@ public class DeleteTaskTest {
 
     @Test
     public void test() throws Exception {
-        assertEquals(logic.getSize(), 10);
+        assertEquals(10, logic.getSize());
         logic.deleteTask(0);
-        assertEquals(logic.getSize(), 9);
+        assertEquals(9, logic.getSize());
         logic.deleteTask(8);
-        assertEquals(logic.getSize(), 8);
+        assertEquals(8, logic.getSize());
         logic.commandMap.get(Commands.DELETE_TASK).undo((ArrayList<Task>) logic.list);
-        assertEquals(logic.getSize(), 9);
+        assertEquals(9, logic.getSize());
+    }
+
+    @Test
+    public void testNegative() throws Exception {
+        boolean testNegative = false;
+        try {
+            logic.deleteTask(-1);
+        } catch (IllegalArgumentException e){
+            testNegative = true;
+        }
+        assert(testNegative);
+    }
+
+    @Test
+    public void testString() throws Exception {
+        boolean testString = false;
+        try {
+            logic.deleteTask(Integer.parseInt("hi"));
+        } catch (NumberFormatException e) {
+            testString = true;
+        }
+        assert(testString);
     }
 }

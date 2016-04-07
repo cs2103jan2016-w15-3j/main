@@ -59,7 +59,6 @@ public class Logic {
         commandMap = new TreeMap<Commands, Command>();
         commandMap.put(Commands.CREATE_TASK, new AddTask());
         commandMap.put(Commands.DELETE_TASK, new DeleteTask());
-        commandMap.put(Commands.DISPLAY_TASK, new DisplayTask());
         commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
         commandMap.put(Commands.SEARCH_TASK, new Search());
         commandMap.put(Commands.SORT_TASK, new Sort());
@@ -162,20 +161,26 @@ public class Logic {
         saveList();
     }
 
-    public void markAsDone(int index) {
-        Task completedTask = list.get(index);
-        completedTask.setDone(true);
-        if (list.get(index) instanceof RecurringTask) {
-            archivedList.add(clone(completedTask));
-            skipForMark(index);
-        } else {
-            archivedList.add(list.get(index));
-            list.remove(index);
+    public void markAsDone(String taskId) {
+        try {
+            int index = findTask(taskId, list);
+            Task completedTask = list.get(index);
+            completedTask.setDone(true);
+            if (list.get(index) instanceof RecurringTask) {
+                archivedList.add(clone(completedTask));
+                skipForMark(index);
+            } else {
+                archivedList.add(list.get(index));
+                list.remove(index);
+            }
+            undoStack.push(Commands.MARK);
+            commandMap.get(Commands.MARK).execute(archivedList, completedTask.getId());
+            saveList();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new ArrayIndexOutOfBoundsException();
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException();
         }
-        undoStack.push(Commands.MARK);
-        String stink = completedTask.getId();
-        commandMap.get(Commands.MARK).execute(archivedList, completedTask.getId());
-        //sort();
     }
 
     // requires cloning to prevent the reucrring task from changing values
@@ -188,6 +193,17 @@ public class Logic {
 
     public void changeDir(String path) {
         settings.setPathOfSaveFile(path);
+        saveList();
+    }
+
+    public int findTask(String id, List<Task> list) {
+        int position = -1;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId().equals(id)) {
+                position = i;
+            }
+        }
+        return position;
     }
 
     private void saveList() {
