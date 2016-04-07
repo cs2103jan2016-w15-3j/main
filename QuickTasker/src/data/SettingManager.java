@@ -82,8 +82,6 @@ public class SettingManager {
             Properties properties = new Properties();
             properties.setProperty("saveFileLocation", "tasks.json");
             properties.setProperty("applicationColor", "red");
-            System.out.println(settingLocation.toAbsolutePath());
-            Files.createFile(settingLocation);
             properties
                     .store(Files.newOutputStream(settingLocation, CREATE), "Application Settings");
         } catch (IOException e) {
