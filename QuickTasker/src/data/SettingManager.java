@@ -11,6 +11,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +40,6 @@ public class SettingManager {
         try {
             Files.deleteIfExists(settingLocation);
             createDefaultSettings();
-            loadSettings();
         } catch (IOException e) {
             throw new ResetSettingsException();
         }
@@ -80,9 +80,11 @@ public class SettingManager {
             Properties properties = new Properties();
             properties.setProperty("saveFileLocation", "tasks.json");
             properties.setProperty("applicationColor", "red");
-            Files.createFile(settingLocation);
+            OutputStream outputStream = Files.newOutputStream(settingLocation,CREATE);
             properties
-                    .store(Files.newOutputStream(settingLocation, CREATE), "Application Settings");
+                    .store(outputStream, "Application Settings");
+            outputStream.close();
+            loadSettings();
         } catch (IOException e) {
             e.printStackTrace();
         }
