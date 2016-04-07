@@ -51,12 +51,10 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
-    @Override
-    public List<Task> getTasks() throws LoadTasksException {
+    @Override public List<Task> getTasks() throws LoadTasksException {
         Gson gson = getGson();
         List<Task> tasks;
-        try {
-            BufferedReader reader = Files.newBufferedReader(pathOfSaveFile);
+        try (BufferedReader reader = Files.newBufferedReader(pathOfSaveFile)) {
             tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {
             }.getType());
             reader.close();
@@ -74,12 +72,10 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
                 new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter)).create();
     }
 
-    @Override
-    public void save(Task task) throws SaveTasksException {
+    @Override public void save(Task task) throws SaveTasksException {
         Gson gson = getGson();
         String json = gson.toJson(task);
-        try {
-            BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile);
+        try (BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile)) {
             writer.write(json);
             writer.close();
         } catch (IOException e) {
@@ -87,13 +83,11 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
-    @Override
-    public void save(List<Task> tasks) throws SaveTasksException {
+    @Override public void save(List<Task> tasks) throws SaveTasksException {
 
         Gson gson = getGson();
         String json = gson.toJson(tasks);
-        try {
-            BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile);
+        try (BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile)) {
             writer.write(json);
             writer.close();
 
@@ -102,8 +96,7 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
-    @Override
-    public void reset() {
+    @Override public void reset() {
         Path p = Paths.get(settings.getPathOfSaveFile());
         try {
             Files.deleteIfExists(p);
@@ -114,9 +107,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
             logger.log(Level.WARNING, "Permission error while deleting " + p.getFileName() +
                     " at reset() method in < " + this.getClass().getName() + "> class");
         } catch (IOException ioe) {
-            logger.log(Level.WARNING,
-                    "Unknow IOException occurs while deleting " + p.getFileName() +
-                            "at reset() method in <" + this.getClass().getName() + "> class");
+            logger.log(Level.WARNING, "Unknow IOException occurs while deleting " + p.getFileName() +
+                    "at reset() method in <" + this.getClass().getName() + "> class");
         }
         initialize();
     }

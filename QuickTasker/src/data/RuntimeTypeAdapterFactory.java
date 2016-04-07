@@ -56,34 +56,31 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
         final Map<String, TypeAdapter<?>> labelToDelegate = new LinkedHashMap<String, TypeAdapter<?>>();
         final Map<Class<?>, TypeAdapter<?>> subtypeToDelegate = new LinkedHashMap<Class<?>, TypeAdapter<?>>();
         for (Map.Entry<String, Class<?>> entry : labelToSubtype.entrySet()) {
-            TypeAdapter<?> delegate = gson
-                    .getDelegateAdapter(this, TypeToken.get(entry.getValue()));
+            TypeAdapter<?> delegate = gson.getDelegateAdapter(this, TypeToken.get(entry.getValue()));
             labelToDelegate.put(entry.getKey(), delegate);
             subtypeToDelegate.put(entry.getValue(), delegate);
         }
 
         return new TypeAdapter<R>() {
-            @Override
-            public R read(JsonReader in) throws IOException {
+            @Override public R read(JsonReader in) throws IOException {
                 JsonElement jsonElement = Streams.parse(in);
                 JsonElement labelJsonElement = jsonElement.getAsJsonObject().remove(typeFieldName);
                 if (labelJsonElement == null) {
-                    throw new JsonParseException("cannot deserialize " + baseType
-                            + " because it does not define a field named " + typeFieldName);
+                    throw new JsonParseException(
+                            "cannot deserialize " + baseType + " because it does not define a field named "
+                                    + typeFieldName);
                 }
                 String label = labelJsonElement.getAsString();
                 @SuppressWarnings("unchecked") // registration requires that subtype extends T
                         TypeAdapter<R> delegate = (TypeAdapter<R>) labelToDelegate.get(label);
                 if (delegate == null) {
-                    throw new JsonParseException(
-                            "cannot deserialize " + baseType + " subtype named " + label
-                                    + "; did you forget to register a subtype?");
+                    throw new JsonParseException("cannot deserialize " + baseType + " subtype named " + label
+                            + "; did you forget to register a subtype?");
                 }
                 return delegate.fromJsonTree(jsonElement);
             }
 
-            @Override
-            public void write(JsonWriter out, R value) throws IOException {
+            @Override public void write(JsonWriter out, R value) throws IOException {
                 Class<?> srcType = value.getClass();
                 String label = subtypeToLabel.get(srcType);
                 @SuppressWarnings("unchecked") // registration requires that subtype extends T

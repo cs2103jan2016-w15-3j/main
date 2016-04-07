@@ -101,8 +101,7 @@ public class RecurringParser {
         } else if (numToSetDate == 1) {
             startDate = endDate = stringToLocalDate("tomorrow");
         } else if (numToSetDate == 2) {
-            startDate = endDate = stringToLocalDate(
-                    userCommand[length - 2] + " " + userCommand[length - 1]);
+            startDate = endDate = stringToLocalDate(userCommand[length - 2] + " " + userCommand[length - 1]);
         } else if (numToSetDate == 3) {// floating task
             startDate = LocalDate.MIN;
             endDate = LocalDate.MIN;// placeholder for null
@@ -119,7 +118,8 @@ public class RecurringParser {
         ArrayList<Integer> indicesTime = parser.indicesToDetermineTime(input);
 
         if (indicesTime.size() == 0) {
-            return;
+            startTime = null;
+            endTime = null;
         }
         ArrayList<LocalTime> localTimes = parser.parseTime(input, indicesTime);
 

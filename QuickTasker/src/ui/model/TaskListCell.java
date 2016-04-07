@@ -7,6 +7,7 @@ package ui.model;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXPopup;
+import com.jfoenix.controls.JFXRippler;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -33,6 +34,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private final JFXPopup searchBox = new JFXPopup();
     private final GridPane grid = new GridPane();
     private final ObservableList<Task> tasks;
+    private JFXRippler rippler = new JFXRippler();
     private Task myTask;
 
     public TaskListCell(ObservableList<Task> list) {
@@ -44,6 +46,16 @@ public class TaskListCell extends JFXListCell<Task> {
         configureCheckBox();
         addControlsToGrid();
         tasks = list;
+        addGridToRippler();
+
+    }
+
+    private void addGridToRippler() {
+        rippler.setControl(grid);
+    }
+
+    public JFXRippler getRippler() {
+        return this.rippler;
     }
 
     private void configureGrid() {
@@ -51,8 +63,8 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.setVgap(5); // vertical gap between grids
         grid.setPadding(new Insets(0, 10, 0, 10));// set custom columns
         ColumnConstraints column1 = new ColumnConstraints();
-        column1.setMinWidth(25);
-        column1.setMaxWidth(25);
+        column1.setMinWidth(20);
+        column1.setMaxWidth(20);
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setMaxWidth(20);
         ColumnConstraints column3 = new ColumnConstraints();
@@ -83,7 +95,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void configureTime() {
         taskStartDate.getStyleClass().add("task-time");
-        taskEndTime.getStyleClass().add(".task-time");
+        taskEndTime.getStyleClass().add("task-time");
         GridPane.setHalignment(taskStartTime, HPos.RIGHT);
         GridPane.setHalignment(taskEndTime, HPos.RIGHT);
     }
@@ -107,15 +119,16 @@ public class TaskListCell extends JFXListCell<Task> {
 
     }
 
-    @Override
-    public void updateItem(Task task, boolean empty) {
+    @Override public void updateItem(Task task, boolean empty) {
         super.updateItem(task, empty);
         if (empty) {
             clearContent();
         } else {
+
             this.myTask = task;
             addContent(task);
-            setGraphic(grid);
+            rippler = new JFXRippler(grid);
+            setGraphic(rippler);
         }
     }
 
@@ -141,38 +154,41 @@ public class TaskListCell extends JFXListCell<Task> {
 
         taskName.setText(task.getName());
     }
-    // From Kenan banana:
-    // right now, we use "-" rather than "not specified" because it helps covers up the problem that
-    // when task name is too long, scroll bar appear, which doesnt look good
-    // It will be shortly replaced with icons in the next iterat
 
     protected void setTaskStartDate(Task task) {
-        if (task != null && !isFloatingTask(task)) {
+        if (task != null && task.getStartDate() != LocalDate.MIN) {
+            setStartDateInText(task);
+        } else {
+            taskStartDate.setText("");
+        }
+    }
 
-            LocalDate startDate = task.getStartDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-            String dateString = formatter.format(startDate);
-            taskStartDate.setText(dateString);
-        } else taskStartDate.setText("");
+    private void setStartDateInText(Task task) {
+        LocalDate startDate = task.getStartDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        String dateString = formatter.format(startDate);
+        taskStartDate.setText(dateString);
     }
 
     private boolean isFloatingTask(Task task) {
-        return task.getTaskType().equals("floating");
+        return "floating".equals(task.getTaskType());
     }
 
     protected void setTaskDueDate(Task task) {
 
-        if (task != null && !isFloatingTask(task)) {
+        if (task != null && task.getDueDate() != LocalDate.MIN) {
 
             LocalDate dueDate = task.getDueDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
             String dateString = formatter.format(dueDate);
             taskDueDate.setText(dateString);
-        } else taskDueDate.setText("-");
+        } else {
+            taskDueDate.setText("-");
+        }
     }
 
     protected void setTaskStartTime(Task task) {
-        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task)) {
+        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task) && timeCheck(task)) {
             LocalTime startTime = task.getStartTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(startTime);
@@ -184,7 +200,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskEndTime(Task task) {
 
-        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task)) {
+        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task) && timeCheck(task)) {
             LocalTime endTime = task.getEndTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(endTime);
@@ -195,13 +211,12 @@ public class TaskListCell extends JFXListCell<Task> {
         }
     }
 
-    private boolean isWholeDayEvent(Task task) {
-        return task.getTaskType()
-                .equals("wholeDayEvent");
+    private boolean timeCheck(Task task) {
+        return task.getStartTime() != null || task.getEndTime() != null;
     }
 
-    public JFXPopup getSearchBox() {
-        return searchBox;
+    private boolean isWholeDayEvent(Task task) {
+        return "wholeDayEvent".equals(task.getTaskType());
     }
 
     public JFXCheckBox getCheckBox() {

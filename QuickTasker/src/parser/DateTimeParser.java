@@ -82,8 +82,8 @@ public class DateTimeParser {
     }
 
     private boolean isEnglish(String input) {
-        return (input.equals("today") || input.equals("tomorrow") || input.equals("next day")
-                || input.equals("day after"));
+        return (input.equals("today") || input.equals("tomorrow") || input.equals("next day") || input
+                .equals("day after"));
     }
 
     public boolean isDate(String input) {

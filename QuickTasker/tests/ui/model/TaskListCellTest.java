@@ -19,8 +19,7 @@ public class TaskListCellTest {
     private TaskListCell taskListCell;
     private ObservableList<Task> testTasks;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
 
         //ObservableList<Task> guiList = FXCollections.observableArrayList();
         //taskListCell = new TaskListCell(testTasks);
@@ -37,8 +36,7 @@ public class TaskListCellTest {
 
     }*/
 
-    @Test
-    public void testSetTaskName() {
+    @Test public void testSetTaskName() {
         String taskName = "Buy bananas";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
 
@@ -51,16 +49,22 @@ public class TaskListCellTest {
         Task t1 = new Task("buy fruits");
         assertEquals("buy fruits", t1.getName());
     }
+    
+/*    @Test 
+    public void testSearchTask() {
+    	Task task = new Task("Buy present");
+    	Task task2 = new Task("Buy bananas");
+    	testTasks.
+    	assertEquals(expected, actual);
+    }*/
 
-    @Test
-    public void testSetTaskStartDate() {
+    @Test public void testSetTaskStartDate() {
         String taskName = "Buy bananas";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         assertEquals(LocalDate.now(), testTask.getStartDate());
     }
 
-    @Test
-    public void testSetTaskDueDate() {
+    @Test public void testSetTaskDueDate() {
         String taskName = "Buy bananas";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         assertEquals(LocalDate.now(), testTask.getDueDate());

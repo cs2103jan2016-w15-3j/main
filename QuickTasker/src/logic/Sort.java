@@ -6,26 +6,25 @@ import java.util.List;
 
 public class Sort<E> implements Command {
 
-    @Override
-    public void execute(List list, Object op) {
+    @Override public void execute(List list, Object op) {
         System.out.println("really sorting now");
         Collections.sort(list);
         System.out.println("finish sorting");
-/*        for(int i = 0; i < list.size(); i++) {   
-            System.out.println(list.get(i) + "\n");
-        } */
     }
 
-    @Override
-    public void undo(ArrayList list) {
+    @Override public void undo(ArrayList list) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
-    public void redo(ArrayList list) {
+    @Override public void redo(ArrayList list) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override public int findTask(String id, ArrayList list) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

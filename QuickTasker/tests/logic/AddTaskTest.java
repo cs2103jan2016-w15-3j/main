@@ -2,9 +2,9 @@ package logic;
 
 import data.SettingManager;
 import model.Task;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
 import parser.Commands;
 
 import java.time.LocalDate;
@@ -22,11 +22,9 @@ public class AddTaskTest {
     Logic logic;
     private SettingManager settings;
 
-    @Before
-    public void setUp() throws Exception {
-        settings = new SettingManager();
-        settings.setPathOfSaveFile("test.json");
+    @Before public void setUp() throws Exception {
         logic = new Logic();
+        logic.clear();
         createEmptyTasks(2);
     }
 
@@ -36,19 +34,22 @@ public class AddTaskTest {
         }
     }
 
-    @After
-    public void tearDown() {
-        settings.resetDefaultSettings();
-        logic.clear();
-    }
-
-    @Test
-    public void testSizeOfListAfterAdd() throws Exception {
+    @Test public void testSizeOfListAfterAdd() throws Exception {
         assertEquals(logic.getSize(), 2);
     }
 
-    @Test
-    public void testSizeOfListAfterAddingNull() throws Exception {
+    @Test public void testAddNull() throws Exception {
+        boolean testResult = false;
+        try {
+            logic.addTask(null);
+        } catch (NullArgumentException e) {
+            System.out.println("error is " + e);
+            testResult = true;
+        }
+        assert (testResult);
+    }
+
+    @Test public void testSizeOfListAfterAddingNull() throws Exception {
         logic.addTask(new Task(null, null, null));
         assertEquals(logic.getSize(), 3);
     }
@@ -57,28 +58,29 @@ public class AddTaskTest {
     // A user could have added normally
     public void testNameAfterAdding() throws Exception {
         logic.addTask(new Task("name", LocalDate.now(), LocalDate.now()));
-        assertEquals(logic.getTasks().get(2).getName(), "name");
+        System.out.println(logic.getSize());
+        assertEquals(logic.getTasks().get(0).getName(), "name");
     }
 
     @Test
     // A user could have added task without start date
     public void testNameAfterAddingWithoutStartDate() throws Exception {
         logic.addTask(new Task("name", null, LocalDate.now()));
-        assertEquals(logic.getTasks().get(2).getName(), "name");
+        assertEquals(logic.getTasks().get(0).getName(), "name");
     }
 
     @Test
     // A user could have added task without due date
     public void testNameAfterAddingWithoutDueDate() throws Exception {
         logic.addTask(new Task("name", LocalDate.now(), null));
-        assertEquals(logic.getTasks().get(2).getName(), "name");
+        assertEquals(logic.getTasks().get(0).getName(), "name");
     }
 
     @Test
     // A user could have added task without dates
     public void testNameAfterAddingWithoutDates() throws Exception {
         logic.addTask(new Task("name", null, null));
-        assertEquals(logic.getTasks().get(2).getName(), "name");
+        assertEquals(logic.getTasks().get(0).getName(), "name");
     }
 
     @Test

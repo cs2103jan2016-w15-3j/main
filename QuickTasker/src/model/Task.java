@@ -2,34 +2,30 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 /**
  * @author A0121558H/A0130949
  */
 public class Task implements Comparable {
-    private static int IdGenerator;
     private String taskName;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean isDone = false;
-    private int id;
-    private boolean isRecurring = false;
+    private String id;
     private String taskType;
 
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
     }
 
-    /**
-     * Default constructor *.
-     */
     public Task() {
         this.taskName = "";
         this.endDate = LocalDate.MIN;
         this.setStartDateAsNow();
-        generateId();
+        this.id = generateId();
     }
 
     /**
@@ -39,7 +35,7 @@ public class Task implements Comparable {
         this.taskName = taskName;
         setStartDateAsNow();
         this.endDate = LocalDate.MIN;
-        generateId();
+        this.id = generateId();
     }
 
     /**
@@ -49,7 +45,8 @@ public class Task implements Comparable {
         this.taskName = taskName;
         this.endDate = LocalDate.MIN;
         this.startDate = startDate;
-        generateId();
+        this.id = generateId();
+
     }
 
     /**
@@ -59,7 +56,7 @@ public class Task implements Comparable {
         this.taskName = taskName;
         this.endDate = endDate;
         this.startDate = startDate;
-        generateId();
+        this.id = generateId();
     }
 
     // @author: A0133333U
@@ -73,12 +70,11 @@ public class Task implements Comparable {
         this.startTime = startTime;
         this.endTime = endTime;
         setTaskType();
-        generateId();
+        this.id = generateId();
     }
 
     public void setTaskType() {
-        if (this.startDate == LocalDate.MAX && this.endDate == LocalDate.MAX)
-            this.taskType = "floating";
+        if (this.startDate == LocalDate.MAX && this.endDate == LocalDate.MAX) this.taskType = "floating";
         else if (this.startTime == LocalTime.MIN && this.endTime == LocalTime.MIN)
             this.taskType = "wholeDayEvent";
         else this.taskType = "task";
@@ -87,18 +83,6 @@ public class Task implements Comparable {
     public String getTaskType() {
         return this.taskType;
     }
-
-
-/*    public Task(String taskName, LocalDate startDate, LocalDate endDate, String type,
-            int numToRecur) {
-        this.taskName = taskName;
-        this.endDate = endDate;
-        this.startDate = startDate;
-        generateId();
-        this.type = type;
-        this.numToRecur = numToRecur;
-        setRecurring();
-    }*/
 
     public String getName() {
         return taskName;
@@ -124,7 +108,7 @@ public class Task implements Comparable {
         taskName = newName;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -152,79 +136,67 @@ public class Task implements Comparable {
         isDone = done;
     }
 
-/*    public void setRecurring() {
-        this.isRecurring = true;
+    private String generateId() {
+        return UUID.randomUUID().toString();
     }
 
-    public boolean getRecurring() {
-        return isRecurring;
-    }*/
-
-    private void generateId() {
-        this.id = ++IdGenerator;
-    }
-
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
 
         Task task = (Task) o;
 
-        if (id != task.id) return false;
+        if (!id.equals(task.id)) return false;
         if (!taskName.equals(task.taskName)) return false;
         if (endDate != null ? !endDate.equals(task.endDate) : task.endDate != null) return false;
         return startDate != null ? startDate.equals(task.startDate) : task.startDate == null;
 
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         int result = taskName.hashCode();
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
-        result = 31 * result + id;
+        result = 31 * result + id.hashCode();
         return result;
     }
 
-    @Override
-    public int compareTo(Object task) {
+    @Override public int compareTo(Object task) {
         Task comparedTask = (Task) task;
-        if (this.getDueDate() == LocalDate.MIN) {
-            return -1;
-        }
-        if (this.getDueDate().getDayOfMonth() > comparedTask.getDueDate().getDayOfMonth()) {
-            if (this.getDueDate().getMonthValue() >= comparedTask.getDueDate().getMonthValue()) {
-                if (this.getDueDate().getYear() >= comparedTask.getDueDate().getYear()) {
-                    return 1;
-                }
-            }
-        }
-        if (this.getDueDate().getMonthValue() > comparedTask.getDueDate().getMonthValue()) {
-            if (this.getDueDate().getYear() > comparedTask.getDueDate().getYear()) {
-                return 1;
-            }
-        }
-        if (this.getDueDate().getYear() > comparedTask.getDueDate().getYear()) {
-            return 1;
+        int result = compareDueDate(this, comparedTask);
+
+        if (result == 0) {
+            result = compareStartDate(this, comparedTask);
         }
 
-        if (this.getStartDate().getDayOfMonth() > comparedTask.getStartDate().getDayOfMonth()) {
-            if (this.getStartDate().getMonthValue() >= comparedTask.getStartDate()
-                    .getMonthValue()) {
-                if (this.getStartDate().getYear() >= comparedTask.getStartDate().getYear()) {
-                    return 1;
-                }
-            }
+        if (result == 0) {
+            result = this.getName().compareTo(comparedTask.getName());
         }
-        if (this.getStartDate().getMonthValue() > comparedTask.getStartDate().getMonthValue()) {
-            if (this.getStartDate().getYear() > comparedTask.getStartDate().getYear()) {
-                return 1;
-            }
-        }
-        if (this.getStartDate().getYear() > comparedTask.getStartDate().getYear()) {
+
+        return result;
+    }
+
+    private int compareDueDate(Task task, Task comparedTask) {
+        if (task.getDueDate() == null && comparedTask.getDueDate() == null) {
+            return 0;
+        } else if (task.getDueDate() != null && comparedTask.getDueDate() == null) {
             return 1;
+        } else if (task.getDueDate() == null && comparedTask.getDueDate() != null) {
+            return -1;
+        } else {
+            return comparedTask.getDueDate().compareTo(this.getDueDate());
         }
-        return -1;
+    }
+
+    private int compareStartDate(Task task, Task comparedTask) {
+        if (task.getStartDate() == null && comparedTask.getStartDate() == null) {
+            return 0;
+        } else if (task.getStartDate() != null && comparedTask.getStartDate() == null) {
+            return 1;
+        } else if (task.getStartDate() == null && comparedTask.getStartDate() != null) {
+            return -1;
+        } else {
+            return comparedTask.getStartDate().compareTo(this.getStartDate());
+        }
     }
 }

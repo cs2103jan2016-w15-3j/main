@@ -1,5 +1,11 @@
 package model;
 
+/*
+*
+*  author A0130949Y
+*
+* */
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -20,9 +26,12 @@ public class RecurringTask extends Task {
     }
 
     public void adjustDate() {
-        this.checkYearsPast();
+/*        this.checkYearsPast();
         this.checkMonthsPast();
-        this.checkDaysPast();
+        this.checkDaysPast();*/
+        if (LocalDate.now().isAfter(this.getDueDate())) {
+            addOffset();
+        }
     }
 
     public String getRecurType() {
@@ -48,7 +57,6 @@ public class RecurringTask extends Task {
     }
 
     private void checkDaysPast() {
-        System.out.println("C");
         if (LocalDate.now().getDayOfMonth() > this.getDueDate().getDayOfMonth()) {
             if (LocalDate.now().getMonthValue() == this.getDueDate().getMonthValue()) {
                 if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
@@ -64,8 +72,7 @@ public class RecurringTask extends Task {
         long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.DAYS);
         if (this.getRecurType().equals("week") || this.getRecurType().equals("weeks")) {
             int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
-            setNextDates(this.getStartDate().plusWeeks(offset),
-                    this.getDueDate().plusWeeks(offset));
+            setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
         } else {
             int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
             setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));
@@ -104,8 +111,9 @@ public class RecurringTask extends Task {
         setEndDate(endDate);
     }
 
-    public Task stopRecurring(RecurringTask task) {
-        Task newTask = new Task(task.getName(), task.nextStartDate, task.getDueDate());
+    public Task stopRecurring() {
+        Task newTask = new Task(this.getName(), this.getStartDate(), this.getDueDate(), this.getStartTime(),
+                this.getEndTime());
         return newTask;
     }
 
