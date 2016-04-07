@@ -28,7 +28,8 @@ public class SettingManager {
     }
 
     private void initiate() {
-        if (settingFileDoesNotExist()) {
+        System.out.println("Setting file exists : " + settingsFileExists());
+        if (!settingsFileExists()) {
             createDefaultSettings();
         } else if (settingFileIsEmpty()) {
             resetDefaultSettings();
@@ -67,12 +68,13 @@ public class SettingManager {
             Configuration con = cons.properties(new File(settingLocation.getFileName().toString()));
             return con.isEmpty();
         } catch (ConfigurationException e) {
-            return false;
+            e.printStackTrace();
         }
+        return false;
     }
 
-    private boolean settingFileDoesNotExist() {
-        return Files.notExists(settingLocation);
+    private boolean settingsFileExists() {
+        return Files.exists(settingLocation);
     }
 
     private void createDefaultSettings() {
@@ -80,6 +82,7 @@ public class SettingManager {
             Properties properties = new Properties();
             properties.setProperty("saveFileLocation", "tasks.json");
             properties.setProperty("applicationColor", "red");
+            System.out.println(settingLocation.toAbsolutePath());
             Files.createFile(settingLocation);
             properties
                     .store(Files.newOutputStream(settingLocation, CREATE), "Application Settings");
