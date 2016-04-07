@@ -44,7 +44,6 @@ public class Main extends Application {
         };
     }
 
-
     private void mainWindow() {
 
         try {

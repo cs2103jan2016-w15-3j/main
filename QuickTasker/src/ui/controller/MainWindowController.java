@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -14,25 +15,24 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
-import org.apache.commons.lang.NullArgumentException;
+import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
 import parser.Commands;
 import parser.ParserInterface;
 import parser.RecurringParser;
 import parser.UserInputParser;
-import ui.model.ApplicationColor;
 import ui.model.TaskListCell;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.EmptyStackException;
-import java.util.InputMismatchException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,16 +53,20 @@ public class MainWindowController implements Initializable {
     private ListView<String> ListViewOnlySearch = new ListView<>();
     private final Logic operations = new Logic();
     private SearchHelper util = new SearchHelper();
+
+    @FXML
+    private AnchorPane mainContentContainer;
+    @FXML
+    private StackPane overlayPane;
     @FXML
     JFXBadge tasksCounter;
     @FXML
-    public AnchorPane root;
+    public BorderPane root;
     @FXML
     private JFXTextField commandBox;
     @FXML
     private JFXListView<Task> printedPlanner;
-    @FXML
-    private StackPane mainContent;
+
     @FXML
     private JFXSnackbar snackbar;
     @FXML
@@ -106,7 +110,7 @@ public class MainWindowController implements Initializable {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         printedPlanner.setItems(plannerEntries);
         printedPlanner.setDepthProperty(1);
-        snackbar.registerSnackbarContainer(mainContent);
+        snackbar.registerSnackbarContainer(mainContentContainer);
         tasksCounter.setText(plannerEntries.size() + "");
         commandBox.requestFocus();
     }
@@ -182,26 +186,23 @@ public class MainWindowController implements Initializable {
                 showAll();
             } else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) {
                 searchTask(userInput);
+            } else if (userInput.contains("theme")) {
+                Scene scene = main.getScene();
+                ThemeChanger themer = new ThemeChanger();
+                Platform.runLater(() -> {
+                    try {
+                        themer.change(userInput, scene);
+                        commandBox.clear();
+                        //an event with a button maybe
+                    } catch (Exception e) {
+                    }
+                });
             } else if (userInput.equals("change directory")) {
                 changeDirectory(userInput);
             } else if (userInput.equals("view archived")) {
                 viewArchived();
             } else if (userInput.equals("back")) {
                 viewTasks();
-            } else if (userInput.equals("hi")) {
-                Platform.runLater(() -> {
-                    try {
-                        main.getDecorator().setStyle("-fx-decorator-color: derive(" + ApplicationColor.BLUE.getHexCode() + ",-20%);");
-                        headerContainer.setStyle("-fx-background-color: " + ApplicationColor.BLUE.getHexCode());
-                        System.out.println(tasksCounter.getChildren());
-                        commandBox.clear();
-                        JFXDatePicker datePicker = new JFXDatePicker();
-
-                        datePicker.show();
-                        //an event with a button maybe
-                    } catch (Exception e) {
-                    }
-                });
             }
         } catch (Exception e) {
             throw new UIOperationException();

@@ -1,7 +1,7 @@
 package logic;
 
 import model.Task;
-import org.apache.commons.lang.NullArgumentException;
+import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
 
 import java.util.*;
 import java.util.logging.Level;

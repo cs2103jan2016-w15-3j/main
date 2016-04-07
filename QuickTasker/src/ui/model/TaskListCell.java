@@ -223,10 +223,6 @@ public class TaskListCell extends JFXListCell<Task> {
         return task.getTaskType().equals("wholeDayEvent");
     }
 
-    public JFXPopup getSearchBox() {
-        return searchBox;
-    }
-
     public JFXCheckBox getCheckBox() {
         return checkBox;
     }

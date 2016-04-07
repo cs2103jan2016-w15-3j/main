@@ -5,12 +5,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65"
+<BorderPane fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65"
             fx:controller="ui.controller.MainWindowController">
     <center>
-        <StackPane fx:id="mainContent" BorderPane.alignment="BOTTOM_CENTER">
+        <StackPane fx:id="overlayPane" BorderPane.alignment="BOTTOM_CENTER">
             <children>
-                <AnchorPane fx:id="root" minHeight="150.0" minWidth="500.0" prefHeight="300.0" prefWidth="400.0"
+                <AnchorPane fx:id="mainContentContainer" minHeight="150.0" minWidth="500.0" prefHeight="300.0"
+                            prefWidth="400.0"
                             styleClass="root">
                     <AnchorPane fx:id="printedPlannerContainer" AnchorPane.bottomAnchor="20.0"
                                 AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
