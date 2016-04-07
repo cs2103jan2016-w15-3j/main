@@ -11,12 +11,11 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
-
-import static java.nio.file.StandardOpenOption.CREATE;
 
 public class SettingManager {
     private static final Path settingLocation = Paths.get("settings.properties");
@@ -28,7 +27,6 @@ public class SettingManager {
     }
 
     private void initiate() {
-        System.out.println("Setting file exists : " + settingsFileExists());
         if (!settingsFileExists()) {
             createDefaultSettings();
         } else if (settingFileIsEmpty()) {
@@ -78,12 +76,13 @@ public class SettingManager {
     }
 
     private void createDefaultSettings() {
-        try {
+
+        try (OutputStream outputStream = Files.newOutputStream(settingLocation)) {
             Properties properties = new Properties();
-            properties.setProperty("saveFileLocation", "tasks.json");
-            properties.setProperty("applicationColor", "red");
             properties
-                    .store(Files.newOutputStream(settingLocation, CREATE), "Application Settings");
+                    .store(outputStream, "Application Settings");
+            loadSettings();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

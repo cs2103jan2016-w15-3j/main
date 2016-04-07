@@ -27,7 +27,6 @@ public class SettingManagerTest {
     public void ifSettingsFileIsEmptyShouldSetDefault() {
         Configuration settings = null;
         removeEverythingFromSettingsFile();
-
         settingManager = new SettingManager();
         settings = settingManager.getConfigs();
         assertFalse(settings.isEmpty());
@@ -43,7 +42,7 @@ public class SettingManagerTest {
 
     private void removeEverythingFromSettingsFile() {
         Configuration settings = settingManager.getConfigs();
-        settings.clear();
+        if(settings!=null)settings.clear();
     }
 
 }
