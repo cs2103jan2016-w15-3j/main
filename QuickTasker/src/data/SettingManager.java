@@ -17,6 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
+import static java.nio.file.StandardOpenOption.CREATE;
+
 public class SettingManager {
     private static final Path settingLocation = Paths.get("settings.properties");
     private Configuration settings;
@@ -29,7 +31,7 @@ public class SettingManager {
     private void initiate() {
         if (settingFileDoesNotExist()) {
             createDefaultSettings();
-        } else if (settingFileIsEmpty()) {
+        } else if (settingFileExistButEmpty()) {
             resetDefaultSettings();
         } else loadSettings();
     }
@@ -59,10 +61,11 @@ public class SettingManager {
         return this.settings;
     }
 
-    private boolean settingFileIsEmpty() {
+    private boolean settingFileExistButEmpty() {
+        assert (Files.exists(settingLocation));
         Configurations cons = new Configurations();
         try {
-            Configuration con = cons.properties(new File(settingLocation.getFileName().toString()));
+            Configuration con = cons.properties(new File(settingLocation.toUri()));
             return con.isEmpty();
         } catch (ConfigurationException e) {
             e.printStackTrace();
@@ -76,7 +79,8 @@ public class SettingManager {
 
     private void createDefaultSettings() {
 
-        try (OutputStream outputStream = Files.newOutputStream(settingLocation)) {
+
+        try (OutputStream outputStream = Files.newOutputStream(settingLocation,CREATE)) {
             Properties properties = new Properties();
             properties.setProperty("saveFileLocation", "tasks.json");
             properties.setProperty("applicationColor", "red");
@@ -93,7 +97,7 @@ public class SettingManager {
     private void loadSettings() throws LoadSettingsException {
         Parameters parameters = new Parameters();
         PropertiesBuilderParameters propertiesParams = parameters.properties()
-                .setFileName("settings.properties").setEncoding("UTF-8");
+                .setFileName("settings.properties").setEncoding("ISO-8859-1");
         FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
                 PropertiesConfiguration.class).configure(propertiesParams);
         builder.setAutoSave(true);

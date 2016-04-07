@@ -55,8 +55,7 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     public List<Task> getTasks() throws LoadTasksException {
         Gson gson = getGson();
         List<Task> tasks;
-        try {
-            BufferedReader reader = Files.newBufferedReader(pathOfSaveFile);
+        try(BufferedReader reader = Files.newBufferedReader(pathOfSaveFile)) {
             tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {
             }.getType());
             reader.close();
@@ -78,8 +77,7 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     public void save(Task task) throws SaveTasksException {
         Gson gson = getGson();
         String json = gson.toJson(task);
-        try {
-            BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile);
+        try (BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile)){
             writer.write(json);
             writer.close();
         } catch (IOException e) {
@@ -92,8 +90,7 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
         Gson gson = getGson();
         String json = gson.toJson(tasks);
-        try {
-            BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile);
+        try (BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile)) {
             writer.write(json);
             writer.close();
 

@@ -42,7 +42,7 @@ public class SettingManagerTest {
 
     private void removeEverythingFromSettingsFile() {
         Configuration settings = settingManager.getConfigs();
-        if(settings!=null)settings.clear();
+        settings.clear();
     }
 
 }

@@ -107,21 +107,6 @@ public class RecurringTask extends Task {
         return (numberOfDays);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof RecurringTask)) return false;
-
-        RecurringTask task = (RecurringTask) o;
-
-        if (this.getId() != task.getId()) return false;
-        if (!this.getName().equals(task.getName())) return false;
-        if (this.getDueDate() != null ? !this.getDueDate().equals(task.getDueDate()) : task.getDueDate() != null)
-            return false;
-        return this.getStartDate() != null ? this.getStartDate().equals(task.getStartDate()) : task.getStartDate() == null;
-
-    }
-
     private void setNextDates(LocalDate startDate, LocalDate endDate) {
         setStartDate(startDate);
         setEndDate(endDate);
