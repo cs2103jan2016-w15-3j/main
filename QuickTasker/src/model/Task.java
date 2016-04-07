@@ -148,10 +148,11 @@ public class Task implements Comparable {
 
         Task task = (Task) o;
 
-        if (id != task.id) return false;
+        if (!id.equals(task.id)) return false;
         if (!taskName.equals(task.taskName)) return false;
         if (endDate != null ? !endDate.equals(task.endDate) : task.endDate != null) return false;
         return startDate != null ? startDate.equals(task.startDate) : task.startDate == null;
+
     }
 
     @Override
