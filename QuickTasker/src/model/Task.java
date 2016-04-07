@@ -101,6 +101,39 @@ public class Task implements Comparable {
         return startTime;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+
+        Task task = (Task) o;
+
+        if (isDone != task.isDone) return false;
+        if (!taskName.equals(task.taskName)) return false;
+        if (startDate != null ? !startDate.equals(task.startDate) : task.startDate != null)
+            return false;
+        if (endDate != null ? !endDate.equals(task.endDate) : task.endDate != null) return false;
+        if (startTime != null ? !startTime.equals(task.startTime) : task.startTime != null)
+            return false;
+        if (endTime != null ? !endTime.equals(task.endTime) : task.endTime != null) return false;
+        if (!id.equals(task.id)) return false;
+        return taskType != null ? taskType.equals(task.taskType) : task.taskType == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = taskName.hashCode();
+        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
+        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
+        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
+        result = 31 * result + (isDone ? 1 : 0);
+        result = 31 * result + id.hashCode();
+        result = 31 * result + (taskType != null ? taskType.hashCode() : 0);
+        return result;
+    }
+
     public LocalTime getEndTime() {
         return endTime;
     }
@@ -139,29 +172,6 @@ public class Task implements Comparable {
 
     private String generateId() {
         return UUID.randomUUID().toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Task)) return false;
-
-        Task task = (Task) o;
-
-        if (id != task.id) return false;
-        if (!taskName.equals(task.taskName)) return false;
-        if (endDate != null ? !endDate.equals(task.endDate) : task.endDate != null) return false;
-        return startDate != null ? startDate.equals(task.startDate) : task.startDate == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = taskName.hashCode();
-        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
-        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
-        result = 31 * result + id.hashCode();
-        return result;
     }
 
     @Override
