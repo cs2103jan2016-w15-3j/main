@@ -38,7 +38,9 @@ import java.util.logging.Logger;
 
 import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
-//@@author  A0133333U
+/**
+ * @@author A0133333U.
+ */
 
 public class MainWindowController implements Initializable {
 

@@ -9,11 +9,11 @@ import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
 
-// @@author A0133333U
+/** @@author A0133333U. */
 
 public class TaskListCellTest {
 
-    //ObservableList<Task> guiList;
+    /** ObservableList<Task> guiList;. */
 
     Task t1;
     private TaskListCell taskListCell;
@@ -27,7 +27,7 @@ public class TaskListCellTest {
         //taskListCell = new TaskListCell(guiList);
     }
 
-/*    @Test
+/**    @Test
     public void testSetTaskId() {
 
         String taskName = "Buy bananas";
@@ -50,7 +50,7 @@ public class TaskListCellTest {
         assertEquals("buy fruits", t1.getName());
     }
     
-/*    @Test 
+/**    @Test 
     public void testSearchTask() {
     	Task task = new Task("Buy present");
     	Task task2 = new Task("Buy bananas");
