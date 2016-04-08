@@ -6,7 +6,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXRippler;
-import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -31,11 +30,10 @@ public class TaskListCell extends JFXListCell<Task> {
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final JFXPopup searchBox = new JFXPopup();
     private final GridPane grid = new GridPane();
-    private final ObservableList<Task> tasks;
     private JFXRippler rippler = new JFXRippler();
     private Task myTask;
 
-    public TaskListCell(ObservableList<Task> list) {
+    public TaskListCell() {
         configureGrid();
         configureTaskName();
         configureDate();
@@ -43,9 +41,7 @@ public class TaskListCell extends JFXListCell<Task> {
         configureIcon();
         configureCheckBox();
         addControlsToGrid();
-        tasks = list;
         addGridToRippler();
-
     }
 
     private void addGridToRippler() {
@@ -100,7 +96,6 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void configureIcon() {
         // lateIcon.getStyleClass().add("late-icon");
-
     }
 
     private void configureCheckBox() {
@@ -114,7 +109,6 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void configureSearchBox() {
         // searchBox.getStyleClass.().add("search-box");
-
     }
 
     @Override
@@ -150,7 +144,6 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     protected void setTaskName(Task task) {
-
         taskName.setText(task.getName());
     }
 
@@ -234,6 +227,5 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.add(taskStartTime, 3, 1);
         grid.add(taskDueDate, 4, 0);
         grid.add(taskEndTime, 4, 1);
-
     }
 }

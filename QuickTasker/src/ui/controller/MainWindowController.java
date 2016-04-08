@@ -502,7 +502,7 @@ public class MainWindowController implements Initializable {
     private void setCellFactory() {
         printedPlanner.setCellFactory(param -> {
 
-            TaskListCell listCell = new TaskListCell(plannerEntries);
+            TaskListCell listCell = new TaskListCell();
             printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
                 Thread.currentThread()
                         .setUncaughtExceptionHandler((t, e) -> Platform.runLater(System.out::println));
