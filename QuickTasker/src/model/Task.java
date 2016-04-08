@@ -1,12 +1,10 @@
 package model;
-
+//@@author A0121558H
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
-/**
- * @author A0121558H/A0130949
- */
+
 public class Task implements Comparable {
     private String taskName;
     private LocalDate startDate;
@@ -140,6 +138,12 @@ public class Task implements Comparable {
         return UUID.randomUUID().toString();
     }
 
+    private void generateId() {
+        this.id = ++IdGenerator;
+    }
+  //@@author A0130949
+    @Override
+    public boolean equals(Object o) {
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;

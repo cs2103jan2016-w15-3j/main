@@ -1,5 +1,6 @@
 package logic;
-
+//@@author A0130949
+import model.RecurringTask;
 import model.Task;
 import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
 
@@ -7,9 +8,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Author A0130949 Soh Yonghao
- */
+
 
 public class AddTask<E> implements Command<Object> {
     private static Logger loggerAdd = Logger.getLogger("log");
@@ -43,6 +42,13 @@ public class AddTask<E> implements Command<Object> {
 
     @Override public void undo(ArrayList<Task> list) {
         loggerAdd.log(Level.INFO, "START ADD UNDO PROCESS");
+        try {
+            Task undoTask = undoTaskStack.pop();
+            int index = undoStackInt.pop();
+            addRedoStack(undoTask, index);
+    @Override
+    public void undo(ArrayList<Task> list) {
+        loggerAdd.log(Level.INFO, "START UNDO PROCESS");
         try {
             Task undoTask = undoTaskStack.pop();
             int index = undoStackInt.pop();

@@ -1,8 +1,6 @@
 package parser;
 
-/**
- * author A0121558H
- */
+//@@author A0121558H
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -12,9 +10,6 @@ import java.util.Arrays;
 
 //import java.time.LocalTime;
 
-/**
- * @author A0121558H dawson
- */
 public class DateTimeParser {
 
     public LocalDate parseDate(String input) {
@@ -155,14 +150,8 @@ public class DateTimeParser {
         ArrayList<Integer> indices = new ArrayList<Integer>();
 
         for (int i = input.length; i > 1; i--) {
-            //  System.out.println("index-1: " + (i - 1));
-
+        	
             String toCheck = input[i - 2] + " " + input[i - 1];
-
-/*         //   System.out.println("input[i-1]: " + input[i - 1]);
-         //   System.out.println("input[i-2] + input[i-1]: " + toCheck);
-            System.out.println("input[i-1]: " + input[i - 1]);
-            System.out.println("input[i-2] + input[i-1]: " + "" + input[i - 2] + input[i - 1]);*/
 
             if (isDate(input[i - 1])) {
                 indices.add(i - 1);
@@ -191,7 +180,6 @@ public class DateTimeParser {
 
     private LocalTime toLocalTime(String input) {
         DateTimeFormatter timeColons = DateTimeFormatter.ofPattern("HH:mm");
-        // how to set am pm??? TODO
         return LocalTime.parse(input, timeColons);
     }
 

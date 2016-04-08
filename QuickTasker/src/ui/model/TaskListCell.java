@@ -1,8 +1,6 @@
 package ui.model;
 
-/*
- * Author: Xin Kenan, A0133333U
- */
+//@@author A0126077E
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;

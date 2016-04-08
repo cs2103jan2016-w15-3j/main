@@ -26,6 +26,7 @@ import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentExceptio
 import parser.Commands;
 import parser.ParserInterface;
 import parser.RecurringParser;
+import parser.UpdateParser;
 import parser.UserInputParser;
 import ui.model.TaskListCell;
 
@@ -39,20 +40,26 @@ import java.util.logging.Logger;
 
 import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
-/**
- * Author: A0133333U/A0130949Y/A0126077E
- */
+//@@author  A0133333U
+
 public class MainWindowController implements Initializable {
 
     private static Logger logger;
 
     private Main main;
-    private Stage stage;
-    private final ParserInterface parser = new UserInputParser();
-    private RecurringParser recurringParser = new RecurringParser();
-    private ListView<String> ListViewOnlySearch = new ListView<>();
+
+    private final UserInputParser parser = new UserInputParser();
+    private final RecurringParser recurringParser = new RecurringParser();
+
+    private final UpdateParser updateParser = new UpdateParser();
     private final Logic operations = new Logic();
     private SearchHelper util = new SearchHelper();
+    private static Logger logger;
+
+    public AnchorPane container;
+    private ListView<String> ListViewOnlySearch = new ListView<>();
+    private Stage stage;
+    private Main main;
 
     @FXML private AnchorPane mainContentContainer;
     @FXML private StackPane overlayPane;
@@ -92,7 +99,6 @@ public class MainWindowController implements Initializable {
     private void initLogger() {
         logger = Logger.getLogger("UILogger");
         logger.setLevel(Level.INFO);
-
     }
 
     private void initPlanner() {
@@ -139,6 +145,10 @@ public class MainWindowController implements Initializable {
     }
 
     private void performOperations(String userInput) throws UIOperationException {
+
+        InputValidator inputValidator = new InputValidator();
+        System.out.println("inputValidator.checkAllValid(userInput) " + inputValidator.checkAllValid(userInput));
+        //if (inputValidator.checkAllValid(userInput)) {
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
                 createTask(userInput);
@@ -369,64 +379,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
-/*	// @@author: A0133333U
-    // Takes in user input and shows display for all tasks with search term
-	// inside on a new list
-	private void searchTask(String userInput) {
-		for (Task task : plannerEntries) {
-			String taskDescription = task.getName().toLowerCase();
-			LocalDate taskStartDate = task.getStartDate();
-			LocalDate taskEndDate = task.getDueDate();
-			if (taskDescription.contains(userInput.toLowerCase())) {
-				plannerEntries.clear();
-				plannerEntries.add(task);
-			} else {
-				snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Invalid search term!", "", 1500, (b) -> {
-				}));
-			}
-		afterOperation();
-		snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Search results returned.", "", 1500, (b) -> {
-			}));
-		}
-	}*/
-
-    /**
-     * Author A0130949Y.
-     */
     private void undoTask() {
-        try {
-            plannerEntries = FXCollections.observableArrayList(operations.undo());
-            afterOperation();
-        } catch (EmptyStackException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Error with undo", "", 1500, (b) -> {
-            }));
-        }
-    }
-
-    /**
-     * Private void searchingTask(String userInput) {
-     * for (Task task : plannerEntries) {
-     * String taskDescription = task.getName();
-     * LocalDate taskStartDate = task.getStartDate();
-     * LocalDate taskEndDate = task.getDueDate();
-     * if (taskDescription.contains(userInput.toLowerCase())) {
-     * //filteredEntries.clear();
-     * filteredEntries.add(task);
-     * System.out.println("filteredlist" + filteredEntries.size());
-     * snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Search results returned.", "", 1500, (b) -> {
-     * }));
-     * } else {
-     * snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Invalid search term!", "", 1500, (b) -> {
-     * }));
-     * <p>
-     * }
-     * afterSearch();
-     * <p>
-     * }
-     * }
-     */
-    private void showTasks() {
-
+        plannerEntries = FXCollections.observableArrayList(operations.undo());
+        afterOperation();
     }
 
     private void updateTask(String userInput) throws Exception {
@@ -434,12 +389,6 @@ public class MainWindowController implements Initializable {
             int indexOfTask = parser.getIndexForUpdate(userInput);
             Task task = plannerEntries.get(indexOfTask);
             printedPlanner.getSelectionModel().select(indexOfTask);
-/*        if (task instanceof RecurringTask) {
-            Task newTask = makeRecurringTask(parser.getTaskNameForUpdate(userInput), parser.getStartDateForUpdate(userInput),
-                    parser.getEndDateForUpdate(userInput), parser.getStartTimeForUpdate(userInput),
-                    parser.getEndTimeForUpdate(userInput), );
-            plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
-        } else {*/
             Task newTask = makeTask(parser.getTaskNameForUpdate(userInput),
                     parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput),
                     parser.getStartTimeForUpdate(userInput), parser.getEndTimeForUpdate(userInput));
@@ -490,11 +439,6 @@ public class MainWindowController implements Initializable {
             Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
                     parser.getEndDate(userInput), parser.getStartTime(userInput),
                     parser.getEndTime(userInput));
-
-		/*
-         * plannerEntries.add(newTask); printedPlanner.setItems(plannerEntries);
-		 * commandBox.clear(); operations.addTask(newTask);
-		 */
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
             afterOperation();
             snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("New task created", "", 1500, (b) -> {
@@ -566,12 +510,6 @@ public class MainWindowController implements Initializable {
                 if (listCell.getTask().equals(event.getTask())) listCell.getCheckBox().fire();
                 listCell.removeEventFilter(TASK_COMPLETE, null);
             }).start());
-            /*
-             * plannerEntries.addListener(new ListChangeListener<Task>() {
-			 * 
-			 * @Override public void onChanged(Change<? extends Task> c) {
-			 * listCell.updateIndex(plannerEntries); } });
-			 */
             return listCell;
         });
     }

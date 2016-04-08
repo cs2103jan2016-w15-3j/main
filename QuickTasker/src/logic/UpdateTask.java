@@ -1,6 +1,5 @@
 package logic;
-
-import model.RecurringTask;
+//@@author A0130949
 import model.Task;
 
 import java.time.LocalDate;
@@ -111,6 +110,7 @@ public class UpdateTask<E> implements Command<Object> {
     @Override public void undo(ArrayList<Task> list) {
         int undoIndex = undoStackInt.pop();
         Task undoTask = undoStackTask.pop();
+        redoStackInt.push(undoIndex);
         redoStackTask.push(list.get(undoIndex));
         list.set(undoIndex, undoTask);
         Collections.sort(list);

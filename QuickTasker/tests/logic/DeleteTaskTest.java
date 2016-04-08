@@ -10,11 +10,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Author A0130949 Soh Yonghao
- * <p>
- * .
- */
+//@@author A0130949
 
 public class DeleteTaskTest {
     Logic logic;
