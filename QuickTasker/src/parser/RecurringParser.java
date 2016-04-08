@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //@@author A0121558H
 
@@ -19,6 +21,8 @@ public class RecurringParser extends UserInputParser{
     private int numToUse;
     private int numToRecur;
     private String recurDuration;
+	private static Logger loggerRecur = Logger.getLogger("setNumToRecur in RecurringParser");
+
 
     private void setAttributesRecurring(String input) {
         DateTimeParser dateTimeParser = new DateTimeParser();
@@ -45,6 +49,14 @@ public class RecurringParser extends UserInputParser{
     }
 
     public int setNumToRecur() {
+		loggerRecur.log(Level.INFO, "Start of setNumToRecur");
+
+    	try {
+    		Integer.parseInt(userCommand[lengthOfInput - 2]);
+    	}catch(NumberFormatException e) {
+			loggerRecur.log(Level.WARNING, "Error in processing number to recur", e);
+    	}
+		loggerRecur.log(Level.INFO, "End of setNumToRecur");
         return Integer.parseInt(userCommand[lengthOfInput - 2]);
     }
 

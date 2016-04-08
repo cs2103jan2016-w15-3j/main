@@ -2,6 +2,8 @@ package ui.controller;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import model.Task;
@@ -11,6 +13,8 @@ import parser.UserInputParser;
 
 //@@author A0121558H
 public class InputValidator extends UserInputParser {
+	private static Logger loggerValidator = Logger.getLogger("checkIfValid in InputValidator");
+
 
 	public boolean isAllValid(String input) {
 		boolean check = false;
@@ -18,12 +22,9 @@ public class InputValidator extends UserInputParser {
 		if (checkUndoRedo(input)) {
 			return true;
 		}
-
-		check = checkIfNull(input);
-		check = checkCommand(input);
-		check = checkTaskName(input);
-		check = checkDate(input);
-		check = checkTime(input);
+		
+		check = checkIfNull(input) || checkCommand(input) || checkTaskName(input)
+				|| checkDate(input) || checkTime(input);
 
 		return check;
 	}
@@ -105,24 +106,22 @@ public class InputValidator extends UserInputParser {
 	// Checks if the added task will have any clashes with any range of tasks in
 	// the list.
 	public boolean checkIfClash(ObservableList<Task> list, Task task) {
+		loggerValidator.log(Level.INFO, "Start of checkIfClash");
 		
 		LocalDate startDate = task.getStartDate();
 		LocalDate endDate = task.getDueDate(); // TODO CHANGE TO ENDDATE
 		LocalTime startTime = task.getStartTime();
 		LocalTime endTime = task.getEndTime();
+		loggerValidator.log(Level.INFO, "Before checking if two localdates");
+
 		if (isNotTwoDates(startDate, endDate)) {
 			return false;
 		} else {
 			for (Task t : list) {
-				if ((startDate.isBefore(t.getDueDate()) || startDate.isEqual(t.getDueDate()))
-						&& (endDate.isAfter(t.getStartDate()) || endDate.isEqual(t.getStartDate()))) {
-					// There is overlap in days
+				if (isDaysOverlap(t, startDate, endDate)) {
 					return true;					
-				} else if (startDate.isEqual(t.getStartDate()) && endDate.equals(t.getDueDate())) {
-					// Same dates
-					if ((startTime.isBefore(t.getEndTime()) || startTime.equals(t.getEndTime()))
-							&& (endTime.isAfter(t.getStartTime()) || endTime.equals(t.getStartTime()))) {
-						// There is overlap in time
+				} else if (isSameDates(t, startDate, endDate)) {
+					if (isTimeOverlap(t, startTime, endTime)) {
 						return true;
 					} else {
 						continue;
@@ -130,11 +129,22 @@ public class InputValidator extends UserInputParser {
 				}
 			}
 		}
+		loggerValidator.log(Level.INFO, "End of checkIfClash");
 		return false;
 	}
 
 	private boolean isNotTwoDates(LocalDate start, LocalDate end) {
 		return start == LocalDate.MAX || end == LocalDate.MAX || start == LocalDate.MIN || end == LocalDate.MIN;
 	}
-
+	private boolean isDaysOverlap(Task t, LocalDate start, LocalDate end) {
+		return (start.isBefore(t.getDueDate()) || start.isEqual(t.getDueDate()))
+				&& (end.isAfter(t.getStartDate()) || end.isEqual(t.getStartDate()));
+	}
+	private boolean isSameDates(Task t, LocalDate start, LocalDate end) {
+		return start.isEqual(t.getStartDate()) && end.equals(t.getDueDate());
+	}
+	private boolean isTimeOverlap(Task t, LocalTime start, LocalTime end) {
+		return (start.isBefore(t.getEndTime()) || start.equals(t.getEndTime()))
+		&& (end.isAfter(t.getStartTime()) || end.equals(t.getStartTime()));
+	}
 }

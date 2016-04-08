@@ -81,20 +81,7 @@ public class UserInputParser {
 	public static class setAttributeException extends RuntimeException {
 	}
 
-	/**
-	 * Checks if it is a floating task. If yes, returns null.
-	 */
-	/*
-	 * public LocalDate setEndDate() { return
-	 * stringToLocalDate(userCommand[lengthOfInput - 1]); }
-	 * 
-	 * public LocalDate setStartDate() { return
-	 * stringToLocalDate(userCommand[lengthOfInput - 2]); }
-	 */
-
-	// LOGGING
 	public void setTaskName() {
-		// UPDATED AS OF 23/3/2016
 
 		loggerTaskName.log(Level.INFO, "Start of process");
 		String output = "";
@@ -113,12 +100,11 @@ public class UserInputParser {
 		taskName = output;
 	}
 
-	// TRYCATCH
 	public String[] removeWhiteSpaces(String input) {
 
 		try {
 			userCommand = input.split("\\s+");
-		} catch (Exception e) {// change into logger
+		} catch (Exception e) {
 			System.out.println("Error in splitting");
 			System.out.println("Please enter again");
 		}
@@ -195,7 +181,7 @@ public class UserInputParser {
 		} else if (numToSetDate == NUMBER_NEXT_DAY_DAY_AFTER) {
 			startDate = endDate = stringToLocalDate(userCommand[length - 2] + " " + userCommand[length - 1]);
 		} else if (numToSetDate == NUMBER_FLOATING) {// floating task
-			startDate = LocalDate.MAX;
+			startDate = LocalDate.MIN;
 			endDate = LocalDate.MAX;// placeholder for null
 		} else if (numToSetDate == NUMBER_TODAY) {
 			startDate = endDate = stringToLocalDate("today");
@@ -263,8 +249,7 @@ public class UserInputParser {
 	}
 
 	private boolean isStartOrEnd() {
-		System.out.println("NUMTOUSE: " + numToUse);
-		System.out.println("lolololol: " +(numToUse == NUMBER_ONLY_START || numToUse == NUMBER_ONLY_END));
+		
 		return numToUse == NUMBER_ONLY_START || numToUse == NUMBER_ONLY_END;
 	}
 
