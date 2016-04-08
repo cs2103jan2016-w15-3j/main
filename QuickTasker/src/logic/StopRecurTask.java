@@ -13,7 +13,8 @@ public class StopRecurTask<E> implements Command<Object> {
     private Stack<Task> redoRecurStack = new Stack<Task>();
     private Stack<String> redoStackId = new Stack<String>();
 
-    @Override public void execute(List<Task> list, Object op) {
+    @Override
+    public void execute(List<Task> list, Object op) {
         int index = (int) op;
         if (list.get(index) instanceof RecurringTask) {
             executeStopRecurring(list, index);
@@ -28,7 +29,8 @@ public class StopRecurTask<E> implements Command<Object> {
         list.set(index, task);
     }
 
-    @Override public void undo(ArrayList<Task> list) {
+    @Override
+    public void undo(ArrayList<Task> list) {
         String undoTaskId = undoStackId.pop();
         Task previousTask = undoRecurStack.pop();
         Task taskToBeReomved = list.remove(findTask(undoTaskId, list));
@@ -37,7 +39,8 @@ public class StopRecurTask<E> implements Command<Object> {
         list.add(previousTask);
     }
 
-    @Override public void redo(ArrayList<Task> list) {
+    @Override
+    public void redo(ArrayList<Task> list) {
         String redoTaskId = redoStackId.pop();
         Task previousTask = redoRecurStack.pop();
         undoStackId.push(redoTaskId);
@@ -52,7 +55,8 @@ public class StopRecurTask<E> implements Command<Object> {
         return clone;
     }
 
-    @Override public int findTask(String id, ArrayList<Task> list) {
+    @Override
+    public int findTask(String id, ArrayList<Task> list) {
         int position = -1;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {

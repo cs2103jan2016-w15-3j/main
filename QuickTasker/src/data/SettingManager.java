@@ -33,7 +33,9 @@ public class SettingManager {
             createDefaultSettings();
         } else if (settingFileExistButEmpty()) {
             resetDefaultSettings();
-        } else loadSettings();
+        } else {
+            loadSettings();
+        }
     }
 
     public void resetDefaultSettings() throws ResetSettingsException {
@@ -62,7 +64,7 @@ public class SettingManager {
     }
 
     private boolean settingFileExistButEmpty() {
-        assert (Files.exists(settingLocation));
+        assert Files.exists(settingLocation);
         Configurations cons = new Configurations();
         try {
             Configuration con = cons.properties(new File(settingLocation.toUri()));

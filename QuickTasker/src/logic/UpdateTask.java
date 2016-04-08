@@ -19,7 +19,8 @@ public class UpdateTask<E> implements Command<Object> {
     private static Stack<Task> redoStackTask = new Stack<Task>();
     private static Stack<Integer> redoStackInt = new Stack<Integer>();
 
-    @Override public void execute(List<Task> list, Object index) {
+    @Override
+    public void execute(List<Task> list, Object index) {
         loggerUpdate.log(Level.INFO, "Start updating");
         try {
             int taskIndex = (int) index;
@@ -57,7 +58,8 @@ public class UpdateTask<E> implements Command<Object> {
             updatedTask.setStartDate(list.get(taskIndex).getStartDate());
         }
 
-        if (updatedTask.getDueDate() == LocalDate.MIN && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
+        if (updatedTask.getDueDate() == LocalDate.MIN
+                && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
             updatedTask.setEndDate(list.get(taskIndex).getDueDate());
         }
 
@@ -78,9 +80,8 @@ public class UpdateTask<E> implements Command<Object> {
 
     private RecurringTask transferAttributes(Task updatedTask, int index, List<Task> list) {
         RecurringTask recurringTask = new RecurringTask(updatedTask.getName(), updatedTask.getStartDate(),
-                updatedTask.getDueDate(), ((RecurringTask) list.get(index)).getRecurType(),
-                updatedTask.getStartTime(), updatedTask.getEndTime(),
-                ((RecurringTask) list.get(index)).getNumberToRecur());
+                updatedTask.getDueDate(), ((RecurringTask) list.get(index)).getRecurType(), updatedTask.getStartTime(),
+                updatedTask.getEndTime(), ((RecurringTask) list.get(index)).getNumberToRecur());
         return recurringTask;
     }
 
@@ -90,7 +91,8 @@ public class UpdateTask<E> implements Command<Object> {
             updatedTask.setStartDate(list.get(taskIndex).getStartDate());
         }
 
-        if (updatedTask.getDueDate() == LocalDate.MIN && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
+        if (updatedTask.getDueDate() == LocalDate.MIN
+                && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
             updatedTask.setEndDate(list.get(taskIndex).getDueDate());
         }
 
@@ -128,29 +130,6 @@ public class UpdateTask<E> implements Command<Object> {
         Collections.sort(list);
         undoStackInt.push(findTask(redoTask.getId(), list));
     }
-
-/*    @Override
-    public int findingTask(Task task, ArrayList<Task> list) {
-        int position = -1;
-        if (task instanceof RecurringTask) {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) instanceof RecurringTask) {
-                    if (((RecurringTask)list.get(i)).equals(task)) {
-                        position = i;
-                        break;
-                    }
-                }
-            }
-        } else {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).equals(task)) {
-                    position = i;
-                    break;
-                }
-            }
-        }
-        return position;
-    }*/
 
     @Override
     public int findTask(String id, ArrayList<Task> list) {

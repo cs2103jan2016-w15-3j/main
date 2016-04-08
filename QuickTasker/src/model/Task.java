@@ -1,5 +1,6 @@
 package model;
 //@@author A0121558H
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class Task implements Comparable {
         this.endDate = LocalDate.MIN;
         this.setStartDateAsNow();
         this.id = generateId();
+        setTaskType();
     }
 
     /**
@@ -72,10 +74,23 @@ public class Task implements Comparable {
     }
 
     public void setTaskType() {
-        if (this.startDate == LocalDate.MAX && this.endDate == LocalDate.MAX) this.taskType = "floating";
-        else if (this.startTime == LocalTime.MIN && this.endTime == LocalTime.MIN)
+        if (bothDateAndTimeAreDefaultValue()) this.taskType = "floating";
+        else if (onlyTimeAreDefaultValue())
             this.taskType = "wholeDayEvent";
         else this.taskType = "task";
+    }
+
+    private boolean onlyTimeAreDefaultValue() {
+        return (startTime == null || this.startTime == LocalTime.MIN)
+                && (this.endTime == null || this.endTime == LocalTime.MIN);
+    }
+
+    //
+    private boolean bothDateAndTimeAreDefaultValue() {
+        return  (startDate == null || this.startDate.equals(LocalDate.MAX))
+                && (endDate == null || this.endDate.equals(LocalDate.MAX))
+                && (startTime == null || this.startTime.equals(LocalTime.MAX))
+                && (endDate == null || this.endDate.equals(LocalDate.MAX));
     }
 
     public String getTaskType() {
@@ -138,12 +153,6 @@ public class Task implements Comparable {
         return UUID.randomUUID().toString();
     }
 
-    private void generateId() {
-        this.id = ++IdGenerator;
-    }
-  //@@author A0130949
-    @Override
-    public boolean equals(Object o) {
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;

@@ -7,12 +7,15 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-//import java.time.LocalTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DateTimeParser {
+	private static Logger loggerParseDate = Logger.getLogger("parseDate in DateTimeParser");
+	private static Logger loggerParseTime = Logger.getLogger("parseTime in DateTimeParser");
 
     public LocalDate parseDate(String input) {
+		loggerParseDate.log(Level.INFO, "Start of parse date");
 
         DateTimeFormatter formatterForDashes = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter formatterForSlashes = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -59,6 +62,7 @@ public class DateTimeParser {
                 output = LocalDate.parse(input, formatterEmpty);
                 return output;
             } catch (Exception e) {
+    			loggerParseDate.log(Level.WARNING, "Error in parsing date", e);
                 output = null;
             }
         } else {
@@ -73,12 +77,24 @@ public class DateTimeParser {
                 output = LocalDate.now().plusDays(2);
             }
         }
+		loggerParseDate.log(Level.INFO, "End of parseDate");
+        return output;
+    }
+    public ArrayList<LocalTime> parseTime(String[] input, ArrayList<Integer> indices) {
+		loggerParseTime.log(Level.INFO, "Start of parse time");
+
+        ArrayList<LocalTime> output = new ArrayList<LocalTime>();
+
+        for (int i = 0; i < indices.size(); i++) {
+            output.add(toLocalTime(input[indices.get(i)]));
+        }
+		loggerParseTime.log(Level.INFO, "End of parseTime");
         return output;
     }
 
     private boolean isEnglish(String input) {
-        return (input.equals("today") || input.equals("tomorrow") || input.equals("next day") || input
-                .equals("day after"));
+        return (input.equals("today") || input.equals("tomorrow") || input.equals("next day")
+                || input.equals("day after"));
     }
 
     public boolean isDate(String input) {
@@ -150,7 +166,7 @@ public class DateTimeParser {
         ArrayList<Integer> indices = new ArrayList<Integer>();
 
         for (int i = input.length; i > 1; i--) {
-        	
+
             String toCheck = input[i - 2] + " " + input[i - 1];
 
             if (isDate(input[i - 1])) {
@@ -167,15 +183,6 @@ public class DateTimeParser {
             }
         }
         return indices;
-    }
-
-    public ArrayList<LocalTime> parseTime(String[] input, ArrayList<Integer> indices) {
-        ArrayList<LocalTime> output = new ArrayList<LocalTime>();
-
-        for (int i = 0; i < indices.size(); i++) {
-            output.add(toLocalTime(input[indices.get(i)]));
-        }
-        return output;
     }
 
     private LocalTime toLocalTime(String input) {

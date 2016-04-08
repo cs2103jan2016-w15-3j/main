@@ -103,13 +103,13 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
             Files.deleteIfExists(p);
         } catch (DirectoryNotEmptyException e) {
             logger.log(Level.WARNING, "Try to delete non-empty directory " + p.getFileName() +
-                    " at reset() method in < " + this.getClass().getName() + "> class");
+                    " at reset() method in < " + getClass().getName() + "> class");
         } catch (SecurityException se) {
             logger.log(Level.WARNING, "Permission error while deleting " + p.getFileName() +
-                    " at reset() method in < " + this.getClass().getName() + "> class");
+                    " at reset() method in < " + getClass().getName() + "> class");
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "Unknow IOException occurs while deleting " + p.getFileName() +
-                    "at reset() method in <" + this.getClass().getName() + "> class");
+                    "at reset() method in <" + getClass().getName() + "> class");
         }
         initialize();
     }

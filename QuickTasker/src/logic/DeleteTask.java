@@ -16,7 +16,8 @@ public class DeleteTask<E> implements Command<Object> {
 
     @Override
     /* deletes a task from that index. exceptions are thrown for Junit tests.
-       please uncomment thrown exceptions for testing */ public void execute(List<Task> list, Object op) {
+       please uncomment thrown exceptions for testing */
+    public void execute(List<Task> list, Object op) {
         loggerDelete.log(Level.INFO, "Start logging for delete");
         try {
             int index = (int) op;
@@ -69,7 +70,8 @@ public class DeleteTask<E> implements Command<Object> {
         loggerDelete.log(Level.INFO, "End");
     }
 
-    @Override public int findTask(String id, ArrayList<Task> list) {
+    @Override
+    public int findTask(String id, ArrayList<Task> list) {
         int position = -1;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {

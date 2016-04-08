@@ -10,7 +10,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-//@@author A0133333U
+/**
+ * @@author A0133333U.
+ */
 public class Main extends Application {
 
     private static final String APP_TITLE = "Welcome to QuickTasker!";
@@ -21,8 +23,11 @@ public class Main extends Application {
     private static final int STAGE_MINIMUM_HEIGHT = 150;
     private static final int STAGE_MINIMUM_WIDTH = 560;
 
-    //@@author A0126077E
-    @Override public void start(Stage primaryStage) {
+    /**
+     * @@author A0126077E.
+     */
+    @Override
+    public void start(Stage primaryStage) {
         SettingManager settings = new SettingManager();
         this.primaryStage = primaryStage;
         // Do not remove these 2 lines of comments:

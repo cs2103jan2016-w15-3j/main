@@ -36,15 +36,15 @@ public class DetermineCommandType {
             case "redo":
                 return Commands.REDO_TASK;
             case "change":
-            	return Commands.CHANGE_DIRECTORY;
+                return Commands.CHANGE_DIRECTORY;
             case "switch":
-            	return Commands.CHANGE_DIRECTORY;
+                return Commands.CHANGE_DIRECTORY;
             case "skip":
-                return Commands.SKIP;
+                return Commands.SKIP_TASK;
             case "stop":
-                return Commands.STOP;
+                return Commands.STOP_TASK;
             case "mark":
-                return Commands.MARK;
+                return Commands.MARK_TASK;
             default:
                 return Commands.ERROR;
         }

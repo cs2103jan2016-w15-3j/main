@@ -117,7 +117,8 @@ public class TaskListCell extends JFXListCell<Task> {
 
     }
 
-    @Override public void updateItem(Task task, boolean empty) {
+    @Override
+    public void updateItem(Task task, boolean empty) {
         super.updateItem(task, empty);
         if (empty) {
             clearContent();
@@ -145,7 +146,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskId(Task task) {
         final int offset = 1;
-        taskId.setText(String.valueOf(tasks.indexOf(task) + offset));
+        taskId.setText(String.valueOf(getIndex() + offset));
     }
 
     protected void setTaskName(Task task) {
@@ -154,7 +155,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     protected void setTaskStartDate(Task task) {
-        if (task != null && task.getStartDate() != LocalDate.MIN) {
+        if (task != null && task.getStartDate() != null && !task.getStartDate().equals(LocalDate.MIN)) {
             setStartDateInText(task);
         } else {
             taskStartDate.setText("");
@@ -174,7 +175,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskDueDate(Task task) {
 
-        if (task != null && task.getDueDate() != LocalDate.MIN) {
+        if (task != null && task.getDueDate() != null && !task.getDueDate().equals(LocalDate.MAX)) {
 
             LocalDate dueDate = task.getDueDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");

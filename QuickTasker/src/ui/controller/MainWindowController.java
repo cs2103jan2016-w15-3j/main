@@ -81,7 +81,8 @@ public class MainWindowController implements Initializable {
 
     }
 
-    @Override public void initialize(URL location, ResourceBundle resources) {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         initPlanner();
         setCellFactory();
         initLogger();
@@ -117,7 +118,8 @@ public class MainWindowController implements Initializable {
         return KeyCode.ENTER.equals(event.getCode());
     }
 
-    @FXML private void handleEnterKeyPressed(KeyEvent event) {
+    @FXML
+    private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
         if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
             logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
@@ -231,7 +233,9 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    /** To be moved inside serach helper when tidy up. */
+    /**
+     * To be moved inside serach helper when tidy up.
+     */
     private boolean isKeywordSearch() {
         return true;
     }
@@ -251,7 +255,9 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    /** Author A0130949Y. */
+    /**
+     * Author A0130949Y.
+     */
     private void markTaskCompleted(String userInput) throws Exception {
         try {
             int i = parser.getIndexForDone(userInput);
@@ -271,7 +277,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    /** Author kenan. */
+    /**
+     * Author kenan.
+     */
     private void tickCheckBoxForMark(Task task, int i) {
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         printedPlanner.getSelectionModel().select(i);
@@ -287,7 +295,8 @@ public class MainWindowController implements Initializable {
 
     private javafx.concurrent.Task<Void> makeSleeper(int duration) {
         return new javafx.concurrent.Task<Void>() {
-            @Override protected Void call() throws Exception {
+            @Override
+            protected Void call() throws Exception {
                 try {
                     Thread.sleep(duration);
                 } catch (InterruptedException e) {
@@ -298,7 +307,9 @@ public class MainWindowController implements Initializable {
         };
     }
 
-    /** Author A0130949Y. */
+    /**
+     * Author A0130949Y.
+     */
     private void viewTasks() {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         afterOperation();
@@ -481,7 +492,9 @@ public class MainWindowController implements Initializable {
         return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
     }
 
-    /** Author kenan. */
+    /**
+     * Author kenan.
+     */
     private void refresh() {
         printedPlanner.setItems(plannerEntries);
     }

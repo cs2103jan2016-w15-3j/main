@@ -12,7 +12,8 @@ public class SkipRecurTask<E> implements Command<Object> {
     private Stack<Integer> undoStackInt = new Stack<Integer>();
     private Stack<Integer> redoStackInt = new Stack<Integer>();
 
-    @Override public void execute(List<Task> list, Object op) {
+    @Override
+    public void execute(List<Task> list, Object op) {
         executeSkip(list, (int) op);
     }
 
@@ -53,7 +54,8 @@ public class SkipRecurTask<E> implements Command<Object> {
         }
     }
 
-    @Override public void undo(ArrayList<Task> list) {
+    @Override
+    public void undo(ArrayList<Task> list) {
         loggerSkip.log(Level.INFO, "Start undo process for skip");
         try {
             undoOperations(list);
@@ -74,7 +76,8 @@ public class SkipRecurTask<E> implements Command<Object> {
         redoStackInt.push(findTask(recurringTask.getId(), list));
     }
 
-    @Override public void redo(ArrayList<Task> list) {
+    @Override
+    public void redo(ArrayList<Task> list) {
         loggerSkip.log(Level.INFO, "Start redo process for skip");
         try {
             redoOperation(list);
@@ -95,7 +98,8 @@ public class SkipRecurTask<E> implements Command<Object> {
         undoStackInt.push(findTask(recurringTask.getId(), list));
     }
 
-    @Override public int findTask(String id, ArrayList<Task> list) {
+    @Override
+    public int findTask(String id, ArrayList<Task> list) {
         int position = -1;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {
