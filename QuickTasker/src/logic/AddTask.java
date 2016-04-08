@@ -18,7 +18,8 @@ public class AddTask<E> implements Command<Object> {
 
     @Override
     /*  adds the task into the list. task cannot be null. throwing NullArgumentException is for Junit test
-        uncomment the throwing of exception when running tests */ public void execute(List<Task> list,
+        uncomment the throwing of exception when running tests */
+    public void execute(List<Task> list,
             Object task) {
         loggerAdd.log(Level.INFO, "Start adding task");
         try {
