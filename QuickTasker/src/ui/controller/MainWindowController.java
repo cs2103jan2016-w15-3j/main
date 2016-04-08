@@ -10,7 +10,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -24,7 +23,6 @@ import model.RecurringTask;
 import model.Task;
 import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
 import parser.Commands;
-import parser.ParserInterface;
 import parser.RecurringParser;
 import parser.UpdateParser;
 import parser.UserInputParser;
@@ -47,19 +45,12 @@ public class MainWindowController implements Initializable {
     private static Logger logger;
 
     private Main main;
-
+    private Stage stage;
     private final UserInputParser parser = new UserInputParser();
-    private final RecurringParser recurringParser = new RecurringParser();
-
     private final UpdateParser updateParser = new UpdateParser();
+    private RecurringParser recurringParser = new RecurringParser();
     private final Logic operations = new Logic();
     private SearchHelper util = new SearchHelper();
-    private static Logger logger;
-
-    public AnchorPane container;
-    private ListView<String> ListViewOnlySearch = new ListView<>();
-    private Stage stage;
-    private Main main;
 
     @FXML private AnchorPane mainContentContainer;
     @FXML private StackPane overlayPane;
@@ -145,9 +136,9 @@ public class MainWindowController implements Initializable {
     }
 
     private void performOperations(String userInput) throws UIOperationException {
-
+/*
         InputValidator inputValidator = new InputValidator();
-        System.out.println("inputValidator.checkAllValid(userInput) " + inputValidator.checkAllValid(userInput));
+        System.out.println("inputValidator.checkAllValid(userInput) " + inputValidator.checkAllValid(userInput));*/
         //if (inputValidator.checkAllValid(userInput)) {
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
@@ -158,17 +149,17 @@ public class MainWindowController implements Initializable {
                 updateTask(userInput);
             } else if (parser.getCommand(userInput) == Commands.UNDO_TASK) {
                 undoTask();
-            } else if (parser.getCommand(userInput) == Commands.REDO) {
+            } else if (parser.getCommand(userInput) == Commands.REDO_TASK) {
                 redoTask();
             } else if (parser.getCommand(userInput) == Commands.EXIT) {
                 operations.exit();
             } else if (parser.getCommand(userInput) == Commands.SORT_TASK) {
                 sortTask(userInput);
-            } else if (parser.getCommand(userInput) == Commands.MARK) {
+            } else if (parser.getCommand(userInput) == Commands.MARK_TASK) {
                 markTaskCompleted(userInput);
             } else if (parser.getCommand(userInput) == Commands.RECUR_TASK) {
                 createRecurringTask(userInput);
-            } else if (parser.getCommand(userInput) == Commands.SKIP) {
+            } else if (parser.getCommand(userInput) == Commands.SKIP_TASK) {
                 skipRecurringTask(userInput);
             } else if (userInput.contains("clear")) {
                 clearTasks(userInput);
@@ -240,9 +231,7 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    /**
-     * To be moved inside serach helper when tidy up.
-     */
+    /** To be moved inside serach helper when tidy up. */
     private boolean isKeywordSearch() {
         return true;
     }
@@ -262,9 +251,7 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    /**
-     * Author A0130949Y.
-     */
+    /** Author A0130949Y. */
     private void markTaskCompleted(String userInput) throws Exception {
         try {
             int i = parser.getIndexForDone(userInput);
@@ -284,9 +271,7 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    /**
-     * Author kenan.
-     */
+    /** Author kenan. */
     private void tickCheckBoxForMark(Task task, int i) {
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         printedPlanner.getSelectionModel().select(i);
@@ -313,9 +298,7 @@ public class MainWindowController implements Initializable {
         };
     }
 
-    /**
-     * Author A0130949Y.
-     */
+    /** Author A0130949Y. */
     private void viewTasks() {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         afterOperation();
@@ -380,18 +363,23 @@ public class MainWindowController implements Initializable {
     }
 
     private void undoTask() {
-        plannerEntries = FXCollections.observableArrayList(operations.undo());
-        afterOperation();
+        try {
+            plannerEntries = FXCollections.observableArrayList(operations.undo());
+            afterOperation();
+        } catch (EmptyStackException e) {
+            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Error with undo", "", 1500, (b) -> {
+            }));
+        }
     }
 
     private void updateTask(String userInput) throws Exception {
         try {
-            int indexOfTask = parser.getIndexForUpdate(userInput);
+            int indexOfTask = updateParser.getTaskIndex(userInput);
             Task task = plannerEntries.get(indexOfTask);
             printedPlanner.getSelectionModel().select(indexOfTask);
-            Task newTask = makeTask(parser.getTaskNameForUpdate(userInput),
-                    parser.getStartDateForUpdate(userInput), parser.getEndDateForUpdate(userInput),
-                    parser.getStartTimeForUpdate(userInput), parser.getEndTimeForUpdate(userInput));
+            Task newTask = makeTask(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
+                    updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
+                    updateParser.getEndTime(userInput));
             plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
             // }
             printedPlanner.getSelectionModel().clearSelection();
@@ -493,9 +481,7 @@ public class MainWindowController implements Initializable {
         return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
     }
 
-    /**
-     * Author kenan.
-     */
+    /** Author kenan. */
     private void refresh() {
         printedPlanner.setItems(plannerEntries);
     }

@@ -1,5 +1,7 @@
 package logic;
 //@@author A0130949
+
+import model.RecurringTask;
 import model.Task;
 
 import java.time.LocalDate;
@@ -107,17 +109,18 @@ public class UpdateTask<E> implements Command<Object> {
         return updatedTask;
     }
 
-    @Override public void undo(ArrayList<Task> list) {
+    @Override
+    public void undo(ArrayList<Task> list) {
         int undoIndex = undoStackInt.pop();
         Task undoTask = undoStackTask.pop();
-        redoStackInt.push(undoIndex);
         redoStackTask.push(list.get(undoIndex));
         list.set(undoIndex, undoTask);
         Collections.sort(list);
         redoStackInt.push(findTask(undoTask.getId(), list));
     }
 
-    @Override public void redo(ArrayList<Task> list) {
+    @Override
+    public void redo(ArrayList<Task> list) {
         int redoIndex = redoStackInt.pop();
         Task redoTask = redoStackTask.pop();
         undoStackTask.push(list.get(redoIndex));
@@ -149,7 +152,8 @@ public class UpdateTask<E> implements Command<Object> {
         return position;
     }*/
 
-    @Override public int findTask(String id, ArrayList<Task> list) {
+    @Override
+    public int findTask(String id, ArrayList<Task> list) {
         int position = -1;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {

@@ -1,6 +1,5 @@
 package logic;
 //@@author A0130949
-import model.RecurringTask;
 import model.Task;
 import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
 
@@ -40,15 +39,9 @@ public class AddTask<E> implements Command<Object> {
         undoStackInt.push(index);
     }
 
-    @Override public void undo(ArrayList<Task> list) {
-        loggerAdd.log(Level.INFO, "START ADD UNDO PROCESS");
-        try {
-            Task undoTask = undoTaskStack.pop();
-            int index = undoStackInt.pop();
-            addRedoStack(undoTask, index);
     @Override
     public void undo(ArrayList<Task> list) {
-        loggerAdd.log(Level.INFO, "START UNDO PROCESS");
+        loggerAdd.log(Level.INFO, "START ADD UNDO PROCESS");
         try {
             Task undoTask = undoTaskStack.pop();
             int index = undoStackInt.pop();
@@ -66,7 +59,8 @@ public class AddTask<E> implements Command<Object> {
         redoStackInt.push(index);
     }
 
-    @Override public int findTask(String id, ArrayList<Task> list) {
+    @Override
+    public int findTask(String id, ArrayList<Task> list) {
         int position = -1;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {
@@ -76,7 +70,8 @@ public class AddTask<E> implements Command<Object> {
         return position;
     }
 
-    @Override public void redo(ArrayList<Task> list) {
+    @Override
+    public void redo(ArrayList<Task> list) {
         loggerAdd.log(Level.INFO, "START REDO PROCESS");
         try {
             Task redoTask = redoTaskStack.pop();

@@ -63,9 +63,9 @@ public class Logic {
         commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
         commandMap.put(Commands.SEARCH_TASK, new Search());
         commandMap.put(Commands.SORT_TASK, new Sort());
-        commandMap.put(Commands.SKIP, new SkipRecurTask());
-        commandMap.put(Commands.STOP, new StopRecurTask());
-        commandMap.put(Commands.MARK, new MarkTask());
+        commandMap.put(Commands.SKIP_TASK, new SkipRecurTask());
+        commandMap.put(Commands.STOP_TASK, new StopRecurTask());
+        commandMap.put(Commands.MARK_TASK, new MarkTask());
     }
 
     public ArrayList<Task> clear() {
@@ -139,8 +139,8 @@ public class Logic {
 
     public ArrayList<Task> skip(int index) {
         if (list.get(index) instanceof RecurringTask) {
-            commandMap.get(Commands.SKIP).execute(list, index);
-            undoStack.push(Commands.SKIP);
+            commandMap.get(Commands.SKIP_TASK).execute(list, index);
+            undoStack.push(Commands.SKIP_TASK);
             saveList();
         }
         return (ArrayList<Task>) list;
@@ -148,15 +148,15 @@ public class Logic {
 
     public void skipForMark(int index) {
         if (list.get(index) instanceof RecurringTask) {
-            commandMap.get(Commands.SKIP).execute(list, index);
+            commandMap.get(Commands.SKIP_TASK).execute(list, index);
             saveList();
         }
     }
 
     public void stopRecurring(int index) {
         if (list.get(index) instanceof RecurringTask) {
-            commandMap.get(Commands.STOP).execute(list, index);
-            undoStack.push(Commands.STOP);
+            commandMap.get(Commands.STOP_TASK).execute(list, index);
+            undoStack.push(Commands.STOP_TASK);
             saveList();
         }
         saveList();
@@ -174,8 +174,8 @@ public class Logic {
                 archivedList.add(list.get(index));
                 list.remove(index);
             }
-            undoStack.push(Commands.MARK);
-            commandMap.get(Commands.MARK).execute(archivedList, completedTask.getId());
+            undoStack.push(Commands.MARK_TASK);
+            commandMap.get(Commands.MARK_TASK).execute(archivedList, completedTask.getId());
             saveList();
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new ArrayIndexOutOfBoundsException();

@@ -1,27 +1,35 @@
 package parser;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class DirectoryParser extends UserInputParser {
-	private String filePath;
-	private String[] userCommand;
+    private String filePath;
+    private String[] userCommand;
+	private static Logger loggerFilePath = Logger.getLogger("getFilePath");
 
-	private void setAttributesForChange(String userInput) {
-		removeWhiteSpaces(userInput);
-		determineLengthOfInput();
-		setFilePath();
-	}
 
-	private void setFilePath() {
-		String path = "";
+    private void setAttributesForChange(String userInput) {
+        removeWhiteSpaces(userInput);
+        determineLengthOfInput();
+        setFilePath();
+    }
 
-		for (int i = 1; i < lengthOfInput; i++) {
-			path += userCommand[i];
-		}
-		path.trim();
-		filePath = path;
-	}
+    private void setFilePath() {
+        String path = "";
 
-	public String getFilePath(String userInput) {
-		setAttributesForChange(userInput);
-		return filePath;
-	}
+        for (int i = 1; i < lengthOfInput; i++) {
+            path += userCommand[i];
+        }
+        path.trim();
+        filePath = path;
+    }
+
+    public String getFilePath(String userInput) {
+		loggerFilePath.log(Level.INFO, "Start of getFilePath");
+        setAttributesForChange(userInput);
+		loggerFilePath.log(Level.INFO, "End of getFilePath");
+
+        return filePath;
+    }
 }

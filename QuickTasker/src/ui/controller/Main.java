@@ -10,7 +10,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-
 //@@author A0133333U
 public class Main extends Application {
 
@@ -21,10 +20,8 @@ public class Main extends Application {
     public static Scene scene;
     private static final int STAGE_MINIMUM_HEIGHT = 150;
     private static final int STAGE_MINIMUM_WIDTH = 560;
-  //@@author A0126077E
-    @Override
-    public void start(Stage primaryStage) {
 
+    //@@author A0126077E
     @Override public void start(Stage primaryStage) {
         SettingManager settings = new SettingManager();
         this.primaryStage = primaryStage;
@@ -34,7 +31,9 @@ public class Main extends Application {
         mainWindow();
     }
 
-    // usage : Platform.runLater(getFxWrapper(yourRunnable));
+    /**
+     * Usage : Platform.runLater(getFxWrapper(yourRunnable));
+     */
     public static Runnable getFxWrapper(final Runnable r) {
         return () -> {
             try {
