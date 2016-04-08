@@ -7,10 +7,7 @@ import model.RecurringTask;
 import model.Task;
 import parser.Commands;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Author A0130949 Soh Yonghao
@@ -69,11 +66,14 @@ public class Logic {
         commandMap.put(Commands.SKIP, new SkipRecurTask());
         commandMap.put(Commands.STOP, new StopRecurTask());
         commandMap.put(Commands.MARK, new MarkTask());
+        commandMap.put(Commands.CLEAR, new ClearTasks());
     }
 
     public ArrayList<Task> clear() {
-        list.clear();
-        storage.reset();
+        //list.clear();
+        //storage.reset();
+        commandMap.get(Commands.CLEAR).execute(list, "");
+        undoStack.push(Commands.CLEAR);
         return (ArrayList<Task>) list;
     }
 
@@ -98,14 +98,19 @@ public class Logic {
 
     public ArrayList<Task> addTask(Task task) {
         commandMap.get(Commands.CREATE_TASK).execute(list, task);
-        undoStack.push(Commands.CREATE_TASK);
+        manageStacks(Commands.CREATE_TASK);
         saveList();
         return (ArrayList<Task>) list;
     }
 
+    public void manageStacks(Commands command) {
+        undoStack.push(command);
+        redoStack.clear();;
+    }
+
     public ArrayList<Task> deleteTask(int index) {
         commandMap.get(Commands.DELETE_TASK).execute(list, index);
-        undoStack.push(Commands.DELETE_TASK);
+        manageStacks(Commands.DELETE_TASK);
         saveList();
         return (ArrayList<Task>) list;
     }
@@ -113,16 +118,20 @@ public class Logic {
     public ArrayList<Task> updateTask(Task task, int index) {
         list.add(task);
         commandMap.get(Commands.UPDATE_TASK).execute(list, index);
-        undoStack.push(Commands.UPDATE_TASK);
+        manageStacks(Commands.UPDATE_TASK);
         saveList();
         return (ArrayList<Task>) list;
     }
 
     public ArrayList<Task> undo() {
         Commands command = undoStack.pop();
+        if (!redoStack.isEmpty() && redoStack.peek() == Commands.CLEAR && command == Commands.CLEAR) {
+            redoStack.pop();
+        }
         redoStack.push(command);
         commandMap.get(command).undo((ArrayList<Task>) list);
-        sort();
+        System.out.println("undo " + command);
+        Collections.sort(list);
         return (ArrayList<Task>) list;
     }
 
@@ -130,7 +139,8 @@ public class Logic {
         Commands command = redoStack.pop();
         undoStack.push(command);
         commandMap.get(command).redo((ArrayList<Task>) list);
-        sort();
+        System.out.println("redo " + command);
+        Collections.sort(list);
         return (ArrayList<Task>) list;
     }
 
@@ -143,7 +153,7 @@ public class Logic {
     public ArrayList<Task> skip(int index) {
         if (list.get(index) instanceof RecurringTask) {
             commandMap.get(Commands.SKIP).execute(list, index);
-            undoStack.push(Commands.SKIP);
+            manageStacks(Commands.SKIP);
             saveList();
         }
         return (ArrayList<Task>) list;
@@ -159,7 +169,7 @@ public class Logic {
     public void stopRecurring(int index) {
         if (list.get(index) instanceof RecurringTask) {
             commandMap.get(Commands.STOP).execute(list, index);
-            undoStack.push(Commands.STOP);
+            manageStacks(Commands.STOP);
             saveList();
         }
         saveList();
@@ -167,24 +177,28 @@ public class Logic {
 
     public void markAsDone(String taskId) {
         try {
-            int index = findTask(taskId, list);
-            Task completedTask = list.get(index);
-            completedTask.setDone(true);
-            if (list.get(index) instanceof RecurringTask) {
-                archivedList.add(clone(completedTask));
-                skipForMark(index);
-            } else {
-                archivedList.add(list.get(index));
-                list.remove(index);
-            }
-            undoStack.push(Commands.MARK);
-            commandMap.get(Commands.MARK).execute(archivedList, completedTask.getId());
+            shiftCompletedTaskToArchivedList(taskId);
             saveList();
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new ArrayIndexOutOfBoundsException();
         } catch (NumberFormatException e) {
             throw new NumberFormatException();
         }
+    }
+
+    private void shiftCompletedTaskToArchivedList(String taskId) {
+        int index = findTask(taskId, list);
+        Task completedTask = list.get(index);
+        completedTask.setDone(true);
+        if (list.get(index) instanceof RecurringTask) {
+            archivedList.add(clone(completedTask));
+            skipForMark(index);
+        } else {
+            archivedList.add(list.get(index));
+            list.remove(index);
+        }
+        commandMap.get(Commands.MARK).execute(archivedList, completedTask.getId());
+        manageStacks(Commands.MARK);
     }
 
     // requires cloning to prevent the reucrring task from changing values

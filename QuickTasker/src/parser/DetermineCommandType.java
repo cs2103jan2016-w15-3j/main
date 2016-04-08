@@ -48,6 +48,8 @@ public class DetermineCommandType {
                 return Commands.STOP;
             case "mark":
                 return Commands.MARK;
+            case "clear":
+                return Commands.CLEAR;
             default:
                 return Commands.ERROR;
         }

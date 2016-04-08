@@ -45,15 +45,22 @@ public class AddTask<E> implements Command<Object> {
     public void undo(ArrayList<Task> list) {
         loggerAdd.log(Level.INFO, "START ADD UNDO PROCESS");
         try {
-            Task undoTask = undoTaskStack.pop();
-            int index = undoStackInt.pop();
-            addRedoStack(undoTask, index);
-            list.remove(index);
+            undoAdding(list);
             loggerAdd.log(Level.INFO, "UNDO COMPELETED");
         } catch (EmptyStackException e) {
             loggerAdd.log(Level.WARNING, "ERROR, ADD UNDO HAS AN ERROR");
+        } catch (Exception e) {
+            System.out.println(e);
         }
         loggerAdd.log(Level.INFO, "END");
+    }
+
+    // basically removing the added task
+    private void undoAdding(ArrayList<Task> list) {
+        Task undoTask = undoTaskStack.pop();
+        int index = undoStackInt.pop();
+        addRedoStack(undoTask, index);
+        list.remove(index);
     }
 
     private void addRedoStack(Task undoTask, int index) {
@@ -76,14 +83,21 @@ public class AddTask<E> implements Command<Object> {
     public void redo(ArrayList<Task> list) {
         loggerAdd.log(Level.INFO, "START REDO PROCESS");
         try {
-            Task redoTask = redoTaskStack.pop();
-            int index = redoStackInt.pop();
-            addUndoStack(redoTask, index);
-            list.add(index, redoTask);
+            redoAdding(list);
         } catch (EmptyStackException e) {
             loggerAdd.log(Level.WARNING, "ERROR, ADD REDO HAS AN ERROR");
+        } catch (Exception e) {
+            System.out.println(e);
         }
         loggerAdd.log(Level.INFO, "FINISH REDO PROCESS");
+    }
+
+    // basically add the task again
+    private void redoAdding(ArrayList<Task> list) {
+        Task redoTask = redoTaskStack.pop();
+        int index = redoStackInt.pop();
+        addUndoStack(redoTask, index);
+        list.add(index, redoTask);
     }
 
     private void addUndoStack(Task redoTask, int index) {

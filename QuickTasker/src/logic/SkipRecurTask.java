@@ -3,6 +3,7 @@ package logic;
 import model.RecurringTask;
 import model.Task;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,8 +25,12 @@ public class SkipRecurTask<E> implements Command<Object> {
             moveDateForward(recurringTask);
             Collections.sort(list);
             undoStackInt.push(findTask(recurringTask.getId(), (ArrayList<Task>) list));
-        } catch (Exception e) {
-            loggerSkip.log(Level.WARNING, "Error in skipping");
+        } catch (IndexOutOfBoundsException e) {
+            loggerSkip.log(Level.WARNING, "Out of bound index");
+            throw new IndexOutOfBoundsException();
+        } catch (NumberFormatException e) {
+            loggerSkip.log(Level.WARNING, "Invalid index");
+            throw new NumberFormatException();
         }
         loggerSkip.log(Level.INFO, "End");
     }
@@ -34,11 +39,20 @@ public class SkipRecurTask<E> implements Command<Object> {
         assert(task != null);
         task.adjustDate();
         if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
-            task.setStartDate(task.getStartDate().plusWeeks(task.getNumberToRecur()));
-            task.setEndDate(task.getDueDate().plusWeeks(task.getNumberToRecur()));
+            adjustDates(task);
         } else {
             task.setStartDate(task.getStartDate().plusDays(task.getNumberToRecur()));
             task.setEndDate(task.getDueDate().plusDays(task.getNumberToRecur()));
+        }
+    }
+
+    private void adjustDates(RecurringTask task) {
+        if (!task.getDueDate().equals(LocalDate.MIN)) {
+            task.setEndDate(task.getDueDate().plusWeeks(task.getNumberToRecur()));
+        }
+
+        if (!task.getStartDate().equals(LocalDate.MIN)) {
+            task.setStartDate(task.getStartDate().plusWeeks(task.getNumberToRecur()));
         }
     }
 
@@ -58,7 +72,7 @@ public class SkipRecurTask<E> implements Command<Object> {
     public void undo(ArrayList<Task> list) {
         loggerSkip.log(Level.INFO, "Start undo process for skip");
         try {
-            undoOperations(list);
+            undoSkip(list);
         } catch (EmptyStackException e) {
             loggerSkip.log(Level.WARNING, "Stack is empty");
         } catch (IndexOutOfBoundsException e) {
@@ -68,7 +82,7 @@ public class SkipRecurTask<E> implements Command<Object> {
     }
 
     // shifts back the date for recurring task at undo index
-    private void undoOperations(ArrayList<Task> list) {
+    private void undoSkip(ArrayList<Task> list) {
         int undoIndex = undoStackInt.pop();
         RecurringTask recurringTask = (RecurringTask) list.get(undoIndex);
         moveDateBackward((RecurringTask) list.get(undoIndex));

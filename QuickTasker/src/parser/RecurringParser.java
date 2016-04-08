@@ -109,8 +109,8 @@ public class RecurringParser {
         } else if (numToSetDate == 4) {
             startDate = endDate = stringToLocalDate("today");
         } else if (numToSetDate == 5) {
-            startDate = stringToLocalDate(userCommand[length - 1]);
-            endDate = LocalDate.MIN;
+            endDate = stringToLocalDate(userCommand[length - 1]);
+            startDate = LocalDate.MIN;
         }
     }
 

@@ -86,6 +86,11 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
     private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
 
+    //author A0130949Y
+    private static final String ERROR_MESSAGE_FOR_WRONG_INDEX = "Index is invalid!";
+    private static final String ERROR_MESSAGE_FOR_INVALID_INDEX = "Index is not a number!";
+    private static final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
+
     public MainWindowController() {
 
     }
@@ -268,14 +273,11 @@ public class MainWindowController implements Initializable {
             operations.markAsDone(task.getId());
             task.setDone(true); // logic should handle
             tickCheckBoxForMark(task, i);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Index is invalid!", "", 1500, (b) -> {
-            }));
         } catch (NumberFormatException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Index is not a number", "", 1500, (b) -> {
+            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_INVALID_INDEX, "", 1500, (b) -> {
             }));
         } catch (IndexOutOfBoundsException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Index is invalid!", "", 1500, (b) -> {
+            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_WRONG_INDEX, "", 1500, (b) -> {
             }));
         }
     }
@@ -330,9 +332,6 @@ public class MainWindowController implements Initializable {
         afterOperation();
     }
 
-    private final String ERROR_MESSAGE_FOR_WRONG_INDEX = "Index is invalid!";
-    private final String ERROR_MESSAGE_FOR_INVALID_INDEX = "Index is not a number!";
-    private final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
     private void skipRecurringTask(String userInput) throws Exception {
         try {
             int index = parser.getTaskIndex(userInput);
@@ -396,6 +395,8 @@ public class MainWindowController implements Initializable {
         } catch (EmptyStackException e) {
             snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Error with undo", "", 1500, (b) -> {
             }));
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 
@@ -435,9 +436,7 @@ public class MainWindowController implements Initializable {
                     parser.getEndTimeForUpdate(userInput), );
             plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
         } else {*/
-            Task newTask = makeTask(parser.getTaskNameForUpdate(userInput), parser.getStartDateForUpdate(userInput),
-                    parser.getEndDateForUpdate(userInput), parser.getStartTimeForUpdate(userInput),
-                    parser.getEndTimeForUpdate(userInput));
+            Task newTask = makeTask(userInput);
             plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
             // }
             printedPlanner.getSelectionModel().clearSelection();
@@ -480,8 +479,7 @@ public class MainWindowController implements Initializable {
 
     private void createTask(String userInput) throws Exception {
         try {
-            Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
-                    parser.getEndDate(userInput), parser.getStartTime(userInput), parser.getEndTime(userInput));
+            Task newTask = makeTask(userInput);
 
 		/*
 		 * plannerEntries.add(newTask); printedPlanner.setItems(plannerEntries);
@@ -503,10 +501,7 @@ public class MainWindowController implements Initializable {
 
     private void createRecurringTask(String userInput) throws Exception {
         try {
-            RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
-                    recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
-                    recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
-                    recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
+            RecurringTask newTask = makeRecurringTask(userInput);
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
             afterOperation();
         } catch (IndexOutOfBoundsException e) {
@@ -528,14 +523,16 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate, LocalTime startTime,
-                          LocalTime endTime) throws Exception {
-        return new Task(taskName, startDate, dueDate, startTime, endTime);
+    private Task makeTask(String userInput) throws Exception {
+        return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput),
+                parser.getEndDate(userInput), parser.getStartTime(userInput), parser.getEndTime(userInput));
     }
 
-    private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate, String type,
-                                            LocalTime startTime, LocalTime endTime, int numberToRecur) throws Exception {
-        return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
+    private RecurringTask makeRecurringTask(String userInput) throws Exception {
+        return new RecurringTask(recurringParser.getTaskName(userInput),
+                recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
+                recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
+                recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
     }
 
     // author kenan
