@@ -53,7 +53,7 @@ public class Logic {
         return (ArrayList<Task>) archivedList;
     }
 
-    public void populateCommandMap() {
+    private void populateCommandMap() {
         commandMap = new TreeMap<Commands, Command>();
         commandMap.put(Commands.CREATE_TASK, new AddTask());
         commandMap.put(Commands.DELETE_TASK, new DeleteTask());
@@ -122,9 +122,6 @@ public class Logic {
 
     public ArrayList<Task> undo() {
         Commands command = undoStack.pop();
-        if (!redoStack.isEmpty() && redoStack.peek() == Commands.CLEAR_TASK && command == Commands.CLEAR_TASK) {
-            redoStack.pop();
-        }
         redoStack.push(command);
         commandMap.get(command).undo((ArrayList<Task>) list);
         System.out.println("undo " + command);

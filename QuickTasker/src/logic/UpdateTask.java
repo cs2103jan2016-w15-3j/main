@@ -3,7 +3,7 @@ package logic;
 
 import model.RecurringTask;
 import model.Task;
-
+import model.RecurringTask;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,13 +53,13 @@ public class UpdateTask<E> implements Command<Object> {
     }
 
     private RecurringTask checkAttributesForRecurringTask(Task updatedTask, int taskIndex, List<Task> list) {
-        if (updatedTask.getStartDate() == LocalDate.MIN
-                && list.get(taskIndex).getStartDate() != LocalDate.MIN) {
+        if (updatedTask.getStartDate().equals(LocalDate.MAX)
+                && !(list.get(taskIndex).getStartDate().equals(LocalDate.MAX))) {
             updatedTask.setStartDate(list.get(taskIndex).getStartDate());
         }
 
-        if (updatedTask.getDueDate() == LocalDate.MIN
-                && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
+        if (updatedTask.getDueDate().equals(LocalDate.MAX)
+                && !(list.get(taskIndex).getDueDate().equals(LocalDate.MIN))) {
             updatedTask.setEndDate(list.get(taskIndex).getDueDate());
         }
 

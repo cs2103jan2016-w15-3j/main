@@ -388,9 +388,13 @@ public class MainWindowController implements Initializable {
             int indexOfTask = updateParser.getTaskIndex(userInput);
             Task task = plannerEntries.get(indexOfTask);
             printedPlanner.getSelectionModel().select(indexOfTask);
-            Task newTask = makeTask(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
-                    updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
-                    updateParser.getEndTime(userInput));
+/*        if (task instanceof RecurringTask) {
+            Task newTask = makeRecurringTask(parser.getTaskNameForUpdate(userInput), parser.getStartDateForUpdate(userInput),
+                    parser.getEndDateForUpdate(userInput), parser.getStartTimeForUpdate(userInput),
+                    parser.getEndTimeForUpdate(userInput), );
+            plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
+        } else {*/
+            Task newTask = makeTaskForUpdate(userInput);
             plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
             // }
             printedPlanner.getSelectionModel().clearSelection();
@@ -490,6 +494,11 @@ public class MainWindowController implements Initializable {
     private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
             String type, LocalTime startTime, LocalTime endTime, int numberToRecur) throws Exception {
         return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
+    }
+
+    private Task makeTaskForUpdate(String userInput) {
+        return new Task(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
+                updateParser.getEndDate(userInput), updateParser.getStartTime(userInput), updateParser.getEndTime(userInput));
     }
 
     /**
