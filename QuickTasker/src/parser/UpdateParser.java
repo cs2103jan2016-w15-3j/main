@@ -9,9 +9,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UpdateParser extends UserInputParser {
+	private int numToRecur;
+	private String durationToRecur;
 	private final int INDEX_OF_TASK = 1;
 	private static Logger loggerUpdate = Logger.getLogger("setAttributesForUpdates in UpdateParser");
-
 
 	public void setAttributesForUpdates(String input) {
 		loggerUpdate.log(Level.INFO, "Start of setAttributesForUpdates");
@@ -21,20 +22,30 @@ public class UpdateParser extends UserInputParser {
 		command = userCommand[0];
 		determineLengthOfInput();
 		userCommand = removeIndexToUpdate();
-		
+		determineLengthOfInput();
+
 		loggerUpdate.log(Level.INFO, "Before checking if is floating update");
 
 		if (!isFloatingUpdate()) {
 			loggerUpdate.log(Level.INFO, "Not floating update");
-
-			setTime(userCommand);
-			userCommand = dateTimeParser.removeTime(userCommand);
-			determineLengthOfInput();
-			isEnglishDate();
-			setDate(numToUse, lengthOfInput);
-			userCommand = dateTimeParser.removeDate(userCommand);
-			determineLengthOfInput();
-			setTaskNameForUpdates();
+			if (!isRecurUpdate()) {
+				loggerUpdate.log(Level.INFO, "Not recurring update");
+				if (!isTimeUpdate()) {
+					setTime(userCommand);
+					userCommand = dateTimeParser.removeTime(userCommand);
+					determineLengthOfInput();
+					isEnglishDate();
+					setDate(numToUse, lengthOfInput);
+					userCommand = dateTimeParser.removeDate(userCommand);
+					determineLengthOfInput();
+					setTaskNameForUpdates();
+				} else {
+					setTime(userCommand);
+				}
+			} else {
+				setNumToRecur();
+				setDurationToRecur();
+			}
 		} else {
 			loggerUpdate.log(Level.INFO, "Floating update");
 
@@ -55,17 +66,16 @@ public class UpdateParser extends UserInputParser {
 	}
 
 	private void setDateFloating() {
-		startDate = LocalDate.MAX;
+		startDate = LocalDate.MIN;
 		endDate = LocalDate.MAX;
 	}
 
 	private void setTimeFloating() {
-		startTime = LocalTime.MAX;
+		startTime = LocalTime.MIN;
 		endTime = LocalTime.MAX;
 	}
 
 	private void setTaskNameForUpdates() {
-		// UPDATED AS OF 23/3/2016
 
 		String output = "";
 
@@ -152,4 +162,32 @@ public class UpdateParser extends UserInputParser {
 		return check;
 	}
 
+	private boolean isTimeUpdate() {
+		DateTimeParser parser = new DateTimeParser();
+		return lengthOfInput==3 && parser.isTime(userCommand[lengthOfInput - 2])
+				&& parser.isTime(userCommand[lengthOfInput - 1]);
+	}
+
+	// remeber to shift getter at bottom
+	private boolean isRecurUpdate() {
+		return userCommand[1].equalsIgnoreCase("recur");
+	}
+
+	private void setNumToRecur() {
+		numToRecur = Integer.parseInt(userCommand[lengthOfInput - 2]);
+	}
+
+	private void setDurationToRecur() {
+		durationToRecur = userCommand[lengthOfInput - 1];
+	}
+
+	public int getNumToRecur(String input) {
+		setAttributesForUpdates(input);
+		return numToRecur;
+	}
+
+	public String getDurationToRecur(String input) {
+		setAttributesForUpdates(input);
+		return durationToRecur;
+	}
 }

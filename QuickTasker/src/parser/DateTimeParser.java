@@ -145,7 +145,7 @@ public class DateTimeParser {
         }
     }
 
-    private boolean isTime(String input) {
+    public boolean isTime(String input) {
         return (input.indexOf(':') >= 0) || (input.indexOf("pm") >= 0) || input.indexOf("am") >= 0;
     }
 

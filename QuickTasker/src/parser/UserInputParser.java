@@ -61,7 +61,6 @@ public class UserInputParser {
 		determineLengthOfInput();
 		command = userCommand[0];
 		if (isStartOrEnd()) {
-			System.out.println("sadasdad");
 			removeStartOrEnd();
 		}
 		setTaskName();
@@ -180,9 +179,9 @@ public class UserInputParser {
 			startDate = endDate = stringToLocalDate("tomorrow");
 		} else if (numToSetDate == NUMBER_NEXT_DAY_DAY_AFTER) {
 			startDate = endDate = stringToLocalDate(userCommand[length - 2] + " " + userCommand[length - 1]);
-		} else if (numToSetDate == NUMBER_FLOATING) {// floating task
+		} else if (numToSetDate == NUMBER_FLOATING) {
 			startDate = LocalDate.MIN;
-			endDate = LocalDate.MAX;// placeholder for null
+			endDate = LocalDate.MAX;// 
 		} else if (numToSetDate == NUMBER_TODAY) {
 			startDate = endDate = stringToLocalDate("today");
 		} else if (numToSetDate == NUMBER_ONLY_START) {
@@ -199,13 +198,14 @@ public class UserInputParser {
 		ArrayList<Integer> indicesTime = parser.indicesToDetermineTime(input);
 
 		if (indicesTime.size() == 0) {
-			return;
+			startTime=LocalTime.MIN;
+			endTime=LocalTime.MAX;
 		}
 		ArrayList<LocalTime> localTimes = parser.parseTime(input, indicesTime);
 
 		if (indicesTime.size() == 1) {
 			startTime = localTimes.get(0);
-			endTime = null;
+			endTime = LocalTime.MAX;
 		}
 		if (indicesTime.size() == 2) {
 			startTime = localTimes.get(0);
@@ -222,7 +222,7 @@ public class UserInputParser {
 		// 5 is only one date
 		DateTimeParser parser = new DateTimeParser();
 		String toCheck = userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1];
-		numToUse = 0;
+		numToUse = NUMBER_NORMAL;
 
 		if (userCommand[lengthOfInput - 1].equals("tomorrow")) {
 			numToUse = NUMBER_TOMORROW;

@@ -11,13 +11,13 @@ import java.util.logging.Logger;
 
 public class RecurringParser extends UserInputParser{
 
-    private String[] userCommand;
+  /*  private String[] userCommand;
     private String taskName;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;
     private LocalTime endTime;
-    private int lengthOfInput;
+    private int lengthOfInput;*/
     private int numToUse;
     private int numToRecur;
     private String recurDuration;
@@ -41,6 +41,7 @@ public class RecurringParser extends UserInputParser{
         determineLengthOfInput();
         setTaskName();
     }
+
     private String[] removeNumAndDuration() {
         ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList(userCommand));
         tempUserCommand.remove(lengthOfInput - 1);
@@ -69,19 +70,19 @@ public class RecurringParser extends UserInputParser{
         return parser.parseDate(date);
     }
 
-    public int getNumToRecur(String userInput) { // for controller
+    public int getNumToRecur(String userInput) { 
         setAttributesRecurring(userInput);
         return numToRecur;
 
     }
 
-    public String getRecurDuration(String userInput) {// for controller
+    public String getRecurDuration(String userInput) {
         setAttributesRecurring(userInput);
         return recurDuration;
 
     }
 
-    public String getTaskName(String userInput) { // for controller
+    public String getTaskName(String userInput) { 
         setAttributesRecurring(userInput);
         return taskName;
     }
@@ -105,4 +106,9 @@ public class RecurringParser extends UserInputParser{
         setAttributesRecurring(userInput);
         return endTime;
     }
+    //update 1 recur 2 weeks
+	public int getIndexForUpdates(String userInput) {
+		removeWhiteSpaces(userInput);
+		return Integer.parseInt(userCommand[1]);
+	}
 }

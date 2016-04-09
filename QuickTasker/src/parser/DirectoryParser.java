@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 
 public class DirectoryParser extends UserInputParser {
 	private String filePath;
-	private String[] userCommand;
 	private static Logger loggerFilePath = Logger.getLogger("getFilePath");
 
 
@@ -13,17 +12,15 @@ public class DirectoryParser extends UserInputParser {
 		removeWhiteSpaces(userInput);
 		determineLengthOfInput();
 		setFilePath();
+		//convertFilePath();
 	}
 
 	private void setFilePath() {
-		String path = "";
-
-		for (int i = 1; i < lengthOfInput; i++) {
-			path += userCommand[i];
-		}
-		path.trim();
-		filePath = path;
+		filePath=userCommand[1];
 	}
+	/*private void convertFilePath() {
+		filePath=filePath.replaceAll("\\", "\\\\");
+	}*/
 
 	public String getFilePath(String userInput) {
 		loggerFilePath.log(Level.INFO, "Start of getFilePath");
