@@ -78,16 +78,14 @@ public class JsonTaskDataAccessTest {
         String taskName = "Task 1";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         dataHandler.save(testTask);
-        Task resultTask = readOneTask();
-        assertEquals(testTask, resultTask);
+        assertEquals(testTask, readOneTask());
     }
 
     @Test
     public void canReadsavedTasksFromJsonFile() {
         plannerNotebook = create30TasksWithDifferentAttributes();
         dataHandler.save(plannerNotebook);
-        List<Task> tasksRead = dataHandler.getTasks();
-        assertEquals(plannerNotebook, tasksRead);
+        assertEquals(plannerNotebook, dataHandler.getTasks());
     }
 
     @Test
@@ -98,8 +96,7 @@ public class JsonTaskDataAccessTest {
         List<Task> tasks = new ArrayList<>();
         tasks.add(task);
         dataHandler.save(tasks);
-        Task t = dataHandler.getTasks().get(0);
-        assertEquals(t.getName(), task.getName());
+        assertEquals(dataHandler.getTasks().get(0).getName(), task.getName());
     }
 
     @Test
@@ -125,9 +122,7 @@ public class JsonTaskDataAccessTest {
         Object[] taskArr = tasks.toArray();
         dataHandler.save(tasks);
 
-        List<Task> result = dataHandler.getTasks();
-        Object[] resultArr = result.toArray();
-        assertArrayEquals(taskArr, resultArr);
+        assertArrayEquals(taskArr, dataHandler.getTasks().toArray());
 
     }
 
@@ -136,9 +131,8 @@ public class JsonTaskDataAccessTest {
         List<Task> expected = create30TasksWithDifferentAttributes(); // last 10 are recurr tasks
         dataHandler.save(expected);
         List<Task> result = dataHandler.getTasks();
-        for (int i = 0; i < expected.size(); i++) {
+        for (int i = 0; i < expected.size(); ++i)
             assertEquals(expected.get(i).getClass(), result.get(i).getClass());
-        }
     }
 
     @Test
@@ -147,12 +141,9 @@ public class JsonTaskDataAccessTest {
         dataHandler.save(expected);
         List<Task> result = dataHandler.getTasks();
 
-        String expectedTypeValue = "RecurringTask";
-        for (int i = 20; i < expected.size(); i++) {
-            RecurringTask resultT = (RecurringTask) result.get(i);
-            RecurringTask expectedT = (RecurringTask) expected.get(i);
-            assertEquals(resultT.getClass(), expectedT.getClass());
-        }
+        for (int i = 20; i < expected.size(); ++i)
+            assertEquals(((RecurringTask) result.get(i)).getClass(),
+                    ((RecurringTask) expected.get(i)).getClass());
 
     }
 
@@ -169,9 +160,9 @@ public class JsonTaskDataAccessTest {
         try {
             BufferedReader reader = Files.newBufferedReader(dataHandler.getFilePath());
             Gson gson = getGson();
-            Task testObj = gson.fromJson(reader, Task.class);
+            Task $ = gson.fromJson(reader, Task.class);
             reader.close();
-            return testObj;
+            return $;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -179,41 +170,32 @@ public class JsonTaskDataAccessTest {
     }
 
     private List<Task> create30TasksWithDifferentAttributes() {
-        List<Task> tasks = new ArrayList<Task>(createTasksWithStartAndEnd(10));
-        tasks.addAll(createTasksWithOnlyTaskNameAttribute(10));
-        tasks.addAll(createRecurringTasks(10));
-        return tasks;
+        List<Task> $ = new ArrayList<Task>(createTasksWithStartAndEnd(10));
+        $.addAll(createTasksWithOnlyTaskNameAttribute(10));
+        $.addAll(createRecurringTasks(10));
+        return $;
     }
 
     private List<Task> createRecurringTasks(int numberOfTasks) {
-        List<Task> tasks = new ArrayList<>();
-        for (int i = 0; i < numberOfTasks; i++) {
-            String taskName = "Recurring Task " + i;
-            Task recurringTask = new RecurringTask(taskName, LocalDate.now(), LocalDate.now().plusMonths(1),
-                    "week", LocalTime.NOON, LocalTime.MIDNIGHT, 1);
-            tasks.add(recurringTask);
-        }
-        return tasks;
+        List<Task> $ = new ArrayList<>();
+        for (int i = 0; i < numberOfTasks; ++i)
+            $.add((new RecurringTask(("Recurring Task " + i), LocalDate.now(), LocalDate.now().plusMonths(1),
+                    "week", LocalTime.NOON, LocalTime.MIDNIGHT, 1)));
+        return $;
     }
 
     private List<Task> createTasksWithOnlyTaskNameAttribute(int numberOfTasks) {
-        List<Task> tasks = new ArrayList<>();
-        for (int i = 0; i < numberOfTasks; i++) {
-            String taskName = "Task " + i;
-            Task task = new Task(taskName);
-            tasks.add(task);
-        }
-        return tasks;
+        List<Task> $ = new ArrayList<>();
+        for (int i = 0; i < numberOfTasks; ++i)
+            $.add((new Task(("Task " + i))));
+        return $;
     }
 
     private List<Task> createTasksWithStartAndEnd(int numberOfTasks) {
-        List<Task> tasks = new ArrayList<>();
-        for (int i = 0; i < numberOfTasks; i++) {
-            String taskName = "Task " + i;
-            Task task = new Task(taskName, LocalDate.now(), LocalDate.now());
-            tasks.add(task);
-        }
-        return tasks;
+        List<Task> $ = new ArrayList<>();
+        for (int i = 0; i < numberOfTasks; ++i)
+            $.add((new Task(("Task " + i), LocalDate.now(), LocalDate.now())));
+        return $;
     }
 
     private boolean hasSaveFile() {
@@ -221,9 +203,11 @@ public class JsonTaskDataAccessTest {
     }
 
     private Gson getGson() {
-        RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
-                .registerSubtype(Task.class, "Task").registerSubtype(RecurringTask.class, "RecurringTask");
-        return new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter).create();
+        return new GsonBuilder().setPrettyPrinting()
+                .registerTypeAdapterFactory(
+                        RuntimeTypeAdapterFactory.of(Task.class).registerSubtype(Task.class, "Task")
+                                .registerSubtype(RecurringTask.class, "RecurringTask"))
+                .create();
     }
 
 }
