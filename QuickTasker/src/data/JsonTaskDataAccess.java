@@ -122,5 +122,4 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     protected void setSavePath(String path) {
         this.pathOfSaveFile = Paths.get(path);
     }
-
 }

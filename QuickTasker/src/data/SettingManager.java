@@ -89,7 +89,6 @@ public class SettingManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void loadSettings() throws LoadSettingsException {
@@ -104,7 +103,5 @@ public class SettingManager {
         } catch (ConfigurationException cex) {
             throw new LoadSettingsException();
         }
-
     }
-
 }

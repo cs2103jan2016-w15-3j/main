@@ -24,7 +24,6 @@ import static org.junit.Assert.*;
 
 public class JsonTaskDataAccessTest {
     private JsonTaskDataAccess dataHandler;
-    private SettingManager settings;
     private List<Task> plannerNotebook;
     public static final String WORKING_DIRECTORY = System.getProperty("user.dir");
     public static final String PATH_SEPARATOR =  System.getProperty("file.separator");
@@ -32,15 +31,13 @@ public class JsonTaskDataAccessTest {
 
     @Before
     public void setUp() throws Exception {
-        settings = new SettingManager();
-        settings.setPathOfSaveFile(FILE_NAME);
         plannerNotebook = new ArrayList<>();
         dataHandler = new JsonTaskDataAccess();
+        dataHandler.setSavePath(FILE_NAME);
     }
 
     @After
     public void tearDown() {
-        settings.resetDefaultSettings();
         dataHandler.reset();
     }
 
