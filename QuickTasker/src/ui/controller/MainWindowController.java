@@ -20,10 +20,7 @@ import logic.Logic;
 import model.RecurringTask;
 import model.Task;
 import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
-import parser.Commands;
-import parser.RecurringParser;
-import parser.UpdateParser;
-import parser.UserInputParser;
+import parser.*;
 import ui.model.TaskListCell;
 
 import java.net.URL;
@@ -48,7 +45,8 @@ public class MainWindowController implements Initializable {
     private Stage stage;
     private final UserInputParser parser = new UserInputParser();
     private final UpdateParser updateParser = new UpdateParser();
-    private RecurringParser recurringParser = new RecurringParser();
+    private final RecurringParser recurringParser = new RecurringParser();
+    private final DirectoryParser directoryParser = new DirectoryParser();
     private final Logic operations = new Logic();
     private SearchHelper util = new SearchHelper();
 
@@ -125,10 +123,11 @@ public class MainWindowController implements Initializable {
         logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
         try {
             performOperations(userInput);
-        } catch (UIOperationException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             logger.log(Level.SEVERE,
                     "Error occured at " + getClass().getName() + " within performOperation method.\n");
-            e.printStackTrace();
+
         }
     }
 
@@ -160,7 +159,7 @@ public class MainWindowController implements Initializable {
             else if ("show all".equals(userInput) || "view all".equals(userInput)) showAll();
             else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) searchTask(userInput);
             else if (userInput.contains("theme")) changeTheme(userInput);
-            else if ("change directory".equals(userInput)) changeDirectory(userInput);
+            else if (parser.getCommand(userInput) == Commands.CHANGE_DIRECTORY) changeDirectory(userInput);
             else if ("view archived".equals(userInput)) viewArchived();
             else if ("back".equals(userInput)) viewTasks();
         } catch (Exception e) {
@@ -405,7 +404,8 @@ public class MainWindowController implements Initializable {
     }
 
     private void changeDirectory(String userInput) throws Exception {
-        operations.changeDir(userInput);
+        String path = directoryParser.getFilePath(userInput);
+        operations.changeDir(path);
     }
 
     private void createTask(String userInput) throws Exception {
