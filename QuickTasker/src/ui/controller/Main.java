@@ -1,6 +1,8 @@
 package ui.controller;
 
+
 import com.jfoenix.controls.JFXDecorator;
+
 import data.SettingManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,9 +12,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-/**
- * @@author A0133333U.
- */
 public class Main extends Application {
 
     private static final String APP_TITLE = "Welcome to QuickTasker!";
@@ -26,6 +25,7 @@ public class Main extends Application {
     /**
      * @@author A0126077E.
      */
+    
     @Override
     public void start(Stage primaryStage) {
         SettingManager settings = new SettingManager();
@@ -34,6 +34,10 @@ public class Main extends Application {
         /*Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
         Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);*/
         mainWindow();
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
     }
 
     /**
@@ -50,6 +54,7 @@ public class Main extends Application {
         };
     }
 
+    // @@author A0133333U
     private void mainWindow() {
 
         try {
@@ -75,11 +80,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-
-    public void quickShow() {
-
-    }
-
+    
     public JFXDecorator getDecorator() {
         return decorator;
     }
@@ -88,7 +89,5 @@ public class Main extends Application {
         return this.scene;
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+
 }

@@ -1,6 +1,20 @@
 package ui.controller;
 
-import com.jfoenix.controls.*;
+import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
+
+import java.net.URL;
+import java.util.EmptyStackException;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.jfoenix.controls.JFXBadge;
+import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXRippler;
+import com.jfoenix.controls.JFXSnackbar;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToolbar;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,33 +22,28 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
-import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
-import parser.*;
+import parser.Commands;
+import parser.DirectoryParser;
+import parser.RecurringParser;
+import parser.UpdateParser;
+import parser.UserInputParser;
 import ui.model.TaskListCell;
 
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.EmptyStackException;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
-
 /**
- * @@author A0133333U
+ *  @@author A0133333U
  */
 
 public class MainWindowController implements Initializable {
@@ -74,19 +83,18 @@ public class MainWindowController implements Initializable {
 	private JFXRippler headerTitleContainer;
 	@FXML
 	private Label headerTitle;
-
+	
+	// Kenan do not rm this line below this thank you
+	private Text help;
 	private ObservableList<Task> plannerEntries;
 	/**
 	 * Display messages as visual feedback for users.
 	 */
-	private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
 	private static final String MESSAGE_ADD_CONFIRMED = "Task added to list.";
 	private static final String MESSAGE_DELETE_CONFIRMED = "Task deleted from list.";
-	private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
 	private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
 	private static final String MESSAGE_FOR_CLEARING = "All tasks removed.";
 	private static final String MESSAGE_FOR_DATE_CHANGE = "Dates updated.";
-
 	private static final String ERROR_MESSAGE_FOR_WRONG_INDEX = "Index is invalid!";
 	private static final String ERROR_MESSAGE_FOR_INVALID_INDEX = "Index is not a number!";
 	private static final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
@@ -106,7 +114,9 @@ public class MainWindowController implements Initializable {
 		setCellFactory();
 		initLogger();
 	}
+	
 
+	// @@author A0133333U
 	private void initLogger() {
 		logger = Logger.getLogger("UILogger");
 		logger.setLevel(Level.INFO);
@@ -183,12 +193,16 @@ public class MainWindowController implements Initializable {
 				markTaskCompleted(userInput);
 			} else if (parser.getCommand(userInput) == Commands.RECUR_TASK) {
 				addRecurringTask(userInput);
+			} else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) {
+				searchTask(userInput);
 			} else if (parser.getCommand(userInput) == Commands.SKIP_TASK) {
 				skipRecurringTask(userInput);
 			} else if (parser.getCommand(userInput) == Commands.CLEAR_TASK) {
 				clearTasks(userInput);
 			} else if (userInput.contains("stop")) {
 				stopRecurringTask(userInput);
+			} else if (userInput.contains("-help")) {
+				showHelp();
 			} else if ("show today".equals(userInput) || "view today".equals(userInput)) {
 				showToday();
 			} else if ("show tomorrow".equals(userInput) || "view tomorrow".equals(userInput)) {
@@ -198,8 +212,6 @@ public class MainWindowController implements Initializable {
 				showFloating();
 			} else if ("show all".equals(userInput) || "view all".equals(userInput)) {
 				showAll();
-			} else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) {
-				searchTask(userInput);
 			} else if (userInput.contains("theme")) {
 				changeTheme(userInput);
 			} else if (userInput.contains("changedir")) {
@@ -215,7 +227,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	/*
-	 * author: A0133333U
+	 * @@author A0133333U
 	 * did refactoring for this method
 	 */
 	private void changeTheme(String userInput) {
@@ -232,7 +244,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	private void showTomorrow() {
-		printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTomorrowView(task)));
+		printedPlanner.setItems(plannerEntries.filtered(task -> util.isDisplayedInTomorrowView(task)));
 		headerTitle.setText("Tasks: Tomorrow");
 		updateTaskCounter();
 		commandBox.clear();
@@ -262,6 +274,23 @@ public class MainWindowController implements Initializable {
 		// to be written
 		commandBox.clear();
 	}
+	
+	/*
+	 * @@author A013333U
+	 */
+	private void showHelp() {
+		Text helpText = new Text("Hi there! Need any help? See below!");
+		HBox root = new HBox();
+		root.setStyle("-fx-background-color: yellow;");
+		root.getChildren().add(helpText);
+		
+		Scene scene = new Scene(root, 100, 200);
+		Stage helpStage = new Stage();
+		helpStage.setScene(scene);
+		helpStage.setTitle("Help");
+		helpStage.show();
+		commandBox.clear();
+	}
 
 	/**
 	 * To be moved inside serach helper when tidy up.
@@ -279,7 +308,7 @@ public class MainWindowController implements Initializable {
 
 	private void showToday() {
 
-		printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTodayView(task)));
+		printedPlanner.setItems(plannerEntries.filtered(task -> util.isDisplayedInTodayView(task)));
 		headerTitle.setText("Tasks: Today + Floating");
 		updateTaskCounter();
 		commandBox.clear();
@@ -303,7 +332,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	/**
-	 * Author kenan.
+	 * Author kenan. 
 	 */
 	private void tickCheckBoxForMark(Task task, int i) {
 		printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -346,6 +375,9 @@ public class MainWindowController implements Initializable {
 		headerTitle.setText("Tasks: Archived");
 	}
 
+	// @@author A0133333U
+	// added warnings to unused method
+	@SuppressWarnings("unused")
 	private void sortTask(String userInput) {
 		System.out.println("Sorting");
 		plannerEntries = FXCollections.observableArrayList(operations.sort());
@@ -399,6 +431,7 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
+	
 	private void updateTask(String userInput) throws Exception {
 		try {
 			int indexOfTask = updateParser.getTaskIndex(userInput);
@@ -443,7 +476,6 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
-	private static final String MESSAGE_FOR_REMOVING_TASK = "Task removed";
 
 	private void changeDirectory(String userInput) throws Exception {
 		operations.changeDir(directoryParser.getFilePath(userInput));
@@ -483,6 +515,7 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
+	
 	private void afterOperation() {
 		setCellFactory();
 		refresh();
@@ -490,6 +523,10 @@ public class MainWindowController implements Initializable {
 		commandBox.clear();
 	}
 
+	/*
+	 * @@author: A0133333U 
+	 * added in extra params for this method
+	 */
 	private Task makeTask(String userInput) throws Exception {
 		return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput), parser.getEndDate(userInput),
 				parser.getStartTime(userInput), parser.getEndTime(userInput));
@@ -501,6 +538,7 @@ public class MainWindowController implements Initializable {
 				recurringParser.getTaskStartTime(userInput), recurringParser.getTaskEndTime(userInput),
 				recurringParser.getNumToRecur(userInput));
 	}
+
 
 	private Task makeTaskForUpdate(String userInput) {
 		return new Task(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),

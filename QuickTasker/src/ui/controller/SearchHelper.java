@@ -9,8 +9,9 @@ public class SearchHelper {
     private final String FLOATING_TASK = "floating";
     private final double FUZZY_STRING_COMPARE_THRESHOLD = 0.65;
 
-    public boolean isItDisplayedInTodayView(Task task) {
-        String taskType = task.getTaskType();
+    
+    /* @@ author A0133333U */
+    public boolean isDisplayedInTodayView(Task task) {
         if (isFloatingTask(task)) {
             return true;
         } else if (isDueToday(task)) {
@@ -19,7 +20,7 @@ public class SearchHelper {
         return false;
     }
 
-    public boolean isItDisplayedInTomorrowView(Task task) {
+    public boolean isDisplayedInTomorrowView(Task task) {
         return isDueTomorrow(task);
     }
 

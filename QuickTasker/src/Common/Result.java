@@ -1,4 +1,4 @@
-package common;
+package Common;
 
 public class Result {
     private boolean isSuccess;
