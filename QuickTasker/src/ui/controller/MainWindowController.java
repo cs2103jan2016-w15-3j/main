@@ -19,6 +19,7 @@ import com.sun.tracing.dtrace.ProviderAttributes;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -34,6 +35,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
@@ -85,10 +87,10 @@ public class MainWindowController implements Initializable {
 	private JFXRippler headerTitleContainer;
 	@FXML
 	private Label headerTitle;
-	private HelpWindow helpWindow;
 	//private Stage helpStage;
 	
 	// Kenan do not rm this line below this thank you
+	
 	// @@author A0133333U
 	private Text help;
 	private ObservableList<Task> plannerEntries;
@@ -293,28 +295,26 @@ public class MainWindowController implements Initializable {
 	/*
 	 * @@author A013333U
 	 */
-
-	
 	private void showHelp() {		
 		HBox hb = new HBox();
-		Text text = new Text("hi");
-		//boolean isOn = false;
+		Text text = new Text("Help Section!");
 	    hb.getStyleClass().add("hbox");
-	    //initTitle();
 		hb.getChildren().add(text);
-		Scene scene = new Scene(hb, 400, 400);
 		Stage helpStage = new Stage();
-		//this.helpWindow.show(this.helpStage);
-		helpStage.setScene(scene);
-		//helpStage.setTitle("Help");
+		Scene scene = new Scene(hb, 400, 400);
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	          public void handle(KeyEvent ke) {
+	        	  if (ke.getCode() == KeyCode.ESCAPE) {
+	              System.out.println("Stage is closing");
+	              helpStage.close();
+	          }
+	          }
+	      });
+		helpStage.setScene(scene);		
 		helpStage.show();
 		commandBox.clear();
 	}
 	
-	private void initTitle(){
-		this.title = new Label(LABEL_TITLE);
-		this.title.setAlignment(Pos.CENTER);
-	}
 
 	/**
 	 * To be moved inside serach helper when tidy up.
