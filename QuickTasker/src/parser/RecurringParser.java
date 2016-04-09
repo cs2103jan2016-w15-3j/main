@@ -11,26 +11,24 @@ import java.util.logging.Logger;
 
 public class RecurringParser extends UserInputParser{
 
-    private String[] userCommand;
-    private String taskName;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private int lengthOfInput;
-    private int numToUse;
     private int numToRecur;
     private String recurDuration;
 	private static Logger loggerRecur = Logger.getLogger("setNumToRecur in RecurringParser");
 
-
     private void setAttributesRecurring(String input) {
+        System.out.println("---");
         DateTimeParser dateTimeParser = new DateTimeParser();
+        System.out.println("===");
         removeWhiteSpaces(input);
+        System.out.println("(()");
         determineLengthOfInput();
+        System.out.println("&&& " + lengthOfInput);
         numToRecur = setNumToRecur();
+        System.out.println("***");
         recurDuration = setRecurDuration();
+        System.out.println("!!!");
         userCommand = removeNumAndDuration();
+        System.out.println("???");
         determineLengthOfInput();
         setTime(userCommand);
         userCommand = dateTimeParser.removeTime(userCommand);
@@ -52,10 +50,16 @@ public class RecurringParser extends UserInputParser{
 		loggerRecur.log(Level.INFO, "Start of setNumToRecur");
 
     	try {
+            System.out.println("sze = " + userCommand.length);
+            System.out.println("lenth = " + lengthOfInput);
     		Integer.parseInt(userCommand[lengthOfInput - 2]);
     	}catch(NumberFormatException e) {
 			loggerRecur.log(Level.WARNING, "Error in processing number to recur", e);
-    	}
+    	} catch (Exception e) {
+            //System.out.println("sze = " + userCommand.length);
+            System.out.println("lenth = " + lengthOfInput);
+            System.out.println(e);
+        }
 		loggerRecur.log(Level.INFO, "End of setNumToRecur");
         return Integer.parseInt(userCommand[lengthOfInput - 2]);
     }

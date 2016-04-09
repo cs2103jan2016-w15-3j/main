@@ -341,10 +341,11 @@ public class MainWindowController implements Initializable {
             Task task = plannerEntries.get(index);
             if (!(task instanceof RecurringTask)) {
                displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
+            } else {
+                plannerEntries = FXCollections.observableArrayList(operations.skip(index));
+                displayMessage(MESSAGE_FOR_DATE_CHANGE);
+                afterOperation();
             }
-            plannerEntries = FXCollections.observableArrayList(operations.skip(index));
-            displayMessage(MESSAGE_FOR_DATE_CHANGE);
-            afterOperation();
         } catch (IndexOutOfBoundsException e) {
            displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         } catch (NumberFormatException e) {
@@ -393,12 +394,9 @@ public class MainWindowController implements Initializable {
             afterOperation();
             displayMessage(MESSAGE_EDIT_CONFIRMED);
         } catch (IndexOutOfBoundsException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_WRONG_INDEX, "", 1500, (b) -> {
-            }));
+           displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         } catch (NumberFormatException e) {
-            snackbar.fireEvent(
-                    new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_INVALID_INDEX, "", 1500, (b) -> {
-                    }));
+           displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
         }
     }
 
@@ -410,15 +408,11 @@ public class MainWindowController implements Initializable {
             afterOperation();
             displayMessage(MESSAGE_DELETE_CONFIRMED);
         } catch (NumberFormatException e) {
-            snackbar.fireEvent(
-                    new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_INVALID_INDEX, "", 1500, (b) -> {
-                    }));
+            displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
         } catch (IllegalArgumentException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_WRONG_INDEX, "", 1500, (b) -> {
-            }));
+           displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         } catch (IndexOutOfBoundsException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_WRONG_INDEX, "", 1500, (b) -> {
-            }));
+           displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         }
     }
 
@@ -447,11 +441,16 @@ public class MainWindowController implements Initializable {
 
     private void addRecurringTask(String userInput) throws Exception {
         try {
+            System.out.println("AAA " + userInput);
+
             RecurringTask newTask = makeRecurringTask(userInput);
+            System.out.println("BBB");
             if (isTimeSlotClashing(newTask)) {
                 displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
             }
+            System.out.println("CCC");
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+            System.out.println("DDD");
             afterOperation();
             displayMessage(MESSAGE_ADD_CONFIRMED);
         } catch (IndexOutOfBoundsException e) {
