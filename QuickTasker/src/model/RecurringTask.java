@@ -63,8 +63,7 @@ public class RecurringTask extends Task {
         long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.DAYS);
         if (this.getRecurType().toLowerCase().equals("week") || this.getRecurType().toLowerCase().equals("weeks")) {
             int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
-            setNextDates(this.getStartDate().plusWeeks(offset),
-                    this.getDueDate().plusWeeks(offset));
+            setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
         } else if (this.getRecurType().toLowerCase().equals("day") || this.getRecurType().toLowerCase().equals("days")){
             int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
             setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));

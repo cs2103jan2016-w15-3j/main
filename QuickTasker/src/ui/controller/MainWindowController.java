@@ -85,6 +85,7 @@ public class MainWindowController implements Initializable {
     private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
     private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
     private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "Did you make any operations before this?";
+    private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
 
     public MainWindowController() {
 
@@ -436,8 +437,6 @@ public class MainWindowController implements Initializable {
             displayMessage(ERROR_MESSAGE_FOR_EMPTY_TASK);
         }
     }
-
-    private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
 
     private void addRecurringTask(String userInput) throws Exception {
         try {

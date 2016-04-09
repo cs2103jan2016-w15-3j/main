@@ -39,46 +39,13 @@ public class UpdateTask<E> implements Command<Object> {
 
     public void executeUpdate(int taskIndex, List<Task> list) {
         Task newTask = list.remove(list.size() - 1);
-        Task updatedTask = checkAttributes(newTask, taskIndex, list);
+        Task updatedTask = checkAttributesForTask(newTask, taskIndex, list);
         list.set(taskIndex, updatedTask);
         Collections.sort(list);
         undoStackInt.push(findTask(updatedTask.getId(), (ArrayList<Task>) list));
     }
 
-    private Task checkAttributes(Task newTask, int taskIndex, List<Task> list) {
-        if (list.get(taskIndex) instanceof RecurringTask) {
-            return checkAttributesForRecurringTask(newTask, taskIndex, list);
-        } else {
-            return checkAttributesForTask(newTask, taskIndex, list);
-        }
-    }
-
-    private RecurringTask checkAttributesForRecurringTask(Task updatedTask, int taskIndex, List<Task> list) {
-        if (updatedTask.getStartDate().equals(LocalDate.MAX)
-                && !(list.get(taskIndex).getStartDate().equals(LocalDate.MAX))) {
-            updatedTask.setStartDate(list.get(taskIndex).getStartDate());
-        }
-
-        if (updatedTask.getDueDate().equals(LocalDate.MAX)
-                && !(list.get(taskIndex).getDueDate().equals(LocalDate.MAX))) {
-            updatedTask.setEndDate(list.get(taskIndex).getDueDate());
-        }
-
-        if (updatedTask.getName().isEmpty() && !list.get(taskIndex).getName().isEmpty()) {
-            updatedTask.setName(list.get(taskIndex).getName());
-        }
-
-        if (updatedTask.getStartTime() == null && list.get(taskIndex).getStartTime() != null) {
-            updatedTask.setStartTime(list.get(taskIndex).getStartTime());
-        }
-
-        if (updatedTask.getEndTime() == null && list.get(taskIndex).getEndTime() != null) {
-            updatedTask.setEndTime(list.get(taskIndex).getEndTime());
-        }
-
-        return transferAttributes(updatedTask, taskIndex, list);
-    }
-
+    // transfer the task attributes to recurring task
     private RecurringTask transferAttributes(Task updatedTask, int index, List<Task> list) {
         RecurringTask recurringTask = new RecurringTask(updatedTask.getName(), updatedTask.getStartDate(),
                 updatedTask.getDueDate(), ((RecurringTask) list.get(index)).getRecurType(), updatedTask.getStartTime(),
@@ -86,6 +53,7 @@ public class UpdateTask<E> implements Command<Object> {
         return recurringTask;
     }
 
+    // checks which attributes the user wishes to update and update accordingly
     private Task checkAttributesForTask(Task updatedTask, int taskIndex, List<Task> list) {
         if (updatedTask.isStartDateEmpty() && !list.get(taskIndex).isStartDateEmpty()) {
             updatedTask.setStartDate(list.get(taskIndex).getStartDate());
@@ -107,7 +75,11 @@ public class UpdateTask<E> implements Command<Object> {
             updatedTask.setEndTime(list.get(taskIndex).getEndTime());
         }
 
-        return updatedTask;
+        if (list.get(taskIndex) instanceof RecurringTask) {
+            return transferAttributes(updatedTask, taskIndex, list);
+        } else {
+            return updatedTask;
+        }
     }
 
     @Override

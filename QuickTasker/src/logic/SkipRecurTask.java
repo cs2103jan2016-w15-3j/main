@@ -35,6 +35,7 @@ public class SkipRecurTask<E> implements Command<Object> {
         loggerSkip.log(Level.INFO, "End");
     }
 
+    // shift the date backwards by using adjustDate methods
     protected void moveDateBackward(RecurringTask task) {
         assert (task != null);
         task.adjustDate();
@@ -49,6 +50,7 @@ public class SkipRecurTask<E> implements Command<Object> {
         }
     }
 
+    // shift the dates forward using some of the adjustDate methods
     protected void moveDateForward(RecurringTask task) {
         assert (task != null);
         task.adjustDate();

@@ -58,8 +58,6 @@ public class Logic {
         commandMap.put(Commands.CREATE_TASK, new AddTask());
         commandMap.put(Commands.DELETE_TASK, new DeleteTask());
         commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
-        commandMap.put(Commands.SEARCH_TASK, new Search());
-        commandMap.put(Commands.SORT_TASK, new Sort());
         commandMap.put(Commands.SKIP_TASK, new SkipRecurTask());
         commandMap.put(Commands.STOP_TASK, new StopRecurTask());
         commandMap.put(Commands.MARK_TASK, new MarkTask());
@@ -70,7 +68,7 @@ public class Logic {
         //list.clear();
         //storage.reset();
         commandMap.get(Commands.CLEAR_TASK).execute(list, "");
-        undoStack.push(Commands.CLEAR_TASK);
+        manageStacks(Commands.CLEAR_TASK);
         return (ArrayList<Task>) list;
     }
 
@@ -102,7 +100,7 @@ public class Logic {
 
     public void manageStacks(Commands command) {
         undoStack.push(command);
-        redoStack.clear();;
+        redoStack.clear();
     }
 
     public ArrayList<Task> deleteTask(int index) {
@@ -153,6 +151,7 @@ public class Logic {
         return (ArrayList<Task>) list;
     }
 
+    // mark uses this version of skip so that the undoStack does not take in skip command
     public void skipForMark(int index) {
         if (list.get(index) instanceof RecurringTask) {
             commandMap.get(Commands.SKIP_TASK).execute(list, index);
@@ -180,6 +179,7 @@ public class Logic {
         }
     }
 
+    // recurring task requires cloning as the task remains in the list
     private void shiftCompletedTaskToArchivedList(String taskId) {
         int index = findTask(taskId, list);
         Task completedTask = list.get(index);

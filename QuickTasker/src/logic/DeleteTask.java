@@ -15,8 +15,7 @@ public class DeleteTask<E> implements Command<Object> {
     private static Stack<Task> redoTaskStack = new Stack<Task>();
 
     @Override
-    /* deletes a task from that index. exceptions are thrown for Junit tests.
-       please uncomment thrown exceptions for testing */
+    // deletes a task from that index. exceptions are thrown for Junit tests.
     public void execute(List<Task> list, Object op) {
         loggerDelete.log(Level.INFO, "Start logging for delete");
         try {
@@ -56,7 +55,7 @@ public class DeleteTask<E> implements Command<Object> {
     }
 
     @Override
-    // takes out the previous-deleted-but-added-back-in task,from the redoTaskStack and remove it from the list
+    // takes out the previous-deleted-but-added-back-in task from the redoTaskStack and remove it from the list
     public void redo(ArrayList<Task> list) {
         loggerDelete.log(Level.INFO, "Start redo process for deleting");
         try {
