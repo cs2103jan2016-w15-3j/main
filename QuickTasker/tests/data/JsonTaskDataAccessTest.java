@@ -39,6 +39,16 @@ public class JsonTaskDataAccessTest {
     @After
     public void tearDown() {
         dataHandler.reset();
+        cleanUpFiles();
+
+    }
+
+    private void cleanUpFiles() {
+        try {
+            Files.deleteIfExists(dataHandler.getFilePath());
+        } catch (IOException e) {
+            System.out.println("Cannot delete test files.");
+        }
     }
 
     @Test
@@ -149,6 +159,15 @@ public class JsonTaskDataAccessTest {
         dataHandler.setSavePath(WORKING_DIRECTORY + PATH_SEPARATOR + FILE_NAME);
         System.out.println(dataHandler.getFilePath());
         dataHandler.save(tasks);
+    }
+
+    @Test
+    public void canSaveFileToNewDir(){
+        String path = "c:" + PATH_SEPARATOR +"temp" +FILE_NAME;
+        List<Task> tasks = create30TasksWithDifferentAttributes();
+        dataHandler.setSavePath(path);
+        assertTrue(Files.exists(Paths.get(path)));
+
     }
 
     private Task readOneTask() {

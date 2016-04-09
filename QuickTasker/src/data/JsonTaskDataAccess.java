@@ -44,6 +44,7 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     private void createNewSaveFile() throws CreateSaveFileException {
         try {
+
             Files.createFile(pathOfSaveFile);
         } catch (IOException e) {
             throw new CreateSaveFileException();
