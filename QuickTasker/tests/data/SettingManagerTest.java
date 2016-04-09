@@ -2,13 +2,13 @@ package data;
 //@@author A0126077E
 
 import org.apache.commons.configuration2.Configuration;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class SettingManagerTest {
     private SettingManager settingManager;
@@ -17,6 +17,10 @@ public class SettingManagerTest {
     @Before
     public void setUp() throws Exception {
         settingManager = new SettingManager();
+    }
+    @After
+    public void tearDown(){
+        settingManager.resetDefaultSettings();
     }
 
     @Test
@@ -33,13 +37,13 @@ public class SettingManagerTest {
         assertFalse(settings.isEmpty());
     }
 
-    /**
-     * If critical properties does not exist (accidentally removed) , should be
-     * set default eg.saveFilePath = save.json
-     * <p>
-     * more thorough approach : look for customSettings.properties first, if
-     * critical ones does not exist, look for the default.properties
-     */
+    @Test
+    public void canChangeDirectorySettings(){
+        String expectedPath = "../desktop";
+        settingManager.setPathOfSaveFile(expectedPath);
+        assertEquals(expectedPath,settingManager.getPathOfSaveFile());
+    }
+
 
     private void removeEverythingFromSettingsFile() {
         Configuration settings = settingManager.getConfigs();
