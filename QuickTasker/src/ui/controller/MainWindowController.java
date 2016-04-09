@@ -1,5 +1,6 @@
 package ui.controller;
 
+import com.intellij.ide.ui.AppearanceOptionsTopHitProvider;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -20,10 +21,7 @@ import logic.Logic;
 import model.RecurringTask;
 import model.Task;
 import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
-import parser.Commands;
-import parser.RecurringParser;
-import parser.UpdateParser;
-import parser.UserInputParser;
+import parser.*;
 import ui.model.TaskListCell;
 
 import java.net.URL;
@@ -48,7 +46,8 @@ public class MainWindowController implements Initializable {
     private Stage stage;
     private final UserInputParser parser = new UserInputParser();
     private final UpdateParser updateParser = new UpdateParser();
-    private RecurringParser recurringParser = new RecurringParser();
+    private final RecurringParser recurringParser = new RecurringParser();
+    private final DirectoryParser directoryParser = new DirectoryParser();
     private final Logic operations = new Logic();
     private SearchHelper util = new SearchHelper();
 
@@ -76,6 +75,16 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_DELETE_CONFIRMED = "Task deleted from list.";
     private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
     private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
+    private static final String MESSAGE_FOR_CLEARING = "All tasks removed.";
+    private static final String MESSAGE_FOR_DATE_CHANGE = "Dates updated.";
+
+    private static final String ERROR_MESSAGE_FOR_WRONG_INDEX = "Index is invalid!";
+    private static final String ERROR_MESSAGE_FOR_INVALID_INDEX = "Index is not a number!";
+    private static final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
+    private static final String ERROR_MESSAGE_FOR_NO_TASK_ENTERED = "Did you enter a recurring task?";
+    private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
+    private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
+    private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "Did you make any operations before this?";
 
     public MainWindowController() {
 
@@ -144,7 +153,7 @@ public class MainWindowController implements Initializable {
         //if (inputValidator.checkAllValid(userInput)) {
         try {
             if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
-                createTask(userInput);
+                addTask(userInput);
             } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
                 deleteTask(userInput);
             } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
@@ -155,15 +164,13 @@ public class MainWindowController implements Initializable {
                 redoTask();
             } else if (parser.getCommand(userInput) == Commands.EXIT) {
                 operations.exit();
-            } else if (parser.getCommand(userInput) == Commands.SORT_TASK) {
-                sortTask(userInput);
             } else if (parser.getCommand(userInput) == Commands.MARK_TASK) {
                 markTaskCompleted(userInput);
             } else if (parser.getCommand(userInput) == Commands.RECUR_TASK) {
-                createRecurringTask(userInput);
+                addRecurringTask(userInput);
             } else if (parser.getCommand(userInput) == Commands.SKIP_TASK) {
                 skipRecurringTask(userInput);
-            } else if (userInput.contains("clear")) {
+            } else if (parser.getCommand(userInput) == Commands.CLEAR_TASK) {
                 clearTasks(userInput);
             } else if (userInput.contains("stop")) {
                 stopRecurringTask(userInput);
@@ -189,7 +196,7 @@ public class MainWindowController implements Initializable {
                     } catch (Exception e) {
                     }
                 });
-            } else if ("change directory".equals(userInput)) {
+            } else if (userInput.contains("changedir")) {
                 changeDirectory(userInput);
             } else if ("view archived".equals(userInput)) {
                 viewArchived();
@@ -256,7 +263,7 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Author A0130949Y.
+     * @@author A0130949Y.
      */
     private void markTaskCompleted(String userInput) throws Exception {
         try {
@@ -265,15 +272,10 @@ public class MainWindowController implements Initializable {
             operations.markAsDone(task.getId());
             task.setDone(true); // logic should handle
             tickCheckBoxForMark(task, i);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Index is invalid!", "", 1500, (b) -> {
-            }));
         } catch (NumberFormatException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Index is not a number", "", 1500, (b) -> {
-            }));
+            displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         } catch (IndexOutOfBoundsException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Index is invalid!", "", 1500, (b) -> {
-            }));
+            displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
         }
     }
 
@@ -308,7 +310,7 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Author A0130949Y.
+     * @@author A0130949Y.
      */
     private void viewTasks() {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
@@ -330,31 +332,23 @@ public class MainWindowController implements Initializable {
     private void clearTasks(String userInput) {
         plannerEntries = FXCollections.observableArrayList(operations.clear());
         afterOperation();
+        displayMessage(MESSAGE_FOR_CLEARING);
     }
-
-    private final String ERROR_MESSAGE_FOR_WRONG_INDEX = "Index is invalid!";
-    private final String ERROR_MESSAGE_FOR_INVALID_INDEX = "Index is not a number!";
-    private final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
 
     private void skipRecurringTask(String userInput) throws Exception {
         try {
             int index = parser.getTaskIndex(userInput);
             Task task = plannerEntries.get(index);
             if (!(task instanceof RecurringTask)) {
-                snackbar.fireEvent(
-                        new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK, "", 1500,
-                                (b) -> {
-                                }));
+               displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
             }
             plannerEntries = FXCollections.observableArrayList(operations.skip(index));
+            displayMessage(MESSAGE_FOR_DATE_CHANGE);
             afterOperation();
         } catch (IndexOutOfBoundsException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_WRONG_INDEX, "", 1500, (b) -> {
-            }));
+           displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         } catch (NumberFormatException e) {
-            snackbar.fireEvent(
-                    new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_INVALID_INDEX, "", 1500, (b) -> {
-                    }));
+            displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
         }
     }
 
@@ -368,8 +362,7 @@ public class MainWindowController implements Initializable {
             plannerEntries = FXCollections.observableArrayList(operations.redo());
             afterOperation();
         } catch (EmptyStackException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Error with redo", "", 1500, (b) -> {
-            }));
+           displayMessage(ERROR_MESSAGE_FOR_REDO_ERROR);
         }
     }
 
@@ -378,8 +371,7 @@ public class MainWindowController implements Initializable {
             plannerEntries = FXCollections.observableArrayList(operations.undo());
             afterOperation();
         } catch (EmptyStackException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Error with undo", "", 1500, (b) -> {
-            }));
+            displayMessage(ERROR_MESSAGE_FOR_UNDO_ERROR);
         }
     }
 
@@ -399,8 +391,7 @@ public class MainWindowController implements Initializable {
             // }
             printedPlanner.getSelectionModel().clearSelection();
             afterOperation();
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Task updated.", "", 1500, (b) -> {
-            }));
+            displayMessage(MESSAGE_EDIT_CONFIRMED);
         } catch (IndexOutOfBoundsException e) {
             snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_WRONG_INDEX, "", 1500, (b) -> {
             }));
@@ -415,11 +406,9 @@ public class MainWindowController implements Initializable {
         try {
             int taskIndex;
             taskIndex = parser.getTaskIndex(userInput);
-            // plannerEntries.remove(taskIndex);
             plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
             afterOperation();
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Task Removed.", "", 1500, (b) -> {
-            }));
+            displayMessage(MESSAGE_DELETE_CONFIRMED);
         } catch (NumberFormatException e) {
             snackbar.fireEvent(
                     new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_INVALID_INDEX, "", 1500, (b) -> {
@@ -433,49 +422,44 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    private static final String MESSAGE_FOR_REMOVING_TASK = "Task removed";
     private void changeDirectory(String userInput) throws Exception {
-        operations.changeDir(userInput);
+        operations.changeDir(directoryParser.getFilePath(userInput));
+        afterOperation();
     }
 
-    private void createTask(String userInput) throws Exception {
+    private void addTask(String userInput) throws Exception {
         try {
-            Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
-                    parser.getEndDate(userInput), parser.getStartTime(userInput),
-                    parser.getEndTime(userInput));
+            Task newTask = makeTask(userInput);
+            if (isTimeSlotClashing(newTask)) {
+                displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
+            }
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
             afterOperation();
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("New task created", "", 1500, (b) -> {
-            }));
+            displayMessage(MESSAGE_ADD_CONFIRMED);
             printedPlanner.scrollTo(printedPlanner.getItems().size() - 1);
-        } catch (NullArgumentException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Task cannot be null!", "", 1500, (b) -> {
-            }));
         } catch (IndexOutOfBoundsException e) {
-            snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Did you enter a task?", "", 1500, (b) -> {
-            }));
+            displayMessage(ERROR_MESSAGE_FOR_EMPTY_TASK);
         }
     }
 
-    private void createRecurringTask(String userInput) throws Exception {
+    private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
+
+    private void addRecurringTask(String userInput) throws Exception {
         try {
-            RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
-                    recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
-                    recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
-                    recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
+            RecurringTask newTask = makeRecurringTask(userInput);
+            if (isTimeSlotClashing(newTask)) {
+                displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
+            }
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
             afterOperation();
+            displayMessage(MESSAGE_ADD_CONFIRMED);
         } catch (IndexOutOfBoundsException e) {
-            snackbar.fireEvent(
-                    new JFXSnackbar.SnackbarEvent("Did you enter a recurring task?", "", 1500, (b) -> {
-                    }));
-        } catch (NullArgumentException e) {
-            snackbar.fireEvent(
-                    new JFXSnackbar.SnackbarEvent("Recurring task cannot be null!", "", 1500, (b) -> {
-                    }));
+            displayMessage(ERROR_MESSAGE_FOR_NO_TASK_ENTERED);
         } catch (NumberFormatException e) {
-            snackbar.fireEvent(
-                    new JFXSnackbar.SnackbarEvent("Did you enter a recurring task?", "", 1500, (b) -> {
-                    }));
+            displayMessage(ERROR_MESSAGE_FOR_NO_TASK_ENTERED);
+        } catch (NullPointerException e) {
+            displayMessage(ERROR_MESSAGE_FOR_EMPTY_TASK);
         }
     }
 
@@ -486,14 +470,17 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate, LocalTime startTime,
-            LocalTime endTime) throws Exception {
-        return new Task(taskName, startDate, dueDate, startTime, endTime);
+    private Task makeTask(String userInput) throws Exception {
+        return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput),
+                parser.getEndDate(userInput), parser.getStartTime(userInput),
+                parser.getEndTime(userInput));
     }
 
-    private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
-            String type, LocalTime startTime, LocalTime endTime, int numberToRecur) throws Exception {
-        return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
+    private RecurringTask makeRecurringTask(String userInput) throws Exception {
+        return new RecurringTask(recurringParser.getTaskName(userInput),
+                recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
+                recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
+                recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
     }
 
     private Task makeTaskForUpdate(String userInput) {
@@ -501,9 +488,74 @@ public class MainWindowController implements Initializable {
                 updateParser.getEndDate(userInput), updateParser.getStartTime(userInput), updateParser.getEndTime(userInput));
     }
 
+    private boolean isTimeSlotClashing(Task task) {
+        boolean timeSlotsAreClashing = false;
+        if (task.getEndTime() == null) {
+            return timeSlotsAreClashing;
+        } else {
+            for (Task taskInList : plannerEntries) {
+                if (taskInList.getDueDate().equals(task.getDueDate()) && taskInList.getStartDate().equals(task.getStartDate())) {
+                    if (taskInList.getEndTime() != null && taskInList.getStartTime() != null) {
+                        if (endTimeWithinStartAndEnd(task, timeSlotsAreClashing, taskInList)) {
+                            timeSlotsAreClashing = true;
+                            break;
+                        }
+
+                        if (endTimeWithinStartAndEnd(taskInList, timeSlotsAreClashing, task)) {
+                            timeSlotsAreClashing = true;
+                            break;
+                        }
+
+                        if (startTimeWithinStartAndEnd(task, timeSlotsAreClashing, taskInList)) {
+                            timeSlotsAreClashing = true;
+                            break;
+                        }
+
+                        if (startTimeWithinStartAndEnd(taskInList, timeSlotsAreClashing, task)) {
+                            timeSlotsAreClashing = true;
+                            break;
+                        }
+                    } else if (taskInList.getEndTime() != null) {
+                        if (endTimeWithinStartAndEnd(task, timeSlotsAreClashing, taskInList)) {
+                            timeSlotsAreClashing = true;
+                            break;
+                        }
+
+                        if (endTimeWithinStartAndEnd(taskInList, timeSlotsAreClashing, task)) {
+                            timeSlotsAreClashing = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return timeSlotsAreClashing;
+    }
+
+    private boolean startTimeWithinStartAndEnd(Task task, boolean timeSlotsAreClashing, Task taskInList) {
+        if (task.getStartTime() != null) {
+            timeSlotsAreClashing = task.getStartTime().isAfter(taskInList.getStartTime().minusHours(1)) &&
+                    task.getEndTime().isBefore((taskInList.getEndTime().plusHours(1)));
+        }
+        return timeSlotsAreClashing;
+    }
+
+    private boolean endTimeWithinStartAndEnd(Task task, boolean timeSlotsAreClashing, Task taskInList) {
+        if (task.getEndTime() != null) {
+            timeSlotsAreClashing = task.getEndTime().isAfter(taskInList.getStartTime().minusHours(1)) &&
+                    task.getEndTime().isBefore(taskInList.getEndTime().plusHours(1));
+        }
+        return timeSlotsAreClashing;
+    }
+
     /**
      * Author kenan.
      */
+    private void displayMessage(String message) {
+        snackbar.fireEvent(
+                new JFXSnackbar.SnackbarEvent(message, "", 1500, (b) -> {
+                }));
+    }
     private void refresh() {
         printedPlanner.setItems(plannerEntries);
     }

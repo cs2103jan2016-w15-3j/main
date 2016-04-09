@@ -27,6 +27,7 @@ public class UpdateTask<E> implements Command<Object> {
             assert (taskIndex >= 0);
             undoStackTask.push(list.get(taskIndex));
             executeUpdate(taskIndex, list);
+            loggerUpdate.log(Level.INFO, "End");
         } catch (AssertionError e) {
             loggerUpdate.log(Level.WARNING, "Cannot update negative index");
             throw new IllegalArgumentException();
@@ -59,7 +60,7 @@ public class UpdateTask<E> implements Command<Object> {
         }
 
         if (updatedTask.getDueDate().equals(LocalDate.MAX)
-                && !(list.get(taskIndex).getDueDate().equals(LocalDate.MIN))) {
+                && !(list.get(taskIndex).getDueDate().equals(LocalDate.MAX))) {
             updatedTask.setEndDate(list.get(taskIndex).getDueDate());
         }
 
@@ -86,13 +87,11 @@ public class UpdateTask<E> implements Command<Object> {
     }
 
     private Task checkAttributesForTask(Task updatedTask, int taskIndex, List<Task> list) {
-        if (updatedTask.getStartDate() == LocalDate.MIN
-                && list.get(taskIndex).getStartDate() != LocalDate.MIN) {
+        if (updatedTask.isStartDateEmpty() && !list.get(taskIndex).isStartDateEmpty()) {
             updatedTask.setStartDate(list.get(taskIndex).getStartDate());
         }
 
-        if (updatedTask.getDueDate() == LocalDate.MIN
-                && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
+        if (updatedTask.isDueDateEmpty() && !list.get(taskIndex).isDueDateEmpty()) {
             updatedTask.setEndDate(list.get(taskIndex).getDueDate());
         }
 

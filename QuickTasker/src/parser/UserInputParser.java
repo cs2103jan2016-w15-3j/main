@@ -199,13 +199,14 @@ public class UserInputParser {
 		ArrayList<Integer> indicesTime = parser.indicesToDetermineTime(input);
 
 		if (indicesTime.size() == 0) {
-			return;
+			startTime = null;
+			endTime = null;
 		}
 		ArrayList<LocalTime> localTimes = parser.parseTime(input, indicesTime);
 
 		if (indicesTime.size() == 1) {
-			startTime = localTimes.get(0);
-			endTime = null;
+			startTime = null;
+			endTime = localTimes.get(0);
 		}
 		if (indicesTime.size() == 2) {
 			startTime = localTimes.get(0);

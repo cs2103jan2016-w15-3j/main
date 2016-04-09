@@ -153,8 +153,6 @@ public class Task implements Comparable {
         return UUID.randomUUID().toString();
     }
 
-
-  //@@author A0130949
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
@@ -177,42 +175,72 @@ public class Task implements Comparable {
         return result;
     }
 
+    //@@author A0130949
     @Override public int compareTo(Object task){
         Task comparedTask = (Task) task;
-        int result = compareDueDate(this, comparedTask);
+        int result = compareDueDate(comparedTask, this);
 
         if (result == 0) {
-            result = compareStartDate(this, comparedTask);
+            result = compareStartDate(comparedTask, this);
         }
 
         if (result == 0) {
-            result = this.getName().compareTo(comparedTask.getName());
+            result = comparedTask.getName().compareTo(this.getName());
         }
-
         return result;
     }
 
     private int compareDueDate(Task task, Task comparedTask) {
-        if (task.getDueDate() == null && comparedTask.getDueDate() == null) {
+        if (task.isDueDateEmpty() && comparedTask.isDueDateEmpty()) {
+            System.out.println(task.getName() + " due is empty");
             return 0;
-        } else if (task.getDueDate() != null && comparedTask.getDueDate() == null) {
+        } else if (!task.isDueDateEmpty() && comparedTask.isDueDateEmpty()) {
             return 1;
-        } else if (task.getDueDate() == null && comparedTask.getDueDate() != null) {
+        } else if (task.isDueDateEmpty() && !comparedTask.isDueDateEmpty()) {
             return -1;
         } else {
-            return comparedTask.getDueDate().compareTo(this.getDueDate());
+            return comparedTask.getDueDate().compareTo(task.getDueDate());
         }
     }
 
     private int compareStartDate(Task task, Task comparedTask) {
-        if (task.getStartDate() == null && comparedTask.getStartDate() == null) {
+        if (task.isStartDateEmpty() && comparedTask.isStartDateEmpty()) {
+            System.out.println(task.getName()+" add Start is empty");
             return 0;
-        } else if (task.getStartDate() != null && comparedTask.getStartDate() == null) {
+        } else if (!task.isStartDateEmpty() && comparedTask.isStartDateEmpty()) {
             return 1;
-        } else if (task.getStartDate() == null && comparedTask.getStartDate() != null) {
+        } else if (task.isStartDateEmpty() && !comparedTask.isStartDateEmpty()) {
             return -1;
         } else {
-            return comparedTask.getStartDate().compareTo(this.getStartDate());
+            return task.getStartDate().compareTo(comparedTask.getStartDate());
         }
+    }
+
+    public boolean isDueDateEmpty() {
+        if (this.getDueDate() == null) {
+            return true;
+        } else if (this.getDueDate().equals(LocalDate.MIN)) {
+            return true;
+        } else if (this.getDueDate().equals(LocalDate.MAX)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isStartDateEmpty() {
+        if (this.getStartDate() == null) {
+            return true;
+        } else if (this.getStartDate().equals(LocalDate.MIN)) {
+            return true;
+        } else if (this.getStartDate().equals(LocalDate.MAX)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isDatesInvalid() {
+        return this.getStartDate().isAfter(this.getDueDate());
     }
 }

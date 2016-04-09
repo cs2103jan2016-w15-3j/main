@@ -30,8 +30,12 @@ public class UpdateParser extends UserInputParser {
 			setTime(userCommand);
 			userCommand = dateTimeParser.removeTime(userCommand);
 			determineLengthOfInput();
-			isEnglishDate();
-			setDate(numToUse, lengthOfInput);
+			try {
+				isEnglishDate();
+				setDate(numToUse, lengthOfInput);
+			} catch (Exception e) {
+
+			}
 			userCommand = dateTimeParser.removeDate(userCommand);
 			determineLengthOfInput();
 			setTaskNameForUpdates();
