@@ -1,4 +1,3 @@
 package ui.controller;
 
-public class CommandBoxController {
-}
+public class CommandBoxController {}

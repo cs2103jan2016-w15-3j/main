@@ -95,7 +95,8 @@ public class SettingManager {
     private void loadSettings() throws LoadSettingsException {
         Parameters parameters = new Parameters();
         PropertiesBuilderParameters propertiesParams = parameters.properties()
-                .setFileName("settings.properties").setEncoding("ISO-8859-1");
+                                                                 .setFileName("settings.properties")
+                                                                 .setEncoding("ISO-8859-1");
         FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
                 PropertiesConfiguration.class).configure(propertiesParams);
         builder.setAutoSave(true);

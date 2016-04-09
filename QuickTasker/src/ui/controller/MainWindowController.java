@@ -127,15 +127,14 @@ public class MainWindowController implements Initializable {
                 performOperations(userInput);
             } catch (UIOperationException e) {
                 logger.log(Level.SEVERE,
-                        "Error occured at " + getClass().getName() + " within performOperation method.\n");
+                           "Error occured at " + getClass().getName() + " within performOperation method.\n");
                 e.printStackTrace();
 
             }
         }
     }
 
-    private class UIOperationException extends RuntimeException {
-    }
+    private class UIOperationException extends RuntimeException {}
 
     private void performOperations(String userInput) throws UIOperationException {
 /*
@@ -343,8 +342,8 @@ public class MainWindowController implements Initializable {
             if (!(task instanceof RecurringTask)) {
                 snackbar.fireEvent(
                         new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK, "", 1500,
-                                (b) -> {
-                                }));
+                                                      (b) -> {
+                                                      }));
             }
             plannerEntries = FXCollections.observableArrayList(operations.skip(index));
             afterOperation();
@@ -389,8 +388,8 @@ public class MainWindowController implements Initializable {
             Task task = plannerEntries.get(indexOfTask);
             printedPlanner.getSelectionModel().select(indexOfTask);
             Task newTask = makeTask(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
-                    updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
-                    updateParser.getEndTime(userInput));
+                                    updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
+                                    updateParser.getEndTime(userInput));
             plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
             // }
             printedPlanner.getSelectionModel().clearSelection();
@@ -436,8 +435,8 @@ public class MainWindowController implements Initializable {
     private void createTask(String userInput) throws Exception {
         try {
             Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
-                    parser.getEndDate(userInput), parser.getStartTime(userInput),
-                    parser.getEndTime(userInput));
+                                    parser.getEndDate(userInput), parser.getStartTime(userInput),
+                                    parser.getEndTime(userInput));
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
             afterOperation();
             snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("New task created", "", 1500, (b) -> {
@@ -455,9 +454,12 @@ public class MainWindowController implements Initializable {
     private void createRecurringTask(String userInput) throws Exception {
         try {
             RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
-                    recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
-                    recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
-                    recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
+                                                      recurringParser.getTaskStartDate(userInput),
+                                                      recurringParser.getTaskEndDate(userInput),
+                                                      recurringParser.getRecurDuration(userInput),
+                                                      recurringParser.getTaskStartTime(userInput),
+                                                      recurringParser.getTaskEndTime(userInput),
+                                                      recurringParser.getNumToRecur(userInput));
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
             afterOperation();
         } catch (IndexOutOfBoundsException e) {
@@ -483,12 +485,13 @@ public class MainWindowController implements Initializable {
     }
 
     private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate, LocalTime startTime,
-            LocalTime endTime) throws Exception {
+                          LocalTime endTime) throws Exception {
         return new Task(taskName, startDate, dueDate, startTime, endTime);
     }
 
     private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
-            String type, LocalTime startTime, LocalTime endTime, int numberToRecur) throws Exception {
+                                            String type, LocalTime startTime, LocalTime endTime,
+                                            int numberToRecur) throws Exception {
         return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
     }
 
@@ -505,7 +508,7 @@ public class MainWindowController implements Initializable {
             TaskListCell listCell = new TaskListCell();
             printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
                 Thread.currentThread()
-                        .setUncaughtExceptionHandler((t, e) -> Platform.runLater(System.out::println));
+                      .setUncaughtExceptionHandler((t, e) -> Platform.runLater(System.out::println));
                 if (listCell.getTask().equals(event.getTask())) listCell.getCheckBox().fire();
                 listCell.removeEventFilter(TASK_COMPLETE, null);
             }).start());

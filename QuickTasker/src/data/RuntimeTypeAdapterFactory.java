@@ -77,7 +77,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
                         TypeAdapter<R> delegate = (TypeAdapter<R>) labelToDelegate.get(label);
                 if (delegate == null) {
                     throw new JsonParseException("cannot deserialize " + baseType + " subtype named " + label
-                            + "; did you forget to register a subtype?");
+                                                         + "; did you forget to register a subtype?");
                 }
                 return delegate.fromJsonTree(jsonElement);
             }
@@ -90,12 +90,13 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
                         TypeAdapter<R> delegate = (TypeAdapter<R>) subtypeToDelegate.get(srcType);
                 if (delegate == null) {
                     throw new JsonParseException("cannot serialize " + srcType.getName()
-                            + "; did you forget to register a subtype?");
+                                                         + "; did you forget to register a subtype?");
                 }
                 JsonObject jsonObject = delegate.toJsonTree(value).getAsJsonObject();
                 if (jsonObject.has(typeFieldName)) {
                     throw new JsonParseException("cannot serialize " + srcType.getName()
-                            + " because it already defines a field named " + typeFieldName);
+                                                         + " because it already defines a field named "
+                                                         + typeFieldName);
                 }
                 JsonObject clone = new JsonObject();
                 clone.add(typeFieldName, new JsonPrimitive(label));

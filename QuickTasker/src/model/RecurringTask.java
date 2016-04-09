@@ -14,7 +14,7 @@ public class RecurringTask extends Task {
     int numberToRecur;
 
     public RecurringTask(String taskName, LocalDate startDate, LocalDate endDate, String recurType,
-            LocalTime startTime, LocalTime endTime, int numberToRecur) {
+                         LocalTime startTime, LocalTime endTime, int numberToRecur) {
         super(taskName, startDate, endDate, startTime, endTime);
         this.recurType = recurType;
         this.numberToRecur = numberToRecur;
@@ -108,7 +108,7 @@ public class RecurringTask extends Task {
 
     public Task stopRecurring() {
         Task newTask = new Task(this.getName(), this.getStartDate(), this.getDueDate(), this.getStartTime(),
-                this.getEndTime());
+                                this.getEndTime());
         return newTask;
     }
 

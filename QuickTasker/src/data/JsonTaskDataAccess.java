@@ -32,7 +32,7 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     private Path pathOfSaveFile;
 
     public JsonTaskDataAccess() {
-         
+
         initialize();
     }
 
@@ -55,8 +55,7 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         Gson gson = getGson();
         List<Task> tasks;
         try (BufferedReader reader = Files.newBufferedReader(pathOfSaveFile)) {
-            tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {
-            }.getType());
+            tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {}.getType());
             reader.close();
             return tasks != null ? tasks : new ArrayList<>();
         } catch (IOException e) {
@@ -66,9 +65,13 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     private Gson getGson() {
         return Converters.registerLocalDateTime(new GsonBuilder().setPrettyPrinting()
-                .registerTypeAdapterFactory(
-                        RuntimeTypeAdapterFactory.of(Task.class).registerSubtype(Task.class)
-                                .registerSubtype(RecurringTask.class))).create();
+                                                                 .registerTypeAdapterFactory(
+                                                                         RuntimeTypeAdapterFactory
+                                                                                 .of(Task.class)
+                                                                                 .registerSubtype(Task.class)
+                                                                                 .registerSubtype(
+                                                                                         RecurringTask.class)))
+                         .create();
     }
 
     @Override
@@ -120,8 +123,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     }
 
     // internal method for unit test
-    protected void setSavePath(String path){
-       this.pathOfSaveFile= Paths.get(path);
+    protected void setSavePath(String path) {
+        this.pathOfSaveFile = Paths.get(path);
     }
 
 }
