@@ -14,12 +14,14 @@ import com.jfoenix.controls.JFXRippler;
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToolbar;
+import com.sun.tracing.dtrace.ProviderAttributes;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
@@ -83,26 +85,32 @@ public class MainWindowController implements Initializable {
 	private JFXRippler headerTitleContainer;
 	@FXML
 	private Label headerTitle;
+	private HelpWindow helpWindow;
+	//private Stage helpStage;
 	
 	// Kenan do not rm this line below this thank you
+	// @@author A0133333U
 	private Text help;
 	private ObservableList<Task> plannerEntries;
+	private Stage helpStage;
+	private Label title;
 	/**
 	 * Display messages as visual feedback for users.
 	 */
-	private static final String MESSAGE_ADD_CONFIRMED = "Task added to list.";
-	private static final String MESSAGE_DELETE_CONFIRMED = "Task deleted from list.";
-	private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
-	private static final String MESSAGE_FOR_CLEARING = "All tasks removed.";
-	private static final String MESSAGE_FOR_DATE_CHANGE = "Dates updated.";
-	private static final String ERROR_MESSAGE_FOR_WRONG_INDEX = "Index is invalid!";
-	private static final String ERROR_MESSAGE_FOR_INVALID_INDEX = "Index is not a number!";
+	private static final String MESSAGE_ADD_CONFIRMED = "Your task is added to QuickTasker.";
+	private static final String MESSAGE_DELETE_CONFIRMED = "Your task is deleted from QuickTasker.";
+	private static final String MESSAGE_EDIT_CONFIRMED = "Your task is updated in QuickTasker.";
+	private static final String MESSAGE_FOR_CLEARING = "All tasks are removed from QuickTasker.";
+	private static final String MESSAGE_FOR_DATE_CHANGE = "Dates updated in QuickTasker";
+	private static final String ERROR_MESSAGE_FOR_WRONG_INDEX = "The index you entered is invalid!";
+	private static final String ERROR_MESSAGE_FOR_INVALID_INDEX = "This index is not a number!";
 	private static final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
 	private static final String ERROR_MESSAGE_FOR_NO_TASK_ENTERED = "Did you enter a recurring task?";
 	private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
 	private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
-	private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "Did you make any operations before this?";
+	private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "No operations to undo before this.";
 	private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
+	private static final String LABEL_TITLE = "Help Here!";
 
 	public MainWindowController() {
 
@@ -139,8 +147,7 @@ public class MainWindowController implements Initializable {
 		this.main = main;
 	}
 
-	// this method will return a boolean value of true or false, depending on
-	// the input
+	// this method will return a boolean value of true or false, depending on the input
 	protected boolean isEmptyInput(String input) {
 		return input == null || input.isEmpty() || "".equals(input.trim());
 	}
@@ -169,6 +176,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	// method takes in user input and passes to parser to determine which method to execute
+	// @@author
 	private void performOperations(String userInput) throws UIOperationException {
 		/*
 		 * InputValidator inputValidator = new InputValidator();
@@ -201,24 +209,31 @@ public class MainWindowController implements Initializable {
 				clearTasks(userInput);
 			} else if (userInput.contains("stop")) {
 				stopRecurringTask(userInput);
-			} else if (userInput.contains("-help")) {
+				// @@author A0133333U
+			} else if (userInput.equalsIgnoreCase("help")) {
 				showHelp();
-			} else if ("show today".equals(userInput) || "view today".equals(userInput)) {
+				// @@author A0133333U
+			} else if ("show today".equalsIgnoreCase(userInput) || "view today".equalsIgnoreCase(userInput)) {
 				showToday();
-			} else if ("show tomorrow".equals(userInput) || "view tomorrow".equals(userInput)) {
+				// @@author A0133333U
+			} else if ("show tomorrow".equalsIgnoreCase(userInput) || "view tomorrow".equalsIgnoreCase(userInput)) {
 				showTomorrow();
 				showAll();
-			} else if ("view floating".equals(userInput) || "show floating".equals(userInput)) {
+				// @@author A0133333U
+			} else if ("view floating".equalsIgnoreCase(userInput) || "show floating".equalsIgnoreCase(userInput)) {
 				showFloating();
+				// @@author A0133333U
 			} else if ("show all".equals(userInput) || "view all".equals(userInput)) {
 				showAll();
 			} else if (userInput.contains("theme")) {
 				changeTheme(userInput);
 			} else if (userInput.contains("changedir")) {
 				changeDirectory(userInput);
-			} else if ("view archived".equals(userInput)) {
+				// @@author A0133333U
+			} else if ("view archived".equalsIgnoreCase(userInput)) {
 				viewArchived();
-			} else if ("back".equals(userInput)) {
+				// @@author A0133333U
+			} else if ("back".equalsIgnoreCase(userInput)) {
 				viewTasks();
 			}
 		} catch (Exception e) {
@@ -278,18 +293,27 @@ public class MainWindowController implements Initializable {
 	/*
 	 * @@author A013333U
 	 */
-	private void showHelp() {
-		Text helpText = new Text("Hi there! Need any help? See below!");
-		HBox root = new HBox();
-		root.setStyle("-fx-background-color: yellow;");
-		root.getChildren().add(helpText);
-		
-		Scene scene = new Scene(root, 100, 200);
+
+	
+	private void showHelp() {		
+		HBox hb = new HBox();
+		Text text = new Text("hi");
+		//boolean isOn = false;
+	    hb.getStyleClass().add("hbox");
+	    //initTitle();
+		hb.getChildren().add(text);
+		Scene scene = new Scene(hb, 400, 400);
 		Stage helpStage = new Stage();
+		//this.helpWindow.show(this.helpStage);
 		helpStage.setScene(scene);
-		helpStage.setTitle("Help");
+		//helpStage.setTitle("Help");
 		helpStage.show();
 		commandBox.clear();
+	}
+	
+	private void initTitle(){
+		this.title = new Label(LABEL_TITLE);
+		this.title.setAlignment(Pos.CENTER);
 	}
 
 	/**

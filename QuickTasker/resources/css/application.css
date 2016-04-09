@@ -29,8 +29,12 @@
     -fx-border-width:0 4 4 4;
 }
 
+/* HelpBox */
 
-
+.hbox {
+    -fx-background-color: #502576;
+    -fx-spacing: 10;
+}
 /* List View */
 
 
@@ -79,11 +83,11 @@
 .task-name{
     -fx-font-family : 'Roboto';
     -fx-font-weight:bold; 
-    -fx-padding:10px;
+    -fx-padding: 10px;
 }
 
 .jfx-list-cell-content-container{
-    -fx-alignment:center-left;
+    -fx-alignment: center-left;
 }
 
 .jfx-list-cell-container> .label{
@@ -107,18 +111,16 @@
    -fx-rippler-fill : transparent;
 }
 
-.task-check-box{
-
-
-      -fx-unchecked-color: BLACK;
-      -fx-checked-color : RED;
+.task-check-box { 
+      -fx-unchecked-colour: BLACK;
+      -fx-checked-color : GREEN;
       -fx-font-weight : BOLD;
 }
 
 /* Header */
 
 .title-label{
-	-fx-font-size: 16.0px;
+	-fx-font-size: 20.0px;
 	-fx-padding	: 10.0px;
 	-fx-text-fill: rgba(0.0, 0.0, 0.0, 0.87);
 }
@@ -206,6 +208,7 @@
 	-fx-font-size: 10.0px;
 	-fx-text-fill:#f44336;
 }
+
 
 
 
