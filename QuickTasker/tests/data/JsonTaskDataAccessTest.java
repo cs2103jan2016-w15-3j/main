@@ -26,11 +26,14 @@ public class JsonTaskDataAccessTest {
     private JsonTaskDataAccess dataHandler;
     private SettingManager settings;
     private List<Task> plannerNotebook;
+    public static final String WORKING_DIRECTORY = System.getProperty("user.dir");
+    public static final String PATH_SEPARATOR =  System.getProperty("file.separator");
+    public static final String FILE_NAME = "test.json";
 
     @Before
     public void setUp() throws Exception {
         settings = new SettingManager();
-        settings.setPathOfSaveFile("test.json");
+        settings.setPathOfSaveFile(FILE_NAME);
         plannerNotebook = new ArrayList<>();
         dataHandler = new JsonTaskDataAccess();
     }
@@ -46,10 +49,6 @@ public class JsonTaskDataAccessTest {
         assertNotNull(dataHandler.getFilePath());
     }
 
-    @Test
-    public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
-
-    }
 
     @Test
     public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
@@ -150,10 +149,9 @@ public class JsonTaskDataAccessTest {
     @Test
     public void saveSaveFileToExistingDirectory() {
         List<Task> tasks = create30TasksWithDifferentAttributes();
-        Path path = Paths.get("c:/windows");
-        System.out.println(path);
-        //dataHandler.setSavePath(path);
-        //dataHandler.save(tasks);
+        dataHandler.setSavePath(WORKING_DIRECTORY + PATH_SEPARATOR + FILE_NAME);
+        System.out.println(dataHandler.getFilePath());
+        dataHandler.save(tasks);
     }
 
     private Task readOneTask() {
