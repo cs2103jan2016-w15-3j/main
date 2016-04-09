@@ -441,16 +441,11 @@ public class MainWindowController implements Initializable {
 
     private void addRecurringTask(String userInput) throws Exception {
         try {
-            System.out.println("AAA " + userInput);
-
             RecurringTask newTask = makeRecurringTask(userInput);
-            System.out.println("BBB");
             if (isTimeSlotClashing(newTask)) {
                 displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
             }
-            System.out.println("CCC");
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
-            System.out.println("DDD");
             afterOperation();
             displayMessage(MESSAGE_ADD_CONFIRMED);
         } catch (IndexOutOfBoundsException e) {

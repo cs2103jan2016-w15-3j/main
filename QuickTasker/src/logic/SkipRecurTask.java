@@ -35,36 +35,111 @@ public class SkipRecurTask<E> implements Command<Object> {
         loggerSkip.log(Level.INFO, "End");
     }
 
-    protected void moveDateForward(RecurringTask task) {
-        assert (task != null);
-        task.adjustDate();
-        if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
-            adjustDates(task);
-        } else {
-            task.setStartDate(task.getStartDate().plusDays(task.getNumberToRecur()));
-            task.setEndDate(task.getDueDate().plusDays(task.getNumberToRecur()));
-        }
-    }
-
-    private void adjustDates(RecurringTask task) {
-        if (!task.getDueDate().equals(LocalDate.MIN)) {
-            task.setEndDate(task.getDueDate().plusWeeks(task.getNumberToRecur()));
-        }
-
-        if (!task.getStartDate().equals(LocalDate.MIN)) {
-            task.setStartDate(task.getStartDate().plusWeeks(task.getNumberToRecur()));
-        }
-    }
-
     protected void moveDateBackward(RecurringTask task) {
         assert (task != null);
         task.adjustDate();
         if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
-            task.setStartDate(task.getStartDate().minusWeeks(task.getNumberToRecur()));
-            task.setEndDate(task.getDueDate().minusWeeks(task.getNumberToRecur()));
+            adjustDatesBackwardForWeeks(task);
+        } else if (task.getRecurType().equals("day") || task.getRecurType().equals("days")){
+            adjustDatesBackwardForDays(task);
+        } else if (task.getRecurType().equals("month") || task.getRecurType().equals("months")) {
+            adjustDatesBackwardForMonths(task);
         } else {
-            task.setStartDate(task.getStartDate().minusDays(task.getNumberToRecur()));
+            adjustDatesBackwardForYears(task);
+        }
+    }
+
+    protected void moveDateForward(RecurringTask task) {
+        assert (task != null);
+        task.adjustDate();
+        if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
+            adjustDatesForwardForWeeks(task);
+        } else if (task.getRecurType().equals("day") || task.getRecurType().equals("days")){
+            adjustDatesForwardForDays(task);
+        } else if (task.getRecurType().equals("month") || task.getRecurType().equals("months")) {
+            adjustDatesForwardForMonths(task);
+        } else {
+            adjustDatesForwardForYears(task);
+        }
+    }
+
+    private void adjustDatesForwardForWeeks(RecurringTask task) {
+        if (!task.isDueDateEmpty()) {
+            task.setEndDate(task.getDueDate().plusWeeks(task.getNumberToRecur()));
+        }
+
+        if (!task.isStartDateEmpty()) {
+            task.setStartDate(task.getStartDate().plusWeeks(task.getNumberToRecur()));
+        }
+    }
+
+    private void adjustDatesForwardForDays(RecurringTask task) {
+        if (!task.isDueDateEmpty()) {
+            task.setEndDate(task.getDueDate().plusDays(task.getNumberToRecur()));
+        }
+
+        if (!task.isStartDateEmpty()) {
+            task.setStartDate(task.getStartDate().plusDays(task.getNumberToRecur()));
+        }
+    }
+
+    private void adjustDatesForwardForMonths(RecurringTask task) {
+        if (!task.isDueDateEmpty()) {
+            task.setEndDate(task.getDueDate().plusMonths(task.getNumberToRecur()));
+        }
+
+        if (!task.isStartDateEmpty()) {
+            task.setStartDate(task.getStartDate().plusMonths(task.getNumberToRecur()));
+        }
+    }
+
+    private void adjustDatesForwardForYears(RecurringTask task) {
+        if (!task.isDueDateEmpty()) {
+            task.setEndDate(task.getDueDate().plusYears(task.getNumberToRecur()));
+        }
+
+        if (!task.isStartDateEmpty()) {
+            task.setStartDate(task.getStartDate().plusYears(task.getNumberToRecur()));
+        }
+    }
+
+    private void adjustDatesBackwardForWeeks(RecurringTask task) {
+        if (!task.isDueDateEmpty()) {
+            task.setEndDate(task.getDueDate().minusWeeks(task.getNumberToRecur()));
+        }
+
+        if (!task.isStartDateEmpty()) {
+            task.setStartDate(task.getStartDate().minusWeeks(task.getNumberToRecur()));
+        }
+    }
+
+    private void adjustDatesBackwardForDays(RecurringTask task) {
+        if (!task.isDueDateEmpty()) {
             task.setEndDate(task.getDueDate().minusDays(task.getNumberToRecur()));
+        }
+
+        if (!task.isStartDateEmpty()) {
+            task.setStartDate(task.getStartDate().minusDays(task.getNumberToRecur()));
+        }
+    }
+
+    private void adjustDatesBackwardForMonths(RecurringTask task) {
+        if (!task.isDueDateEmpty()) {
+            task.setEndDate(task.getDueDate().minusMonths(task.getNumberToRecur()));
+        }
+
+        if (!task.isStartDateEmpty()) {
+            task.setStartDate(task.getStartDate().minusMonths(task.getNumberToRecur()));
+        }
+    }
+
+    private void adjustDatesBackwardForYears(RecurringTask task) {
+        if (!task.isDueDateEmpty()) {
+            task.setEndDate(task.getDueDate().minusYears(task.getNumberToRecur()));
+        }
+
+        if (!task.isStartDateEmpty()) {
+            task.setStartDate(task.getStartDate().minusYears(task.getNumberToRecur()));
         }
     }
 
