@@ -1,11 +1,5 @@
 package parser;
-//@@author A0121558H
-
-/**
- * TODO
- * FIX "edge of tomorrow" tomorrow
- * scan from behind. stop once hit date
- */
+//@@author A0121558
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -71,14 +65,14 @@ public class UserInputParser {
 		System.out.println("parser endtime " + endTime);
 	}
 
-	public void setAttributesForGetCommands(String userInput) throws setAttributeException {
+	public void setAttributesForGetCommands(String userInput)/* throws setAttributeException*/ {
 		removeWhiteSpaces(userInput);
 		determineLengthOfInput();
 		command = userCommand[0];
 	}
 
-	public static class setAttributeException extends RuntimeException {
-	}
+	/*public static class setAttributeException extends RuntimeException {
+	}*/
 
 	public void setTaskName() {
 
@@ -123,7 +117,6 @@ public class UserInputParser {
 	}
 
 	public static LocalDate stringToLocalDate(String date) {
-
 		DateTimeParser parser = new DateTimeParser();
 		return parser.parseDate(date);
 	}
@@ -181,7 +174,7 @@ public class UserInputParser {
 			startDate = endDate = stringToLocalDate(userCommand[length - 2] + " " + userCommand[length - 1]);
 		} else if (numToSetDate == NUMBER_FLOATING) {
 			startDate = LocalDate.MIN;
-			endDate = LocalDate.MAX;// 
+			endDate = LocalDate.MAX;//
 		} else if (numToSetDate == NUMBER_TODAY) {
 			startDate = endDate = stringToLocalDate("today");
 		} else if (numToSetDate == NUMBER_ONLY_START) {
@@ -198,8 +191,8 @@ public class UserInputParser {
 		ArrayList<Integer> indicesTime = parser.indicesToDetermineTime(input);
 
 		if (indicesTime.size() == 0) {
-			startTime=LocalTime.MIN;
-			endTime=LocalTime.MAX;
+			startTime = LocalTime.MIN;
+			endTime = LocalTime.MAX;
 		}
 		ArrayList<LocalTime> localTimes = parser.parseTime(input, indicesTime);
 
@@ -214,33 +207,27 @@ public class UserInputParser {
 	}
 
 	protected void isEnglishDate() {
-		// 1 is tmr
-		// 2 is either next day or day after
-		// 3 is floating task
-		// 0 is two dates
-		// 4 is today
-		// 5 is only one date
 		DateTimeParser parser = new DateTimeParser();
 		String toCheck = userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1];
-		numToUse = NUMBER_NORMAL;
-
-		if (userCommand[lengthOfInput - 1].equals("tomorrow")) {
+		
+		if (userCommand[lengthOfInput - 1].equalsIgnoreCase("tomorrow")) {
 			numToUse = NUMBER_TOMORROW;
-		} else if (toCheck.equals("next day") || toCheck.equals("day after")) {
+		} else if (toCheck.equalsIgnoreCase("next day") || toCheck.equalsIgnoreCase("day after")) {
 			numToUse = NUMBER_NEXT_DAY_DAY_AFTER;
 		} else if (isFloating()) {
 			numToUse = NUMBER_FLOATING;
-		} else if (userCommand[lengthOfInput - 1].equals("today")) {
+		} else if (userCommand[lengthOfInput - 1].equalsIgnoreCase("today")) {
 			numToUse = NUMBER_TODAY;
 		} else if (parser.isDate(userCommand[lengthOfInput - 2]) && isStart(userCommand[lengthOfInput - 1])) {
 			numToUse = NUMBER_ONLY_START;
 		} else if (parser.isDate(userCommand[lengthOfInput - 2]) && isEnd(userCommand[lengthOfInput - 1])) {
 			numToUse = NUMBER_ONLY_END;
+		} else {
+			numToUse = NUMBER_NORMAL;
 		}
 	}
 
 	private boolean isStart(String input) {
-	//	System.out.println("check start end: "+ userCommand[lengthOfInput - 2]);
 		return input.equalsIgnoreCase("start");
 	}
 
@@ -249,7 +236,7 @@ public class UserInputParser {
 	}
 
 	private boolean isStartOrEnd() {
-		
+
 		return numToUse == NUMBER_ONLY_START || numToUse == NUMBER_ONLY_END;
 	}
 
@@ -263,6 +250,6 @@ public class UserInputParser {
 				break;
 			}
 		}
-		userCommand= tempUserCommand.toArray(new String[tempUserCommand.size()]);
+		userCommand = tempUserCommand.toArray(new String[tempUserCommand.size()]);
 	}
 }

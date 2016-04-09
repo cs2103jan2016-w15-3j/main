@@ -16,47 +16,74 @@ public class RecurringParserTest {
     LocalTime endTime;
     int numToRecur;
     String recurDuration;
-    String userCommand = "recur buy dog tomorrow 13:00 15:00 3 days";
+    String userCommandTomorrow = "recur buy dog tomorrow 13:00 15:00 3 days";
+    String userCommandDayAfter = "recur buy dog day after 13:00 15:00 3 days";
+    String userCommandNormal="recur buy dog 121212 131212 13:00 15:00 3 days";
 
+
+    @Test
+    public void testTomorrow() {
+    	parser= new RecurringParser();
+        assertEquals(3, parser.getNumToRecur(userCommandTomorrow));
+        assertEquals("days", parser.getRecurDuration(userCommandTomorrow));
+        assertEquals("buy dog", parser.getTaskName(userCommandTomorrow));
+        assertEquals(LocalDate.now().plusDays(1), parser.getTaskStartDate(userCommandTomorrow));
+        assertEquals(LocalDate.now().plusDays(1), parser.getTaskEndDate(userCommandTomorrow));
+        assertEquals(LocalTime.of(13, 00), parser.getTaskStartTime(userCommandTomorrow));
+        assertEquals(LocalTime.of(15, 00), parser.getTaskEndTime(userCommandTomorrow));
+    	
+    }
+    @Test
+    public void testDayAfter() {
+    	parser= new RecurringParser();
+        assertEquals(3, parser.getNumToRecur(userCommandDayAfter));
+        assertEquals("days", parser.getRecurDuration(userCommandDayAfter));
+        assertEquals("buy dog", parser.getTaskName(userCommandDayAfter));
+        assertEquals(LocalDate.now().plusDays(2), parser.getTaskStartDate(userCommandDayAfter));
+        assertEquals(LocalDate.now().plusDays(2), parser.getTaskEndDate(userCommandDayAfter));
+        assertEquals(LocalTime.of(13, 00), parser.getTaskStartTime(userCommandDayAfter));
+        assertEquals(LocalTime.of(15, 00), parser.getTaskEndTime(userCommandDayAfter));
+    	
+    }
     @Test
     public void testGetNumToRecur() {
         parser= new RecurringParser();
-        assertEquals(3, parser.getNumToRecur(userCommand));
+        assertEquals(3, parser.getNumToRecur(userCommandNormal));
     }
 
     @Test
     public void testGetRecurDuration() {
         parser= new RecurringParser();
-        assertEquals("days", parser.getRecurDuration(userCommand));
+        assertEquals("days", parser.getRecurDuration(userCommandNormal));
     }
 
     @Test
     public void testGetTaskName() {
         parser= new RecurringParser();
-        assertEquals("buy dog", parser.getTaskName(userCommand));
+        assertEquals("buy dog", parser.getTaskName(userCommandNormal));
     }
 
     @Test
     public void testGetTaskStartDate() {
         parser= new RecurringParser();
-        assertEquals(LocalDate.now().plusDays(1), parser.getTaskStartDate(userCommand));
+        assertEquals(LocalDate.of(2012,12,12), parser.getTaskStartDate(userCommandNormal));
     }
 
     @Test
     public void testGetTaskEndDate() {
         parser= new RecurringParser();
-        assertEquals(LocalDate.now().plusDays(1), parser.getTaskEndDate(userCommand));
+        assertEquals(LocalDate.of(2012,12,13), parser.getTaskEndDate(userCommandNormal));
     }
 
     @Test
     public void testGetTaskStartTime() {
         parser= new RecurringParser();
-        assertEquals(LocalTime.of(13, 00), parser.getTaskStartTime(userCommand));
+        assertEquals(LocalTime.of(13, 00), parser.getTaskStartTime(userCommandNormal));
     }
 
     @Test
     public void testGetTaskEndTime() {
         parser= new RecurringParser();
-        assertEquals(LocalTime.of(15, 00), parser.getTaskEndTime(userCommand));
+        assertEquals(LocalTime.of(15, 00), parser.getTaskEndTime(userCommandNormal));
     }
 }

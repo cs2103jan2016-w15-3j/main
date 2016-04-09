@@ -11,14 +11,6 @@ import java.util.logging.Logger;
 
 public class RecurringParser extends UserInputParser{
 
-  /*  private String[] userCommand;
-    private String taskName;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private int lengthOfInput;*/
-    private int numToUse;
     private int numToRecur;
     private String recurDuration;
 	private static Logger loggerRecur = Logger.getLogger("setNumToRecur in RecurringParser");
@@ -35,6 +27,10 @@ public class RecurringParser extends UserInputParser{
         setTime(userCommand);
         userCommand = dateTimeParser.removeTime(userCommand);
         determineLengthOfInput();
+        
+        for(String s: userCommand) 
+        	System.out.print(s + " ");
+        
         isEnglishDate();
         setDate(numToUse, lengthOfInput);
         userCommand = dateTimeParser.removeDate(userCommand);
@@ -106,7 +102,6 @@ public class RecurringParser extends UserInputParser{
         setAttributesRecurring(userInput);
         return endTime;
     }
-    //update 1 recur 2 weeks
 	public int getIndexForUpdates(String userInput) {
 		removeWhiteSpaces(userInput);
 		return Integer.parseInt(userCommand[1]);
