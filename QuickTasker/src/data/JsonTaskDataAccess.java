@@ -119,4 +119,9 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         return this.pathOfSaveFile;
     }
 
+    // internal method for unit test
+    protected void setSavePath(String path){
+       this.pathOfSaveFile= Paths.get(path);
+    }
+
 }

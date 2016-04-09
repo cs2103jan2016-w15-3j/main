@@ -13,6 +13,8 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -153,6 +155,15 @@ public class JsonTaskDataAccessTest {
             assertEquals(resultT.getClass(), expectedT.getClass());
         }
 
+    }
+
+    @Test
+    public void saveSaveFileToExistingDirectory(){
+        List<Task> tasks = create30TasksWithDifferentAttributes();
+        Path path = Paths.get("c:/windows");
+        System.out.println(path);
+        //dataHandler.setSavePath(path);
+        //dataHandler.save(tasks);
     }
 
     private Task readOneTask() {

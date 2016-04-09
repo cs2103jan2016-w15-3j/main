@@ -39,7 +39,7 @@ public class SettingManagerTest {
 
     @Test
     public void canChangeDirectorySettings(){
-        String expectedPath = "../desktop";
+        String expectedPath = "..desktop";
         settingManager.setPathOfSaveFile(expectedPath);
         assertEquals(expectedPath,settingManager.getPathOfSaveFile());
     }
