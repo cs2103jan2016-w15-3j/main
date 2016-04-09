@@ -1,5 +1,6 @@
 package data;
 //@@author A0126077E
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -24,33 +25,39 @@ public class JsonTaskDataAccessTest {
     private SettingManager settings;
     private List<Task> plannerNotebook;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         settings = new SettingManager();
         settings.setPathOfSaveFile("test.json");
         plannerNotebook = new ArrayList<>();
         dataHandler = new JsonTaskDataAccess();
     }
 
-    @After public void tearDown() {
+    @After
+    public void tearDown() {
         settings.resetDefaultSettings();
         dataHandler.reset();
     }
 
-    @Test public void whenNewHandlerCreatedPathShouldNotBeNull() {
+    @Test
+    public void whenNewHandlerCreatedPathShouldNotBeNull() {
         assertNotNull(dataHandler.getFilePath());
     }
 
-    @Test public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
+    @Test
+    public void ifPathOfSaveFileIsNullThenUseDefaultPath() {
 
     }
 
-    @Test public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
+    @Test
+    public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
         Files.deleteIfExists(dataHandler.getFilePath());
         dataHandler = new JsonTaskDataAccess();
         assertTrue(hasSaveFile());
     }
 
-    @Test public void canSaveListOfTasksToJsonFile() {
+    @Test
+    public void canSaveListOfTasksToJsonFile() {
         List<Task> tasks = createTasksWithStartAndEnd(20);
         dataHandler.save(tasks);
         try {
@@ -65,7 +72,8 @@ public class JsonTaskDataAccessTest {
         }
     }
 
-    @Test public void canSaveOneTaskIntoJsonFile() {
+    @Test
+    public void canSaveOneTaskIntoJsonFile() {
         String taskName = "Task 1";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         dataHandler.save(testTask);
@@ -73,14 +81,16 @@ public class JsonTaskDataAccessTest {
         assertEquals(testTask, resultTask);
     }
 
-    @Test public void canReadsavedTasksFromJsonFile() {
+    @Test
+    public void canReadsavedTasksFromJsonFile() {
         plannerNotebook = create30TasksWithDifferentAttributes();
         dataHandler.save(plannerNotebook);
         List<Task> tasksRead = dataHandler.getTasks();
         assertEquals(plannerNotebook, tasksRead);
     }
 
-    @Test public void canSaveOneRecurrTask() {
+    @Test
+    public void canSaveOneRecurrTask() {
 
         RecurringTask task = new RecurringTask("RecurringTask11", LocalDate.MIN, LocalDate.MAX, "week",
                 LocalTime.NOON, LocalTime.now(), 1);
@@ -91,12 +101,14 @@ public class JsonTaskDataAccessTest {
         assertEquals(t.getName(), task.getName());
     }
 
-    @Test public void ifTaskSaveFileHasNoTaskGetTasksShouldNotReturnNull() throws IOException {
+    @Test
+    public void ifTaskSaveFileHasNoTaskGetTasksShouldNotReturnNull() throws IOException {
         dataHandler.reset();
         assertNotNull(dataHandler.getTasks());
     }
 
-    @Test public void deserializedRecurringTasksShouldHaveCorrectType() {
+    @Test
+    public void deserializedRecurringTasksShouldHaveCorrectType() {
         Task t = new RecurringTask("task1", LocalDate.now(), LocalDate.now(), "week", LocalTime.NOON,
                 LocalTime.MIDNIGHT, 1);
         List<Task> tasks = new ArrayList<>();
@@ -106,7 +118,8 @@ public class JsonTaskDataAccessTest {
         assertEquals(RecurringTask.class, dataHandler.getTasks().get(0).getClass());
     }
 
-    @Test public void allDeserializedTasksShouldBeEqualToOriginal() {
+    @Test
+    public void allDeserializedTasksShouldBeEqualToOriginal() {
         List<Task> tasks = create30TasksWithDifferentAttributes();
         Object[] taskArr = tasks.toArray();
         dataHandler.save(tasks);
@@ -117,7 +130,8 @@ public class JsonTaskDataAccessTest {
 
     }
 
-    @Test public void deserilizedTasksShouldHaveCorrectType() {
+    @Test
+    public void deserilizedTasksShouldHaveCorrectType() {
         List<Task> expected = create30TasksWithDifferentAttributes(); // last 10 are recurr tasks
         dataHandler.save(expected);
         List<Task> result = dataHandler.getTasks();
@@ -126,7 +140,8 @@ public class JsonTaskDataAccessTest {
         }
     }
 
-    @Test public void deserilizedRecurTaskShouldContainTypeAttribute() {
+    @Test
+    public void deserilizedRecurTaskShouldContainTypeAttribute() {
         List<Task> expected = create30TasksWithDifferentAttributes();
         dataHandler.save(expected);
         List<Task> result = dataHandler.getTasks();

@@ -1,5 +1,6 @@
 package logic;
 //@@author A0130949
+
 import data.SettingManager;
 import model.Task;
 import org.junit.Before;
@@ -13,7 +14,8 @@ public class UpdateTaskTest {
     Logic logic;
     SettingManager settings;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         init();
     }
 
@@ -45,14 +47,16 @@ public class UpdateTaskTest {
         assertEquals("name longer by alot", logic.getTasks().get(0).getName());
     }
 
-    @Test public void testUpdatingOnlyWithName() throws Exception {
+    @Test
+    public void testUpdatingOnlyWithName() throws Exception {
         logic.updateTask(new Task("name longer by alot", LocalDate.MIN, LocalDate.MIN), 0);
         assertEquals("name longer by alot", logic.getTasks().get(0).getName());
         assertEquals(LocalDate.now(), logic.getTasks().get(0).getStartDate());
         assertEquals(LocalDate.now(), logic.getTasks().get(0).getDueDate());
     }
 
-    @Test public void testUpdatingOnlyWithDates() throws Exception {
+    @Test
+    public void testUpdatingOnlyWithDates() throws Exception {
         logic.updateTask(new Task("", LocalDate.of(2016, 4, 1), LocalDate.of(2016, 5, 1)), 0);
         assertEquals("hello", logic.getTasks().get(0).getName());
         assertEquals(LocalDate.of(2016, 4, 1), logic.getTasks().get(0).getStartDate());
@@ -73,7 +77,8 @@ public class UpdateTaskTest {
         assertEquals("name longer by alot", logic.getTasks().get(0).getName());
     }
 
-    @Test public void testUpdatingNegativeIndex() throws Exception {
+    @Test
+    public void testUpdatingNegativeIndex() throws Exception {
         boolean testNegative = false;
         try {
             logic.updateTask(new Task("name longer by alot", LocalDate.now(), null), -1);
@@ -83,7 +88,8 @@ public class UpdateTaskTest {
         assert (testNegative);
     }
 
-    @Test public void testUpdatingWithString() throws Exception {
+    @Test
+    public void testUpdatingWithString() throws Exception {
         boolean testString = false;
         try {
             logic.updateTask(new Task("name longer by alot", LocalDate.now(), null), Integer.parseInt("hi"));

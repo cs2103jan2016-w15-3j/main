@@ -19,11 +19,13 @@ public class InputValidatorTest {
     ObservableList<Task> list;
     Task toTest;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         validator = new InputValidator();
     }
 
-    @Test public void testCheckIfClashSameTimeOverlapDates() {
+    @Test
+    public void testCheckIfClashSameTimeOverlapDates() {
         list = FXCollections.observableArrayList(operations.addTask(
                 new Task("TEST 1", LocalDate.of(2016, 4, 6), LocalDate.of(2016, 4, 25), LocalTime.of(9, 00),
                         LocalTime.of(13, 00))));
@@ -33,7 +35,8 @@ public class InputValidatorTest {
 
     }
 
-    @Test public void testCheckIfClashOverlapTimeSameDates() {
+    @Test
+    public void testCheckIfClashOverlapTimeSameDates() {
         list = FXCollections.observableArrayList(operations.addTask(
                 new Task("TEST 1", LocalDate.of(2016, 4, 6), LocalDate.of(2016, 4, 6), LocalTime.of(9, 00),
                         LocalTime.of(13, 00))));

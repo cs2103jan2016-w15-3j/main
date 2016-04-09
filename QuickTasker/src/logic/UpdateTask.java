@@ -58,8 +58,7 @@ public class UpdateTask<E> implements Command<Object> {
             updatedTask.setStartDate(list.get(taskIndex).getStartDate());
         }
 
-        if (updatedTask.getDueDate() == LocalDate.MIN
-                && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
+        if (updatedTask.getDueDate() == LocalDate.MIN && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
             updatedTask.setEndDate(list.get(taskIndex).getDueDate());
         }
 
@@ -80,8 +79,9 @@ public class UpdateTask<E> implements Command<Object> {
 
     private RecurringTask transferAttributes(Task updatedTask, int index, List<Task> list) {
         RecurringTask recurringTask = new RecurringTask(updatedTask.getName(), updatedTask.getStartDate(),
-                updatedTask.getDueDate(), ((RecurringTask) list.get(index)).getRecurType(), updatedTask.getStartTime(),
-                updatedTask.getEndTime(), ((RecurringTask) list.get(index)).getNumberToRecur());
+                updatedTask.getDueDate(), ((RecurringTask) list.get(index)).getRecurType(),
+                updatedTask.getStartTime(), updatedTask.getEndTime(),
+                ((RecurringTask) list.get(index)).getNumberToRecur());
         return recurringTask;
     }
 
@@ -91,8 +91,7 @@ public class UpdateTask<E> implements Command<Object> {
             updatedTask.setStartDate(list.get(taskIndex).getStartDate());
         }
 
-        if (updatedTask.getDueDate() == LocalDate.MIN
-                && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
+        if (updatedTask.getDueDate() == LocalDate.MIN && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
             updatedTask.setEndDate(list.get(taskIndex).getDueDate());
         }
 

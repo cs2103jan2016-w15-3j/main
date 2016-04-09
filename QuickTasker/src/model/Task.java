@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
-
 public class Task implements Comparable {
     private String taskName;
     private LocalDate startDate;
@@ -75,22 +74,20 @@ public class Task implements Comparable {
 
     public void setTaskType() {
         if (bothDateAndTimeAreDefaultValue()) this.taskType = "floating";
-        else if (onlyTimeAreDefaultValue())
-            this.taskType = "wholeDayEvent";
+        else if (onlyTimeAreDefaultValue()) this.taskType = "wholeDayEvent";
         else this.taskType = "task";
     }
 
     private boolean onlyTimeAreDefaultValue() {
-        return (startTime == null || this.startTime == LocalTime.MIN)
-                && (this.endTime == null || this.endTime == LocalTime.MIN);
+        return (startTime == null || this.startTime == LocalTime.MIN) && (this.endTime == null
+                || this.endTime == LocalTime.MIN);
     }
 
     //
     private boolean bothDateAndTimeAreDefaultValue() {
-        return  (startDate == null || this.startDate.equals(LocalDate.MAX))
-                && (endDate == null || this.endDate.equals(LocalDate.MAX))
-                && (startTime == null || this.startTime.equals(LocalTime.MAX))
-                && (endDate == null || this.endDate.equals(LocalDate.MAX));
+        return (startDate == null || this.startDate.equals(LocalDate.MAX)) && (endDate == null || this.endDate
+                .equals(LocalDate.MAX)) && (startTime == null || this.startTime.equals(LocalTime.MAX)) && (
+                endDate == null || this.endDate.equals(LocalDate.MAX));
     }
 
     public String getTaskType() {
@@ -153,7 +150,8 @@ public class Task implements Comparable {
         return UUID.randomUUID().toString();
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
 
@@ -166,7 +164,8 @@ public class Task implements Comparable {
 
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         int result = taskName.hashCode();
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
@@ -174,7 +173,8 @@ public class Task implements Comparable {
         return result;
     }
 
-    @Override public int compareTo(Object task) {
+    @Override
+    public int compareTo(Object task) {
         Task comparedTask = (Task) task;
         int result = compareDueDate(this, comparedTask);
 

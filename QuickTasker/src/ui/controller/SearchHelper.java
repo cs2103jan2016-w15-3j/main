@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 
-public class SearchHelper {
+class SearchHelper {
     private final String FLOATING_TASK = "floating";
     private final double FUZZY_STRING_COMPARE_THRESHOLD = 0.65;
 

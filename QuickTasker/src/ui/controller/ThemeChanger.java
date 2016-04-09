@@ -17,9 +17,9 @@ public class ThemeChanger {
             JFXToolbar toolbar = (JFXToolbar) scene.lookup(".jfx-tool-bar");
             Label label = (Label) scene.lookup(".icons-badge Label");
 
-            label.setStyle("-fx-text-fill:" + selectedColor.getColorHex() + ";");
-            decorator.setStyle("-fx-decorator-color: derive(" + selectedColor.getColorHex() + ",-20%);");
-            toolbar.setStyle("-fx-background-color: " + selectedColor.getColorHex() + ";");
+            label.setStyle("-fx-text-fill:" + selectedColor.getColorValue() + ";");
+            decorator.setStyle("-fx-decorator-color: derive(" + selectedColor.getColorValue() + ",-20%);");
+            toolbar.setStyle("-fx-background-color: " + selectedColor.getColorValue() + ";");
         }
     }
 }

@@ -162,14 +162,13 @@ public class TaskListCell extends JFXListCell<Task> {
         taskStartDate.setText(dateString);
     }
 
-    private boolean isFloatingTask(Task task) {
-        return "floating".equals(task.getTaskType());
+    private boolean isNotFloatingTask(Task task) {
+        return !"floating".equals(task.getTaskType());
     }
 
     protected void setTaskDueDate(Task task) {
 
         if (task != null && task.getDueDate() != null && !task.getDueDate().equals(LocalDate.MAX)) {
-
             LocalDate dueDate = task.getDueDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
             String dateString = formatter.format(dueDate);
@@ -180,7 +179,7 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     protected void setTaskStartTime(Task task) {
-        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task) && timeCheck(task)) {
+        if (task != null && isNotFloatingTask(task) && isNotEvent(task) && timeCheck(task)) {
             LocalTime startTime = task.getStartTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(startTime);
@@ -192,7 +191,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void setTaskEndTime(Task task) {
 
-        if (task != null && !isFloatingTask(task) && !isWholeDayEvent(task) && timeCheck(task)) {
+        if (task != null && isNotFloatingTask(task) && isNotEvent(task) && timeCheck(task)) {
             LocalTime endTime = task.getEndTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(endTime);
@@ -207,8 +206,9 @@ public class TaskListCell extends JFXListCell<Task> {
         return task.getStartTime() != null || task.getEndTime() != null;
     }
 
-    private boolean isWholeDayEvent(Task task) {
-        return "wholeDayEvent".equals(task.getTaskType());
+    private boolean isNotEvent(Task task) {
+        //todo:change to enum
+        return !"wholeDayEvent".equals(task.getTaskType());
     }
 
     public JFXCheckBox getCheckBox() {

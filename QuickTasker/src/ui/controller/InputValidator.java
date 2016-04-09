@@ -113,7 +113,6 @@ public class InputValidator extends UserInputParser {
                         // There is overlap in time
                         return true;
                     } else {
-                        continue;
                     }
                 }
             }

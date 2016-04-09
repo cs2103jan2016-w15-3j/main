@@ -19,7 +19,7 @@ public class Main extends Application {
     private static final String IMAGE_ICON = "img/home.png";
     private JFXDecorator decorator;
     private Stage primaryStage;
-    public static Scene scene;
+    private Scene scene;
     private static final int STAGE_MINIMUM_HEIGHT = 150;
     private static final int STAGE_MINIMUM_WIDTH = 560;
 

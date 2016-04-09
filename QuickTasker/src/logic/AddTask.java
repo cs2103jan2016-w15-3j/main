@@ -1,13 +1,12 @@
 package logic;
 //@@author A0130949
+
 import model.Task;
 import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
 
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-
 
 public class AddTask<E> implements Command<Object> {
     private static Logger loggerAdd = Logger.getLogger("log");

@@ -24,6 +24,7 @@ public enum ApplicationColor {
     BLUE_GREY("#607D8B"),
     BLACK("#000000"),
     DARK("#000000");
+
     private final String hexCode;
 
     ApplicationColor(String hexCode) {
@@ -31,7 +32,6 @@ public enum ApplicationColor {
     }
 
     public String getHexCode() {
-
         return this.hexCode;
     }
 
@@ -44,14 +44,15 @@ public enum ApplicationColor {
         return false;
     }
 
-    public String getColorHex() {
+    public String getColorValue() {
         return this.hexCode;
     }
 
-    public String getColorHex(String color) {
+    // returns default color red if color given is unknown
+    public String findColor(String color) {
         for (ApplicationColor c : values()) {
             if (c.name().equalsIgnoreCase(color)) {
-                return c.getHexCode();
+                return c.getColorValue();
             }
         }
         return RED.getHexCode();

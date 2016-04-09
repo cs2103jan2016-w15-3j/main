@@ -16,7 +16,8 @@ public class DeleteTaskTest {
     Logic logic;
     SettingManager settings;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         init();
     }
 
@@ -29,7 +30,8 @@ public class DeleteTaskTest {
         }
     }
 
-    @Test public void test() throws Exception {
+    @Test
+    public void test() throws Exception {
         assertEquals(10, logic.getSize());
         logic.deleteTask(0);
         assertEquals(9, logic.getSize());
@@ -39,7 +41,8 @@ public class DeleteTaskTest {
         assertEquals(9, logic.getSize());
     }
 
-    @Test public void testNegative() throws Exception {
+    @Test
+    public void testNegative() throws Exception {
         boolean testNegative = false;
         try {
             logic.deleteTask(-1);
@@ -49,7 +52,8 @@ public class DeleteTaskTest {
         assert (testNegative);
     }
 
-    @Test public void testString() throws Exception {
+    @Test
+    public void testString() throws Exception {
         boolean testString = false;
         try {
             logic.deleteTask(Integer.parseInt("hi"));

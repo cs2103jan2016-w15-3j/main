@@ -11,11 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DateTimeParser {
-	private static Logger loggerParseDate = Logger.getLogger("parseDate in DateTimeParser");
-	private static Logger loggerParseTime = Logger.getLogger("parseTime in DateTimeParser");
+    private static Logger loggerParseDate = Logger.getLogger("parseDate in DateTimeParser");
+    private static Logger loggerParseTime = Logger.getLogger("parseTime in DateTimeParser");
 
     public LocalDate parseDate(String input) {
-		loggerParseDate.log(Level.INFO, "Start of parse date");
+        loggerParseDate.log(Level.INFO, "Start of parse date");
 
         DateTimeFormatter formatterForDashes = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter formatterForSlashes = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -62,7 +62,7 @@ public class DateTimeParser {
                 output = LocalDate.parse(input, formatterEmpty);
                 return output;
             } catch (Exception e) {
-    			loggerParseDate.log(Level.WARNING, "Error in parsing date", e);
+                loggerParseDate.log(Level.WARNING, "Error in parsing date", e);
                 output = null;
             }
         } else {
@@ -77,24 +77,25 @@ public class DateTimeParser {
                 output = LocalDate.now().plusDays(2);
             }
         }
-		loggerParseDate.log(Level.INFO, "End of parseDate");
+        loggerParseDate.log(Level.INFO, "End of parseDate");
         return output;
     }
+
     public ArrayList<LocalTime> parseTime(String[] input, ArrayList<Integer> indices) {
-		loggerParseTime.log(Level.INFO, "Start of parse time");
+        loggerParseTime.log(Level.INFO, "Start of parse time");
 
         ArrayList<LocalTime> output = new ArrayList<LocalTime>();
 
         for (int i = 0; i < indices.size(); i++) {
             output.add(toLocalTime(input[indices.get(i)]));
         }
-		loggerParseTime.log(Level.INFO, "End of parseTime");
+        loggerParseTime.log(Level.INFO, "End of parseTime");
         return output;
     }
 
     private boolean isEnglish(String input) {
-        return (input.equals("today") || input.equals("tomorrow") || input.equals("next day")
-                || input.equals("day after"));
+        return (input.equals("today") || input.equals("tomorrow") || input.equals("next day") || input
+                .equals("day after"));
     }
 
     public boolean isDate(String input) {

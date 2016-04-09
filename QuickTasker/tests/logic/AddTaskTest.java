@@ -18,7 +18,8 @@ public class AddTaskTest {
     Logic logic;
     private SettingManager settings;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         logic = new Logic();
         logic.clear();
         createEmptyTasks(2);
@@ -30,11 +31,13 @@ public class AddTaskTest {
         }
     }
 
-    @Test public void testSizeOfListAfterAdd() throws Exception {
+    @Test
+    public void testSizeOfListAfterAdd() throws Exception {
         assertEquals(logic.getSize(), 2);
     }
 
-    @Test public void testAddNull() throws Exception {
+    @Test
+    public void testAddNull() throws Exception {
         boolean testResult = false;
         try {
             logic.addTask(null);
@@ -45,7 +48,8 @@ public class AddTaskTest {
         assert (testResult);
     }
 
-    @Test public void testSizeOfListAfterAddingNull() throws Exception {
+    @Test
+    public void testSizeOfListAfterAddingNull() throws Exception {
         logic.addTask(new Task(null, null, null));
         assertEquals(logic.getSize(), 3);
     }

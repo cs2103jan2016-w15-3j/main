@@ -63,7 +63,7 @@ public class Logic {
         commandMap.put(Commands.SKIP_TASK, new SkipRecurTask());
         commandMap.put(Commands.STOP_TASK, new StopRecurTask());
         commandMap.put(Commands.MARK_TASK, new MarkTask());
-        commandMap.put((Commands.CLEAR_TASK),new ClearTasks());
+        commandMap.put((Commands.CLEAR_TASK), new ClearTasks());
     }
 
     public ArrayList<Task> clear() {
@@ -102,7 +102,8 @@ public class Logic {
 
     public void manageStacks(Commands command) {
         undoStack.push(command);
-        redoStack.clear();;
+        redoStack.clear();
+        ;
     }
 
     public ArrayList<Task> deleteTask(int index) {
@@ -122,7 +123,8 @@ public class Logic {
 
     public ArrayList<Task> undo() {
         Commands command = undoStack.pop();
-        if (!redoStack.isEmpty() && redoStack.peek() == Commands.CLEAR_TASK && command == Commands.CLEAR_TASK) {
+        if (!redoStack.isEmpty() && redoStack.peek() == Commands.CLEAR_TASK
+                && command == Commands.CLEAR_TASK) {
             redoStack.pop();
         }
         redoStack.push(command);
@@ -200,10 +202,10 @@ public class Logic {
 
     // requires cloning to prevent the reucrring task from changing values
     private RecurringTask clone(Task completedTask) {
-        return new RecurringTask(completedTask.getName(),
-                completedTask.getStartDate(), completedTask.getDueDate(),
-                ((RecurringTask) completedTask).getRecurType(), completedTask.getStartTime(),
-                completedTask.getEndTime(), ((RecurringTask) completedTask).getNumberToRecur());
+        return new RecurringTask(completedTask.getName(), completedTask.getStartDate(),
+                completedTask.getDueDate(), ((RecurringTask) completedTask).getRecurType(),
+                completedTask.getStartTime(), completedTask.getEndTime(),
+                ((RecurringTask) completedTask).getNumberToRecur());
     }
 
     public void changeDir(String path) {

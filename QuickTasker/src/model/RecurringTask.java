@@ -1,5 +1,6 @@
 package model;
 //@@author A0130949
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -66,8 +67,7 @@ public class RecurringTask extends Task {
         long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.DAYS);
         if (this.getRecurType().equals("week") || this.getRecurType().equals("weeks")) {
             int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
-            setNextDates(this.getStartDate().plusWeeks(offset),
-                    this.getDueDate().plusWeeks(offset));
+            setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
         } else {
             int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
             setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));
@@ -107,7 +107,8 @@ public class RecurringTask extends Task {
     }
 
     public Task stopRecurring() {
-        Task newTask = new Task(this.getName(), this.getStartDate(), this.getDueDate(), this.getStartTime(), this.getEndTime());
+        Task newTask = new Task(this.getName(), this.getStartDate(), this.getDueDate(), this.getStartTime(),
+                this.getEndTime());
         return newTask;
     }
 

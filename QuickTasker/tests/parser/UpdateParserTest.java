@@ -19,34 +19,35 @@ public class UpdateParserTest {
     public void setUp() throws Exception {
         parser = new UpdateParser();
     }
-	@Test
-	public void testGetStartDate() {
+
+    @Test
+    public void testGetStartDate() {
 
         assertEquals(LocalDate.of(2012, 12, 12), parser.getStartDate(stringToTest));
     }
 
-	@Test
-	public void testGetEndDate() {
+    @Test
+    public void testGetEndDate() {
         assertEquals(LocalDate.of(2013, 12, 12), parser.getEndDate(stringToTest));
     }
 
-	@Test
-	public void testGetStartTime() {
+    @Test
+    public void testGetStartTime() {
         assertEquals(LocalTime.of(9, 00), parser.getStartTime(stringToTest));
     }
 
-	@Test
-	public void testGetEndTime() {
+    @Test
+    public void testGetEndTime() {
         assertEquals(LocalTime.of(10, 00), parser.getEndTime(stringToTest));
     }
 
-	@Test
-	public void testGetTaskName() {
+    @Test
+    public void testGetTaskName() {
         assertEquals("buy groceries", parser.getTaskName(stringToTest));
     }
 
-	@Test
-	public void testGetIndex() {
+    @Test
+    public void testGetIndex() {
         parser.setAttributesForUpdates(stringToTest);
         assertEquals(1, parser.getIndexForUpdates(stringToTest));
     }

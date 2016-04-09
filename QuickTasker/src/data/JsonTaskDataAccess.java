@@ -5,6 +5,9 @@ import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import common.CreateSaveFileException;
+import common.LoadTasksException;
+import common.SaveTasksException;
 import model.RecurringTask;
 import model.Task;
 
@@ -29,19 +32,14 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     private Path pathOfSaveFile;
 
     public JsonTaskDataAccess() {
+         
         initialize();
     }
 
     private void initialize() {
         String p = settings.getPathOfSaveFile();
-        if (p != null) {
-            pathOfSaveFile = Paths.get(p);
-        } else {
-            pathOfSaveFile = DEFAULT_SAVE_PATH;
-        }
-        if (Files.notExists(pathOfSaveFile)) {
-            createNewSaveFile();
-        }
+        pathOfSaveFile = p != null ? Paths.get(p) : DEFAULT_SAVE_PATH;
+        if (Files.notExists(pathOfSaveFile)) createNewSaveFile();
     }
 
     private void createNewSaveFile() throws CreateSaveFileException {
@@ -52,30 +50,31 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
-    @Override public List<Task> getTasks() throws LoadTasksException {
+    @Override
+    public List<Task> getTasks() throws LoadTasksException {
         Gson gson = getGson();
         List<Task> tasks;
         try (BufferedReader reader = Files.newBufferedReader(pathOfSaveFile)) {
             tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {
             }.getType());
             reader.close();
-            return tasks == null ? new ArrayList<>() : tasks;
+            return tasks != null ? tasks : new ArrayList<>();
         } catch (IOException e) {
             throw new LoadTasksException();
         }
     }
 
     private Gson getGson() {
-        RuntimeTypeAdapterFactory<Task> adapter = RuntimeTypeAdapterFactory.of(Task.class)
-                .registerSubtype(Task.class).registerSubtype(RecurringTask.class);
-
-        return Converters.registerLocalDateTime(
-                new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter)).create();
+        return Converters.registerLocalDateTime(new GsonBuilder().setPrettyPrinting()
+                .registerTypeAdapterFactory(
+                        RuntimeTypeAdapterFactory.of(Task.class).registerSubtype(Task.class)
+                                .registerSubtype(RecurringTask.class))).create();
     }
 
-    @Override public void save(Task task) throws SaveTasksException {
+    @Override
+    public void save(Task t) throws SaveTasksException {
         Gson gson = getGson();
-        String json = gson.toJson(task);
+        String json = gson.toJson(t);
         try (BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile)) {
             writer.write(json);
             writer.close();
@@ -84,10 +83,11 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
-    @Override public void save(List<Task> tasks) throws SaveTasksException {
+    @Override
+    public void save(List<Task> ts) throws SaveTasksException {
 
         Gson gson = getGson();
-        String json = gson.toJson(tasks);
+        String json = gson.toJson(ts);
         try (BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile)) {
             writer.write(json);
             writer.close();
@@ -97,7 +97,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         }
     }
 
-    @Override public void reset() {
+    @Override
+    public void reset() {
         Path p = Paths.get(settings.getPathOfSaveFile());
         try {
             Files.deleteIfExists(p);
@@ -114,16 +115,8 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         initialize();
     }
 
-    protected Path getFilePath() {
+    Path getFilePath() {
         return this.pathOfSaveFile;
     }
 
-    private static class CreateSaveFileException extends RuntimeException {
-    }
-
-    private static class LoadTasksException extends RuntimeException {
-    }
-
-    private static class SaveTasksException extends RuntimeException {
-    }
 }

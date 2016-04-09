@@ -1,4 +1,5 @@
 *.json
+.checkstyle
 .json
 # For OSX users
 

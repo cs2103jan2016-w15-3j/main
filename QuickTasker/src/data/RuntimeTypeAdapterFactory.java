@@ -1,5 +1,6 @@
 package data;
 //@@author A0126077E
+
 import com.google.gson.*;
 import com.google.gson.internal.Streams;
 import com.google.gson.reflect.TypeToken;
@@ -62,7 +63,8 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
         }
 
         return new TypeAdapter<R>() {
-            @Override public R read(JsonReader in) throws IOException {
+            @Override
+            public R read(JsonReader in) throws IOException {
                 JsonElement jsonElement = Streams.parse(in);
                 JsonElement labelJsonElement = jsonElement.getAsJsonObject().remove(typeFieldName);
                 if (labelJsonElement == null) {
@@ -80,7 +82,8 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
                 return delegate.fromJsonTree(jsonElement);
             }
 
-            @Override public void write(JsonWriter out, R value) throws IOException {
+            @Override
+            public void write(JsonWriter out, R value) throws IOException {
                 Class<?> srcType = value.getClass();
                 String label = subtypeToLabel.get(srcType);
                 @SuppressWarnings("unchecked") // registration requires that subtype extends T

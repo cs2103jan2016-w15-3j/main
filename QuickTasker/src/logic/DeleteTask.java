@@ -1,5 +1,6 @@
 package logic;
 //@@author A0130949
+
 import model.Task;
 
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class DeleteTask<E> implements Command<Object> {
     private static Logger loggerDelete = Logger.getLogger("log");
     private static Stack<Task> undoStackTask = new Stack<Task>();
@@ -16,8 +16,7 @@ public class DeleteTask<E> implements Command<Object> {
 
     @Override
     /* deletes a task from that index. exceptions are thrown for Junit tests.
-       please uncomment thrown exceptions for testing */
-    public void execute(List<Task> list, Object op) {
+       please uncomment thrown exceptions for testing */ public void execute(List<Task> list, Object op) {
         loggerDelete.log(Level.INFO, "Start logging for delete");
         try {
             int index = (int) op;

@@ -1,5 +1,8 @@
 package data;
 //@@author A0126077E
+
+import common.LoadSettingsException;
+import common.ResetSettingsException;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -29,13 +32,9 @@ public class SettingManager {
     }
 
     private void initiate() {
-        if (settingFileDoesNotExist()) {
-            createDefaultSettings();
-        } else if (settingFileExistButEmpty()) {
-            resetDefaultSettings();
-        } else {
-            loadSettings();
-        }
+        if (settingFileDoesNotExist()) createDefaultSettings();
+        else if (!settingFileExistButEmpty()) loadSettings();
+        else resetDefaultSettings();
     }
 
     public void resetDefaultSettings() throws ResetSettingsException {
@@ -67,8 +66,7 @@ public class SettingManager {
         assert Files.exists(settingLocation);
         Configurations cons = new Configurations();
         try {
-            Configuration con = cons.properties(new File(settingLocation.toUri()));
-            return con.isEmpty();
+            return cons.properties(new File(settingLocation.toUri())).isEmpty();
         } catch (ConfigurationException e) {
             e.printStackTrace();
             return false;
@@ -109,9 +107,4 @@ public class SettingManager {
 
     }
 
-    public static class LoadSettingsException extends RuntimeException {
-    }
-
-    public static class ResetSettingsException extends RuntimeException {
-    }
 }
