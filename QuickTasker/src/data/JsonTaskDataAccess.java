@@ -65,13 +65,9 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     private Gson getGson() {
         return Converters.registerLocalDateTime(new GsonBuilder().setPrettyPrinting()
-                                                                 .registerTypeAdapterFactory(
-                                                                         RuntimeTypeAdapterFactory
-                                                                                 .of(Task.class)
-                                                                                 .registerSubtype(Task.class)
-                                                                                 .registerSubtype(
-                                                                                         RecurringTask.class)))
-                         .create();
+                .registerTypeAdapterFactory(
+                        RuntimeTypeAdapterFactory.of(Task.class).registerSubtype(Task.class)
+                                .registerSubtype(RecurringTask.class))).create();
     }
 
     @Override

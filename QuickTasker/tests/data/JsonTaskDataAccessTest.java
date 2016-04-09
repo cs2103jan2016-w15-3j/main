@@ -65,8 +65,7 @@ public class JsonTaskDataAccessTest {
         try {
             BufferedReader reader = Files.newBufferedReader(dataHandler.getFilePath());
             Gson gson = getGson();
-            List<Task> testObj = gson.fromJson(reader, new TypeToken<List<Task>>() {
-            }.getType());
+            List<Task> testObj = gson.fromJson(reader, new TypeToken<List<Task>>() {}.getType());
             assertEquals(testObj, tasks);
             reader.close();
         } catch (IOException e) {
@@ -158,7 +157,7 @@ public class JsonTaskDataAccessTest {
     }
 
     @Test
-    public void saveSaveFileToExistingDirectory(){
+    public void saveSaveFileToExistingDirectory() {
         List<Task> tasks = create30TasksWithDifferentAttributes();
         Path path = Paths.get("c:/windows");
         System.out.println(path);

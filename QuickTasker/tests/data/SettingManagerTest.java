@@ -7,8 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import static org.junit.Assert.*;
 
+import static org.junit.Assert.*;
 
 public class SettingManagerTest {
     private SettingManager settingManager;
@@ -18,8 +18,9 @@ public class SettingManagerTest {
     public void setUp() throws Exception {
         settingManager = new SettingManager();
     }
+
     @After
-    public void tearDown(){
+    public void tearDown() {
         settingManager.resetDefaultSettings();
     }
 
@@ -38,12 +39,11 @@ public class SettingManagerTest {
     }
 
     @Test
-    public void canChangeDirectorySettings(){
+    public void canChangeDirectorySettings() {
         String expectedPath = "..desktop";
         settingManager.setPathOfSaveFile(expectedPath);
-        assertEquals(expectedPath,settingManager.getPathOfSaveFile());
+        assertEquals(expectedPath, settingManager.getPathOfSaveFile());
     }
-
 
     private void removeEverythingFromSettingsFile() {
         Configuration settings = settingManager.getConfigs();

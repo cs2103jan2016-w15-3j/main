@@ -78,8 +78,7 @@ public class UserInputParser {
         command = userCommand[0];
     }
 
-    public static class setAttributeException extends RuntimeException {
-    }
+    public static class setAttributeException extends RuntimeException {}
 
     public void setTaskName() {
 

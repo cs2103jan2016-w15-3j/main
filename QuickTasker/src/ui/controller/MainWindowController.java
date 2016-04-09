@@ -82,7 +82,7 @@ public class MainWindowController implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle b) {
         initPlanner();
         setCellFactory();
         initLogger();
@@ -102,35 +102,33 @@ public class MainWindowController implements Initializable {
         commandBox.requestFocus();
     }
 
-    void setStage(Stage stage) {
-        this.stage = stage;
+    void setStage(Stage s) {
+        this.stage = s;
     }
 
-    public void setMain(Main main) {
-        this.main = main;
+    public void setMain(Main m) {
+        this.main = m;
     }
 
     private boolean isEmptyInput(String input) {
         return input == null || input.isEmpty() || "".equals(input.trim());
     }
 
-    private boolean enterKeyIsPressed(KeyEvent event) {
-        return KeyCode.ENTER.equals(event.getCode());
+    private boolean enterKeyIsPressed(KeyEvent e) {
+        return KeyCode.ENTER.equals(e.getCode());
     }
 
     @FXML
     private void handleEnterKeyPressed(KeyEvent event) {
         String userInput = commandBox.getText();
-        if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
-            logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
-            try {
-                performOperations(userInput);
-            } catch (UIOperationException e) {
-                logger.log(Level.SEVERE,
-                           "Error occured at " + getClass().getName() + " within performOperation method.\n");
-                e.printStackTrace();
-
-            }
+        if (isEmptyInput(userInput) || !enterKeyIsPressed(event)) return;
+        logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
+        try {
+            performOperations(userInput);
+        } catch (UIOperationException e) {
+            logger.log(Level.SEVERE,
+                    "Error occured at " + getClass().getName() + " within performOperation method.\n");
+            e.printStackTrace();
         }
     }
 
@@ -142,62 +140,45 @@ public class MainWindowController implements Initializable {
         System.out.println("inputValidator.checkAllValid(userInput) " + inputValidator.checkAllValid(userInput));*/
         //if (inputValidator.checkAllValid(userInput)) {
         try {
-            if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
-                createTask(userInput);
-            } else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
-                deleteTask(userInput);
-            } else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
-                updateTask(userInput);
-            } else if (parser.getCommand(userInput) == Commands.UNDO_TASK) {
-                undoTask();
-            } else if (parser.getCommand(userInput) == Commands.REDO_TASK) {
-                redoTask();
-            } else if (parser.getCommand(userInput) == Commands.EXIT) {
-                operations.exit();
-            } else if (parser.getCommand(userInput) == Commands.SORT_TASK) {
-                sortTask(userInput);
-            } else if (parser.getCommand(userInput) == Commands.MARK_TASK) {
-                markTaskCompleted(userInput);
-            } else if (parser.getCommand(userInput) == Commands.RECUR_TASK) {
-                createRecurringTask(userInput);
-            } else if (parser.getCommand(userInput) == Commands.SKIP_TASK) {
-                skipRecurringTask(userInput);
-            } else if (userInput.contains("clear")) {
-                clearTasks(userInput);
-            } else if (userInput.contains("stop")) {
-                stopRecurringTask(userInput);
-            } else if ("show today".equals(userInput) || "view today".equals(userInput)) {
-                showToday();
-            } else if ("show tomorrow".equals(userInput) || "view tomorrow".equals(userInput)) {
+            if (parser.getCommand(userInput) == Commands.CREATE_TASK) createTask(userInput);
+            else if (parser.getCommand(userInput) == Commands.DELETE_TASK) deleteTask(userInput);
+            else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) updateTask(userInput);
+            else if (parser.getCommand(userInput) == Commands.UNDO_TASK) undoTask();
+            else if (parser.getCommand(userInput) == Commands.REDO_TASK) redoTask();
+            else if (parser.getCommand(userInput) == Commands.EXIT) operations.exit();
+            else if (parser.getCommand(userInput) == Commands.SORT_TASK) sortTask(userInput);
+            else if (parser.getCommand(userInput) == Commands.MARK_TASK) markTaskCompleted(userInput);
+            else if (parser.getCommand(userInput) == Commands.RECUR_TASK) createRecurringTask(userInput);
+            else if (parser.getCommand(userInput) == Commands.SKIP_TASK) skipRecurringTask(userInput);
+            else if (userInput.contains("clear")) clearTasks(userInput);
+            else if (userInput.contains("stop")) stopRecurringTask(userInput);
+            else if ("show today".equals(userInput) || "view today".equals(userInput)) showToday();
+            else if ("show tomorrow".equals(userInput) || "view tomorrow".equals(userInput)) {
                 showTomorrow();
                 showAll();
-            } else if ("view floating".equals(userInput) || "show floating".equals(userInput)) {
-                showFloating();
-            } else if ("show all".equals(userInput) || "view all".equals(userInput)) {
-                showAll();
-            } else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) {
-                searchTask(userInput);
-            } else if (userInput.contains("theme")) {
-                Scene scene = main.getScene();
-                ThemeChanger themer = new ThemeChanger();
-                Platform.runLater(() -> {
-                    try {
-                        themer.change(userInput, scene);
-                        commandBox.clear();
-                        //an event with a button maybe
-                    } catch (Exception e) {
-                    }
-                });
-            } else if ("change directory".equals(userInput)) {
-                changeDirectory(userInput);
-            } else if ("view archived".equals(userInput)) {
-                viewArchived();
-            } else if ("back".equals(userInput)) {
-                viewTasks();
-            }
+            } else if ("view floating".equals(userInput) || "show floating".equals(userInput)) showFloating();
+            else if ("show all".equals(userInput) || "view all".equals(userInput)) showAll();
+            else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) searchTask(userInput);
+            else if (userInput.contains("theme")) changeTheme(userInput);
+            else if ("change directory".equals(userInput)) changeDirectory(userInput);
+            else if ("view archived".equals(userInput)) viewArchived();
+            else if ("back".equals(userInput)) viewTasks();
         } catch (Exception e) {
             throw new UIOperationException();
         }
+    }
+
+    private void changeTheme(String userInput) {
+        Scene scene = main.getScene();
+        ThemeChanger themer = new ThemeChanger();
+        Platform.runLater(() -> {
+            try {
+                themer.change(userInput, scene);
+                commandBox.clear();
+                //an event with a button maybe
+            } catch (Exception e) {
+            }
+        });
     }
 
     private void showTomorrow() {
@@ -279,12 +260,11 @@ public class MainWindowController implements Initializable {
     /**
      * Author kenan.
      */
-    private void tickCheckBoxForMark(Task task, int i) {
+    private void tickCheckBoxForMark(Task t, int i) {
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         printedPlanner.getSelectionModel().select(i);
-        printedPlanner.fireEvent(new TaskDoneEvent(task));
-        javafx.concurrent.Task<Void> sleeper;
-        sleeper = makeSleeper(500);
+        printedPlanner.fireEvent(new TaskDoneEvent(t));
+        javafx.concurrent.Task<Void> sleeper = makeSleeper(500);
         sleeper.setOnSucceeded(event -> {
             printedPlanner.getSelectionModel().clearSelection();
             commandBox.clear();
@@ -339,12 +319,9 @@ public class MainWindowController implements Initializable {
         try {
             int index = parser.getTaskIndex(userInput);
             Task task = plannerEntries.get(index);
-            if (!(task instanceof RecurringTask)) {
-                snackbar.fireEvent(
-                        new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK, "", 1500,
-                                                      (b) -> {
-                                                      }));
-            }
+            if (!(task instanceof RecurringTask)) snackbar.fireEvent(
+                    new JFXSnackbar.SnackbarEvent(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK, "", 1500,
+                            (b) -> {}));
             plannerEntries = FXCollections.observableArrayList(operations.skip(index));
             afterOperation();
         } catch (IndexOutOfBoundsException e) {
@@ -388,8 +365,8 @@ public class MainWindowController implements Initializable {
             Task task = plannerEntries.get(indexOfTask);
             printedPlanner.getSelectionModel().select(indexOfTask);
             Task newTask = makeTask(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
-                                    updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
-                                    updateParser.getEndTime(userInput));
+                    updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
+                    updateParser.getEndTime(userInput));
             plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
             // }
             printedPlanner.getSelectionModel().clearSelection();
@@ -408,8 +385,7 @@ public class MainWindowController implements Initializable {
 
     private void deleteTask(String userInput) throws Exception {
         try {
-            int taskIndex;
-            taskIndex = parser.getTaskIndex(userInput);
+            int taskIndex = parser.getTaskIndex(userInput);
             // plannerEntries.remove(taskIndex);
             plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
             afterOperation();
@@ -435,8 +411,8 @@ public class MainWindowController implements Initializable {
     private void createTask(String userInput) throws Exception {
         try {
             Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
-                                    parser.getEndDate(userInput), parser.getStartTime(userInput),
-                                    parser.getEndTime(userInput));
+                    parser.getEndDate(userInput), parser.getStartTime(userInput),
+                    parser.getEndTime(userInput));
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
             afterOperation();
             snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("New task created", "", 1500, (b) -> {
@@ -454,12 +430,9 @@ public class MainWindowController implements Initializable {
     private void createRecurringTask(String userInput) throws Exception {
         try {
             RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
-                                                      recurringParser.getTaskStartDate(userInput),
-                                                      recurringParser.getTaskEndDate(userInput),
-                                                      recurringParser.getRecurDuration(userInput),
-                                                      recurringParser.getTaskStartTime(userInput),
-                                                      recurringParser.getTaskEndTime(userInput),
-                                                      recurringParser.getNumToRecur(userInput));
+                    recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
+                    recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
+                    recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
             plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
             afterOperation();
         } catch (IndexOutOfBoundsException e) {
@@ -485,13 +458,12 @@ public class MainWindowController implements Initializable {
     }
 
     private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate, LocalTime startTime,
-                          LocalTime endTime) throws Exception {
+            LocalTime endTime) throws Exception {
         return new Task(taskName, startDate, dueDate, startTime, endTime);
     }
 
     private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate,
-                                            String type, LocalTime startTime, LocalTime endTime,
-                                            int numberToRecur) throws Exception {
+            String type, LocalTime startTime, LocalTime endTime, int numberToRecur) throws Exception {
         return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
     }
 
@@ -508,7 +480,7 @@ public class MainWindowController implements Initializable {
             TaskListCell listCell = new TaskListCell();
             printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
                 Thread.currentThread()
-                      .setUncaughtExceptionHandler((t, e) -> Platform.runLater(System.out::println));
+                        .setUncaughtExceptionHandler((t, e) -> Platform.runLater(System.out::println));
                 if (listCell.getTask().equals(event.getTask())) listCell.getCheckBox().fire();
                 listCell.removeEventFilter(TASK_COMPLETE, null);
             }).start());
