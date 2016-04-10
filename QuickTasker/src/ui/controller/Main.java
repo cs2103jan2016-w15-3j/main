@@ -13,6 +13,7 @@ import javafx.stage.StageStyle;
 
 import java.util.logging.Logger;
 
+// @@author A0133333U
 public class Main extends Application {
 
     private static final String APP_TITLE = "Welcome to QuickTasker!";
