@@ -9,8 +9,10 @@ public class Task implements Comparable {
     private String taskName;
     private LocalDate startDate;
     private LocalDate endDate;
+    // @@author A0133333U
     private LocalTime startTime;
     private LocalTime endTime;
+    //@@author A0121558H
     private boolean isDone = false;
     private String id;
     private String taskType;
@@ -103,14 +105,17 @@ public class Task implements Comparable {
         return startDate;
     }
 
+    // @@author A0133333U
     public LocalTime getStartTime() {
         return startTime;
     }
 
+    // @@author A0133333U
     public LocalTime getEndTime() {
         return endTime;
     }
 
+    // @@author 
     public void setName(String newName) {
         taskName = newName;
     }
@@ -131,14 +136,17 @@ public class Task implements Comparable {
         this.endDate = date;
     }
 
+    // @@author A0133333U
     public void setStartTime(LocalTime time) {
         this.startTime = time;
     }
 
+    // @@author A0133333U
     public void setEndTime(LocalTime time) {
         this.endTime = time;
     }
-
+    
+    // @@author
     public void setDone(boolean done) {
         isDone = done;
     }
