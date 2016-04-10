@@ -78,6 +78,7 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5, column6);
     }
 
+    // @@author A0133333U
     private void configureTaskName() {
         setWrapIfTaskNameLong();
         taskName.getStyleClass().add("task-name");
@@ -148,7 +149,7 @@ public class TaskListCell extends JFXListCell<Task> {
     
     //@@author A0133333U
     protected void setIcon(Task task) {
-        Image image = new Image(getClass().getResourceAsStream("/img/late-icon.png"));
+        Image image = new Image(getClass().getResourceAsStream("/img/task-icon.png"));
     	ImageView imageView = new ImageView(image);
     	imageView.setFitHeight(25);
     	imageView.setFitWidth(25);
@@ -184,6 +185,7 @@ public class TaskListCell extends JFXListCell<Task> {
         taskDueDate.setText(task == null || task.getDueDate() == null || task.getDueDate().equals(LocalDate.MAX) ?
                 "-" :
                 DateTimeFormatter.ofPattern("dd MMM yyyy").format(task.getDueDate()));
+        
     }
 
     // @@author A0133333U
