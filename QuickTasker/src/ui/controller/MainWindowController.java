@@ -334,6 +334,7 @@ public class MainWindowController implements Initializable {
 	}
 	
 	//@@author A0133333U
+	// method displays list of overdue items
 	private void showOverdue() {
 		printedPlanner.setItems(plannerEntries.filtered(task -> util.isTaskOverdue(task)));
 		headerTitle.setText("Tasks: Overdue");
