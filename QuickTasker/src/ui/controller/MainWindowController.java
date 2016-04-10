@@ -409,22 +409,27 @@ public class MainWindowController implements Initializable {
 		displayMessage(MESSAGE_FOR_CLEARING);
 	}
 
+	// skip 1 iteration for that recurring task in that index
 	private void skipRecurringTask(String userInput) throws Exception {
 		try {
-			int index = parser.getTaskIndex(userInput);
-			Task task = plannerEntries.get(index);
-			if (!(task instanceof RecurringTask)) {
-				displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
-			} else {
-				plannerEntries = FXCollections.observableArrayList(operations.skip(index));
-				displayMessage(MESSAGE_FOR_DATE_CHANGE);
-				afterOperation();
-			}
+			skippingRecurringTaskOperation(userInput);
+			afterOperation();
 		} catch (IndexOutOfBoundsException e) {
 			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
 		} catch (NumberFormatException e) {
 			displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
 		}
+	}
+
+	private void skippingRecurringTaskOperation(String userInput) {
+		int index = parser.getTaskIndex(userInput);
+		Task task = plannerEntries.get(index);
+		if (!(task instanceof RecurringTask)) {
+            displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
+        } else {
+            plannerEntries = FXCollections.observableArrayList(operations.skip(index));
+            displayMessage(MESSAGE_FOR_DATE_CHANGE);
+        }
 	}
 
 	//unused because stopRecurring has bugs
