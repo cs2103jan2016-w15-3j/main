@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class Main extends Application {
 
     private static final String APP_TITLE = "Welcome to QuickTasker!";
-    private static final String IMAGE_ICON = "img/home.png";
+    private static final String IMAGE_ICON = "img/quickTasker.png";
     private JFXDecorator decorator;
     private Stage primaryStage;
     private Scene scene;
