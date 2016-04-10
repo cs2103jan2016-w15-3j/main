@@ -131,12 +131,13 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void addContent(Task task) {
         setTaskName(task);
+        setIcon(task);
         setTaskId(task);
 
         setTaskStartDate(task);
         setTaskDueDate(task);
 
-        setTaskStartTime(task);
+        //setTaskStartTime(task);
         setTaskEndTime(task);
 
         setGraphic(grid);
@@ -181,11 +182,11 @@ public class TaskListCell extends JFXListCell<Task> {
                 DateTimeFormatter.ofPattern("dd MMM yyyy").format(task.getDueDate()));
     }
 
-    protected void setTaskStartTime(Task task) {
+/*    protected void setTaskStartTime(Task task) {
         taskStartTime.setText(task == null || !isNotFloatingTask(task) || !isNotEvent(task) || !timeCheck(task) ?
                 "" :
                 DateTimeFormatter.ofPattern("HH:mm").format(task.getStartTime()));
-    }
+    }*/
 
     protected void setTaskEndTime(Task task) {
 
