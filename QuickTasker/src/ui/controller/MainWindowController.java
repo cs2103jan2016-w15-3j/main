@@ -1,6 +1,7 @@
 package ui.controller;
 
 import com.jfoenix.controls.*;
+import common.UIOperationException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,8 +31,6 @@ import parser.UserInputParser;
 import ui.model.TaskListCell;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.EmptyStackException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -57,8 +56,8 @@ public class MainWindowController implements Initializable {
 
     @FXML private AnchorPane mainContentContainer;
     @FXML private StackPane overlayPane;
-    @FXML JFXBadge tasksCounter;
-    @FXML public BorderPane root;
+    @FXML private JFXBadge tasksCounter;
+    @FXML private BorderPane root;
     @FXML private JFXTextField commandBox;
     @FXML private JFXListView<Task> printedPlanner;
 
@@ -151,9 +150,7 @@ public class MainWindowController implements Initializable {
         }
 	}
 
-    private class UIOperationException extends RuntimeException {}
-
-    private void performOperations(String userInput) throws UIOperationException {
+	private void performOperations(String userInput) throws UIOperationException {
 /*
         InputValidator inputValidator = new InputValidator();
         System.out.println("inputValidator.checkAllValid(userInput) " + inputValidator.checkAllValid(userInput));*/
@@ -453,9 +450,7 @@ public class MainWindowController implements Initializable {
 
 	private void addTaskOperation(String userInput) throws Exception {
 		Task newTask = makeTask(userInput);
-		if (isTimeSlotClashing(newTask)) {
-            displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
-        }
+		if (isTimeSlotClashing(newTask)) displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
 		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
 	}
 
@@ -511,64 +506,38 @@ public class MainWindowController implements Initializable {
 	}
 
 	//checks that on the same day, returns true when there is clashing timeslot
-	private boolean isTimeSlotClashing(Task task) {
-		boolean timeSlotsAreClashing = false;
-		if (task.getEndTime() == null) {
-			return timeSlotsAreClashing;
-		} else {
-			for (Task taskInList : plannerEntries) {
-				if (taskInList.getDueDate().equals(task.getDueDate())
-						&& taskInList.getStartDate().equals(task.getStartDate())) {
-					if (taskInList.getEndTime() != null && taskInList.getStartTime() != null) {
-						if (endTimeWithinStartAndEnd(task, timeSlotsAreClashing, taskInList)) {
-							timeSlotsAreClashing = true;
-							break;
-						}
+	private boolean isTimeSlotClashing(Task t) {
+        boolean $ = false;
+        if (t.getEndTime() == null) return $;
+        for (Task taskInList : plannerEntries)
+            if (taskInList.getDueDate().equals(t.getDueDate())
+                    && taskInList.getStartDate().equals(t.getStartDate())) {
+                if (taskInList.getEndTime() == null || taskInList.getStartTime() == null) {
+                    if (taskInList.getEndTime() != null && (endTimeWithinStartAndEnd(t, $, taskInList)
+                            || endTimeWithinStartAndEnd(taskInList, $, t))) {
+                        $ = true;
+                        break;
+                    }
+                } else if (endTimeWithinStartAndEnd(t, $, taskInList)
+                        || endTimeWithinStartAndEnd(taskInList, $, t)
+                        || startTimeWithinStartAndEnd(t, $, taskInList)
+                        || startTimeWithinStartAndEnd(taskInList, $, t)) {
+                    $ = true;
+                    break;
+                }
+            }
+        return $;
+    }
 
-						if (endTimeWithinStartAndEnd(taskInList, timeSlotsAreClashing, task)) {
-							timeSlotsAreClashing = true;
-							break;
-						}
-
-						if (startTimeWithinStartAndEnd(task, timeSlotsAreClashing, taskInList)) {
-							timeSlotsAreClashing = true;
-							break;
-						}
-
-						if (startTimeWithinStartAndEnd(taskInList, timeSlotsAreClashing, task)) {
-							timeSlotsAreClashing = true;
-							break;
-						}
-					} else if (taskInList.getEndTime() != null) {
-						if (endTimeWithinStartAndEnd(task, timeSlotsAreClashing, taskInList)) {
-							timeSlotsAreClashing = true;
-							break;
-						}
-
-						if (endTimeWithinStartAndEnd(taskInList, timeSlotsAreClashing, task)) {
-							timeSlotsAreClashing = true;
-							break;
-						}
-					}
-				}
-			}
-		}
+	private boolean startTimeWithinStartAndEnd(Task t, boolean timeSlotsAreClashing, Task taskInList) {
+		if (t.getStartTime() != null) timeSlotsAreClashing = t.getStartTime().isAfter(taskInList.getStartTime().minusHours(1))
+                && t.getEndTime().isBefore((taskInList.getEndTime().plusHours(1)));
 		return timeSlotsAreClashing;
 	}
 
-	private boolean startTimeWithinStartAndEnd(Task task, boolean timeSlotsAreClashing, Task taskInList) {
-		if (task.getStartTime() != null) {
-			timeSlotsAreClashing = task.getStartTime().isAfter(taskInList.getStartTime().minusHours(1))
-					&& task.getEndTime().isBefore((taskInList.getEndTime().plusHours(1)));
-		}
-		return timeSlotsAreClashing;
-	}
-
-	private boolean endTimeWithinStartAndEnd(Task task, boolean timeSlotsAreClashing, Task taskInList) {
-		if (task.getEndTime() != null) {
-			timeSlotsAreClashing = task.getEndTime().isAfter(taskInList.getStartTime().minusHours(1))
-					&& task.getEndTime().isBefore(taskInList.getEndTime().plusHours(1));
-		}
+	private boolean endTimeWithinStartAndEnd(Task t, boolean timeSlotsAreClashing, Task taskInList) {
+		if (t.getEndTime() != null) timeSlotsAreClashing = t.getEndTime().isAfter(taskInList.getStartTime().minusHours(1))
+                && t.getEndTime().isBefore(taskInList.getEndTime().plusHours(1));
 		return timeSlotsAreClashing;
 	}
 
