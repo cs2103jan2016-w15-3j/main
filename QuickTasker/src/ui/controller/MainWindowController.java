@@ -57,7 +57,7 @@ public class MainWindowController implements Initializable {
 	private Stage stage;
 	private final UserInputParser parser = new UserInputParser();
 	private final UpdateParser updateParser = new UpdateParser();
-	private final InputValidator inputValidator= new InputValidator();
+	private final InputValidator inputValidator = new InputValidator();
 	private final RecurringParser recurringParser = new RecurringParser();
 	private final DirectoryParser directoryParser = new DirectoryParser();
 	private final Logic operations = new Logic();
@@ -112,7 +112,7 @@ public class MainWindowController implements Initializable {
 	private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
 	private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
 	private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "No operations to undo before this.";
-	private static final String ERROR_MESSAGE_FOR_INVALID_INPUT= "Invalid input. Please key in again.";
+	private static final String ERROR_MESSAGE_FOR_INVALID_INPUT = "Invalid input. Please key in again.";
 	private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
 	private static final String LABEL_TITLE = "Help Here!";
 
@@ -208,34 +208,14 @@ public class MainWindowController implements Initializable {
 					skipRecurringTask(userInput);
 				} else if (parser.getCommand(userInput) == Commands.CLEAR_TASK) {
 					clearTasks(userInput);
-				} else if (userInput.contains("stop")) {
+				} else if (parser.getCommand(userInput) == Commands.STOP_TASK) {
 					stopRecurringTask(userInput);
-					// @@author A0133333U
-				} else if (userInput.equalsIgnoreCase("help")) {
-					showHelp();
-					// @@author A0133333U
-				} else if ("show today".equalsIgnoreCase(userInput) || "view today".equalsIgnoreCase(userInput)) {
-					showToday();
-					// @@author A0133333U
-				} else if ("show tomorrow".equalsIgnoreCase(userInput) || "view tomorrow".equalsIgnoreCase(userInput)) {
-					showTomorrow();
-					showAll();
-					// @@author A0133333U
-				} else if ("view floating".equalsIgnoreCase(userInput) || "show floating".equalsIgnoreCase(userInput)) {
-					showFloating();
-					// @@author A0133333U
-				} else if ("show all".equals(userInput) || "view all".equals(userInput)) {
-					showAll();
-				} else if (userInput.contains("theme")) {
+				} else if (parser.getCommand(userInput) == Commands.DISPLAY_TASK) {
+					showTasks(userInput);
+				} else if (parser.getCommand(userInput) == Commands.THEME) {
 					changeTheme(userInput);
-				} else if (userInput.contains("changedir")) {
-					changeDirectory(userInput);
-					// @@author A0133333U
-				} else if ("view archived".equalsIgnoreCase(userInput)) {
-					viewArchived();
-					// @@author A0133333U
-				} else if ("back".equalsIgnoreCase(userInput)) {
-					viewTasks();
+				} else if (parser.getCommand(userInput) == Commands.HELP) {
+					showHelp();
 				}
 			} catch (Exception e) {
 				throw new UIOperationException();
@@ -245,9 +225,28 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
-	/*
-	 * @@author A0133333U did refactoring for this method
-	 */
+	private void showTasks(String userInput) {
+		String whatToShow = determineShow(userInput);
+
+		if (whatToShow.equals("all")) {
+			showAll();
+		} else if (whatToShow.equals("today")) {
+			showToday();
+		} else if (whatToShow.equals("tomorrow")) {
+			showTomorrow();
+		} else if (whatToShow.equals("floating")) {
+			showFloating();
+		} else {
+			showArchived();
+		}
+	}
+
+	private String determineShow(String input) {
+		String[] withoutWhiteSpaces = input.split("\\s+");
+		return withoutWhiteSpaces[1];
+	}
+
+	// @@author kenan
 	private void changeTheme(String userInput) {
 		Scene scene = main.getScene();
 		ThemeChanger themer = new ThemeChanger();
@@ -393,7 +392,7 @@ public class MainWindowController implements Initializable {
 		afterOperation();
 	}
 
-	private void viewArchived() {
+	private void showArchived() {
 		plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
 		afterOperation();
 		headerTitle.setText("Tasks: Archived");
@@ -509,7 +508,7 @@ public class MainWindowController implements Initializable {
 			Task newTask = makeTask(userInput);
 			if (inputValidator.checkIfClash(plannerEntries, newTask)) {
 				displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
-				//TODO HOW TO CHANGE IT TO RED OR SOMETHING????
+				// TODO HOW TO CHANGE IT TO RED OR SOMETHING????
 			}
 			plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
 			afterOperation();

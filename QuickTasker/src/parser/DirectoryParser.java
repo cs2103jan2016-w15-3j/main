@@ -9,6 +9,7 @@ public class DirectoryParser extends UserInputParser {
 
 
 	private void setAttributesForChange(String userInput) {
+		assert(userInput.length()>0);
 		removeWhiteSpaces(userInput);
 		determineLengthOfInput();
 		setFilePath();

@@ -21,16 +21,8 @@ public class InputValidator {
 	private static final RecurringParser recurringParser = new RecurringParser();
 	Commands cmd;
 
-	public boolean isAllValid(String input) {
-		boolean check = false;
-
-		if (checkUndoRedo(input)) {
-			return true;
-		}
-		check = isNull(input) && checkCommand(input) && checkTaskName(input) && checkDate(input)
-				&& checkTime(input);
-		
-		return check;
+	public boolean checkAllValid(String userInput) {
+		return isAllValid(userInput);
 	}
 
 	private static boolean isNull(String input) {
@@ -59,7 +51,6 @@ public class InputValidator {
 
 	private boolean checkTaskName(String input) {
 		if (cmd == Commands.CREATE_TASK) {
-			System.out.println("userInputParser.getTaskName(input).length() != 0 " + (userInputParser.getTaskName(input).length() != 0));
 			return userInputParser.getTaskName(input).length() != 0;
 		} else if (cmd == Commands.UPDATE_TASK) {
 			return updateParser.getTaskName(input).length() != 0;
@@ -100,7 +91,8 @@ public class InputValidator {
 			LocalDate startAdd = userInputParser.getStartDate(input);
 			LocalDate endAdd = userInputParser.getEndDate(input);
 			if (isDateAvailable(startAdd, endAdd)) {
-				System.out.println("endAdd.isAfter(startAdd) || endAdd.isEqual(startAdd) " +(endAdd.isAfter(startAdd) || endAdd.isEqual(startAdd)));
+				System.out.println("endAdd.isAfter(startAdd) || endAdd.isEqual(startAdd) "
+						+ (endAdd.isAfter(startAdd) || endAdd.isEqual(startAdd)));
 				return endAdd.isAfter(startAdd) || endAdd.isEqual(startAdd);
 			}
 			return true;
@@ -128,10 +120,6 @@ public class InputValidator {
 
 	private boolean isDateAvailable(LocalDate start, LocalDate end) {
 		return !(start == LocalDate.MIN) && !(end == LocalDate.MAX);
-	}
-
-	public boolean checkAllValid(String userInput) {
-		return isAllValid(userInput);
 	}
 
 	// Checks if the added task will have any clashes with any range of tasks in
@@ -162,6 +150,17 @@ public class InputValidator {
 		}
 		loggerValidator.log(Level.INFO, "End of checkIfClash");
 		return false;
+	}
+
+	public boolean isAllValid(String input) {
+		boolean check = false;
+
+		if (checkUndoRedo(input)) {
+			return true;
+		}
+		check = isNull(input) && checkCommand(input) && checkTaskName(input) && checkDate(input) && checkTime(input);
+
+		return check;
 	}
 
 	private boolean isNotTwoDates(LocalDate start, LocalDate end) {

@@ -27,10 +27,6 @@ public class RecurringParser extends UserInputParser{
         setTime(userCommand);
         userCommand = dateTimeParser.removeTime(userCommand);
         determineLengthOfInput();
-        
-        for(String s: userCommand) 
-        	System.out.print(s + " ");
-        
         isEnglishDate();
         setDate(numToUse, lengthOfInput);
         userCommand = dateTimeParser.removeDate(userCommand);
