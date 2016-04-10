@@ -523,6 +523,7 @@ public class MainWindowController implements Initializable {
                 updateParser.getEndTime(userInput));
     }
 
+    // @@author A0130949Y
     // checks that on the same day, returns true when there is clashing timeslot
     // unused due to bugs
     private boolean isTimeSlotClashing(Task task) {
