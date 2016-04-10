@@ -78,6 +78,7 @@ public class MainWindowController implements Initializable {
 	private JFXRippler headerTitleContainer;
 	@FXML
 	private Label headerTitle;
+	
 
 	private ObservableList<Task> plannerEntries;
 	private Stage helpStage;
@@ -317,10 +318,33 @@ public class MainWindowController implements Initializable {
 	private boolean isKeywordSearch() {
 		return true;
 	}
+	
+	//@@author A0133333U
+	// this method will set the generic task icon in the header titles, except in overdue
+    protected void setGenericIcon() {
+        Image image = new Image(getClass().getResourceAsStream("/img/task-icon.png"));
+    	ImageView imageView = new ImageView(image);
+    	imageView.setFitHeight(25);
+    	imageView.setFitWidth(25);
+    	imageView.setPreserveRatio(true);
+        headerTitle.setGraphic(imageView);
+    }
+    
+	// @@author A0133333U
+    // this method will set and assign the warning icon to the header title when overdue tasks are shown
+    private void setWarningIcon() {
+		Image warningImage = new Image(getClass().getResourceAsStream("/img/warning.png"));
+		ImageView imageWarning = new ImageView(warningImage);
+		imageWarning.setFitHeight(25);
+		imageWarning.setFitWidth(25);
+		imageWarning.setPreserveRatio(true);
+		headerTitle.setGraphic(imageWarning);
+	}
 
 	private void showAll() {
 		printedPlanner.setItems(plannerEntries);
 		headerTitle.setText("Tasks: All");
+		setGenericIcon();
 		updateTaskCounter();
 		commandBox.clear();
 	}
@@ -329,6 +353,7 @@ public class MainWindowController implements Initializable {
 
 		printedPlanner.setItems(plannerEntries.filtered(task -> util.isDisplayedInTodayView(task)));
 		headerTitle.setText("Tasks: Today + Floating");
+		setGenericIcon();
 		updateTaskCounter();
 		commandBox.clear();
 	}
@@ -338,15 +363,12 @@ public class MainWindowController implements Initializable {
 	private void showOverdue() {
 		printedPlanner.setItems(plannerEntries.filtered(task -> util.isTaskOverdue(task)));
 		headerTitle.setText("Tasks: Overdue");
-		Image warningImage = new Image(getClass().getResourceAsStream("/img/warning.png"));
-		ImageView imageWarning = new ImageView(warningImage);
-		imageWarning.setFitHeight(25);
-		imageWarning.setFitWidth(25);
-		imageWarning.setPreserveRatio(true);
-		headerTitle.setGraphic(imageWarning);
+		setWarningIcon();
 		updateTaskCounter();
 		commandBox.clear();
 	}
+
+
 
 	// @@author A0130949Y
 	private void markTaskCompleted(String userInput) throws Exception {
@@ -400,6 +422,7 @@ public class MainWindowController implements Initializable {
 		plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
 		afterOperation();
 		headerTitle.setText("Tasks: Archived");
+		//setGenericIcon();
 	}
 
 	private void sortTask(String userInput) {

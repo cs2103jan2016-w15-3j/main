@@ -30,7 +30,6 @@ public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartTime = new Label();
     private final Label taskEndTime = new Label();
     private final Label taskId = new Label();
-    private final Label lateIcon = new Label();
     private final JFXCheckBox checkBox = new JFXCheckBox();
   //@@author A0126077E
     private final JFXPopup searchBox = new JFXPopup();
@@ -44,7 +43,7 @@ public class TaskListCell extends JFXListCell<Task> {
         configureTaskName();
         configureDate();
         configureTime();
-        configureIcon();
+        //configureIcon();
         configureCheckBox();
         addControlsToGrid();
         addGridToRippler();
@@ -68,24 +67,18 @@ public class TaskListCell extends JFXListCell<Task> {
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setMaxWidth(20);
         ColumnConstraints column3 = new ColumnConstraints();
-        column3.setMaxWidth(20);
-        ColumnConstraints column4 = new ColumnConstraints();
         column3.setHgrow(Priority.ALWAYS);
+        ColumnConstraints column4 = new ColumnConstraints();
+        column4.setMinWidth(80);
         ColumnConstraints column5 = new ColumnConstraints();
         column5.setMinWidth(80);
-        //column5.setPrefWidth(80);
-        ColumnConstraints column6 = new ColumnConstraints();
-       column6.setMinWidth(80);
-       //column5.setPrefWidth(80);
-
-        grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5, column6);
+        grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5);
     }
 
     // @@author A0133333U
     private void configureTaskName() {
         setWrapIfTaskNameLong();
         taskName.getStyleClass().add("task-name");
-        //GridPane.setHalignment(taskName, HPos.LEFT);
     }
 
     private void setWrapIfTaskNameLong() {
@@ -108,10 +101,12 @@ public class TaskListCell extends JFXListCell<Task> {
         GridPane.setHalignment(taskEndTime, HPos.RIGHT);
     }
 
-    // @@author A0133333U
+/*    // @@author A0133333U-unused
+ * unused because layout decided on is diff
+ *	
     private void configureIcon() {
         lateIcon.getStyleClass().add("late-icon");
-    }
+    }*/
 
     private void configureCheckBox() {
         checkBox.getStyleClass().add("task-check-box");
@@ -138,7 +133,6 @@ public class TaskListCell extends JFXListCell<Task> {
 
     protected void addContent(Task task) {
         setTaskName(task);
-        setIcon(task);
         setTaskId(task);
 
         setTaskStartDate(task);
@@ -150,15 +144,6 @@ public class TaskListCell extends JFXListCell<Task> {
         setGraphic(grid);
     }
     
-    //@@author A0133333U
-    protected void setIcon(Task task) {
-        Image image = new Image(getClass().getResourceAsStream("/img/task-icon.png"));
-    	ImageView imageView = new ImageView(image);
-    	imageView.setFitHeight(25);
-    	imageView.setFitWidth(25);
-    	imageView.setPreserveRatio(true);
-        lateIcon.setGraphic(imageView);
-    }
 
     // @@author A0133333U
     protected void setTaskId(Task task) {
@@ -229,12 +214,12 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void addControlsToGrid() {
         grid.add(taskId, 0, 0, 1, 2);
-        grid.add(lateIcon, 1, 0, 1, 2);
-        grid.add(checkBox, 2, 0, 1, 2);
-        grid.add(new HBox(taskName), 3, 0, 1, 2);
-        grid.add(taskStartDate, 4, 0);
-        grid.add(taskStartTime, 4, 1);
-        grid.add(taskDueDate, 5, 0);
-        grid.add(taskEndTime, 5, 1);
+        grid.add(checkBox, 1, 0, 1, 2);
+        grid.add(new HBox(taskName), 2, 0, 1, 2);
+        grid.add(taskStartDate, 3, 0);
+        grid.add(taskStartTime, 3, 1);
+        grid.add(taskDueDate, 4, 0);
+        grid.add(taskEndTime, 4, 1);
     }
+
 }
