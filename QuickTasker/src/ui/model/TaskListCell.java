@@ -26,11 +26,13 @@ public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartDate = new Label();
     private final Label taskDueDate = new Label();
     private final Label taskName = new Label();
+    // @@author A0133333U
     private final Label taskStartTime = new Label();
     private final Label taskEndTime = new Label();
     private final Label taskId = new Label();
     private final Label lateIcon = new Label();
     private final JFXCheckBox checkBox = new JFXCheckBox();
+  //@@author A0126077E
     private final JFXPopup searchBox = new JFXPopup();
     private final GridPane grid = new GridPane();
     private JFXRippler rippler = new JFXRippler();
@@ -91,6 +93,7 @@ public class TaskListCell extends JFXListCell<Task> {
         GridPane.setHalignment(taskDueDate, HPos.RIGHT);
     }
 
+    // @@author A0133333U
     private void configureTime() {
         taskStartDate.getStyleClass().add("task-time");
         taskEndTime.getStyleClass().add("task-time");
@@ -112,9 +115,6 @@ public class TaskListCell extends JFXListCell<Task> {
         setGraphic(null);
     }
 
-    private void configureSearchBox() {
-        // searchBox.getStyleClass.().add("search-box");
-    }
 
     @Override
     public void updateItem(Task task, boolean empty) {
@@ -153,6 +153,7 @@ public class TaskListCell extends JFXListCell<Task> {
         lateIcon.setGraphic(imageView);
     }
 
+    // @@author A0133333U
     protected void setTaskId(Task task) {
         taskId.setText(String.valueOf(getIndex() + offset));    
     }
@@ -182,12 +183,14 @@ public class TaskListCell extends JFXListCell<Task> {
                 DateTimeFormatter.ofPattern("dd MMM yyyy").format(task.getDueDate()));
     }
 
-/*    protected void setTaskStartTime(Task task) {
+    // @@author A0133333U
+    protected void setTaskStartTime(Task task) {
         taskStartTime.setText(task == null || !isNotFloatingTask(task) || !isNotEvent(task) || !timeCheck(task) ?
                 "" :
                 DateTimeFormatter.ofPattern("HH:mm").format(task.getStartTime()));
-    }*/
+    }
 
+    // @@author A0133333U
     protected void setTaskEndTime(Task task) {
 
         if (task == null || !isNotFloatingTask(task) || !isNotEvent(task) || !timeCheck(task)) taskEndTime.setText("-");
