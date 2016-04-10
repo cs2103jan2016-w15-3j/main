@@ -1,5 +1,5 @@
 package parser;
-
+//@@author A0121558H
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,12 +8,11 @@ public class DirectoryParser extends UserInputParser {
 	private static Logger loggerFilePath = Logger.getLogger("getFilePath");
 
 
-	private void setAttributesForChange(String userInput) {
-		removeWhiteSpaces(userInput);
-		determineLengthOfInput();
-		setFilePath();
-		//convertFilePath();
-	}
+    private void setAttributesForChange(String userInput) {
+        removeWhiteSpaces(userInput);
+        determineLengthOfInput();
+        setFilePath();
+    }
 
 	private void setFilePath() {
 		filePath=userCommand[1];

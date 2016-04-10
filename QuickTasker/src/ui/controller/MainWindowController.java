@@ -183,6 +183,7 @@ public class MainWindowController implements Initializable {
             else if (parser.getCommand(userInput) == Commands.CHANGE_DIRECTORY) changeDirectory(userInput);
             else if ("view archived".equals(userInput)) viewArchived();
             else if ("back".equals(userInput)) viewTasks();
+	        else if ("help".equals(userInput)) showHelp();
         } catch (Exception e) {
             throw new UIOperationException();
         }

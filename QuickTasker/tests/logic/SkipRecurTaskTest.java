@@ -20,8 +20,7 @@ public class SkipRecurTaskTest {
 
     private void createRecurringTasks(int n) {
         for (int i = 0; i < n; i++) {
-            logic.addTask(new RecurringTask("Recurring " + i, LocalDate.now().plusDays(i),
-                    LocalDate.now().plusDays(i), "weeks", null, null, 2));
+            logic.addTask(new RecurringTask("Recurring " + i, LocalDate.now().plusDays(i), LocalDate.now().plusDays(i), "weeks", null, null, 2));
         }
     }
 
@@ -42,7 +41,7 @@ public class SkipRecurTaskTest {
         boolean testNegative = false;
         try {
             logic.skip(-1);
-        } catch (IndexOutOfBoundsException e) {
+        } catch(IndexOutOfBoundsException e) {
             testNegative = true;
         }
         assert (testNegative);
@@ -53,7 +52,7 @@ public class SkipRecurTaskTest {
         boolean testOutOfBound = false;
         try {
             logic.skip(5);
-        } catch (IndexOutOfBoundsException e) {
+        } catch(IndexOutOfBoundsException e) {
             testOutOfBound = true;
         }
         assert (testOutOfBound);
@@ -64,7 +63,7 @@ public class SkipRecurTaskTest {
         boolean testNonNumberIndex = false;
         try {
             logic.skip(Integer.parseInt("hi"));
-        } catch (NumberFormatException e) {
+        } catch(NumberFormatException e) {
             testNonNumberIndex = true;
         }
         assert (testNonNumberIndex);
