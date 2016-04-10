@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import static org.junit.Assert.assertEquals;
 
 /*
- * @@author Lee Jia Lin <A0133333U>
+ * @@author A0133333U
  */
 public class TaskListCellTest {
 
