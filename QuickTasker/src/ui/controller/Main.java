@@ -27,7 +27,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        SettingManager settings = new SettingManagerImpl(); // required to load settings from file when program starts
+        // required to generate settings when program starts the first time
+        SettingManager settings = new SettingManagerImpl();
+        // ======================================================
         this.primaryStage = primaryStage;
         initMainWindow();
     }
@@ -59,6 +61,7 @@ public class Main extends Application {
     }
 
     private void setCssStyles() {
+        // PRECAUSION: fonts.css need to be loaded before other css files to avoid compilation error
         scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
         scene.getStylesheets().add(Main.class.getResource("/css/application.css").toExternalForm());
     }
