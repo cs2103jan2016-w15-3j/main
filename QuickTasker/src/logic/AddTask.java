@@ -1,5 +1,5 @@
 package logic;
-//@@author A0130949
+//@@author A0130949Y
 
 import model.Task;
 import org.ocpsoft.prettytime.shade.org.apache.commons.lang.NullArgumentException;
@@ -16,8 +16,7 @@ public class AddTask<E> implements Command<Object> {
     private Stack<Integer> redoStackInt = new Stack<Integer>();
 
     @Override
-    /*  adds the task into the list. task cannot be null. throwing NullArgumentException is for Junit test
-        uncomment the throwing of exception when running tests */
+    // adds the task into the list. task cannot be null. throwing Exception is for Junit testing
     public void execute(List<Task> list,
             Object task) {
         loggerAdd.log(Level.INFO, "Start adding task");
@@ -53,7 +52,7 @@ public class AddTask<E> implements Command<Object> {
         loggerAdd.log(Level.INFO, "END");
     }
 
-    // basically removing the added task
+    // removing the added task
     private void undoAdding(ArrayList<Task> list) {
         Task undoTask = undoTaskStack.pop();
         int index = undoStackInt.pop();
@@ -90,7 +89,7 @@ public class AddTask<E> implements Command<Object> {
         loggerAdd.log(Level.INFO, "FINISH REDO PROCESS");
     }
 
-    // basically add the task again
+    // add the task again
     private void redoAdding(ArrayList<Task> list) {
         Task redoTask = redoTaskStack.pop();
         int index = redoStackInt.pop();

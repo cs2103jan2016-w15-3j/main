@@ -14,7 +14,7 @@ public class ClearTasks<E> implements Command<Object> {
         executeClear(list);
     }
 
-    // transfer the current list to a new task for undo proposes
+    // transfer the current list to a new list for undo proposes
     private void executeClear(List<Task> list) {
         tasks.clear();
         for (int i = 0; i < list.size(); i++) {
