@@ -1,8 +1,8 @@
 package data;
 //@@author A0126077E
 
-import Common.LoadSettingsException;
-import Common.ResetSettingsException;
+import common.LoadSettingsException;
+import common.ResetSettingsException;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;

@@ -1,7 +1,9 @@
 package ui.controller;
 
 import com.jfoenix.controls.*;
-import Common.UIOperationException;
+import com.sun.corba.se.spi.orbutil.threadpool.NoSuchWorkQueueException;
+
+import common.UIOperationException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -334,6 +337,8 @@ public class MainWindowController implements Initializable {
 	private void showOverdue() {
 		printedPlanner.setItems(plannerEntries.filtered(task -> util.isTaskOverdue(task)));
 		headerTitle.setText("Tasks: Overdue");
+		Image warningImage = new Image(getClass().getResourceAsStream("/img/warning.png"));
+		headerTitle.setGraphic(new ImageView(warningImage));
 		updateTaskCounter();
 		commandBox.clear();
 	}

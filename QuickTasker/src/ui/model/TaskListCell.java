@@ -68,13 +68,16 @@ public class TaskListCell extends JFXListCell<Task> {
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setMaxWidth(20);
         ColumnConstraints column3 = new ColumnConstraints();
-        column3.setMinWidth(80);
+        column3.setMaxWidth(20);
         ColumnConstraints column4 = new ColumnConstraints();
         column3.setHgrow(Priority.ALWAYS);
         ColumnConstraints column5 = new ColumnConstraints();
         column5.setMinWidth(80);
+        //column5.setPrefWidth(80);
         ColumnConstraints column6 = new ColumnConstraints();
-        column6.setMinWidth(80);
+       column6.setMinWidth(80);
+       //column5.setPrefWidth(80);
+
         grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5, column6);
     }
 
@@ -82,7 +85,7 @@ public class TaskListCell extends JFXListCell<Task> {
     private void configureTaskName() {
         setWrapIfTaskNameLong();
         taskName.getStyleClass().add("task-name");
-        GridPane.setHalignment(taskName, HPos.LEFT);
+        //GridPane.setHalignment(taskName, HPos.LEFT);
     }
 
     private void setWrapIfTaskNameLong() {
