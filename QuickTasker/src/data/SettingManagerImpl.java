@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SettingManagerImpl implements SettingManager {
@@ -46,6 +47,8 @@ public class SettingManagerImpl implements SettingManager {
             Files.deleteIfExists(DEFAULT_PATH_OF_SETTING);
             createDefaultSettings();
         } catch (IOException e) {
+            logger.log(Level.SEVERE, "IO exception occured trying to reset default setting.\n"
+                    + "Exception might be thrown because createDefaults() method failed to write to file.",e);
             throw new ResetSettingsException();
         }
     }
@@ -55,6 +58,7 @@ public class SettingManagerImpl implements SettingManager {
         try {
             return settings.getString(AvailableSettings.SAVE_LOCATION.toString());
         } catch (NullPointerException e) {
+            logger.log(Level.WARNING,"Setting stored in configuration object is :"+settings.getString(AvailableSettings.SAVE_LOCATION.toString()), e);
             return null;
         }
     }
@@ -91,7 +95,6 @@ public class SettingManagerImpl implements SettingManager {
             Properties properties = new DefaultSettings().getDefaults();
             properties.store(outputStream, SETTING_HEADER_TEXT);
             loadSettings();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
