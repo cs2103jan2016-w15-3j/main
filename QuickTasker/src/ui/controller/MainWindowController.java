@@ -208,7 +208,11 @@ public class MainWindowController implements Initializable {
 			} else if (parser.getCommand(userInput) == Commands.SKIP_TASK) {
 				skipRecurringTask(userInput);
 			} else if (parser.getCommand(userInput) == Commands.CLEAR_TASK) {
-				clearTasks(userInput);
+				clearTasks();
+			} else if ("view archived".equalsIgnoreCase(userInput)) {
+				viewArchived();
+			} else if (parser.getCommand(userInput) == Commands.BACK) {
+				viewTasks();
 			} else if (userInput.contains("stop")) {
 				stopRecurringTask(userInput);
 				// @@author A0133333U
@@ -232,11 +236,6 @@ public class MainWindowController implements Initializable {
 			} else if (userInput.contains("changedir")) {
 				changeDirectory(userInput);
 				// @@author A0133333U
-			} else if ("view archived".equalsIgnoreCase(userInput)) {
-				viewArchived();
-				// @@author A0133333U
-			} else if ("back".equalsIgnoreCase(userInput)) {
-				viewTasks();
 			}
 		} catch (Exception e) {
 			throw new UIOperationException();
@@ -244,7 +243,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	/*
-	 * @@author A0133333U
+	 * @@author A0133333U and kena
 	 * did refactoring for this method
 	 */
 	private void changeTheme(String userInput) {
@@ -260,6 +259,7 @@ public class MainWindowController implements Initializable {
 		});
 	}
 
+	//@@author kenan
 	private void showTomorrow() {
 		printedPlanner.setItems(plannerEntries.filtered(task -> util.isDisplayedInTomorrowView(task)));
 		headerTitle.setText("Tasks: Tomorrow");
@@ -317,6 +317,7 @@ public class MainWindowController implements Initializable {
 	
 
 	/**
+	 * @@author kenan
 	 * To be moved inside serach helper when tidy up.
 	 */
 	private boolean isKeywordSearch() {
@@ -408,7 +409,8 @@ public class MainWindowController implements Initializable {
 		afterOperation();
 	}
 
-	private void clearTasks(String userInput) {
+	//@@author A0130949Y
+	private void clearTasks() {
 		plannerEntries = FXCollections.observableArrayList(operations.clear());
 		afterOperation();
 		displayMessage(MESSAGE_FOR_CLEARING);
@@ -458,23 +460,7 @@ public class MainWindowController implements Initializable {
 	
 	private void updateTask(String userInput) throws Exception {
 		try {
-			int indexOfTask = updateParser.getTaskIndex(userInput);
-			Task task = plannerEntries.get(indexOfTask);
-			printedPlanner.getSelectionModel().select(indexOfTask);
-			/*
-			 * if (task instanceof RecurringTask) { Task newTask =
-			 * makeRecurringTask(parser.getTaskNameForUpdate(userInput),
-			 * parser.getStartDateForUpdate(userInput),
-			 * parser.getEndDateForUpdate(userInput),
-			 * parser.getStartTimeForUpdate(userInput),
-			 * parser.getEndTimeForUpdate(userInput), ); plannerEntries =
-			 * FXCollections.observableArrayList(operations.updateTask(newTask,
-			 * indexOfTask)); } else {
-			 */
-			Task newTask = makeTaskForUpdate(userInput);
-			plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
-			// }
-			printedPlanner.getSelectionModel().clearSelection();
+			updateTaskOperation(userInput);
 			afterOperation();
 			displayMessage(MESSAGE_EDIT_CONFIRMED);
 		} catch (IndexOutOfBoundsException e) {
@@ -484,11 +470,17 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
+	private void updateTaskOperation(String userInput) {
+		int indexOfTask = updateParser.getTaskIndex(userInput);
+		printedPlanner.getSelectionModel().select(indexOfTask);
+		Task newTask = makeTaskForUpdate(userInput);
+		plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
+		printedPlanner.getSelectionModel().clearSelection();
+	}
+
 	private void deleteTask(String userInput) throws Exception {
 		try {
-			int taskIndex;
-			taskIndex = parser.getTaskIndex(userInput);
-			plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
+			deleteTaskOperation(userInput);
 			afterOperation();
 			displayMessage(MESSAGE_DELETE_CONFIRMED);
 		} catch (NumberFormatException e) {
@@ -500,6 +492,11 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
+	private void deleteTaskOperation(String userInput) {
+		int taskIndex;
+		taskIndex = parser.getTaskIndex(userInput);
+		plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
+	}
 
 	private void changeDirectory(String userInput) throws Exception {
 		operations.changeDir(directoryParser.getFilePath(userInput));
@@ -508,11 +505,7 @@ public class MainWindowController implements Initializable {
 
 	private void addTask(String userInput) throws Exception {
 		try {
-			Task newTask = makeTask(userInput);
-			if (isTimeSlotClashing(newTask)) {
-				displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
-			}
-			plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+			addTaskOperation(userInput);
 			afterOperation();
 			displayMessage(MESSAGE_ADD_CONFIRMED);
 			printedPlanner.scrollTo(printedPlanner.getItems().size() - 1);
@@ -521,13 +514,17 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
+	private void addTaskOperation(String userInput) throws Exception {
+		Task newTask = makeTask(userInput);
+		if (isTimeSlotClashing(newTask)) {
+            displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
+        }
+		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+	}
+
 	private void addRecurringTask(String userInput) throws Exception {
 		try {
-			RecurringTask newTask = makeRecurringTask(userInput);
-			if (isTimeSlotClashing(newTask)) {
-				displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
-			}
-			plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+			addRecurringTaskOperation(userInput);
 			afterOperation();
 			displayMessage(MESSAGE_ADD_CONFIRMED);
 		} catch (IndexOutOfBoundsException e) {
@@ -539,7 +536,15 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
-	
+	private void addRecurringTaskOperation(String userInput) throws Exception {
+		RecurringTask newTask = makeRecurringTask(userInput);
+		if (isTimeSlotClashing(newTask)) {
+            displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
+        }
+		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+	}
+
+
 	private void afterOperation() {
 		setCellFactory();
 		refresh();
@@ -556,6 +561,7 @@ public class MainWindowController implements Initializable {
 				parser.getStartTime(userInput), parser.getEndTime(userInput));
 	}
 
+	//@@author A0130949Y
 	private RecurringTask makeRecurringTask(String userInput) throws Exception {
 		return new RecurringTask(recurringParser.getTaskName(userInput), recurringParser.getTaskStartDate(userInput),
 				recurringParser.getTaskEndDate(userInput), recurringParser.getRecurDuration(userInput),
@@ -563,13 +569,13 @@ public class MainWindowController implements Initializable {
 				recurringParser.getNumToRecur(userInput));
 	}
 
-
 	private Task makeTaskForUpdate(String userInput) {
 		return new Task(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
 				updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
 				updateParser.getEndTime(userInput));
 	}
 
+	//checks that on the same day, returns true when there is clashing timeslot
 	private boolean isTimeSlotClashing(Task task) {
 		boolean timeSlotsAreClashing = false;
 		if (task.getEndTime() == null) {

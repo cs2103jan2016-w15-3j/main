@@ -47,6 +47,8 @@ public class DetermineCommandType {
                 return Commands.MARK_TASK;
             case "clear":
                 return Commands.CLEAR_TASK;
+            case "back":
+                return Commands.BACK;
             default:
                 return Commands.ERROR;
         }

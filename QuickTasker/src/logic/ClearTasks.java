@@ -1,13 +1,10 @@
 package logic;
-
+//@@author A0130949Y
 import model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by User on 7/4/2016.
- */
 public class ClearTasks<E> implements Command<Object> {
     private ArrayList<Task> tasks = new ArrayList<Task>();
 

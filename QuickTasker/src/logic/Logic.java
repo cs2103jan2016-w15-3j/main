@@ -1,5 +1,5 @@
 package logic;
-
+//@@author A0130949Y
 import data.JsonTaskDataAccess;
 import data.SettingManager;
 import data.TaskDataAccessObject;
@@ -8,8 +8,6 @@ import model.Task;
 import parser.Commands;
 
 import java.util.*;
-
-//@@author A0130949
 
 public class Logic {
     protected List<Task> list;
