@@ -225,9 +225,43 @@ public class MainWindowController implements Initializable {
         // to be written
         commandBox.clear();
     }
+    
+/*@@author A0133333U-unused
+unused because another team member had implemented search as well
+*/
+/*private void searchTask(String userInput) {
+        if (userInput != null) {
+          listView.setItems(plannerEntries);
+        }
+        String[] splitted = userInput.toLowerCase().split(" ");
+        filteredEntries = FXCollections.observableArrayList();
+        listView.setItems(plannerEntries);
 
+        for (Task task : listView.getItems()) {
+          boolean match = false;
+          String entryText = task.getName();
+          System.out.println(entryText);
+          for (int i = 1; i < splitted.length; i++) {
+            if (entryText.toUpperCase().contains(splitted[i].toUpperCase())) {
+              match = true;
+            }
+            if (match) {
+              filteredEntries.add(task);
+              snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Search results returned.", "", 1500, (b) -> {
+              }));
+            }
+          }
+          listView.setItems(filteredEntries);
+          afterSearch();
+
+        }
+      }
+*/
+    
+    
     /*
      * @@author A013333U
+     * Display a Help popup when user types in 'help'. 
      */
     private void showHelp() throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/fxml/Help.fxml"));
