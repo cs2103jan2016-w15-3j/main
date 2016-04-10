@@ -25,54 +25,62 @@ public class Main extends Application {
     private static final int STAGE_MINIMUM_WIDTH = 560;
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
-    /**
-     * @@author A0126077E.
-     */
-
     @Override
     public void start(Stage primaryStage) {
         SettingManager settings = new SettingManagerImpl();
         this.primaryStage = primaryStage;
-        mainWindow();
+        initMainWindow();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    // @@author A0133333U
-    private void mainWindow() {
-
+    private void initMainWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainWindowView.fxml"));
             BorderPane mainContainer = loader.load();
             MainWindowController mainWindowController = loader.getController();
-            mainWindowController.setMain(this);
-            mainWindowController.setStage(primaryStage);
-            decorator = new JFXDecorator(primaryStage, mainContainer);
-            scene = new Scene(decorator, 560, 400);
-            scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
-            scene.getStylesheets().add(Main.class.getResource("/css/application.css").toExternalForm());
 
-            primaryStage.initStyle(StageStyle.UNDECORATED);
-            primaryStage.getIcons().add(new Image(IMAGE_ICON));
-            primaryStage.setTitle(APP_TITLE);
-            primaryStage.setMinWidth(STAGE_MINIMUM_WIDTH);
-            primaryStage.setMinHeight(STAGE_MINIMUM_HEIGHT);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
+            setReferencesToController(mainWindowController);
+            configureScene(mainContainer);
+            setCssStyles();
+            initializePrimaryStage();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public JFXDecorator getDecorator() {
-        return decorator;
+    private void setReferencesToController(MainWindowController mainWindowController) {
+        mainWindowController.setMain(this);
+        mainWindowController.setStage(primaryStage);
+    }
+
+    private void configureScene(BorderPane mainContainer) {
+        decorator = new JFXDecorator(primaryStage, mainContainer);
+        scene = new Scene(decorator, 560, 400);
+    }
+
+    private void setCssStyles() {
+        scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
+        scene.getStylesheets().add(Main.class.getResource("/css/application.css").toExternalForm());
+    }
+
+    private void initializePrimaryStage() {
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.getIcons().add(new Image(IMAGE_ICON));
+        primaryStage.setTitle(APP_TITLE);
+        primaryStage.setMinWidth(STAGE_MINIMUM_WIDTH);
+        primaryStage.setMinHeight(STAGE_MINIMUM_HEIGHT);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     public Scene getScene() {
         return this.scene;
     }
 
+    public JFXDecorator getDecorator() {
+        return decorator;
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
