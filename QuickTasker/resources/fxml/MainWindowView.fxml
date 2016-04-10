@@ -57,7 +57,7 @@
                             <JFXBadge fx:id="tasksCounter" position="TOP_RIGHT"
                                       styleClass="icons-badge" text="1"
                                       BorderPane.alignment="CENTER">
-                                <MaterialDesignIconView glyphName="INBOX" size="2.5em"
+                              <MaterialDesignIconView glyphName="INBOX" size="2.5em"
                                                         styleClass="icon"
                                                         textAlignment="CENTER" textOrigin="CENTER"/>
                             </JFXBadge>
