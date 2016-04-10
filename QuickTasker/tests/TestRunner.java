@@ -1,6 +1,8 @@
 import data.JsonTaskDataAccessTest;
 import data.SettingManagerTest;
-import logic.*;
+import logic.AddTaskTest;
+import logic.DeleteTaskTest;
+import logic.UpdateTaskTest;
 import model.RecurringTaskTest;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -24,11 +26,11 @@ public class TestRunner {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(JsonTaskDataAccessTest.class, SettingManagerTest.class,
-                AddTaskTest.class, DeleteTaskTest.class, DisplayTaskTest.class,
-                UpdateTaskTest.class, AddRecurTaskTest.class, RecurringTaskTest.class,
-                DateTimeParserTest.class, UserInputParserTest.class, TaskDoneEventTest.class,
-                TaskListCellTest.class);
+        Result result = JUnitCore
+                .runClasses(JsonTaskDataAccessTest.class, SettingManagerTest.class, AddTaskTest.class,
+                        DeleteTaskTest.class, UpdateTaskTest.class, RecurringTaskTest.class,
+                        DateTimeParserTest.class, UserInputParserTest.class, TaskDoneEventTest.class,
+                        TaskListCellTest.class);
 
         System.out.println();
 
@@ -40,7 +42,7 @@ public class TestRunner {
         } else {
             List<Failure> failures = result.getFailures();
             for (Failure f : failures) {
-                System.out.println(ANSI_RED + f.toString() + ANSI_RESET);
+                System.out.println(ANSI_RED + f + ANSI_RESET);
             }
         }
     }

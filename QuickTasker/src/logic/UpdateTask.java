@@ -1,15 +1,19 @@
 package logic;
 //@@author A0130949
+
+import model.RecurringTask;
 import model.Task;
 import model.RecurringTask;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UpdateTask<E> implements Command<Object> {
+    private static Logger loggerUpdate = Logger.getLogger("log");
     private static Stack<Task> undoStackTask = new Stack<Task>();
     private static Stack<Integer> undoStackInt = new Stack<Integer>();
     private static Stack<Task> redoStackTask = new Stack<Task>();
@@ -17,52 +21,31 @@ public class UpdateTask<E> implements Command<Object> {
 
     @Override
     public void execute(List<Task> list, Object index) {
-        int taskIndex = (int) index;
-        undoStackTask.push(list.get(taskIndex));
-        executeUpdate(taskIndex, list);
+        loggerUpdate.log(Level.INFO, "Start updating");
+        try {
+            int taskIndex = (int) index;
+            assert (taskIndex >= 0);
+            undoStackTask.push(list.get(taskIndex));
+            executeUpdate(taskIndex, list);
+            loggerUpdate.log(Level.INFO, "End");
+        } catch (AssertionError e) {
+            loggerUpdate.log(Level.WARNING, "Cannot update negative index");
+            throw new IllegalArgumentException();
+        } catch (NumberFormatException e) {
+            loggerUpdate.log(Level.WARNING, "Cannot update an index thats not a number");
+            throw new NumberFormatException();
+        }
     }
 
     public void executeUpdate(int taskIndex, List<Task> list) {
         Task newTask = list.remove(list.size() - 1);
-        Task updatedTask = checkAttributes(newTask, taskIndex, list);
+        Task updatedTask = checkAttributesForTask(newTask, taskIndex, list);
         list.set(taskIndex, updatedTask);
         Collections.sort(list);
-        undoStackInt.push(findTask(updatedTask, (ArrayList<Task>) list));
-    }
-    private Task checkAttributes (Task newTask, int taskIndex, List<Task> list) {
-        if (list.get(taskIndex) instanceof RecurringTask) {
-            return checkAttributesForRecurringTask(newTask, taskIndex, list);
-        } else {
-            return checkAttributesForTask(newTask, taskIndex, list);
-        }
-    }
-    
-    private RecurringTask checkAttributesForRecurringTask(Task updatedTask, int taskIndex, List<Task> list) {
-        if (updatedTask.getStartDate() == LocalDate.MIN
-                && list.get(taskIndex).getStartDate() != LocalDate.MIN) {
-            updatedTask.setStartDate(list.get(taskIndex).getStartDate());
-        }
-
-        if (updatedTask.getDueDate() == LocalDate.MIN
-                && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
-            updatedTask.setEndDate(list.get(taskIndex).getDueDate());
-        }
-
-        if (updatedTask.getName().isEmpty() && !list.get(taskIndex).getName().isEmpty()) {
-            updatedTask.setName(list.get(taskIndex).getName());
-        }
-
-        if (updatedTask.getStartTime() == null && list.get(taskIndex).getStartTime() != null) {
-            updatedTask.setStartTime(list.get(taskIndex).getStartTime());
-        }
-
-        if (updatedTask.getEndTime() == null && list.get(taskIndex).getEndTime() != null) {
-            updatedTask.setEndTime(list.get(taskIndex).getEndTime());
-        }
-        
-        return transferAttributes(updatedTask, taskIndex, list);
+        undoStackInt.push(findTask(updatedTask.getId(), (ArrayList<Task>) list));
     }
 
+    // transfer the task attributes to recurring task
     private RecurringTask transferAttributes(Task updatedTask, int index, List<Task> list) {
         RecurringTask recurringTask = new RecurringTask(updatedTask.getName(), updatedTask.getStartDate(),
                 updatedTask.getDueDate(), ((RecurringTask) list.get(index)).getRecurType(), updatedTask.getStartTime(),
@@ -70,14 +53,13 @@ public class UpdateTask<E> implements Command<Object> {
         return recurringTask;
     }
 
+    // checks which attributes the user wishes to update and update accordingly
     private Task checkAttributesForTask(Task updatedTask, int taskIndex, List<Task> list) {
-        if (updatedTask.getStartDate() == LocalDate.MIN
-                && list.get(taskIndex).getStartDate() != LocalDate.MIN) {
+        if (updatedTask.isStartDateEmpty() && !list.get(taskIndex).isStartDateEmpty()) {
             updatedTask.setStartDate(list.get(taskIndex).getStartDate());
         }
 
-        if (updatedTask.getDueDate() == LocalDate.MIN
-                && list.get(taskIndex).getDueDate() != LocalDate.MIN) {
+        if (updatedTask.isDueDateEmpty() && !list.get(taskIndex).isDueDateEmpty()) {
             updatedTask.setEndDate(list.get(taskIndex).getDueDate());
         }
 
@@ -92,8 +74,12 @@ public class UpdateTask<E> implements Command<Object> {
         if (updatedTask.getEndTime() == null && list.get(taskIndex).getEndTime() != null) {
             updatedTask.setEndTime(list.get(taskIndex).getEndTime());
         }
-        
-        return updatedTask;
+
+        if (list.get(taskIndex) instanceof RecurringTask) {
+            return transferAttributes(updatedTask, taskIndex, list);
+        } else {
+            return updatedTask;
+        }
     }
 
     @Override
@@ -103,7 +89,7 @@ public class UpdateTask<E> implements Command<Object> {
         redoStackTask.push(list.get(undoIndex));
         list.set(undoIndex, undoTask);
         Collections.sort(list);
-        redoStackInt.push(findTask(undoTask, list));
+        redoStackInt.push(findTask(undoTask.getId(), list));
     }
 
     @Override
@@ -113,27 +99,15 @@ public class UpdateTask<E> implements Command<Object> {
         undoStackTask.push(list.get(redoIndex));
         list.set(redoIndex, redoTask);
         Collections.sort(list);
-        undoStackInt.push(findTask(redoTask, list));
+        undoStackInt.push(findTask(redoTask.getId(), list));
     }
 
     @Override
-    public int findTask(Task task, ArrayList<Task> list) {
+    public int findTask(String id, ArrayList<Task> list) {
         int position = -1;
-        if (task instanceof RecurringTask) {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) instanceof RecurringTask) {
-                    if (((RecurringTask)list.get(i)).equals(task)) {
-                        position = i;
-                        break;
-                    }
-                }
-            }
-        } else {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).equals(task)) {
-                    position = i;
-                    break;
-                }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId().equals(id)) {
+                position = i;
             }
         }
         return position;

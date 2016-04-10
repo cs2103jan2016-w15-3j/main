@@ -1,72 +1,133 @@
 package ui.controller;
 
+import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
+
+import java.net.URL;
+import java.util.EmptyStackException;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.jfoenix.controls.JFXBadge;
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXRippler;
+import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToolbar;
+import com.sun.tracing.dtrace.ProviderAttributes;
+
 import javafx.application.Platform;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListCell;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
 import parser.Commands;
-import parser.ParserInterface;
+import parser.DirectoryParser;
 import parser.RecurringParser;
 import parser.UpdateParser;
 import parser.UserInputParser;
 import ui.model.TaskListCell;
 
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
-
-//@@author  A0133333U
+/**
+ * @@author A0133333U
+ */
 
 public class MainWindowController implements Initializable {
 
 	private static Logger logger;
-	public AnchorPane container;
 	private Main main;
+	private Stage stage;
 	private final UserInputParser parser = new UserInputParser();
 	private final UpdateParser updateParser = new UpdateParser();
-	private RecurringParser recurringParser = new RecurringParser();
+	private final InputValidator inputValidator= new InputValidator();
+	private final RecurringParser recurringParser = new RecurringParser();
+	private final DirectoryParser directoryParser = new DirectoryParser();
 	private final Logic operations = new Logic();
+	private SearchHelper util = new SearchHelper();
 
+	@FXML
+	private AnchorPane mainContentContainer;
+	@FXML
+	private StackPane overlayPane;
+	@FXML
+	JFXBadge tasksCounter;
+	@FXML
+	public BorderPane root;
 	@FXML
 	private JFXTextField commandBox;
 	@FXML
 	private JFXListView<Task> printedPlanner;
+
+	@FXML
+	private JFXSnackbar snackbar;
+	@FXML
+	private AnchorPane commandBoxContainer;
+	@FXML
+	private VBox headerWrapper;
+	@FXML
+	private JFXToolbar headerContainer;
+	@FXML
+	private JFXRippler headerTitleContainer;
+	@FXML
+	private Label headerTitle;
+	// private Stage helpStage;
+
+	// Kenan do not rm this line below this thank you
+
+	// @@author A0133333U
+	private Text help;
 	private ObservableList<Task> plannerEntries;
+	private Stage helpStage;
+	private Label title;
+	/**
+	 * Display messages as visual feedback for users.
+	 */
+	private static final String MESSAGE_ADD_CONFIRMED = "Your task is added to QuickTasker.";
+	private static final String MESSAGE_DELETE_CONFIRMED = "Your task is deleted from QuickTasker.";
+	private static final String MESSAGE_EDIT_CONFIRMED = "Your task is updated in QuickTasker.";
+	private static final String MESSAGE_FOR_CLEARING = "All tasks are removed from QuickTasker.";
+	private static final String MESSAGE_FOR_DATE_CHANGE = "Dates updated in QuickTasker";
+	private static final String ERROR_MESSAGE_FOR_WRONG_INDEX = "The index you entered is invalid!";
+	private static final String ERROR_MESSAGE_FOR_INVALID_INDEX = "This index is not a number!";
+	private static final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
+	private static final String ERROR_MESSAGE_FOR_NO_TASK_ENTERED = "Did you enter a recurring task?";
+	private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
+	private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
+	private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "No operations to undo before this.";
+	private static final String ERROR_MESSAGE_FOR_INVALID_INPUT= "Invalid input. Please key in again.";
+	private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
+	private static final String LABEL_TITLE = "Help Here!";
 
-	// Display messages as visual feedback for users
-	private static final String MESSAGE_WELCOME = "Welcome to quickTasker!";
-	private static final String MESSAGE_ADD_CONFIRMED = "Task added to list.";
-	private static final String MESSAGE_DELETE_CONFIRMED = "Task deleted from list.";
-	private static final String MESSAGE_COMPLETED_CONFIRMED = "Task marked as completed.";
-	private static final String MESSAGE_EDIT_CONFIRMED = "Task edited.";
+	public MainWindowController() {
 
-	// @@author A0126077E
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		setMain(main);
 		initPlanner();
 		setCellFactory();
 		initLogger();
 	}
 
+	// @@author A0133333U
 	private void initLogger() {
 		logger = Logger.getLogger("UILogger");
 		logger.setLevel(Level.INFO);
@@ -75,12 +136,22 @@ public class MainWindowController implements Initializable {
 	private void initPlanner() {
 		plannerEntries = FXCollections.observableArrayList(operations.getTasks());
 		printedPlanner.setItems(plannerEntries);
+		printedPlanner.setDepthProperty(1);
+		snackbar.registerSnackbarContainer(mainContentContainer);
+		tasksCounter.setText(plannerEntries.size() + "");
+		commandBox.requestFocus();
 	}
 
-	void setMain(Main main) {
+	void setStage(Stage stage) {
+		this.stage = stage;
+	}
+
+	public void setMain(Main main) {
 		this.main = main;
 	}
 
+	// this method will return a boolean value of true or false, depending on
+	// the input
 	protected boolean isEmptyInput(String input) {
 		return input == null || input.isEmpty() || "".equals(input.trim());
 	}
@@ -98,7 +169,9 @@ public class MainWindowController implements Initializable {
 				performOperations(userInput);
 			} catch (UIOperationException e) {
 				logger.log(Level.SEVERE,
-						"Error occured at " + this.getClass().getName() + " within performOperation method. \n");
+						"Error occured at " + getClass().getName() + " within performOperation method.\n");
+				e.printStackTrace();
+
 			}
 		}
 	}
@@ -106,14 +179,15 @@ public class MainWindowController implements Initializable {
 	private class UIOperationException extends RuntimeException {
 	}
 
-	// @@author A0130949
+	// method takes in user input and passes to parser to determine which method
+	// to execute
+	// @@author
 	private void performOperations(String userInput) throws UIOperationException {
-		InputValidator inputValidator = new InputValidator();
-		System.out.println("inputValidator.checkAllValid(userInput) " + inputValidator.checkAllValid(userInput));
+
 		if (inputValidator.checkAllValid(userInput)) {
 			try {
 				if (parser.getCommand(userInput) == Commands.CREATE_TASK) {
-					createTask(userInput);
+					addTask(userInput);
 				} else if (parser.getCommand(userInput) == Commands.DELETE_TASK) {
 					deleteTask(userInput);
 				} else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) {
@@ -124,38 +198,167 @@ public class MainWindowController implements Initializable {
 					redoTask();
 				} else if (parser.getCommand(userInput) == Commands.EXIT) {
 					operations.exit();
-				} else if (parser.getCommand(userInput) == Commands.SORT_TASK) {
-					System.out.println("getting the command");
-					sortTask(userInput);
-				} else if (userInput.contains("edit")) {
-					editTask(userInput);
-				} else if (userInput.contains("mark")) {
+				} else if (parser.getCommand(userInput) == Commands.MARK_TASK) {
 					markTaskCompleted(userInput);
 				} else if (parser.getCommand(userInput) == Commands.RECUR_TASK) {
-					createRecurringTask(userInput);
+					addRecurringTask(userInput);
+				} else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) {
+					searchTask(userInput);
+				} else if (parser.getCommand(userInput) == Commands.SKIP_TASK) {
+					skipRecurringTask(userInput);
+				} else if (parser.getCommand(userInput) == Commands.CLEAR_TASK) {
+					clearTasks(userInput);
+				} else if (userInput.contains("stop")) {
+					stopRecurringTask(userInput);
+					// @@author A0133333U
+				} else if (userInput.equalsIgnoreCase("help")) {
+					showHelp();
+					// @@author A0133333U
+				} else if ("show today".equalsIgnoreCase(userInput) || "view today".equalsIgnoreCase(userInput)) {
+					showToday();
+					// @@author A0133333U
+				} else if ("show tomorrow".equalsIgnoreCase(userInput) || "view tomorrow".equalsIgnoreCase(userInput)) {
+					showTomorrow();
+					showAll();
+					// @@author A0133333U
+				} else if ("view floating".equalsIgnoreCase(userInput) || "show floating".equalsIgnoreCase(userInput)) {
+					showFloating();
+					// @@author A0133333U
+				} else if ("show all".equals(userInput) || "view all".equals(userInput)) {
+					showAll();
+				} else if (userInput.contains("theme")) {
+					changeTheme(userInput);
+				} else if (userInput.contains("changedir")) {
+					changeDirectory(userInput);
+					// @@author A0133333U
+				} else if ("view archived".equalsIgnoreCase(userInput)) {
+					viewArchived();
+					// @@author A0133333U
+				} else if ("back".equalsIgnoreCase(userInput)) {
+					viewTasks();
 				}
 			} catch (Exception e) {
 				throw new UIOperationException();
 			}
 		} else {
-			// TELL USER TO RETYPE THE INPUT
+			displayMessage(ERROR_MESSAGE_FOR_INVALID_INPUT);
 		}
 	}
 
-	private void editTask(String userInput) throws Exception {
-		String[] input;
-		int indexToEdit;
-		boolean editAll = false;
-		Task taskToEdit;
-		int taskIndex = parser.getTaskIndex(userInput);
-		refresh();
+	/*
+	 * @@author A0133333U did refactoring for this method
+	 */
+	private void changeTheme(String userInput) {
+		Scene scene = main.getScene();
+		ThemeChanger themer = new ThemeChanger();
+		Platform.runLater(() -> {
+			try {
+				themer.change(userInput, scene);
+				commandBox.clear();
+				// an event with a button maybe
+			} catch (Exception e) {
+			}
+		});
 	}
 
-	private void markTaskCompleted(String userInput) throws Exception {
+	private void showTomorrow() {
+		printedPlanner.setItems(plannerEntries.filtered(task -> util.isDisplayedInTomorrowView(task)));
+		headerTitle.setText("Tasks: Tomorrow");
+		updateTaskCounter();
+		commandBox.clear();
+	}
 
-		int i = parser.getIndexForDone(userInput);
-		Task task = plannerEntries.get(i);
-		task.setDone(true); // logic should handle
+	private void updateTaskCounter() {
+		tasksCounter.setText(printedPlanner.getItems().size() + "");
+	}
+
+	private void showFloating() {
+		printedPlanner.setItems(plannerEntries.filtered(task -> util.isFloatingTask(task)));
+		headerTitle.setText("Tasks: Floating");
+		updateTaskCounter();
+		commandBox.clear();
+	}
+
+	private void searchTask(String userInput) throws Exception {
+
+		if (isKeywordSearch()) {
+			String taskName = parser.getTaskName(userInput);
+			headerTitle.setText("Search Results  \"" + taskName + "\":");
+			printedPlanner.setItems(plannerEntries.filtered(task -> util.containsKeyWord(task, taskName)));
+			updateTaskCounter();
+		}
+
+		// other types of search
+		// to be written
+		commandBox.clear();
+	}
+
+	/*
+	 * @@author A013333U
+	 */
+	private void showHelp() {
+		HBox hb = new HBox();
+		Text text = new Text("Help Section!");
+		hb.getStyleClass().add("hbox");
+		hb.getChildren().add(text);
+		Stage helpStage = new Stage();
+		Scene scene = new Scene(hb, 400, 400);
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent ke) {
+				if (ke.getCode() == KeyCode.ESCAPE) {
+					System.out.println("Stage is closing");
+					helpStage.close();
+				}
+			}
+		});
+		helpStage.setScene(scene);
+		helpStage.show();
+		commandBox.clear();
+	}
+
+	/**
+	 * To be moved inside serach helper when tidy up.
+	 */
+	private boolean isKeywordSearch() {
+		return true;
+	}
+
+	private void showAll() {
+		printedPlanner.setItems(plannerEntries);
+		headerTitle.setText("Tasks: All");
+		updateTaskCounter();
+		commandBox.clear();
+	}
+
+	private void showToday() {
+
+		printedPlanner.setItems(plannerEntries.filtered(task -> util.isDisplayedInTodayView(task)));
+		headerTitle.setText("Tasks: Today + Floating");
+		updateTaskCounter();
+		commandBox.clear();
+	}
+
+	/**
+	 * @@author A0130949Y.
+	 */
+	private void markTaskCompleted(String userInput) throws Exception {
+		try {
+			int i = parser.getIndexForDone(userInput);
+			Task task = plannerEntries.get(i);
+			operations.markAsDone(task.getId());
+			task.setDone(true); // logic should handle
+			tickCheckBoxForMark(task, i);
+		} catch (NumberFormatException e) {
+			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
+		} catch (IndexOutOfBoundsException e) {
+			displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
+		}
+	}
+
+	/**
+	 * Author kenan.
+	 */
+	private void tickCheckBoxForMark(Task task, int i) {
 		printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		printedPlanner.getSelectionModel().select(i);
 		printedPlanner.fireEvent(new TaskDoneEvent(task));
@@ -166,118 +369,6 @@ public class MainWindowController implements Initializable {
 			commandBox.clear();
 		});
 		new Thread(sleeper).start();
-	}
-
-	private void sortTask(String userInput) {
-		System.out.println("Sorting");
-		plannerEntries = FXCollections.observableArrayList(operations.sort());
-		afterOperation();
-	}
-
-	private void redoTask() {
-		plannerEntries = FXCollections.observableArrayList(operations.redo());
-		afterOperation();
-	}
-
-	private void undoTask() {
-		plannerEntries = FXCollections.observableArrayList(operations.undo());
-		afterOperation();
-	}
-
-	private void updateTask(String userInput) throws Exception {
-		int indexOfTask = updateParser.getIndexForUpdates(userInput);
-		printedPlanner.getSelectionModel().select(indexOfTask);
-		Task newTask = makeTask(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
-				updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
-				updateParser.getEndTime(userInput));
-		/*
-		 * plannerEntries.remove(indexOfTask);
-		 * plannerEntries.add(indexOfTask,newTask);
-		 */
-
-		plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
-		printedPlanner.getSelectionModel().clearSelection();
-		afterOperation();
-	}
-
-	private void deleteTask(String userInput) throws Exception {
-		int taskIndex;
-		taskIndex = parser.getTaskIndex(userInput);
-		// plannerEntries.remove(taskIndex);
-		plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
-		afterOperation();
-	}
-
-	private void createTask(String userInput) throws Exception {
-		Task newTask = makeTask(parser.getTaskName(userInput), parser.getStartDate(userInput),
-				parser.getEndDate(userInput), parser.getStartTime(userInput), parser.getEndTime(userInput));
-
-		/*
-		 * plannerEntries.add(newTask); printedPlanner.setItems(plannerEntries);
-		 * commandBox.clear(); operations.addTask(newTask);
-		 */
-		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
-		afterOperation();
-		printedPlanner.scrollTo(printedPlanner.getItems().size() - 1);
-	}
-
-	private Task makeTask(String taskName, LocalDate startDate, LocalDate dueDate, LocalTime startTime,
-			LocalTime endTime) throws Exception {
-		System.out.println("D");
-		return new Task(taskName, startDate, dueDate, startTime, endTime);
-	}
-
-	private RecurringTask makeRecurringTask(String taskName, LocalDate startDate, LocalDate dueDate, String type,
-			LocalTime startTime, LocalTime endTime, int numberToRecur) throws Exception {
-		return new RecurringTask(taskName, startDate, dueDate, type, startTime, endTime, numberToRecur);
-	}
-
-	private void createRecurringTask(String userInput) throws Exception {
-		RecurringTask newTask = makeRecurringTask(recurringParser.getTaskName(userInput),
-				recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
-				recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
-				recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
-		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
-		afterOperation();
-	}
-	// @@author A0126077E
-
-	private void afterOperation() {
-		setCellFactory();
-		refresh();
-		commandBox.clear();
-	}
-
-	private void refresh() {
-		printedPlanner.setItems(plannerEntries);
-	}
-
-	private void setCellFactory() {
-		printedPlanner.setCellFactory(param -> {
-
-			TaskListCell listCell = new TaskListCell(plannerEntries);
-			printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
-				Thread.currentThread().setUncaughtExceptionHandler((t, e) -> Platform.runLater(System.out::println));
-				if (listCell.getTask().equals(event.getTask()))
-					listCell.getCheckBox().fire();
-			}).start());
-			/*
-			 * plannerEntries.addListener(new ListChangeListener<Task>() {
-			 * 
-			 * @Override public void onChanged(Change<? extends Task> c) {
-			 * listCell.updateIndex(plannerEntries); } });
-			 */
-			return listCell;
-		});
-	}
-
-	class SearchHighlightedTextCell extends ListCell<String> {
-		private static final String HIGHLIGHT_CLASS = "search-highlight";
-		private final StringProperty searchText;
-
-		SearchHighlightedTextCell(StringProperty searchText) {
-			this.searchText = searchText;
-		}
 	}
 
 	private javafx.concurrent.Task<Void> makeSleeper(int duration) {
@@ -292,5 +383,212 @@ public class MainWindowController implements Initializable {
 				return null;
 			}
 		};
+	}
+
+	/**
+	 * @@author A0130949Y.
+	 */
+	private void viewTasks() {
+		plannerEntries = FXCollections.observableArrayList(operations.getTasks());
+		afterOperation();
+	}
+
+	private void viewArchived() {
+		plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
+		afterOperation();
+		headerTitle.setText("Tasks: Archived");
+	}
+
+	// @@author A0133333U
+	// added warnings to unused method
+	@SuppressWarnings("unused")
+	private void sortTask(String userInput) {
+		System.out.println("Sorting");
+		plannerEntries = FXCollections.observableArrayList(operations.sort());
+		afterOperation();
+	}
+
+	private void clearTasks(String userInput) {
+		plannerEntries = FXCollections.observableArrayList(operations.clear());
+		afterOperation();
+		displayMessage(MESSAGE_FOR_CLEARING);
+	}
+
+	private void skipRecurringTask(String userInput) throws Exception {
+		try {
+			int index = parser.getTaskIndex(userInput);
+			Task task = plannerEntries.get(index);
+			if (!(task instanceof RecurringTask)) {
+				displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
+			} else {
+				plannerEntries = FXCollections.observableArrayList(operations.skip(index));
+				displayMessage(MESSAGE_FOR_DATE_CHANGE);
+				afterOperation();
+			}
+		} catch (IndexOutOfBoundsException e) {
+			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
+		} catch (NumberFormatException e) {
+			displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
+		}
+	}
+
+	private void stopRecurringTask(String userInput) throws Exception {
+		operations.stopRecurring(parser.getTaskIndex(userInput));
+		afterOperation();
+	}
+
+	private void redoTask() {
+		try {
+			plannerEntries = FXCollections.observableArrayList(operations.redo());
+			afterOperation();
+		} catch (EmptyStackException e) {
+			displayMessage(ERROR_MESSAGE_FOR_REDO_ERROR);
+		}
+	}
+
+	private void undoTask() {
+		try {
+			plannerEntries = FXCollections.observableArrayList(operations.undo());
+			afterOperation();
+		} catch (EmptyStackException e) {
+			displayMessage(ERROR_MESSAGE_FOR_UNDO_ERROR);
+		}
+	}
+
+	private void updateTask(String userInput) throws Exception {
+		try {
+			int indexOfTask = updateParser.getTaskIndex(userInput);
+			Task task = plannerEntries.get(indexOfTask);
+			printedPlanner.getSelectionModel().select(indexOfTask);
+			/*
+			 * if (task instanceof RecurringTask) { Task newTask =
+			 * makeRecurringTask(parser.getTaskNameForUpdate(userInput),
+			 * parser.getStartDateForUpdate(userInput),
+			 * parser.getEndDateForUpdate(userInput),
+			 * parser.getStartTimeForUpdate(userInput),
+			 * parser.getEndTimeForUpdate(userInput), ); plannerEntries =
+			 * FXCollections.observableArrayList(operations.updateTask(newTask,
+			 * indexOfTask)); } else {
+			 */
+			Task newTask = makeTaskForUpdate(userInput);
+			plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
+			// }
+			printedPlanner.getSelectionModel().clearSelection();
+			afterOperation();
+			displayMessage(MESSAGE_EDIT_CONFIRMED);
+		} catch (IndexOutOfBoundsException e) {
+			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
+		} catch (NumberFormatException e) {
+			displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
+		}
+	}
+
+	private void deleteTask(String userInput) throws Exception {
+		try {
+			int taskIndex;
+			taskIndex = parser.getTaskIndex(userInput);
+			plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
+			afterOperation();
+			displayMessage(MESSAGE_DELETE_CONFIRMED);
+		} catch (NumberFormatException e) {
+			displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
+		} catch (IllegalArgumentException e) {
+			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
+		} catch (IndexOutOfBoundsException e) {
+			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
+		}
+	}
+
+	private void changeDirectory(String userInput) throws Exception {
+		operations.changeDir(directoryParser.getFilePath(userInput));
+		afterOperation();
+	}
+
+	private void addTask(String userInput) throws Exception {
+		try {
+			Task newTask = makeTask(userInput);
+			if (inputValidator.checkIfClash(plannerEntries, newTask)) {
+				displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
+				//TODO HOW TO CHANGE IT TO RED OR SOMETHING????
+			}
+			plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+			afterOperation();
+			displayMessage(MESSAGE_ADD_CONFIRMED);
+			printedPlanner.scrollTo(printedPlanner.getItems().size() - 1);
+		} catch (IndexOutOfBoundsException e) {
+			displayMessage(ERROR_MESSAGE_FOR_EMPTY_TASK);
+		}
+	}
+
+	private void addRecurringTask(String userInput) throws Exception {
+		try {
+			RecurringTask newTask = makeRecurringTask(userInput);
+			if (inputValidator.checkIfClash(plannerEntries, newTask)) {
+				displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
+			}
+			plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+			afterOperation();
+			displayMessage(MESSAGE_ADD_CONFIRMED);
+		} catch (IndexOutOfBoundsException e) {
+			displayMessage(ERROR_MESSAGE_FOR_NO_TASK_ENTERED);
+		} catch (NumberFormatException e) {
+			displayMessage(ERROR_MESSAGE_FOR_NO_TASK_ENTERED);
+		} catch (NullPointerException e) {
+			displayMessage(ERROR_MESSAGE_FOR_EMPTY_TASK);
+		}
+	}
+
+	private void afterOperation() {
+		setCellFactory();
+		refresh();
+		updateTaskCounter();
+		commandBox.clear();
+	}
+
+	/*
+	 * @@author: A0133333U added in extra params for this method
+	 */
+	private Task makeTask(String userInput) throws Exception {
+		return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput), parser.getEndDate(userInput),
+				parser.getStartTime(userInput), parser.getEndTime(userInput));
+	}
+
+	private RecurringTask makeRecurringTask(String userInput) throws Exception {
+		return new RecurringTask(recurringParser.getTaskName(userInput), recurringParser.getTaskStartDate(userInput),
+				recurringParser.getTaskEndDate(userInput), recurringParser.getRecurDuration(userInput),
+				recurringParser.getTaskStartTime(userInput), recurringParser.getTaskEndTime(userInput),
+				recurringParser.getNumToRecur(userInput));
+	}
+
+	private Task makeTaskForUpdate(String userInput) {
+		return new Task(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
+				updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
+				updateParser.getEndTime(userInput));
+	}
+
+	/**
+	 * Author kenan.
+	 */
+	private void displayMessage(String message) {
+		snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(message, "", 1500, (b) -> {
+		}));
+	}
+
+	private void refresh() {
+		printedPlanner.setItems(plannerEntries);
+	}
+
+	private void setCellFactory() {
+		printedPlanner.setCellFactory(param -> {
+
+			TaskListCell listCell = new TaskListCell(plannerEntries);
+			printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
+				Thread.currentThread().setUncaughtExceptionHandler((t, e) -> Platform.runLater(System.out::println));
+				if (listCell.getTask().equals(event.getTask()))
+					listCell.getCheckBox().fire();
+				listCell.removeEventFilter(TASK_COMPLETE, null);
+			}).start());
+			return listCell;
+		});
 	}
 }

@@ -1,25 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- @@author A0133333U -->
-<?import com.jfoenix.controls.JFXListView?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.scene.layout.*?>
-<AnchorPane fx:id="container" minHeight="189.0" minWidth="500.0" prefHeight="300.0"
-            prefWidth="394.0" stylesheets="@/css/application.css"
-            xmlns="http://javafx.com/javafx/8.0.65"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controller.MainWindowController">
-    <JFXListView fx:id="printedPlanner" minHeight="200.0"
-                 prefHeight="250.0" prefWidth="600.0" stylesheets="@/css/application.css"
-                 AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0"
-                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-    <AnchorPane layoutX="10.0" layoutY="255.0"
-                AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0"
-                AnchorPane.rightAnchor="0.0">
-        <JFXTextField fx:id="commandBox" focusColor="lightgrey"
-                      layoutX="4.0" maxWidth="500.0" minWidth="100.0"
-                      onKeyPressed="#handleEnterKeyPressed"
-                      prefHeight="30.0" prefWidth="500.0" promptText="Enter command:"
-                      AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="4.0"
-                      AnchorPane.rightAnchor="3.0"/>
 
-    </AnchorPane>
-</AnchorPane>
+<!-- @@author KENAN-->
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<BorderPane fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65"
+            fx:controller="ui.controller.MainWindowController">
+    <center>
+        <StackPane fx:id="overlayPane" BorderPane.alignment="BOTTOM_CENTER">
+            <children>
+                <AnchorPane fx:id="mainContentContainer" minHeight="150.0" minWidth="500.0"
+                            prefHeight="300.0"
+                            prefWidth="400.0"
+                            styleClass="root">
+                    <AnchorPane fx:id="printedPlannerContainer" AnchorPane.bottomAnchor="20.0"
+                                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                AnchorPane.topAnchor="1.0">
+                        <children>
+                            <JFXListView fx:id="printedPlanner" cache="true" cacheHint="SPEED"
+                                         minHeight="150.0"
+                                         prefHeight="250.0" prefWidth="600.0" styleClass="list-view"
+                                         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0"
+                                         AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0"/>
+                        </children>
+                    </AnchorPane>
+                </AnchorPane>
+                <JFXSnackbar fx:id="snackbar"/>
+            </children>
+        </StackPane>
+    </center>
+    <bottom>
+        <AnchorPane fx:id="commandBoxContainer" styleClass="container"
+                    BorderPane.alignment="BOTTOM_CENTER">
+            <JFXTextField fx:id="commandBox" alignment="BOTTOM_CENTER" cache="true"
+                          cacheHint="SPEED" labelFloat="true"
+                          maxWidth="500.0" minWidth="100.0" onKeyPressed="#handleEnterKeyPressed"
+                          prefHeight="30.0"
+                          prefWidth="500.0" promptText="Enter command :" styleClass="text-box"
+                          AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0"
+                          AnchorPane.rightAnchor="0.0"/>
+            <BorderPane.margin>
+                <Insets/>
+            </BorderPane.margin>
+
+        </AnchorPane>
+    </bottom>
+    <top>
+        <VBox fx:id="headerWrapper" spacing="20" styleClass="header-wrapper">
+            <JFXToolbar fx:id="headerContainer" styleClass="header-container">
+                <left>
+                    <JFXRippler alignment="BASELINE_LEFT" maskType="CIRCLE" ripplerFill="WHITE"
+                                style="-fx-ripple-color:WHITE;">
+                        <StackPane styleClass="badge-container">
+                            <JFXBadge fx:id="tasksCounter" position="TOP_RIGHT"
+                                      styleClass="icons-badge" text="1"
+                                      BorderPane.alignment="CENTER">
+<!--                                 <MaterialDesignIconView glyphName="INBOX" size="2.5em"
+                                                        styleClass="icon"
+                                                        textAlignment="CENTER" textOrigin="CENTER"/> -->
+                            </JFXBadge>
+                        </StackPane>
+                    </JFXRippler>
+                </left>
+                <center>
+                    <Label fx:id="headerTitle" alignment="CENTER" styleClass="title-label"
+                           textOverrun="CLIP"
+                           BorderPane.alignment="CENTER">All Tasks
+                    </Label>
+                </center>
+                <opaqueInsets>
+                    <Insets/>
+                </opaqueInsets>
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+                <padding>
+                    <Insets right="30.0"/>
+                </padding>
+            </JFXToolbar>
+        </VBox>
+    </top>
+</BorderPane>

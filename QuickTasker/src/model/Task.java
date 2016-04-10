@@ -1,33 +1,31 @@
 package model;
 //@@author A0121558H
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 
 public class Task implements Comparable {
-    private static int IdGenerator;
     private String taskName;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean isDone = false;
-    private int id;
-    private boolean isRecurring = false;
+    private String id;
     private String taskType;
 
     public void setStartDateAsNow() {
         startDate = LocalDate.now();
     }
 
-    /**
-     * Default constructor *.
-     */
     public Task() {
         this.taskName = "";
         this.endDate = LocalDate.MIN;
         this.setStartDateAsNow();
-        generateId();
+        this.id = generateId();
+        setTaskType();
     }
 
     /**
@@ -37,7 +35,7 @@ public class Task implements Comparable {
         this.taskName = taskName;
         setStartDateAsNow();
         this.endDate = LocalDate.MIN;
-        generateId();
+        this.id = generateId();
     }
 
     /**
@@ -47,8 +45,10 @@ public class Task implements Comparable {
         this.taskName = taskName;
         this.endDate = LocalDate.MIN;
         this.startDate = startDate;
-        generateId();
+        this.id = generateId();
+
     }
+
     /**
      * Constructor with all fields filled *.
      */
@@ -56,9 +56,12 @@ public class Task implements Comparable {
         this.taskName = taskName;
         this.endDate = endDate;
         this.startDate = startDate;
-        generateId();
+        this.id = generateId();
     }
 
+    // @author: A0133333U
+    // this is the only constructor being used, with the rest bypassed
+    // There need to be a way to determine the correct task type and call the respective constructor
     public Task(String taskName, LocalDate startDate, LocalDate endDate, LocalTime startTime,
             LocalTime endTime) {
         this.taskName = taskName;
@@ -67,30 +70,33 @@ public class Task implements Comparable {
         this.startTime = startTime;
         this.endTime = endTime;
         setTaskType();
-        generateId();
+        this.id = generateId();
     }
+
     public void setTaskType() {
-        if (this.startDate == LocalDate.MAX && this.endDate == LocalDate.MAX)
-            this.taskType = "floating";
-        else if (this.startTime == LocalTime.MIN && this.endTime == LocalTime.MIN)
+        if (bothDateAndTimeAreDefaultValue()) this.taskType = "floating";
+        else if (onlyTimeAreDefaultValue())
             this.taskType = "wholeDayEvent";
         else this.taskType = "task";
     }
+
+    private boolean onlyTimeAreDefaultValue() {
+        return (startTime == null || this.startTime == LocalTime.MIN)
+                && (this.endTime == null || this.endTime == LocalTime.MIN);
+    }
+
+    //
+    private boolean bothDateAndTimeAreDefaultValue() {
+        return  (startDate == null || this.startDate.equals(LocalDate.MAX))
+                && (endDate == null || this.endDate.equals(LocalDate.MAX))
+                && (startTime == null || this.startTime.equals(LocalTime.MAX))
+                && (endDate == null || this.endDate.equals(LocalDate.MAX));
+    }
+
     public String getTaskType() {
         return this.taskType;
     }
 
-
-/*    public Task(String taskName, LocalDate startDate, LocalDate endDate, String type,
-            int numToRecur) {
-        this.taskName = taskName;
-        this.endDate = endDate;
-        this.startDate = startDate;
-        generateId();
-        this.type = type;
-        this.numToRecur = numToRecur;
-        setRecurring();
-    }*/
     public String getName() {
         return taskName;
     }
@@ -106,7 +112,7 @@ public class Task implements Comparable {
     public LocalTime getStartTime() {
         return startTime;
     }
-  
+
     public LocalTime getEndTime() {
         return endTime;
     }
@@ -115,7 +121,7 @@ public class Task implements Comparable {
         taskName = newName;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -134,6 +140,7 @@ public class Task implements Comparable {
     public void setStartTime(LocalTime time) {
         this.startTime = time;
     }
+
     public void setEndTime(LocalTime time) {
         this.endTime = time;
     }
@@ -142,26 +149,17 @@ public class Task implements Comparable {
         isDone = done;
     }
 
-/*    public void setRecurring() {
-        this.isRecurring = true;
+    private String generateId() {
+        return UUID.randomUUID().toString();
     }
 
-    public boolean getRecurring() {
-        return isRecurring;
-    }*/
-
-    private void generateId() {
-        this.id = ++IdGenerator;
-    }
-  //@@author A0130949
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
 
         Task task = (Task) o;
 
-        if (id != task.id) return false;
+        if (!id.equals(task.id)) return false;
         if (!taskName.equals(task.taskName)) return false;
         if (endDate != null ? !endDate.equals(task.endDate) : task.endDate != null) return false;
         return startDate != null ? startDate.equals(task.startDate) : task.startDate == null;
@@ -169,52 +167,80 @@ public class Task implements Comparable {
     }
 
     @Override
-    public int hashCode() {
+        public int hashCode() {
         int result = taskName.hashCode();
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
-        result = 31 * result + id;
+        result = 31 * result + id.hashCode();
         return result;
     }
 
-    @Override
-    public int compareTo(Object task) {
+    //@@author A0130949
+    @Override public int compareTo(Object task){
         Task comparedTask = (Task) task;
-        if (this.getDueDate() == LocalDate.MIN) {
-            return -1;
-        }
-        if (this.getDueDate().getDayOfMonth() > comparedTask.getDueDate().getDayOfMonth()) {
-            if (this.getDueDate().getMonthValue() >= comparedTask.getDueDate().getMonthValue()) {
-                if (this.getDueDate().getYear() >= comparedTask.getDueDate().getYear()) {
-                    return 1;
-                }
-            }
-        }
-        if (this.getDueDate().getMonthValue() > comparedTask.getDueDate().getMonthValue()) {
-            if (this.getDueDate().getYear() > comparedTask.getDueDate().getYear()) {
-                return 1;
-            }
-        }
-        if (this.getDueDate().getYear() > comparedTask.getDueDate().getYear()) {
-            return 1;
+        int result = compareDueDate(comparedTask, this);
+
+        if (result == 0) {
+            result = compareStartDate(comparedTask, this);
         }
 
-        if (this.getStartDate().getDayOfMonth() > comparedTask.getStartDate().getDayOfMonth()) {
-            if (this.getStartDate().getMonthValue() >= comparedTask.getStartDate()
-                    .getMonthValue()) {
-                if (this.getStartDate().getYear() >= comparedTask.getStartDate().getYear()) {
-                    return 1;
-                }
-            }
+        if (result == 0) {
+            result = comparedTask.getName().compareTo(this.getName());
         }
-        if (this.getStartDate().getMonthValue() > comparedTask.getStartDate().getMonthValue()) {
-            if (this.getStartDate().getYear() > comparedTask.getStartDate().getYear()) {
-                return 1;
-            }
-        }
-        if (this.getStartDate().getYear() > comparedTask.getStartDate().getYear()) {
+        return result;
+    }
+
+    private int compareDueDate(Task task, Task comparedTask) {
+        if (task.isDueDateEmpty() && comparedTask.isDueDateEmpty()) {
+            System.out.println(task.getName() + " due is empty");
+            return 0;
+        } else if (!task.isDueDateEmpty() && comparedTask.isDueDateEmpty()) {
             return 1;
+        } else if (task.isDueDateEmpty() && !comparedTask.isDueDateEmpty()) {
+            return -1;
+        } else {
+            return comparedTask.getDueDate().compareTo(task.getDueDate());
         }
-        return -1;
+    }
+
+    private int compareStartDate(Task task, Task comparedTask) {
+        if (task.isStartDateEmpty() && comparedTask.isStartDateEmpty()) {
+            System.out.println(task.getName()+" add Start is empty");
+            return 0;
+        } else if (!task.isStartDateEmpty() && comparedTask.isStartDateEmpty()) {
+            return 1;
+        } else if (task.isStartDateEmpty() && !comparedTask.isStartDateEmpty()) {
+            return -1;
+        } else {
+            return task.getStartDate().compareTo(comparedTask.getStartDate());
+        }
+    }
+
+    public boolean isDueDateEmpty() {
+        if (this.getDueDate() == null) {
+            return true;
+        } else if (this.getDueDate().equals(LocalDate.MIN)) {
+            return true;
+        } else if (this.getDueDate().equals(LocalDate.MAX)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isStartDateEmpty() {
+        if (this.getStartDate() == null) {
+            return true;
+        } else if (this.getStartDate().equals(LocalDate.MIN)) {
+            return true;
+        } else if (this.getStartDate().equals(LocalDate.MAX)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isDatesInvalid() {
+        return this.getStartDate().isAfter(this.getDueDate());
     }
 }

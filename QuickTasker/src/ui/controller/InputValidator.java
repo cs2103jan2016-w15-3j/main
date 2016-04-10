@@ -1,5 +1,5 @@
 package ui.controller;
-
+//@@author A0121558H
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.logging.Level;
@@ -11,7 +11,6 @@ import parser.Commands;
 import parser.DetermineCommandType;
 import parser.UserInputParser;
 
-//@@author A0121558H
 public class InputValidator extends UserInputParser {
 	private static Logger loggerValidator = Logger.getLogger("checkIfValid in InputValidator");
 
@@ -21,8 +20,7 @@ public class InputValidator extends UserInputParser {
 
 		if (checkUndoRedo(input)) {
 			return true;
-		}
-		
+		}	
 		check = checkIfNull(input) || checkCommand(input) || checkTaskName(input)
 				|| checkDate(input) || checkTime(input);
 

@@ -20,9 +20,6 @@ public class RecurringTask extends Task {
     }
 
     public void adjustDate() {
-/*        this.checkYearsPast();
-        this.checkMonthsPast();
-        this.checkDaysPast();*/
         if (LocalDate.now().isAfter(this.getDueDate())) {
             addOffset();
         }
@@ -51,7 +48,6 @@ public class RecurringTask extends Task {
     }
 
     private void checkDaysPast() {
-        System.out.println("C");
         if (LocalDate.now().getDayOfMonth() > this.getDueDate().getDayOfMonth()) {
             if (LocalDate.now().getMonthValue() == this.getDueDate().getMonthValue()) {
                 if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
@@ -65,13 +61,18 @@ public class RecurringTask extends Task {
 
     private void addOffset() {
         long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.DAYS);
-        if (this.getRecurType().equals("week") || this.getRecurType().equals("weeks")) {
+        if (this.getRecurType().toLowerCase().equals("week") || this.getRecurType().toLowerCase().equals("weeks")) {
             int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
-            setNextDates(this.getStartDate().plusWeeks(offset),
-                    this.getDueDate().plusWeeks(offset));
-        } else {
+            setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
+        } else if (this.getRecurType().toLowerCase().equals("day") || this.getRecurType().toLowerCase().equals("days")){
             int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
             setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));
+        } else if (this.getRecurType().toLowerCase().equals("month") || this.getRecurType().toLowerCase().equals("months")){
+            long amountOfMonths = this.getDueDate().until(LocalDate.now(), ChronoUnit.MONTHS);
+            setNextDates(this.getStartDate().plusMonths(amountOfMonths + 1), this.getDueDate().plusMonths(amountOfMonths + 1));
+        } else {
+            long amountOfYears = this.getDueDate().until(LocalDate.now(), ChronoUnit.YEARS);
+            setNextDates(this.getStartDate().plusYears(amountOfYears + 1), this.getDueDate().plusYears(amountOfYears + 1));
         }
     }
 
@@ -101,20 +102,6 @@ public class RecurringTask extends Task {
         }
         return (numberOfDays);
     }
-    
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof RecurringTask)) return false;
-
-        RecurringTask task = (RecurringTask) o;
-
-        if (this.getId() != task.getId()) return false;
-        if (!this.getName().equals(task.getName())) return false;
-        if (this.getDueDate() != null ? !this.getDueDate().equals(task.getDueDate()) : task.getDueDate() != null) return false;
-        return this.getStartDate() != null ? this.getStartDate().equals(task.getStartDate()) : task.getStartDate() == null;
-
-    }
 
     private void setNextDates(LocalDate startDate, LocalDate endDate) {
         setStartDate(startDate);
@@ -122,7 +109,7 @@ public class RecurringTask extends Task {
     }
 
     public Task stopRecurring() {
-        Task newTask = new Task(this.getName(), this.nextStartDate, this.getDueDate(), this.getStartTime(), this.getEndTime());
+        Task newTask = new Task(this.getName(), this.getStartDate(), this.getDueDate(), this.getStartTime(), this.getEndTime());
         return newTask;
     }
 

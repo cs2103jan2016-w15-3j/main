@@ -5,7 +5,7 @@
 }
 
 .text {
-    -fx-font-family: "Roboto";
+    -fx-font-family: Roboto;
 }
 
 .material-toolbar {

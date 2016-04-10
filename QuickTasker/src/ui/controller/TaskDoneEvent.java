@@ -1,5 +1,6 @@
 package ui.controller;
 //@@author A0126077E
+
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;
@@ -7,8 +8,7 @@ import model.Task;
 
 public class TaskDoneEvent extends Event {
 
-    public static final EventType<TaskDoneEvent> TASK_COMPLETE = new EventType(ANY,
-            "TASK_COMPLETE");
+    public static final EventType<TaskDoneEvent> TASK_COMPLETE = new EventType(ANY, "TASK_COMPLETE");
 
     private Task task;
 
