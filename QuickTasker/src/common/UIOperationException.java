@@ -1,3 +1,3 @@
-package Common;
+package common;
 
 public class UIOperationException extends RuntimeException {}
