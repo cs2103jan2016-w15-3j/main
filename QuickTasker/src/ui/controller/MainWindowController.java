@@ -14,8 +14,6 @@ import com.jfoenix.controls.JFXRippler;
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToolbar;
-import com.sun.tracing.dtrace.ProviderAttributes;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +33,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
@@ -104,6 +101,9 @@ public class MainWindowController implements Initializable {
 	private static final String MESSAGE_EDIT_CONFIRMED = "Your task is updated in QuickTasker.";
 	private static final String MESSAGE_FOR_CLEARING = "All tasks are removed from QuickTasker.";
 	private static final String MESSAGE_FOR_DATE_CHANGE = "Dates updated in QuickTasker";
+	private static final String MESSAGE_FOR_UNDO = "Undone last operation. Yay!";
+	private static final String MESSAGE_FOR_REDO = "Redo the last undo. Yay!";
+	private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
 	private static final String ERROR_MESSAGE_FOR_WRONG_INDEX = "The index you entered is invalid!";
 	private static final String ERROR_MESSAGE_FOR_INVALID_INDEX = "This index is not a number!";
 	private static final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
@@ -111,7 +111,6 @@ public class MainWindowController implements Initializable {
 	private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
 	private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
 	private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "No operations to undo before this.";
-	private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
 	private static final String LABEL_TITLE = "Help Here!";
 
 	public MainWindowController() {
@@ -243,7 +242,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	/*
-	 * @@author A0133333U and kena
+	 * @@author A0133333U and kenan
 	 * did refactoring for this method
 	 */
 	private void changeTheme(String userInput) {
@@ -339,9 +338,7 @@ public class MainWindowController implements Initializable {
 		commandBox.clear();
 	}
 
-	/**
-	 * @@author A0130949Y.
-	 */
+	//@@author A0130949Y
 	private void markTaskCompleted(String userInput) throws Exception {
 		try {
 			int i = parser.getIndexForDone(userInput);
@@ -356,9 +353,7 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
-	/**
-	 * Author kenan. 
-	 */
+	//@@author kenan.
 	private void tickCheckBoxForMark(Task task, int i) {
 		printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		printedPlanner.getSelectionModel().select(i);
@@ -386,9 +381,7 @@ public class MainWindowController implements Initializable {
 		};
 	}
 
-	/**
-	 * @@author A0130949Y.
-	 */
+	//@@author A0130949Y
 	private void viewTasks() {
 		plannerEntries = FXCollections.observableArrayList(operations.getTasks());
 		afterOperation();
@@ -434,6 +427,7 @@ public class MainWindowController implements Initializable {
 		}
 	}
 
+	//unused because stopRecurring has bugs
 	private void stopRecurringTask(String userInput) throws Exception {
 		operations.stopRecurring(parser.getTaskIndex(userInput));
 		afterOperation();
@@ -442,6 +436,7 @@ public class MainWindowController implements Initializable {
 	private void redoTask() {
 		try {
 			plannerEntries = FXCollections.observableArrayList(operations.redo());
+			displayMessage(MESSAGE_FOR_REDO);
 			afterOperation();
 		} catch (EmptyStackException e) {
 			displayMessage(ERROR_MESSAGE_FOR_REDO_ERROR);
@@ -451,6 +446,7 @@ public class MainWindowController implements Initializable {
 	private void undoTask() {
 		try {
 			plannerEntries = FXCollections.observableArrayList(operations.undo());
+			displayMessage(MESSAGE_FOR_UNDO);
 			afterOperation();
 		} catch (EmptyStackException e) {
 			displayMessage(ERROR_MESSAGE_FOR_UNDO_ERROR);
@@ -544,7 +540,7 @@ public class MainWindowController implements Initializable {
 		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
 	}
 
-
+	// clear the command box and set up new list for view
 	private void afterOperation() {
 		setCellFactory();
 		refresh();

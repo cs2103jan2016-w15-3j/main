@@ -1,14 +1,10 @@
 package model;
-//@@author A0130949
+//@@author A0130949Y
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public class RecurringTask extends Task {
-    private LocalDate nextStartDate;
-    private LocalDate nextEndDate;
-    private LocalTime nextStartTime;
-    private LocalTime nextEndTime;
     private String recurType;
     int numberToRecur;
 
@@ -31,32 +27,6 @@ public class RecurringTask extends Task {
 
     public int getNumberToRecur() {
         return this.numberToRecur;
-    }
-
-    private void checkYearsPast() {
-        if (LocalDate.now().getYear() > this.getDueDate().getYear()) {
-            addOffset();
-        }
-    }
-
-    private void checkMonthsPast() {
-        if (LocalDate.now().getMonthValue() > this.getDueDate().getMonthValue()) {
-            if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
-                addOffset();
-            }
-        }
-    }
-
-    private void checkDaysPast() {
-        if (LocalDate.now().getDayOfMonth() > this.getDueDate().getDayOfMonth()) {
-            if (LocalDate.now().getMonthValue() == this.getDueDate().getMonthValue()) {
-                if (LocalDate.now().getYear() == this.getDueDate().getYear()) {
-                    //long amount = ChronoUnit.DAYS.between(this.getDueDate(), LocalDate.now());
-                    //System.out.println("A");
-                    addOffset();
-                }
-            }
-        }
     }
 
     private void addOffset() {
@@ -111,21 +81,5 @@ public class RecurringTask extends Task {
     public Task stopRecurring() {
         Task newTask = new Task(this.getName(), this.getStartDate(), this.getDueDate(), this.getStartTime(), this.getEndTime());
         return newTask;
-    }
-
-    private void setNextStartDate(LocalDate date) {
-        this.nextStartDate = date;
-    }
-
-    private void setNextEndDate(LocalDate date) {
-        this.nextEndDate = date;
-    }
-
-    protected LocalDate getNextStartDate() {
-        return nextStartDate;
-    }
-
-    protected LocalDate getNextEndDate() {
-        return nextEndDate;
     }
 }
