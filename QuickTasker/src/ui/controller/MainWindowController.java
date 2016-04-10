@@ -60,10 +60,8 @@ public class MainWindowController implements Initializable {
     @FXML private JFXRippler headerTitleContainer;
     @FXML private Label headerTitle;
 
-    private Text help;
     private ObservableList<Task> plannerEntries;
     private Stage helpStage;
-    private Label title;
 
     /**
      * Display messages as visual feedback for users.
@@ -83,7 +81,6 @@ public class MainWindowController implements Initializable {
     private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
     private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
     private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "No operations to undo before this.";
-    private static final String LABEL_TITLE = "Help Here!";
 
     public MainWindowController() {
 
@@ -96,6 +93,7 @@ public class MainWindowController implements Initializable {
         initLogger();
     }
 
+    // @@author A0133333U
     private void initLogger() {
         logger = Logger.getLogger("UILogger");
         logger.setLevel(Level.INFO);
@@ -110,12 +108,12 @@ public class MainWindowController implements Initializable {
         commandBox.requestFocus();
     }
 
-    void setStage(Stage s) {
-        this.stage = s;
+    void setStage(Stage stage) {
+        this.stage = stage;
     }
 
-    public void setMain(Main m) {
-        this.main = m;
+    public void setMain(Main main) {
+        this.main = main;
     }
 
     // this method will return a boolean value of true or false, depending on the input
@@ -174,6 +172,8 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    // @@author A0133333U
+    // refactored this yay
     private void changeTheme(String userInput) {
         Scene scene = main.getScene();
         ThemeChanger themer = new ThemeChanger();
@@ -223,26 +223,25 @@ public class MainWindowController implements Initializable {
     /*
      * @@author A013333U
      */
-    private void showHelp() {
-        HBox hb = new HBox();
-        Text text = new Text("Help Section!");
-        hb.getStyleClass().add("hbox");
-        hb.getChildren().add(text);
-        Stage helpStage = new Stage();
-        Scene scene = new Scene(hb, 400, 400);
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.ESCAPE) {
-                    System.out.println("Stage is closing");
-                    helpStage.close();
-                }
-            }
-        });
-        helpStage.setScene(scene);
-        helpStage.show();
-        commandBox.clear();
-    }
-
+    private void showHelp() throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("/fxml/Help.fxml"));
+		Scene helpScene = new Scene(root);
+		Stage helpStage = new Stage();
+		helpScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent ke) {
+				if (ke.getCode() == KeyCode.ESCAPE) {
+					helpStage.close();
+				}
+			}
+		});
+		helpStage.setTitle("QuickTasker Help");
+		helpStage.getIcons().add(new Image("img/help.png"));
+		helpStage.initModality(Modality.APPLICATION_MODAL);
+		helpStage.setScene(helpScene);
+		helpStage.setResizable(false);
+		helpStage.show();
+		commandBox.clear();
+	}
     /**
      * @@author kenan
      */
@@ -281,10 +280,10 @@ public class MainWindowController implements Initializable {
     }
 
     //@@author kenan.
-    private void tickCheckBoxForMark(Task t, int i) {
+    private void tickCheckBoxForMark(Task task, int i) {
         printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         printedPlanner.getSelectionModel().select(i);
-        printedPlanner.fireEvent(new TaskDoneEvent(t));
+        printedPlanner.fireEvent(new TaskDoneEvent(task));
         javafx.concurrent.Task<Void> sleeper = makeSleeper(500);
         sleeper.setOnSucceeded(event -> {
             printedPlanner.getSelectionModel().clearSelection();
@@ -319,8 +318,6 @@ public class MainWindowController implements Initializable {
         headerTitle.setText("Tasks: Archived");
     }
 
-    // @@author A0133333U
-    // added warnings to unused method
     private void sortTask(String userInput) {
         System.out.println("Sorting");
         plannerEntries = FXCollections.observableArrayList(operations.sort());
@@ -495,21 +492,21 @@ public class MainWindowController implements Initializable {
     }
 
     //checks that on the same day, returns true when there is clashing timeslot
-    private boolean isTimeSlotClashing(Task t) {
+    private boolean isTimeSlotClashing(Task task) {
         boolean $ = false;
-        if (t.getEndTime() == null) return $;
+        if (task.getEndTime() == null) return $;
         for (Task taskInList : plannerEntries)
-            if (taskInList.getDueDate().equals(t.getDueDate()) && taskInList.getStartDate()
-                    .equals(t.getStartDate())) {
+            if (taskInList.getDueDate().equals(task.getDueDate()) && taskInList.getStartDate()
+                    .equals(task.getStartDate())) {
                 if (taskInList.getEndTime() == null || taskInList.getStartTime() == null) {
-                    if (taskInList.getEndTime() != null && (endTimeWithinStartAndEnd(t, $, taskInList)
-                            || endTimeWithinStartAndEnd(taskInList, $, t))) {
+                    if (taskInList.getEndTime() != null && (endTimeWithinStartAndEnd(task, $, taskInList)
+                            || endTimeWithinStartAndEnd(taskInList, $, task))) {
                         $ = true;
                         break;
                     }
-                } else if (endTimeWithinStartAndEnd(t, $, taskInList) || endTimeWithinStartAndEnd(taskInList,
-                        $, t) || startTimeWithinStartAndEnd(t, $, taskInList) || startTimeWithinStartAndEnd(
-                        taskInList, $, t)) {
+                } else if (endTimeWithinStartAndEnd(task, $, taskInList) || endTimeWithinStartAndEnd(taskInList,
+                        $, task) || startTimeWithinStartAndEnd(task, $, taskInList) || startTimeWithinStartAndEnd(
+                        taskInList, $, task)) {
                     $ = true;
                     break;
                 }
@@ -517,16 +514,16 @@ public class MainWindowController implements Initializable {
         return $;
     }
 
-    private boolean startTimeWithinStartAndEnd(Task t, boolean timeSlotsAreClashing, Task taskInList) {
-        if (t.getStartTime() != null) timeSlotsAreClashing =
-                t.getStartTime().isAfter(taskInList.getStartTime().minusHours(1)) && t.getEndTime()
+    private boolean startTimeWithinStartAndEnd(Task task, boolean timeSlotsAreClashing, Task taskInList) {
+        if (task.getStartTime() != null) timeSlotsAreClashing =
+                task.getStartTime().isAfter(taskInList.getStartTime().minusHours(1)) && task.getEndTime()
                         .isBefore((taskInList.getEndTime().plusHours(1)));
         return timeSlotsAreClashing;
     }
 
-    private boolean endTimeWithinStartAndEnd(Task t, boolean timeSlotsAreClashing, Task taskInList) {
-        if (t.getEndTime() != null) timeSlotsAreClashing =
-                t.getEndTime().isAfter(taskInList.getStartTime().minusHours(1)) && t.getEndTime()
+    private boolean endTimeWithinStartAndEnd(Task task, boolean timeSlotsAreClashing, Task taskInList) {
+        if (task.getEndTime() != null) timeSlotsAreClashing =
+                task.getEndTime().isAfter(taskInList.getStartTime().minusHours(1)) && task.getEndTime()
                         .isBefore(taskInList.getEndTime().plusHours(1));
         return timeSlotsAreClashing;
     }
@@ -549,7 +546,7 @@ public class MainWindowController implements Initializable {
             TaskListCell listCell = new TaskListCell();
             printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
                 Thread.currentThread()
-                        .setUncaughtExceptionHandler((t, e) -> Platform.runLater(System.out::println));
+                        .setUncaughtExceptionHandler((task, e) -> Platform.runLater(System.out::println));
                 if (listCell.getTask().equals(event.getTask())) listCell.getCheckBox().fire();
                 listCell.removeEventFilter(TASK_COMPLETE, null);
             }).start());
