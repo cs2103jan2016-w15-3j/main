@@ -25,8 +25,14 @@ public class DetermineCommandType {
                 return Commands.SEARCH_TASK;
             case "find":
                 return Commands.SEARCH_TASK;
-            case "read":
+            case "show":
                 return Commands.DISPLAY_TASK;
+            case "view":
+                return Commands.DISPLAY_TASK;
+            case "back":
+                return Commands.DISPLAY_TASK;
+            case "mark":
+            	return Commands.MARK_TASK;
             case "undo":
                 return Commands.UNDO_TASK;
             case "recur":
@@ -38,17 +44,17 @@ public class DetermineCommandType {
             case "change":
                 return Commands.CHANGE_DIRECTORY;
             case "switch":
-                return Commands.CHANGE_DIRECTORY;
+            	return Commands.CHANGE_DIRECTORY;
+            case "help":
+            	return Commands.HELP;
+            case "theme":
+            	return Commands.THEME;
             case "skip":
                 return Commands.SKIP_TASK;
             case "stop":
                 return Commands.STOP_TASK;
-            case "mark":
-                return Commands.MARK_TASK;
             case "clear":
                 return Commands.CLEAR_TASK;
-            case "back":
-                return Commands.BACK;
             default:
                 return Commands.ERROR;
         }
