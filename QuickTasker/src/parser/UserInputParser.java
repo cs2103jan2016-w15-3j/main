@@ -133,12 +133,14 @@ public class UserInputParser {
         return endDate;
     }
 
+    // @@author A0133333U
     public LocalTime getStartTime(String userInput) {
         setAttributes(userInput);
 
         return startTime;
     }
 
+    // @@author A0133333U
     public LocalTime getEndTime(String userInput) {
         setAttributes(userInput);
 
