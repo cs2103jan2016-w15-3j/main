@@ -10,11 +10,11 @@ class SearchHelper {
     private final String FLOATING_TASK = "floating";
     private final double FUZZY_STRING_COMPARE_THRESHOLD = 0.65;
 
-    public boolean isItDisplayedInTodayView(Task t) {
+    public boolean isDisplayedInTodayView(Task t) {
         return isFloatingTask(t) || isDueToday(t);
     }
 
-    public boolean isItDisplayedInTomorrowView(Task t) {
+    public boolean isDisplayedInTomorrowView(Task t) {
         return isDueTomorrow(t);
     }
 

@@ -1,20 +1,24 @@
 package ui.controller;
 
 import com.jfoenix.controls.*;
-import common.UIOperationException;
+import Common.UIOperationException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.Logic;
 import model.RecurringTask;
@@ -22,6 +26,7 @@ import model.Task;
 import parser.*;
 import ui.model.TaskListCell;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.EmptyStackException;
 import java.util.ResourceBundle;
@@ -139,6 +144,8 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    
+  
     private void performOperations(String userInput) throws UIOperationException {
 /*
         InputValidator inputValidator = new InputValidator();
@@ -189,7 +196,7 @@ public class MainWindowController implements Initializable {
 
     //@@author kenan
     private void showTomorrow() {
-        printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTomorrowView(task)));
+        printedPlanner.setItems(plannerEntries.filtered(task -> util.isDisplayedInTomorrowView(task)));
         headerTitle.setText("Tasks: Tomorrow");
         updateTaskCounter();
         commandBox.clear();
@@ -258,7 +265,7 @@ public class MainWindowController implements Initializable {
 
     private void showToday() {
 
-        printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTodayView(task)));
+        printedPlanner.setItems(plannerEntries.filtered(task -> util.isDisplayedInTodayView(task)));
         headerTitle.setText("Tasks: Today + Floating");
         updateTaskCounter();
         commandBox.clear();

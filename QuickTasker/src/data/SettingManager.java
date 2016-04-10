@@ -1,6 +1,6 @@
 package data;
 
-import common.ResetSettingsException;
+import Common.ResetSettingsException;
 import org.apache.commons.configuration2.Configuration;
 
 public interface SettingManager {
