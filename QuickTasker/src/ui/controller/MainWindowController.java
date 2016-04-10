@@ -144,6 +144,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	@FXML
+	// This method will log the user input, as well as passes valid input to the performOperations method
 	private void handleEnterKeyPressed(KeyEvent event) {
 		String userInput = commandBox.getText();
 		if (isEmptyInput(userInput) || !enterKeyIsPressed(event))
@@ -189,6 +190,8 @@ public class MainWindowController implements Initializable {
 				clearTasks();
 			else if (userInput.contains("stop"))
 				stopRecurringTask(userInput);
+			else if (userInput.equals("show overdue")) 
+				showOverdue();
 			else if ("show today".equals(userInput) || "view today".equals(userInput))
 				showToday();
 			else if ("show tomorrow".equals(userInput) || "view tomorrow".equals(userInput))
@@ -323,6 +326,14 @@ public class MainWindowController implements Initializable {
 
 		printedPlanner.setItems(plannerEntries.filtered(task -> util.isDisplayedInTodayView(task)));
 		headerTitle.setText("Tasks: Today + Floating");
+		updateTaskCounter();
+		commandBox.clear();
+	}
+	
+	//@@author A0133333U
+	private void showOverdue() {
+		printedPlanner.setItems(plannerEntries.filtered(task -> util.isTaskOverdue(task)));
+		headerTitle.setText("Tasks: Overdue");
 		updateTaskCounter();
 		commandBox.clear();
 	}

@@ -17,7 +17,17 @@ class SearchHelper {
     public boolean isDisplayedInTomorrowView(Task t) {
         return isDueTomorrow(t);
     }
+    
+    public boolean isTaskOverdue(Task t) {
+    	return isOverdue(t);
+    }
+    
+    // @@author A0133333U
+    private boolean isOverdue(Task t) {
+    	return t.getDueDate().isBefore(LocalDate.now());
+    }
 
+    // @@author
     private boolean isDueTomorrow(Task t) {
         return t.getDueDate().isAfter(LocalDate.now()) && t.getDueDate()
                 .isBefore(LocalDate.now().plusDays(1).plusDays(1));
