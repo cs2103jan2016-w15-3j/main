@@ -68,17 +68,20 @@ public class TaskListCell extends JFXListCell<Task> {
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setMaxWidth(20);
         ColumnConstraints column3 = new ColumnConstraints();
-        column3.setHgrow(Priority.ALWAYS);
+        column3.setMinWidth(80);
         ColumnConstraints column4 = new ColumnConstraints();
-        column4.setMinWidth(80);
+        column3.setHgrow(Priority.ALWAYS);
         ColumnConstraints column5 = new ColumnConstraints();
         column5.setMinWidth(80);
-        grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5);
+        ColumnConstraints column6 = new ColumnConstraints();
+        column6.setMinWidth(80);
+        grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5, column6);
     }
 
     private void configureTaskName() {
         setWrapIfTaskNameLong();
         taskName.getStyleClass().add("task-name");
+        GridPane.setHalignment(taskName, HPos.LEFT);
     }
 
     private void setWrapIfTaskNameLong() {
@@ -221,12 +224,12 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void addControlsToGrid() {
         grid.add(taskId, 0, 0, 1, 2);
-        grid.add(lateIcon, 0, 2, 1, 2);
-        grid.add(checkBox, 1, 0, 1, 2);
-        grid.add(new HBox(taskName), 2, 0, 1, 2);
-        grid.add(taskStartDate, 3, 0);
-        grid.add(taskStartTime, 3, 1);
-        grid.add(taskDueDate, 4, 0);
-        grid.add(taskEndTime, 4, 1);
+        grid.add(lateIcon, 1, 0, 1, 2);
+        grid.add(checkBox, 2, 0, 1, 2);
+        grid.add(new HBox(taskName), 3, 0, 1, 2);
+        grid.add(taskStartDate, 4, 0);
+        grid.add(taskStartTime, 4, 1);
+        grid.add(taskDueDate, 5, 0);
+        grid.add(taskEndTime, 5, 1);
     }
 }
