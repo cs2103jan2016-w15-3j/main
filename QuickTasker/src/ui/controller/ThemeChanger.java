@@ -12,10 +12,8 @@ public class ThemeChanger {
 
     public void change(String userinput, Scene s) {
         String colorName = userinput.substring(userinput.indexOf(" ") + 1);
-        if (!ApplicationColor.hasColor(colorName)) {
-        	return;
-        }
-        
+        if (!ApplicationColor.hasColor(colorName)) return;
+
         ApplicationColor selectedColor = ApplicationColor.valueOf(colorName.toUpperCase());
         JFXDecorator decorator = (JFXDecorator) s.lookup(".jfx-decorator");
         JFXToolbar toolbar = (JFXToolbar) s.lookup(".jfx-tool-bar");

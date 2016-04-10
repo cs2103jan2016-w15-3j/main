@@ -1,15 +1,10 @@
 package ui.model;
 
-//@@author A0126077E
-
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListCell;
-import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXRippler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -26,41 +21,39 @@ public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartDate = new Label();
     private final Label taskDueDate = new Label();
     private final Label taskName = new Label();
-    // @@author A0133333U
     private final Label taskStartTime = new Label();
     private final Label taskEndTime = new Label();
     private final Label taskId = new Label();
     private final JFXCheckBox checkBox = new JFXCheckBox();
-  //@@author A0126077E
-    private final JFXPopup searchBox = new JFXPopup();
     private final GridPane grid = new GridPane();
     private JFXRippler rippler = new JFXRippler();
     private Task myTask;
-    private final int offset = 1;
 
     public TaskListCell() {
         configureGrid();
         configureTaskName();
         configureDate();
         configureTime();
-        //configureIcon();
         configureCheckBox();
         addControlsToGrid();
         addGridToRippler();
+    }
+
+    @Override
+    public void updateItem(Task t, boolean empty) {
+        super.updateItem(t, empty);
+        if (empty) clearContent();
+        else updateContent(t);
     }
 
     private void addGridToRippler() {
         rippler.setControl(grid);
     }
 
-    public JFXRippler getRippler() {
-        return this.rippler;
-    }
-
     private void configureGrid() {
-        grid.setHgap(10); // horizontal gap between grids
-        grid.setVgap(5); // vertical gap between grids
-        grid.setPadding(new Insets(0, 10, 0, 10));// set custom columns
+        grid.setHgap(10);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(0, 10, 0, 10));
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setMinWidth(20);
         column1.setMaxWidth(20);
@@ -75,141 +68,21 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5);
     }
 
-    // @@author A0133333U
-    private void configureTaskName() {
-        setWrapIfTaskNameLong();
-        taskName.getStyleClass().add("task-name");
-    }
-
-    private void setWrapIfTaskNameLong() {
-        taskName.setWrapText(true);
-        setPrefWidth(0);
-    }
-
-    private void configureDate() {
-        taskStartDate.getStyleClass().add("task-date");
-        taskDueDate.getStyleClass().add("task-date");
-        GridPane.setHalignment(taskStartDate, HPos.RIGHT);
-        GridPane.setHalignment(taskDueDate, HPos.RIGHT);
-    }
-
-    // @@author A0133333U
-    private void configureTime() {
-        taskStartDate.getStyleClass().add("task-time");
-        taskEndTime.getStyleClass().add("task-time");
-        GridPane.setHalignment(taskStartTime, HPos.RIGHT);
-        GridPane.setHalignment(taskEndTime, HPos.RIGHT);
-    }
-
-/*    // @@author A0133333U-unused
- * unused because layout decided on is diff
- *	
-    private void configureIcon() {
-        lateIcon.getStyleClass().add("late-icon");
-    }*/
-
-    private void configureCheckBox() {
-        checkBox.getStyleClass().add("task-check-box");
-    }
-
-    private void clearContent() {
-        setText(null);
-        setGraphic(null);
-    }
-
-
-    @Override
-    public void updateItem(Task task, boolean empty) {
-        super.updateItem(task, empty);
-        if (empty) clearContent();
-        else {
-
-            this.myTask = task;
-            addContent(task);
-            rippler = new JFXRippler(grid);
-            setGraphic(rippler);
-        }
-    }
-
-    protected void addContent(Task task) {
-        setTaskName(task);
-        setTaskId(task);
-
-        setTaskStartDate(task);
-        setTaskDueDate(task);
-
-        //setTaskStartTime(task);
-        setTaskEndTime(task);
-
+    protected void addContent(Task t) {
+        setTaskName(t);
+        setTaskId(t);
+        setTaskStartDate(t);
+        setTaskEndDate(t);
+        setTaskStartTime(t);
+        setTaskEndTime(t);
         setGraphic(grid);
     }
-    
 
-    // @@author A0133333U
-    protected void setTaskId(Task task) {
-        taskId.setText(String.valueOf(getIndex() + offset));    
-    }
-
-    protected void setTaskName(Task task) {
-        taskName.setText(task.getName());
-    }
-
-    protected void setTaskStartDate(Task task) {
-        if (task != null && task.getStartDate() != null && !task.getStartDate().equals(LocalDate.MIN))
-            setStartDateInText(task);
-        else taskStartDate.setText("");
-    }
-
-    private void setStartDateInText(Task task) {
-        taskStartDate.setText(DateTimeFormatter.ofPattern("dd MMM yyyy").format(task.getStartDate()));
-    }
-
-    private boolean isNotFloatingTask(Task task) {
-        return !"floating".equals(task.getTaskType());
-    }
-
-    protected void setTaskDueDate(Task task) {
-
-        taskDueDate.setText(task == null || task.getDueDate() == null || task.getDueDate().equals(LocalDate.MAX) ?
-                "-" :
-                DateTimeFormatter.ofPattern("dd MMM yyyy").format(task.getDueDate()));
-        
-    }
-
-    // @@author A0133333U
-    protected void setTaskStartTime(Task task) {
-        taskStartTime.setText(task == null || !isNotFloatingTask(task) || !isNotEvent(task) || !timeCheck(task) ?
-                "" :
-                DateTimeFormatter.ofPattern("HH:mm").format(task.getStartTime()));
-    }
-
-    // @@author A0133333U
-    protected void setTaskEndTime(Task task) {
-
-        if (task == null || !isNotFloatingTask(task) || !isNotEvent(task) || !timeCheck(task)) taskEndTime.setText("-");
-        else {
-            LocalTime endTime = task.getEndTime();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            String timeString = formatter.format(endTime);
-            System.out.println(timeString);
-            taskEndTime.setText(timeString);
-        }
-    }
-
-    private boolean timeCheck(Task task) {
-        return task.getStartTime() != null || task.getEndTime() != null;
-    }
-
-    private boolean isNotEvent(Task task) {
-        return !"wholeDayEvent".equals(task.getTaskType());
-    }
-
-    public JFXCheckBox getCheckBox() {
-        return checkBox;
-    }
-
-    public Task getTask() {
-        return myTask;
+    private void updateContent(Task t) {
+        this.myTask = t;
+        addContent(t);
+        rippler = new JFXRippler(grid);
+        setGraphic(rippler);
     }
 
     private void addControlsToGrid() {
@@ -220,6 +93,102 @@ public class TaskListCell extends JFXListCell<Task> {
         grid.add(taskStartTime, 3, 1);
         grid.add(taskDueDate, 4, 0);
         grid.add(taskEndTime, 4, 1);
+    }
+
+    private void configureTime() {
+        taskStartDate.getStyleClass().add("task-time");
+        taskEndTime.getStyleClass().add("task-time");
+        GridPane.setHalignment(taskStartTime, HPos.RIGHT);
+        GridPane.setHalignment(taskEndTime, HPos.RIGHT);
+    }
+
+    private void configureTaskName() {
+        setWrapIfTaskNameLong();
+        taskName.getStyleClass().add("task-name");
+    }
+
+    private void configureDate() {
+        taskStartDate.getStyleClass().add("task-date");
+        taskDueDate.getStyleClass().add("task-date");
+        GridPane.setHalignment(taskStartDate, HPos.RIGHT);
+        GridPane.setHalignment(taskDueDate, HPos.RIGHT);
+    }
+
+    private void configureCheckBox() {
+        checkBox.getStyleClass().add("task-check-box");
+    }
+
+    private void clearContent() {
+        setText(null);
+        setGraphic(null);
+    }
+
+    protected void setTaskId(Task t) {
+        taskId.setText(String.valueOf(getIndex() + 1));
+    }
+
+    protected void setTaskName(Task t) {
+        taskName.setText(t.getName());
+    }
+
+    protected void setTaskStartDate(Task t) {
+        if (t != null && t.getStartDate() != null && !t.getStartDate().equals(LocalDate.MIN))
+            setStartDateInText(t);
+        else taskStartDate.setText("");
+    }
+
+    private void setStartDateInText(Task t) {
+        taskStartDate.setText(DateTimeFormatter.ofPattern("dd MMM yyyy").format(t.getStartDate()));
+    }
+
+    private boolean isNotFloatingTask(Task t) {
+        return !"floating".equals(t.getTaskType());
+    }
+
+    protected void setTaskEndDate(Task t) {
+
+        taskDueDate.setText(t == null || t.getDueDate() == null || t.getDueDate().equals(LocalDate.MAX) ?
+                "-" :
+                DateTimeFormatter.ofPattern("dd MMM yyyy").format(t.getDueDate()));
+    }
+
+    protected void setTaskStartTime(Task t) {
+        taskStartTime.setText(t == null || !isNotFloatingTask(t) || !isNotEvent(t) || !timeCheck(t) ?
+                "" :
+                DateTimeFormatter.ofPattern("HH:mm").format(t.getStartTime()));
+    }
+
+    protected void setTaskEndTime(Task t) {
+
+        if (t == null || !isNotFloatingTask(t) || !isNotEvent(t) || !timeCheck(t)) taskEndTime.setText("-");
+        else {
+            LocalTime endTime = t.getEndTime();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            String timeString = formatter.format(endTime);
+            System.out.println(timeString);
+            taskEndTime.setText(timeString);
+        }
+    }
+
+    private boolean timeCheck(Task t) {
+        return t.getStartTime() != null || t.getEndTime() != null;
+    }
+
+    private boolean isNotEvent(Task t) {
+        return !"wholeDayEvent".equals(t.getTaskType());
+    }
+
+    public JFXCheckBox getCheckBox() {
+        return checkBox;
+    }
+
+    public Task getTask() {
+        return myTask;
+    }
+
+    private void setWrapIfTaskNameLong() {
+        taskName.setWrapText(true);
+        setPrefWidth(0);
     }
 
 }

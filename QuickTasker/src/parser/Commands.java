@@ -21,6 +21,7 @@ public enum Commands {
     CHANGE_DIRECTORY,
     CLEAR_TASK,
     THEME,
-    HELP;
+    HELP,
+    BACK;
 
 }

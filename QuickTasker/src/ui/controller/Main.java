@@ -18,6 +18,7 @@ public class Main extends Application {
 
     private static final String APP_TITLE = "Welcome to QuickTasker!";
     private static final String IMAGE_ICON = "img/quickTasker.png";
+    // @author A0126077E
     private JFXDecorator decorator;
     private Stage primaryStage;
     private Scene scene;
@@ -25,6 +26,7 @@ public class Main extends Application {
     private static final int STAGE_MINIMUM_WIDTH = 560;
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
+    // @author A0126077E
     @Override
     public void start(Stage primaryStage) {
         // required to generate settings when program starts the first time
@@ -34,6 +36,7 @@ public class Main extends Application {
         initMainWindow();
     }
 
+    // @author A0126077E
     private void initMainWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/MainWindowView.fxml"));
@@ -50,21 +53,25 @@ public class Main extends Application {
         }
     }
 
+    // @author A0126077E
     private void setReferencesToController(MainWindowController mainWindowController) {
         mainWindowController.setMain(this);
         mainWindowController.setStage(primaryStage);
     }
 
+    // @author A0126077E
     private void configureScene(BorderPane mainContainer) {
         decorator = new JFXDecorator(primaryStage, mainContainer);
         scene = new Scene(decorator, 560, 400);
     }
 
+    // @author A0126077E
     private void setCssStyles() {
         // PRECAUSION: fonts.css need to be loaded before other css files to avoid compilation error
         scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
         scene.getStylesheets().add(Main.class.getResource("/css/application.css").toExternalForm());
     }
+    // @author A0126077E
 
     private void initializePrimaryStage() {
         primaryStage.initStyle(StageStyle.UNDECORATED);
@@ -76,14 +83,17 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    // @author A0126077E
     public Scene getScene() {
         return this.scene;
     }
 
+    // @author A0126077E
     public JFXDecorator getDecorator() {
         return decorator;
     }
 
+    // @author A0126077E
     public static void main(String[] args) {
         launch(args);
     }

@@ -147,7 +147,7 @@ public class UserInputParser {
         return endTime;
     }
 
-  //@@author A0121558H
+    //@@author A0121558H
 
     public String getTaskName(String userInput) {
         setAttributes(userInput);

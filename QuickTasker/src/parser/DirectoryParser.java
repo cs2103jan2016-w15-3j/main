@@ -20,7 +20,7 @@ public class DirectoryParser extends UserInputParser {
         filePath = userCommand[1];
     }
     /*private void convertFilePath() {
-		filePath=filePath.replaceAll("\\", "\\\\");
+        filePath=filePath.replaceAll("\\", "\\\\");
 	}*/
 
     public String getFilePath(String userInput) {

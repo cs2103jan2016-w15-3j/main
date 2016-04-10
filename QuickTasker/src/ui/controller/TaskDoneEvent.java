@@ -1,6 +1,5 @@
 package ui.controller;
 //@@author A0126077E
-
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;
@@ -18,7 +17,6 @@ public class TaskDoneEvent extends Event {
     }
 
     public Task getTask() {
-
         return task;
     }
 

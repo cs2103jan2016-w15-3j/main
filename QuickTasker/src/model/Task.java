@@ -72,20 +72,19 @@ public class Task implements Comparable {
     }
 
     public void setTaskType() {
-        if (bothDateAndTimeAreDefaultValue()) this.taskType = "floating";
-        else if (onlyTimeAreDefaultValue()) this.taskType = "wholeDayEvent";
-        else this.taskType = "task";
+        this.taskType = bothDateAndTimeAreDefaultValue() ? "floating"
+                : !onlyTimeAreDefaultValue() ? "task" : "wholeDayEvent";
     }
 
     private boolean onlyTimeAreDefaultValue() {
         return (startTime == null || this.startTime == LocalTime.MIN) && (this.endTime == null
-                || this.endTime == LocalTime.MIN);
+                || this.endTime == LocalTime.MAX);
     }
 
     //
     private boolean bothDateAndTimeAreDefaultValue() {
-        return (startDate == null || this.startDate.equals(LocalDate.MAX)) && (endDate == null || this.endDate
-                .equals(LocalDate.MAX)) && (startTime == null || this.startTime.equals(LocalTime.MAX)) && (
+        return (startDate == null || this.startDate.equals(LocalDate.MIN)) && (endDate == null || this.endDate
+                .equals(LocalDate.MAX)) && (startTime == null || this.startTime.equals(LocalTime.MIN)) && (
                 endDate == null || this.endDate.equals(LocalDate.MAX));
     }
 
@@ -145,7 +144,7 @@ public class Task implements Comparable {
     public void setEndTime(LocalTime time) {
         this.endTime = time;
     }
-    
+
     // @@author
     public void setDone(boolean done) {
         isDone = done;
@@ -155,27 +154,21 @@ public class Task implements Comparable {
         return UUID.randomUUID().toString();
     }
 
+  //@@author A0126077E
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (o == this) return true;
         if (!(o instanceof Task)) return false;
-
         Task task = (Task) o;
-
-        if (!id.equals(task.id)) return false;
-        if (!taskName.equals(task.taskName)) return false;
-        if (endDate != null ? !endDate.equals(task.endDate) : task.endDate != null) return false;
-        return startDate != null ? startDate.equals(task.startDate) : task.startDate == null;
-
+        return id.equals(task.id) && taskName.equals(task.taskName)
+                && !(endDate == null ? task.endDate != null : !endDate.equals(task.endDate))
+                && (startDate == null ? task.startDate == null : startDate.equals(task.startDate));
     }
 
     @Override
     public int hashCode() {
-        int result = taskName.hashCode();
-        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
-        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
-        result = 31 * result + id.hashCode();
-        return result;
+        return 31 * ((startDate == null ? 0 : startDate.hashCode())
+                + 31 * (31 * taskName.hashCode() + (endDate == null ? 0 : endDate.hashCode()))) + id.hashCode();
     }
 
     //@@author A0130949
@@ -221,27 +214,13 @@ public class Task implements Comparable {
     }
 
     public boolean isDueDateEmpty() {
-        if (this.getDueDate() == null) {
-            return true;
-        } else if (this.getDueDate().equals(LocalDate.MIN)) {
-            return true;
-        } else if (this.getDueDate().equals(LocalDate.MAX)) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.getDueDate() == null || this.getDueDate().equals(LocalDate.MIN)
+                || this.getDueDate().equals(LocalDate.MAX);
     }
 
     public boolean isStartDateEmpty() {
-        if (this.getStartDate() == null) {
-            return true;
-        } else if (this.getStartDate().equals(LocalDate.MIN)) {
-            return true;
-        } else if (this.getStartDate().equals(LocalDate.MAX)) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.getStartDate() == null || this.getStartDate().equals(LocalDate.MIN)
+                || this.getStartDate().equals(LocalDate.MAX);
     }
 
     public boolean isDatesInvalid() {

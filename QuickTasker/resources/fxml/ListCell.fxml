@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<GridPane fx:id="gridView" hgap="10.0" maxHeight="-Infinity" minHeight="-Infinity" vgap="5.0"
+          xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+    <columnConstraints>
+        <ColumnConstraints hgrow="NEVER" maxWidth="200.0" minWidth="200.0" prefWidth="90.0"/>
+        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="150.0"/>
+        <ColumnConstraints hgrow="ALWAYS"/>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints valignment="CENTER" vgrow="NEVER"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+    </padding>
+    <children>
+        <HBox fx:id="hBoxCol1" alignment="CENTER" spacing="15.0">
+            <children>
+                <Label text="1"/>
+                <JFXCheckBox fx:id="checkBox" maxWidth="20.0" minWidth="20.0" HBox.hgrow="NEVER"/>
+                <MaterialDesignIconView/>
+                <JFXButton fx:id="btnStartTime" alignment="BOTTOM_RIGHT" maxWidth="45.0" minWidth="45.0"
+                           opacity="0.71" style="-fx-background-color: &quot;#2196F3&quot;;" text="12:20"
+                           textFill="WHITE" HBox.hgrow="NEVER"/>
+                <JFXButton fx:id="btnEndTime" alignment="BOTTOM_LEFT" maxWidth="45.0" minWidth="45.0"
+                           style="-fx-background-color: &quot;#2196F3&quot;;" text="13:30" textFill="WHITE"
+                           HBox.hgrow="NEVER"/>
+            </children>
+        </HBox>
+        <HBox fx:id="hBoxCol2" alignment="CENTER_LEFT" GridPane.columnIndex="1">
+            <children>
+                <VBox fx:id="vBoxCol1TaskContainer" alignment="CENTER" prefHeight="0.0" prefWidth="200.0">
+                    <children>
+                        <HBox fx:id="hBoxTaskWrapper" alignment="CENTER_LEFT">
+                            <children>
+                                <Label fx:id="lblTaskName" minWidth="80.0"
+                                       text="this is a very long task name">
+                                    <font>
+                                        <Font name="Roboto Bold" size="13.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <VBox.margin>
+                                <Insets bottom="4.0" top="5.0"/>
+                            </VBox.margin>
+                        </HBox>
+                        <HBox fx:id="hBoxRow2" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                            <children>
+                                <Label fx:id="lblStartDate" opacity="0.6" text="12-12-12"/>
+                                <Separator opacity="0.7" orientation="VERTICAL" prefHeight="200.0"/>
+                                <Label fx:id="lblEndDate" opacity="0.6" text="12-12-12"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</GridPane>

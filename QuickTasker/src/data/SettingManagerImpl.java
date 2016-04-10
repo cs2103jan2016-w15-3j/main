@@ -48,7 +48,8 @@ public class SettingManagerImpl implements SettingManager {
             createDefaultSettings();
         } catch (IOException e) {
             logger.log(Level.SEVERE, "IO exception occured trying to reset default setting.\n"
-                    + "Exception might be thrown because createDefaults() method failed to write to file.",e);
+                            + "Exception might be thrown because createDefaults() method failed to write to file.",
+                    e);
             throw new ResetSettingsException();
         }
     }
@@ -58,7 +59,8 @@ public class SettingManagerImpl implements SettingManager {
         try {
             return settings.getString(AvailableSettings.SAVE_LOCATION.toString());
         } catch (NullPointerException e) {
-            logger.log(Level.WARNING,"Setting stored in configuration object is :"+settings.getString(AvailableSettings.SAVE_LOCATION.toString()), e);
+            logger.log(Level.WARNING, "Setting stored in configuration object is :" + settings
+                    .getString(AvailableSettings.SAVE_LOCATION.toString()), e);
             return null;
         }
     }
