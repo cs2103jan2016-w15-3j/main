@@ -27,7 +27,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        SettingManager settings = new SettingManagerImpl();
+        SettingManager settings = new SettingManagerImpl(); // required to load settings from file when program starts
         this.primaryStage = primaryStage;
         initMainWindow();
     }
@@ -43,6 +43,7 @@ public class Main extends Application {
             setCssStyles();
             initializePrimaryStage();
         } catch (Exception e) {
+            logger.severe("Main window failed to load during init Stage.");
             e.printStackTrace();
         }
     }
