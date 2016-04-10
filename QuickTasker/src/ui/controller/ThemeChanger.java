@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXToolbar;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import ui.model.ApplicationColor;
+
 // @author A0126077E
 public class ThemeChanger {
     private final Enum DefaultColor = ApplicationColor.RED;

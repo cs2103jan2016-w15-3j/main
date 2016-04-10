@@ -4,7 +4,6 @@ import ui.model.ApplicationColor;
 
 import java.util.Properties;
 
-
 public class DefaultSettings {
     private Properties properties = new Properties();
 
@@ -12,11 +11,11 @@ public class DefaultSettings {
         setDefaults();
     }
 
-    public Properties getDefaults(){
+    public Properties getDefaults() {
         return properties;
     }
 
-    public Properties setDefaults(){
+    public Properties setDefaults() {
 
         properties.setProperty(AvailableSettings.APP_THEME.name(), ApplicationColor.RED.name());
         properties.setProperty(AvailableSettings.SAVE_LOCATION.name(), "tasks.json");

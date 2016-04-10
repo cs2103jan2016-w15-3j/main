@@ -5,7 +5,9 @@ import model.RecurringTaskTest;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-import parser.*;
+import parser.DateTimeParserTest;
+import parser.UpdateParserTest;
+import parser.UserInputParserTest;
 import ui.model.TaskListCellTest;
 
 import java.util.List;
@@ -24,8 +26,8 @@ public class TestRunner {
     public static void main(String[] args) {
         Result result = JUnitCore
                 .runClasses(JsonDataHandlerTest.class, SettingManagerTest.class, AddTaskTest.class,
-                        DeleteTaskTest.class, LogicTest.class,SkipRecurTaskTest.class, UpdateTaskTest.class, RecurringTaskTest.class,
-                        DateTimeParserTest.class, UserInputParserTest.class,
+                        DeleteTaskTest.class, LogicTest.class, SkipRecurTaskTest.class, UpdateTaskTest.class,
+                        RecurringTaskTest.class, DateTimeParserTest.class, UserInputParserTest.class,
                         UpdateParserTest.class, UserInputParserTest.class, TaskListCellTest.class);
 
         System.out.println();

@@ -1,9 +1,10 @@
 package logic;
 //@@author A0130949Y
+
+import data.DataHandler;
 import data.JsonDataHandler;
 import data.SettingManager;
 import data.SettingManagerImpl;
-import data.DataHandler;
 import model.RecurringTask;
 import model.Task;
 import parser.Commands;
@@ -60,7 +61,7 @@ public class Logic {
         commandMap.put(Commands.SKIP_TASK, new SkipRecurTask());
         commandMap.put(Commands.STOP_TASK, new StopRecurTask());
         commandMap.put(Commands.MARK_TASK, new MarkTask());
-        commandMap.put((Commands.CLEAR_TASK),new ClearTasks());
+        commandMap.put((Commands.CLEAR_TASK), new ClearTasks());
     }
 
     public ArrayList<Task> clear() {
@@ -196,10 +197,10 @@ public class Logic {
 
     // requires cloning to prevent the reucrring task from changing values
     private RecurringTask clone(Task completedTask) {
-        return new RecurringTask(completedTask.getName(),
-                completedTask.getStartDate(), completedTask.getDueDate(),
-                ((RecurringTask) completedTask).getRecurType(), completedTask.getStartTime(),
-                completedTask.getEndTime(), ((RecurringTask) completedTask).getNumberToRecur());
+        return new RecurringTask(completedTask.getName(), completedTask.getStartDate(),
+                completedTask.getDueDate(), ((RecurringTask) completedTask).getRecurType(),
+                completedTask.getStartTime(), completedTask.getEndTime(),
+                ((RecurringTask) completedTask).getNumberToRecur());
     }
 
     public void changeDir(String path) {

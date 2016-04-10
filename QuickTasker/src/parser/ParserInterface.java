@@ -16,9 +16,9 @@ public interface ParserInterface {
 
     LocalDate getEndDate(String userInput) throws Exception;
 
-   // @@ author A0133333U
+    // @@ author A0133333U
     LocalTime getStartTime(String userInput) throws Exception;
-    
+
     // @@ author A0133333U
     LocalTime getEndTime(String userInput) throws Exception;
 

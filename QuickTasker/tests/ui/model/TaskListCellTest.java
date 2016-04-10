@@ -14,17 +14,18 @@ import static org.junit.Assert.assertEquals;
  */
 public class TaskListCellTest {
 
-
-	// denotes the Task object
+    // denotes the Task object
     Task t1;
     private TaskListCell taskListCell;
     private ObservableList<Task> testTasks;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
 
     }
 
-    @Test public void testSetTaskName() {
+    @Test
+    public void testSetTaskName() {
         String taskName = "Buy bananas";
         Task testTask = new Task(taskName, LocalDate.now(), LocalDate.now());
         assertEquals("Buy bananas", testTask.getName());
@@ -37,8 +38,7 @@ public class TaskListCellTest {
         assertEquals("buy fruits", t1.getName());
     }
 
-    
-    @Test 
+    @Test
     // method will test start date of task to see if they are the same as expected start date
     public void testSetTaskStartDate() {
         String taskName = "Buy bananas";
@@ -46,7 +46,7 @@ public class TaskListCellTest {
         assertEquals(LocalDate.now(), testTask.getStartDate());
     }
 
-    @Test 
+    @Test
     // method will test end date of task to see if they are the same as expected end date
     public void testSetTaskDueDate() {
         String taskName = "Buy bananas";

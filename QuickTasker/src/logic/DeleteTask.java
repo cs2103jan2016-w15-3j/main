@@ -1,5 +1,6 @@
 package logic;
 //@@author A0130949Y
+
 import model.Task;
 
 import java.util.ArrayList;
@@ -7,7 +8,6 @@ import java.util.List;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class DeleteTask<E> implements Command<Object> {
     private static Logger loggerDelete = Logger.getLogger("log");

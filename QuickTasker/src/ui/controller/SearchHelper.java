@@ -19,8 +19,8 @@ class SearchHelper {
     }
 
     private boolean isDueTomorrow(Task t) {
-        return t.getDueDate().isAfter(LocalDate.now())
-                && t.getDueDate().isBefore(LocalDate.now().plusDays(1).plusDays(1));
+        return t.getDueDate().isAfter(LocalDate.now()) && t.getDueDate()
+                .isBefore(LocalDate.now().plusDays(1).plusDays(1));
     }
 
     public boolean containsKeyWord(Task t, String keywords) {

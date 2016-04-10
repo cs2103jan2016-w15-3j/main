@@ -25,7 +25,7 @@ public class JsonDataHandlerTest {
     private JsonDataHandler dataHandler;
     private List<Task> plannerNotebook;
     public static final String WORKING_DIRECTORY = System.getProperty("user.dir");
-    public static final String PATH_SEPARATOR =  System.getProperty("file.separator");
+    public static final String PATH_SEPARATOR = System.getProperty("file.separator");
     public static final String FILE_NAME = "test.json";
 
     @Before
@@ -54,7 +54,6 @@ public class JsonDataHandlerTest {
     public void whenNewHandlerCreatedPathShouldNotBeNull() {
         assertNotNull(dataHandler.getFilePath());
     }
-
 
     @Test
     public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
@@ -161,8 +160,8 @@ public class JsonDataHandlerTest {
     }
 
     @Test
-    public void canSaveFileToNewDir(){
-        String path = "c:" + PATH_SEPARATOR +"temp" +PATH_SEPARATOR +FILE_NAME;
+    public void canSaveFileToNewDir() {
+        String path = "c:" + PATH_SEPARATOR + "temp" + PATH_SEPARATOR + FILE_NAME;
         System.out.println(path);
         List<Task> tasks = create30TasksWithDifferentAttributes();
         dataHandler.setSavePath(path);
@@ -217,11 +216,9 @@ public class JsonDataHandlerTest {
     }
 
     private Gson getGson() {
-        return new GsonBuilder().setPrettyPrinting()
-                .registerTypeAdapterFactory(
-                        RuntimeTypeAdapterFactory.of(Task.class).registerSubtype(Task.class, "Task")
-                                .registerSubtype(RecurringTask.class, "RecurringTask"))
-                .create();
+        return new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(
+                RuntimeTypeAdapterFactory.of(Task.class).registerSubtype(Task.class, "Task")
+                        .registerSubtype(RecurringTask.class, "RecurringTask")).create();
     }
 
 }

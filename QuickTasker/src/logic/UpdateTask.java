@@ -1,9 +1,9 @@
 package logic;
 //@@author A0130949Y
+
 import model.RecurringTask;
 import model.Task;
-import model.RecurringTask;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,8 +47,9 @@ public class UpdateTask<E> implements Command<Object> {
     // transfer the task attributes to recurring task
     private RecurringTask transferAttributes(Task updatedTask, int index, List<Task> list) {
         RecurringTask recurringTask = new RecurringTask(updatedTask.getName(), updatedTask.getStartDate(),
-                updatedTask.getDueDate(), ((RecurringTask) list.get(index)).getRecurType(), updatedTask.getStartTime(),
-                updatedTask.getEndTime(), ((RecurringTask) list.get(index)).getNumberToRecur());
+                updatedTask.getDueDate(), ((RecurringTask) list.get(index)).getRecurType(),
+                updatedTask.getStartTime(), updatedTask.getEndTime(),
+                ((RecurringTask) list.get(index)).getNumberToRecur());
         return recurringTask;
     }
 

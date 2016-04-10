@@ -13,21 +13,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import logic.Logic;
 import model.RecurringTask;
 import model.Task;
-import parser.Commands;
-import parser.DirectoryParser;
-import parser.RecurringParser;
-import parser.UpdateParser;
-import parser.UserInputParser;
+import parser.*;
 import ui.model.TaskListCell;
 
 import java.net.URL;
@@ -39,20 +31,20 @@ import java.util.logging.Logger;
 import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
 /**
- *  @@author A0133333U
+ * @@author A0133333U
  */
 
 public class MainWindowController implements Initializable {
 
-	private static Logger logger;
-	private Main main;
-	private Stage stage;
-	private final UserInputParser parser = new UserInputParser();
-	private final UpdateParser updateParser = new UpdateParser();
-	private final RecurringParser recurringParser = new RecurringParser();
-	private final DirectoryParser directoryParser = new DirectoryParser();
-	private final Logic operations = new Logic();
-	private SearchHelper util = new SearchHelper();
+    private static Logger logger;
+    private Main main;
+    private Stage stage;
+    private final UserInputParser parser = new UserInputParser();
+    private final UpdateParser updateParser = new UpdateParser();
+    private final RecurringParser recurringParser = new RecurringParser();
+    private final DirectoryParser directoryParser = new DirectoryParser();
+    private final Logic operations = new Logic();
+    private SearchHelper util = new SearchHelper();
 
     @FXML private AnchorPane mainContentContainer;
     @FXML private StackPane overlayPane;
@@ -93,7 +85,6 @@ public class MainWindowController implements Initializable {
     private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "No operations to undo before this.";
     private static final String LABEL_TITLE = "Help Here!";
 
-
     public MainWindowController() {
 
     }
@@ -127,19 +118,19 @@ public class MainWindowController implements Initializable {
         this.main = m;
     }
 
-	// this method will return a boolean value of true or false, depending on the input
-	protected boolean isEmptyInput(String input) {
-		return input == null || input.isEmpty() || "".equals(input.trim());
-	}
+    // this method will return a boolean value of true or false, depending on the input
+    protected boolean isEmptyInput(String input) {
+        return input == null || input.isEmpty() || "".equals(input.trim());
+    }
 
-	private boolean enterKeyIsPressed(KeyEvent e) {
-		return KeyCode.ENTER.equals(e.getCode());
-	}
+    private boolean enterKeyIsPressed(KeyEvent e) {
+        return KeyCode.ENTER.equals(e.getCode());
+    }
 
-	@FXML
-	private void handleEnterKeyPressed(KeyEvent event) {
-		String userInput = commandBox.getText();
-		if (isEmptyInput(userInput) || !enterKeyIsPressed(event)) return;
+    @FXML
+    private void handleEnterKeyPressed(KeyEvent event) {
+        String userInput = commandBox.getText();
+        if (isEmptyInput(userInput) || !enterKeyIsPressed(event)) return;
         logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
         try {
             performOperations(userInput);
@@ -148,15 +139,15 @@ public class MainWindowController implements Initializable {
                     "Error occured at " + getClass().getName() + " within performOperation method.\n");
             e.printStackTrace();
         }
-	}
+    }
 
-	private void performOperations(String userInput) throws UIOperationException {
+    private void performOperations(String userInput) throws UIOperationException {
 /*
         InputValidator inputValidator = new InputValidator();
         System.out.println("inputValidator.checkAllValid(userInput) " + inputValidator.checkAllValid(userInput));*/
         //if (inputValidator.checkAllValid(userInput)) {
         try {
-            if (parser.getCommand(userInput) == Commands.CREATE_TASK) 	addTask(userInput);
+            if (parser.getCommand(userInput) == Commands.CREATE_TASK) addTask(userInput);
             else if (parser.getCommand(userInput) == Commands.DELETE_TASK) deleteTask(userInput);
             else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) updateTask(userInput);
             else if (parser.getCommand(userInput) == Commands.UNDO_TASK) undoTask();
@@ -177,7 +168,7 @@ public class MainWindowController implements Initializable {
             else if (parser.getCommand(userInput) == Commands.CHANGE_DIRECTORY) changeDirectory(userInput);
             else if ("view archived".equals(userInput)) viewArchived();
             else if ("back".equals(userInput)) viewTasks();
-	        else if ("help".equals(userInput)) showHelp();
+            else if ("help".equals(userInput)) showHelp();
         } catch (Exception e) {
             throw new UIOperationException();
         }
@@ -196,332 +187,329 @@ public class MainWindowController implements Initializable {
         });
     }
 
-	//@@author kenan
-	private void showTomorrow() {
-		printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTomorrowView(task)));
-		headerTitle.setText("Tasks: Tomorrow");
-		updateTaskCounter();
-		commandBox.clear();
-	}
+    //@@author kenan
+    private void showTomorrow() {
+        printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTomorrowView(task)));
+        headerTitle.setText("Tasks: Tomorrow");
+        updateTaskCounter();
+        commandBox.clear();
+    }
 
-	private void updateTaskCounter() {
-		tasksCounter.setText(printedPlanner.getItems().size() + "");
-	}
+    private void updateTaskCounter() {
+        tasksCounter.setText(printedPlanner.getItems().size() + "");
+    }
 
-	private void showFloating() {
-		printedPlanner.setItems(plannerEntries.filtered(task -> util.isFloatingTask(task)));
-		headerTitle.setText("Tasks: Floating");
-		updateTaskCounter();
-		commandBox.clear();
-	}
+    private void showFloating() {
+        printedPlanner.setItems(plannerEntries.filtered(task -> util.isFloatingTask(task)));
+        headerTitle.setText("Tasks: Floating");
+        updateTaskCounter();
+        commandBox.clear();
+    }
 
-	private void searchTask(String userInput) throws Exception {
+    private void searchTask(String userInput) throws Exception {
 
-		if (isKeywordSearch()) {
-			String taskName = parser.getTaskName(userInput);
-			headerTitle.setText("Search Results  \"" + taskName + "\":");
-			printedPlanner.setItems(plannerEntries.filtered(task -> util.containsKeyWord(task, taskName)));
-			updateTaskCounter();
-		}
+        if (isKeywordSearch()) {
+            String taskName = parser.getTaskName(userInput);
+            headerTitle.setText("Search Results  \"" + taskName + "\":");
+            printedPlanner.setItems(plannerEntries.filtered(task -> util.containsKeyWord(task, taskName)));
+            updateTaskCounter();
+        }
 
-		// other types of search
-		// to be written
-		commandBox.clear();
-	}
+        // other types of search
+        // to be written
+        commandBox.clear();
+    }
 
-	/*
-	 * @@author A013333U
-	 */
-	private void showHelp() {
-		HBox hb = new HBox();
-		Text text = new Text("Help Section!");
-	    hb.getStyleClass().add("hbox");
-		hb.getChildren().add(text);
-		Stage helpStage = new Stage();
-		Scene scene = new Scene(hb, 400, 400);
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-	          public void handle(KeyEvent ke) {
-	        	  if (ke.getCode() == KeyCode.ESCAPE) {
-	              System.out.println("Stage is closing");
-	              helpStage.close();
-	          }
-	          }
-	      });
-		helpStage.setScene(scene);
-		helpStage.show();
-		commandBox.clear();
-	}
+    /*
+     * @@author A013333U
+     */
+    private void showHelp() {
+        HBox hb = new HBox();
+        Text text = new Text("Help Section!");
+        hb.getStyleClass().add("hbox");
+        hb.getChildren().add(text);
+        Stage helpStage = new Stage();
+        Scene scene = new Scene(hb, 400, 400);
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent ke) {
+                if (ke.getCode() == KeyCode.ESCAPE) {
+                    System.out.println("Stage is closing");
+                    helpStage.close();
+                }
+            }
+        });
+        helpStage.setScene(scene);
+        helpStage.show();
+        commandBox.clear();
+    }
 
+    /**
+     * @@author kenan
+     */
+    private boolean isKeywordSearch() {
+        return true;
+    }
 
-	/**
-	 * @@author kenan
-	 *
-	 */
-	private boolean isKeywordSearch() {
-		return true;
-	}
+    private void showAll() {
+        printedPlanner.setItems(plannerEntries);
+        headerTitle.setText("Tasks: All");
+        updateTaskCounter();
+        commandBox.clear();
+    }
 
-	private void showAll() {
-		printedPlanner.setItems(plannerEntries);
-		headerTitle.setText("Tasks: All");
-		updateTaskCounter();
-		commandBox.clear();
-	}
+    private void showToday() {
 
-	private void showToday() {
+        printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTodayView(task)));
+        headerTitle.setText("Tasks: Today + Floating");
+        updateTaskCounter();
+        commandBox.clear();
+    }
 
-		printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTodayView(task)));
-		headerTitle.setText("Tasks: Today + Floating");
-		updateTaskCounter();
-		commandBox.clear();
-	}
+    //@@author A0130949Y
+    private void markTaskCompleted(String userInput) throws Exception {
+        try {
+            int i = parser.getIndexForDone(userInput);
+            Task task = plannerEntries.get(i);
+            operations.markAsDone(task.getId());
+            task.setDone(true); // logic should handle
+            tickCheckBoxForMark(task, i);
+        } catch (NumberFormatException e) {
+            displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
+        } catch (IndexOutOfBoundsException e) {
+            displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
+        }
+    }
 
-	//@@author A0130949Y
-	private void markTaskCompleted(String userInput) throws Exception {
-		try {
-			int i = parser.getIndexForDone(userInput);
-			Task task = plannerEntries.get(i);
-			operations.markAsDone(task.getId());
-			task.setDone(true); // logic should handle
-			tickCheckBoxForMark(task, i);
-		} catch (NumberFormatException e) {
-			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
-		} catch (IndexOutOfBoundsException e) {
-			displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
-		}
-	}
+    //@@author kenan.
+    private void tickCheckBoxForMark(Task t, int i) {
+        printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        printedPlanner.getSelectionModel().select(i);
+        printedPlanner.fireEvent(new TaskDoneEvent(t));
+        javafx.concurrent.Task<Void> sleeper = makeSleeper(500);
+        sleeper.setOnSucceeded(event -> {
+            printedPlanner.getSelectionModel().clearSelection();
+            commandBox.clear();
+        });
+        new Thread(sleeper).start();
+    }
 
-	//@@author kenan.
-	private void tickCheckBoxForMark(Task t, int i) {
-		printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		printedPlanner.getSelectionModel().select(i);
-		printedPlanner.fireEvent(new TaskDoneEvent(t));
-		javafx.concurrent.Task<Void> sleeper = makeSleeper(500);
-		sleeper.setOnSucceeded(event -> {
-			printedPlanner.getSelectionModel().clearSelection();
-			commandBox.clear();
-		});
-		new Thread(sleeper).start();
-	}
+    private javafx.concurrent.Task<Void> makeSleeper(int duration) {
+        return new javafx.concurrent.Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(duration);
+                } catch (InterruptedException e) {
+                    // do nothing. handles library bug
+                }
+                return null;
+            }
+        };
+    }
 
-	private javafx.concurrent.Task<Void> makeSleeper(int duration) {
-		return new javafx.concurrent.Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				try {
-					Thread.sleep(duration);
-				} catch (InterruptedException e) {
-					// do nothing. handles library bug
-				}
-				return null;
-			}
-		};
-	}
+    //@@author A0130949Y
+    private void viewTasks() {
+        plannerEntries = FXCollections.observableArrayList(operations.getTasks());
+        afterOperation();
+    }
 
-	//@@author A0130949Y
-	private void viewTasks() {
-		plannerEntries = FXCollections.observableArrayList(operations.getTasks());
-		afterOperation();
-	}
+    private void viewArchived() {
+        plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
+        afterOperation();
+        headerTitle.setText("Tasks: Archived");
+    }
 
-	private void viewArchived() {
-		plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
-		afterOperation();
-		headerTitle.setText("Tasks: Archived");
-	}
+    // @@author A0133333U
+    // added warnings to unused method
+    private void sortTask(String userInput) {
+        System.out.println("Sorting");
+        plannerEntries = FXCollections.observableArrayList(operations.sort());
+        afterOperation();
+    }
 
-	// @@author A0133333U
-	// added warnings to unused method
-	private void sortTask(String userInput) {
-		System.out.println("Sorting");
-		plannerEntries = FXCollections.observableArrayList(operations.sort());
-		afterOperation();
-	}
+    //@@author A0130949Y
+    private void clearTasks() {
+        plannerEntries = FXCollections.observableArrayList(operations.clear());
+        afterOperation();
+        displayMessage(MESSAGE_FOR_CLEARING);
+    }
 
-	//@@author A0130949Y
-	private void clearTasks() {
-		plannerEntries = FXCollections.observableArrayList(operations.clear());
-		afterOperation();
-		displayMessage(MESSAGE_FOR_CLEARING);
-	}
+    // skip 1 iteration for that recurring task in that index
+    private void skipRecurringTask(String userInput) throws Exception {
+        try {
+            skippingRecurringTaskOperation(userInput);
+            afterOperation();
+        } catch (IndexOutOfBoundsException e) {
+            displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
+        } catch (NumberFormatException e) {
+            displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
+        }
+    }
 
-	// skip 1 iteration for that recurring task in that index
-	private void skipRecurringTask(String userInput) throws Exception {
-		try {
-			skippingRecurringTaskOperation(userInput);
-			afterOperation();
-		} catch (IndexOutOfBoundsException e) {
-			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
-		} catch (NumberFormatException e) {
-			displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
-		}
-	}
-
-	private void skippingRecurringTaskOperation(String userInput) {
-		int index = parser.getTaskIndex(userInput);
-		if (!(plannerEntries.get(index) instanceof RecurringTask)) displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
+    private void skippingRecurringTaskOperation(String userInput) {
+        int index = parser.getTaskIndex(userInput);
+        if (!(plannerEntries.get(index) instanceof RecurringTask))
+            displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
         else {
             plannerEntries = FXCollections.observableArrayList(operations.skip(index));
             displayMessage(MESSAGE_FOR_DATE_CHANGE);
         }
-	}
+    }
 
-	//unused because stopRecurring has bugs
-	private void stopRecurringTask(String userInput) throws Exception {
-		operations.stopRecurring(parser.getTaskIndex(userInput));
-		afterOperation();
-	}
+    //unused because stopRecurring has bugs
+    private void stopRecurringTask(String userInput) throws Exception {
+        operations.stopRecurring(parser.getTaskIndex(userInput));
+        afterOperation();
+    }
 
-	private void redoTask() {
-		try {
-			plannerEntries = FXCollections.observableArrayList(operations.redo());
-			displayMessage(MESSAGE_FOR_REDO);
-			afterOperation();
-		} catch (EmptyStackException e) {
-			displayMessage(ERROR_MESSAGE_FOR_REDO_ERROR);
-		}
-	}
+    private void redoTask() {
+        try {
+            plannerEntries = FXCollections.observableArrayList(operations.redo());
+            displayMessage(MESSAGE_FOR_REDO);
+            afterOperation();
+        } catch (EmptyStackException e) {
+            displayMessage(ERROR_MESSAGE_FOR_REDO_ERROR);
+        }
+    }
 
-	private void undoTask() {
-		try {
-			plannerEntries = FXCollections.observableArrayList(operations.undo());
-			displayMessage(MESSAGE_FOR_UNDO);
-			afterOperation();
-		} catch (EmptyStackException e) {
-			displayMessage(ERROR_MESSAGE_FOR_UNDO_ERROR);
-		}
-	}
+    private void undoTask() {
+        try {
+            plannerEntries = FXCollections.observableArrayList(operations.undo());
+            displayMessage(MESSAGE_FOR_UNDO);
+            afterOperation();
+        } catch (EmptyStackException e) {
+            displayMessage(ERROR_MESSAGE_FOR_UNDO_ERROR);
+        }
+    }
 
+    private void updateTask(String userInput) throws Exception {
+        try {
+            updateTaskOperation(userInput);
+            afterOperation();
+            displayMessage(MESSAGE_EDIT_CONFIRMED);
+        } catch (IndexOutOfBoundsException e) {
+            displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
+        } catch (NumberFormatException e) {
+            displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
+        }
+    }
 
-	private void updateTask(String userInput) throws Exception {
-		try {
-			updateTaskOperation(userInput);
-			afterOperation();
-			displayMessage(MESSAGE_EDIT_CONFIRMED);
-		} catch (IndexOutOfBoundsException e) {
-			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
-		} catch (NumberFormatException e) {
-			displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
-		}
-	}
+    private void updateTaskOperation(String userInput) {
+        int indexOfTask = updateParser.getTaskIndex(userInput);
+        printedPlanner.getSelectionModel().select(indexOfTask);
+        Task newTask = makeTaskForUpdate(userInput);
+        plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
+        printedPlanner.getSelectionModel().clearSelection();
+    }
 
-	private void updateTaskOperation(String userInput) {
-		int indexOfTask = updateParser.getTaskIndex(userInput);
-		printedPlanner.getSelectionModel().select(indexOfTask);
-		Task newTask = makeTaskForUpdate(userInput);
-		plannerEntries = FXCollections.observableArrayList(operations.updateTask(newTask, indexOfTask));
-		printedPlanner.getSelectionModel().clearSelection();
-	}
+    private void deleteTask(String userInput) throws Exception {
+        try {
+            deleteTaskOperation(userInput);
+            afterOperation();
+            displayMessage(MESSAGE_DELETE_CONFIRMED);
+        } catch (NumberFormatException e) {
+            displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
+        } catch (IllegalArgumentException e) {
+            displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
+        } catch (IndexOutOfBoundsException e) {
+            displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
+        }
+    }
 
-	private void deleteTask(String userInput) throws Exception {
-		try {
-			deleteTaskOperation(userInput);
-			afterOperation();
-			displayMessage(MESSAGE_DELETE_CONFIRMED);
-		} catch (NumberFormatException e) {
-			displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
-		} catch (IllegalArgumentException e) {
-			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
-		} catch (IndexOutOfBoundsException e) {
-			displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
-		}
-	}
-
-	private void deleteTaskOperation(String userInput) {
-		plannerEntries = FXCollections
+    private void deleteTaskOperation(String userInput) {
+        plannerEntries = FXCollections
                 .observableArrayList(operations.deleteTask(parser.getTaskIndex(userInput)));
-	}
+    }
 
-	private void changeDirectory(String userInput) throws Exception {
-		operations.changeDir(directoryParser.getFilePath(userInput));
-		afterOperation();
-	}
+    private void changeDirectory(String userInput) throws Exception {
+        operations.changeDir(directoryParser.getFilePath(userInput));
+        afterOperation();
+    }
 
-	private void addTask(String userInput) throws Exception {
-		try {
-			addTaskOperation(userInput);
-			afterOperation();
-			displayMessage(MESSAGE_ADD_CONFIRMED);
-			printedPlanner.scrollTo(printedPlanner.getItems().size() - 1);
-		} catch (IndexOutOfBoundsException e) {
-			displayMessage(ERROR_MESSAGE_FOR_EMPTY_TASK);
-		}
-	}
+    private void addTask(String userInput) throws Exception {
+        try {
+            addTaskOperation(userInput);
+            afterOperation();
+            displayMessage(MESSAGE_ADD_CONFIRMED);
+            printedPlanner.scrollTo(printedPlanner.getItems().size() - 1);
+        } catch (IndexOutOfBoundsException e) {
+            displayMessage(ERROR_MESSAGE_FOR_EMPTY_TASK);
+        }
+    }
 
-	private void addTaskOperation(String userInput) throws Exception {
-		Task newTask = makeTask(userInput);
-		if (isTimeSlotClashing(newTask)) displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
-		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
-	}
+    private void addTaskOperation(String userInput) throws Exception {
+        Task newTask = makeTask(userInput);
+        if (isTimeSlotClashing(newTask)) displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
+        plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+    }
 
-	private void addRecurringTask(String userInput) throws Exception {
-		try {
-			addRecurringTaskOperation(userInput);
-			afterOperation();
-			displayMessage(MESSAGE_ADD_CONFIRMED);
-		} catch (IndexOutOfBoundsException e) {
-			displayMessage(ERROR_MESSAGE_FOR_NO_TASK_ENTERED);
-		} catch (NumberFormatException e) {
-			displayMessage(ERROR_MESSAGE_FOR_NO_TASK_ENTERED);
-		} catch (NullPointerException e) {
-			displayMessage(ERROR_MESSAGE_FOR_EMPTY_TASK);
-		}
-	}
+    private void addRecurringTask(String userInput) throws Exception {
+        try {
+            addRecurringTaskOperation(userInput);
+            afterOperation();
+            displayMessage(MESSAGE_ADD_CONFIRMED);
+        } catch (IndexOutOfBoundsException e) {
+            displayMessage(ERROR_MESSAGE_FOR_NO_TASK_ENTERED);
+        } catch (NumberFormatException e) {
+            displayMessage(ERROR_MESSAGE_FOR_NO_TASK_ENTERED);
+        } catch (NullPointerException e) {
+            displayMessage(ERROR_MESSAGE_FOR_EMPTY_TASK);
+        }
+    }
 
-	private void addRecurringTaskOperation(String userInput) throws Exception {
-		RecurringTask newTask = makeRecurringTask(userInput);
-		if (isTimeSlotClashing(newTask)) displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
-		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
-	}
+    private void addRecurringTaskOperation(String userInput) throws Exception {
+        RecurringTask newTask = makeRecurringTask(userInput);
+        if (isTimeSlotClashing(newTask)) displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
+        plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
+    }
 
-	// clear the command box and set up new list for view
-	private void afterOperation() {
-		setCellFactory();
-		refresh();
-		updateTaskCounter();
-		commandBox.clear();
-	}
+    // clear the command box and set up new list for view
+    private void afterOperation() {
+        setCellFactory();
+        refresh();
+        updateTaskCounter();
+        commandBox.clear();
+    }
 
-	/*
-	 * @@author: A0133333U
-	 * added in extra params for this method
-	 */
-	private Task makeTask(String userInput) throws Exception {
-		return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput), parser.getEndDate(userInput),
-				parser.getStartTime(userInput), parser.getEndTime(userInput));
-	}
+    /*
+     * @@author: A0133333U
+     * added in extra params for this method
+     */
+    private Task makeTask(String userInput) throws Exception {
+        return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput),
+                parser.getEndDate(userInput), parser.getStartTime(userInput), parser.getEndTime(userInput));
+    }
 
-	//@@author A0130949Y
-	private RecurringTask makeRecurringTask(String userInput) throws Exception {
-		return new RecurringTask(recurringParser.getTaskName(userInput), recurringParser.getTaskStartDate(userInput),
-				recurringParser.getTaskEndDate(userInput), recurringParser.getRecurDuration(userInput),
-				recurringParser.getTaskStartTime(userInput), recurringParser.getTaskEndTime(userInput),
-				recurringParser.getNumToRecur(userInput));
-	}
+    //@@author A0130949Y
+    private RecurringTask makeRecurringTask(String userInput) throws Exception {
+        return new RecurringTask(recurringParser.getTaskName(userInput),
+                recurringParser.getTaskStartDate(userInput), recurringParser.getTaskEndDate(userInput),
+                recurringParser.getRecurDuration(userInput), recurringParser.getTaskStartTime(userInput),
+                recurringParser.getTaskEndTime(userInput), recurringParser.getNumToRecur(userInput));
+    }
 
-	private Task makeTaskForUpdate(String userInput) {
-		return new Task(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
-				updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
-				updateParser.getEndTime(userInput));
-	}
+    private Task makeTaskForUpdate(String userInput) {
+        return new Task(updateParser.getTaskName(userInput), updateParser.getStartDate(userInput),
+                updateParser.getEndDate(userInput), updateParser.getStartTime(userInput),
+                updateParser.getEndTime(userInput));
+    }
 
-	//checks that on the same day, returns true when there is clashing timeslot
-	private boolean isTimeSlotClashing(Task t) {
+    //checks that on the same day, returns true when there is clashing timeslot
+    private boolean isTimeSlotClashing(Task t) {
         boolean $ = false;
         if (t.getEndTime() == null) return $;
         for (Task taskInList : plannerEntries)
-            if (taskInList.getDueDate().equals(t.getDueDate())
-                    && taskInList.getStartDate().equals(t.getStartDate())) {
+            if (taskInList.getDueDate().equals(t.getDueDate()) && taskInList.getStartDate()
+                    .equals(t.getStartDate())) {
                 if (taskInList.getEndTime() == null || taskInList.getStartTime() == null) {
                     if (taskInList.getEndTime() != null && (endTimeWithinStartAndEnd(t, $, taskInList)
                             || endTimeWithinStartAndEnd(taskInList, $, t))) {
                         $ = true;
                         break;
                     }
-                } else if (endTimeWithinStartAndEnd(t, $, taskInList)
-                        || endTimeWithinStartAndEnd(taskInList, $, t)
-                        || startTimeWithinStartAndEnd(t, $, taskInList)
-                        || startTimeWithinStartAndEnd(taskInList, $, t)) {
+                } else if (endTimeWithinStartAndEnd(t, $, taskInList) || endTimeWithinStartAndEnd(taskInList,
+                        $, t) || startTimeWithinStartAndEnd(t, $, taskInList) || startTimeWithinStartAndEnd(
+                        taskInList, $, t)) {
                     $ = true;
                     break;
                 }
@@ -529,32 +517,34 @@ public class MainWindowController implements Initializable {
         return $;
     }
 
-	private boolean startTimeWithinStartAndEnd(Task t, boolean timeSlotsAreClashing, Task taskInList) {
-		if (t.getStartTime() != null) timeSlotsAreClashing = t.getStartTime().isAfter(taskInList.getStartTime().minusHours(1))
-                && t.getEndTime().isBefore((taskInList.getEndTime().plusHours(1)));
-		return timeSlotsAreClashing;
-	}
+    private boolean startTimeWithinStartAndEnd(Task t, boolean timeSlotsAreClashing, Task taskInList) {
+        if (t.getStartTime() != null) timeSlotsAreClashing =
+                t.getStartTime().isAfter(taskInList.getStartTime().minusHours(1)) && t.getEndTime()
+                        .isBefore((taskInList.getEndTime().plusHours(1)));
+        return timeSlotsAreClashing;
+    }
 
-	private boolean endTimeWithinStartAndEnd(Task t, boolean timeSlotsAreClashing, Task taskInList) {
-		if (t.getEndTime() != null) timeSlotsAreClashing = t.getEndTime().isAfter(taskInList.getStartTime().minusHours(1))
-                && t.getEndTime().isBefore(taskInList.getEndTime().plusHours(1));
-		return timeSlotsAreClashing;
-	}
+    private boolean endTimeWithinStartAndEnd(Task t, boolean timeSlotsAreClashing, Task taskInList) {
+        if (t.getEndTime() != null) timeSlotsAreClashing =
+                t.getEndTime().isAfter(taskInList.getStartTime().minusHours(1)) && t.getEndTime()
+                        .isBefore(taskInList.getEndTime().plusHours(1));
+        return timeSlotsAreClashing;
+    }
 
-	/**
-	 * Author kenan.
-	 */
-	private void displayMessage(String message) {
-		snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(message, "", 1500, (b) -> {
-		}));
-	}
+    /**
+     * Author kenan.
+     */
+    private void displayMessage(String message) {
+        snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(message, "", 1500, (b) -> {
+        }));
+    }
 
-	private void refresh() {
-		printedPlanner.setItems(plannerEntries);
-	}
+    private void refresh() {
+        printedPlanner.setItems(plannerEntries);
+    }
 
-	private void setCellFactory() {
-		printedPlanner.setCellFactory(param -> {
+    private void setCellFactory() {
+        printedPlanner.setCellFactory(param -> {
 
             TaskListCell listCell = new TaskListCell();
             printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {

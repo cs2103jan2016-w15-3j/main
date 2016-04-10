@@ -1,11 +1,6 @@
 package ui.controller;
 
-
-import java.util.logging.Logger;
-
 import com.jfoenix.controls.JFXDecorator;
-
-
 import data.SettingManager;
 import data.SettingManagerImpl;
 import javafx.application.Application;
@@ -15,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.util.logging.Logger;
 
 public class Main extends Application {
 
@@ -30,14 +27,14 @@ public class Main extends Application {
     /**
      * @@author A0126077E.
      */
-    
+
     @Override
     public void start(Stage primaryStage) {
         SettingManager settings = new SettingManagerImpl();
         this.primaryStage = primaryStage;
         mainWindow();
     }
-    
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -68,7 +65,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-    
+
     public JFXDecorator getDecorator() {
         return decorator;
     }
@@ -76,6 +73,5 @@ public class Main extends Application {
     public Scene getScene() {
         return this.scene;
     }
-
 
 }

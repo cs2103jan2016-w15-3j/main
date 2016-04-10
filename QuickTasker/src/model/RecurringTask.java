@@ -1,5 +1,6 @@
 package model;
 //@@author A0130949Y
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -31,18 +32,23 @@ public class RecurringTask extends Task {
 
     private void addOffset() {
         long amount = this.getDueDate().until(LocalDate.now(), ChronoUnit.DAYS);
-        if (this.getRecurType().toLowerCase().equals("week") || this.getRecurType().toLowerCase().equals("weeks")) {
+        if (this.getRecurType().toLowerCase().equals("week") || this.getRecurType().toLowerCase()
+                .equals("weeks")) {
             int offset = calculateOffsetForWeeks((int) amount, this.getNumberToRecur());
             setNextDates(this.getStartDate().plusWeeks(offset), this.getDueDate().plusWeeks(offset));
-        } else if (this.getRecurType().toLowerCase().equals("day") || this.getRecurType().toLowerCase().equals("days")){
+        } else if (this.getRecurType().toLowerCase().equals("day") || this.getRecurType().toLowerCase()
+                .equals("days")) {
             int offset = calculateOffsetForDays((int) amount, this.getNumberToRecur());
             setNextDates(this.getStartDate().plusDays(offset), this.getDueDate().plusDays(offset));
-        } else if (this.getRecurType().toLowerCase().equals("month") || this.getRecurType().toLowerCase().equals("months")){
+        } else if (this.getRecurType().toLowerCase().equals("month") || this.getRecurType().toLowerCase()
+                .equals("months")) {
             long amountOfMonths = this.getDueDate().until(LocalDate.now(), ChronoUnit.MONTHS);
-            setNextDates(this.getStartDate().plusMonths(amountOfMonths + 1), this.getDueDate().plusMonths(amountOfMonths + 1));
+            setNextDates(this.getStartDate().plusMonths(amountOfMonths + 1),
+                    this.getDueDate().plusMonths(amountOfMonths + 1));
         } else {
             long amountOfYears = this.getDueDate().until(LocalDate.now(), ChronoUnit.YEARS);
-            setNextDates(this.getStartDate().plusYears(amountOfYears + 1), this.getDueDate().plusYears(amountOfYears + 1));
+            setNextDates(this.getStartDate().plusYears(amountOfYears + 1),
+                    this.getDueDate().plusYears(amountOfYears + 1));
         }
     }
 
@@ -79,7 +85,8 @@ public class RecurringTask extends Task {
     }
 
     public Task stopRecurring() {
-        Task newTask = new Task(this.getName(), this.getStartDate(), this.getDueDate(), this.getStartTime(), this.getEndTime());
+        Task newTask = new Task(this.getName(), this.getStartDate(), this.getDueDate(), this.getStartTime(),
+                this.getEndTime());
         return newTask;
     }
 }

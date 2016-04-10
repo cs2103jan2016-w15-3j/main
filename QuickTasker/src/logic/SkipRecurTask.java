@@ -1,9 +1,9 @@
 package logic;
 //@@author A0130949Y
+
 import model.RecurringTask;
 import model.Task;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +41,7 @@ public class SkipRecurTask<E> implements Command<Object> {
         task.adjustDate();
         if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
             adjustDatesBackwardForWeeks(task);
-        } else if (task.getRecurType().equals("day") || task.getRecurType().equals("days")){
+        } else if (task.getRecurType().equals("day") || task.getRecurType().equals("days")) {
             adjustDatesBackwardForDays(task);
         } else if (task.getRecurType().equals("month") || task.getRecurType().equals("months")) {
             adjustDatesBackwardForMonths(task);
@@ -56,7 +56,7 @@ public class SkipRecurTask<E> implements Command<Object> {
         task.adjustDate();
         if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
             adjustDatesForwardForWeeks(task);
-        } else if (task.getRecurType().equals("day") || task.getRecurType().equals("days")){
+        } else if (task.getRecurType().equals("day") || task.getRecurType().equals("days")) {
             adjustDatesForwardForDays(task);
         } else if (task.getRecurType().equals("month") || task.getRecurType().equals("months")) {
             adjustDatesForwardForMonths(task);

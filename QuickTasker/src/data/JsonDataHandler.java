@@ -47,10 +47,10 @@ public class JsonDataHandler implements DataHandler {
     }
 
     private void createSaveFileIfNotExist() throws CreateSaveFileException {
-        try  {
-            if (pathOfSaveFile.getParent()!=null &&!Files.isRegularFile(pathOfSaveFile))
+        try {
+            if (pathOfSaveFile.getParent() != null && !Files.isRegularFile(pathOfSaveFile))
                 Files.createDirectories(pathOfSaveFile.getParent());
-           if (!Files.exists(pathOfSaveFile)) Files.createFile(pathOfSaveFile);
+            if (!Files.exists(pathOfSaveFile)) Files.createFile(pathOfSaveFile);
         } catch (IOException e) {
             logger.warning(e.toString());
             throw new CreateSaveFileException();
@@ -93,8 +93,8 @@ public class JsonDataHandler implements DataHandler {
 
     @Override
     public void save(List<Task> ts) throws SaveTasksException {
-       loadSavePathFromSettingManager();
-       createSaveFileIfNotExist();
+        loadSavePathFromSettingManager();
+        createSaveFileIfNotExist();
         Gson gson = getGson();
         String json = gson.toJson(ts);
         try (BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile)) {
