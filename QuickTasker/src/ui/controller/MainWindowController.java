@@ -404,8 +404,7 @@ public class MainWindowController implements Initializable {
     }
 
     private void changeDirectory(String userInput) throws Exception {
-        String path = directoryParser.getFilePath(userInput);
-        operations.changeDir(path);
+        operations.changeDir(directoryParser.getFilePath(userInput));
     }
 
     private void createTask(String userInput) throws Exception {

@@ -9,32 +9,23 @@ class SearchHelper {
     private final String FLOATING_TASK = "floating";
     private final double FUZZY_STRING_COMPARE_THRESHOLD = 0.65;
 
-    public boolean isItDisplayedInTodayView(Task task) {
-        String taskType = task.getTaskType();
-        if (isFloatingTask(task)) {
-            return true;
-        } else if (isDueToday(task)) {
-            return true;
-        }
-        return false;
+    public boolean isItDisplayedInTodayView(Task t) {
+        return isFloatingTask(t) || isDueToday(t);
     }
 
-    public boolean isItDisplayedInTomorrowView(Task task) {
-        return isDueTomorrow(task);
+    public boolean isItDisplayedInTomorrowView(Task t) {
+        return isDueTomorrow(t);
     }
 
-    private boolean isDueTomorrow(Task task) {
-        LocalDate tomorrow = LocalDate.now().plusDays(1);
-        LocalDate today = LocalDate.now();
-        LocalDate theDayAfterTomorrow = tomorrow.plusDays(1);
-        return task.getDueDate().isAfter(today) && task.getDueDate().isBefore(theDayAfterTomorrow);
+    private boolean isDueTomorrow(Task t) {
+        return t.getDueDate().isAfter(LocalDate.now())
+                && t.getDueDate().isBefore(LocalDate.now().plusDays(1).plusDays(1));
     }
 
-    public boolean containsKeyWord(Task task, String keywords) {
+    public boolean containsKeyWord(Task t, String keywords) {
         String[] keywWordsArr = keywords.split("\\s+");
         processKeyWords(keywWordsArr);
-        String taskName = task.getName();
-        return containsFuzzy(keywWordsArr, taskName);
+        return containsFuzzy(keywWordsArr, t.getName());
     }
 
     private void processKeyWords(String[] keywords) {
@@ -45,14 +36,9 @@ class SearchHelper {
     }
 
     private boolean containsFuzzy(String[] keywords, String taskName) {
-        for (String s : keywords) {
-            if (taskName.contains(s)) {
+        for (String s : keywords)
+            if (taskName.contains(s) || compareStrings(taskName, s) > FUZZY_STRING_COMPARE_THRESHOLD)
                 return true;
-            }
-            if (compareStrings(taskName, s) > FUZZY_STRING_COMPARE_THRESHOLD) {
-                return true;
-            }
-        }
         return false;
     }
 
@@ -60,13 +46,11 @@ class SearchHelper {
         return StringUtils.getJaroWinklerDistance(source, toBeCompared);
     }
 
-    public boolean isFloatingTask(Task task) {
-        return FLOATING_TASK.equals(task.getTaskType());
+    public boolean isFloatingTask(Task t) {
+        return FLOATING_TASK.equals(t.getTaskType());
     }
 
-    private boolean isDueToday(Task task) {
-        LocalDate today = LocalDate.now();
-        LocalDate dueDate = task.getDueDate();
-        return dueDate.isEqual(today);
+    private boolean isDueToday(Task t) {
+        return t.getDueDate().isEqual(LocalDate.now());
     }
 }

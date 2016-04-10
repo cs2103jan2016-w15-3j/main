@@ -36,11 +36,8 @@ public enum ApplicationColor {
     }
 
     public static boolean hasColor(String color) {
-        for (ApplicationColor c : values()) {
-            if (c.name().equalsIgnoreCase(color)) {
-                return true;
-            }
-        }
+        for (ApplicationColor c : values())
+            if (c.name().equalsIgnoreCase(color)) return true;
         return false;
     }
 
@@ -50,11 +47,8 @@ public enum ApplicationColor {
 
     // returns default color red if color given is unknown
     public String findColor(String color) {
-        for (ApplicationColor c : values()) {
-            if (c.name().equalsIgnoreCase(color)) {
-                return c.getColorValue();
-            }
-        }
+        for (ApplicationColor c : values())
+            if (c.name().equalsIgnoreCase(color)) return c.getColorValue();
         return RED.getHexCode();
     }
 }

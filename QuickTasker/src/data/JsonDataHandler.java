@@ -121,7 +121,6 @@ public class JsonDataHandler implements DataHandler {
     }
 
     protected void setSavePath(String path) {
-        Path p = Paths.get(path);
         this.pathOfSaveFile = Paths.get(path);
 
     }

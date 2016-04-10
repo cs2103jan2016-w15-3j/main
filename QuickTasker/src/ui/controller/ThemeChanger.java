@@ -9,17 +9,15 @@ import ui.model.ApplicationColor;
 public class ThemeChanger {
     private final Enum DefaultColor = ApplicationColor.RED;
 
-    public void change(String userinput, Scene scene) {
+    public void change(String userinput, Scene s) {
         String colorName = userinput.substring(userinput.indexOf(" ") + 1);
-        if (ApplicationColor.hasColor(colorName)) {
-            ApplicationColor selectedColor = ApplicationColor.valueOf(colorName.toUpperCase());
-            JFXDecorator decorator = (JFXDecorator) scene.lookup(".jfx-decorator");
-            JFXToolbar toolbar = (JFXToolbar) scene.lookup(".jfx-tool-bar");
-            Label label = (Label) scene.lookup(".icons-badge Label");
-
-            label.setStyle("-fx-text-fill:" + selectedColor.getColorValue() + ";");
-            decorator.setStyle("-fx-decorator-color: derive(" + selectedColor.getColorValue() + ",-20%);");
-            toolbar.setStyle("-fx-background-color: " + selectedColor.getColorValue() + ";");
-        }
+        if (!ApplicationColor.hasColor(colorName)) return;
+        ApplicationColor selectedColor = ApplicationColor.valueOf(colorName.toUpperCase());
+        JFXDecorator decorator = (JFXDecorator) s.lookup(".jfx-decorator");
+        JFXToolbar toolbar = (JFXToolbar) s.lookup(".jfx-tool-bar");
+        Label label = (Label) s.lookup(".icons-badge Label");
+        label.setStyle("-fx-text-fill:" + selectedColor.getColorValue() + ";");
+        decorator.setStyle("-fx-decorator-color: derive(" + selectedColor.getColorValue() + ",-20%);");
+        toolbar.setStyle("-fx-background-color: " + selectedColor.getColorValue() + ";");
     }
 }
