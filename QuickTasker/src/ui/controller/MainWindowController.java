@@ -44,7 +44,8 @@ import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
 public class MainWindowController implements Initializable {
     // @@author A0126077E
-    private static Logger logger;
+    static Logger logger;
+    private final UiOperationHandler uiOperationHandler = new UiOperationHandler(this);
     private Main main;
     private Stage stage;
     private final UserInputParser parser = new UserInputParser();
@@ -87,6 +88,10 @@ public class MainWindowController implements Initializable {
 
     public MainWindowController() {
 
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 
     @Override
@@ -141,7 +146,7 @@ public class MainWindowController implements Initializable {
         if (isEmptyInput(userInput) || !enterKeyIsPressed(event)) return;
         logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
         try {
-            performOperations(userInput);
+            uiOperationHandler.performOperations(userInput);
         } catch (UIOperationException e) {
             logger.log(Level.SEVERE,
                     "Error occured at " + getClass().getName() + " within performOperation method.\n");
@@ -150,40 +155,11 @@ public class MainWindowController implements Initializable {
     }
     // @author A0126077E
     private void performOperations(String userInput) throws UIOperationException {
-        //@@author A0121558H
-        InputValidator inputValidator = new InputValidator();
-        if (!inputValidator.checkAllValid(userInput)) logger.severe(inputValidator.toString());
-        else try {
-            if (parser.getCommand(userInput) == Commands.CREATE_TASK) addTask(userInput);
-            else if (parser.getCommand(userInput) == Commands.DELETE_TASK) deleteTask(userInput);
-            else if (parser.getCommand(userInput) == Commands.UPDATE_TASK) updateTask(userInput);
-            else if (parser.getCommand(userInput) == Commands.UNDO_TASK) undoTask();
-            else if (parser.getCommand(userInput) == Commands.REDO_TASK) redoTask();
-            else if (parser.getCommand(userInput) == Commands.EXIT) operations.exit();
-            else if (parser.getCommand(userInput) == Commands.SORT_TASK) sortTask(userInput);
-            else if (parser.getCommand(userInput) == Commands.MARK_TASK) markTaskCompleted(userInput);
-            else if (parser.getCommand(userInput) == Commands.RECUR_TASK) addRecurringTask(userInput);
-            else if (parser.getCommand(userInput) == Commands.SKIP_TASK) skipRecurringTask(userInput);
-            else if (parser.getCommand(userInput) == Commands.CLEAR_TASK) clearTasks();
-            else if (parser.getCommand(userInput) == Commands.STOP_TASK) stopRecurringTask(userInput);
-            else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) searchTask(userInput);
-            else if (parser.getCommand(userInput) == Commands.CHANGE_DIRECTORY) changeDirectory(userInput);
-            else if (parser.getCommand(userInput) == Commands.BACK) viewTasks();
-            else if ("show today".equals(userInput) || "view today".equals(userInput)) showToday();
-            else if ("show tomorrow".equals(userInput) || "view tomorrow".equals(userInput)) showTomorrow();
-            else if ("show all".equals(userInput) || "view all".equals(userInput)) showAll();
-            else if ("view archived".equals(userInput)) viewArchived();
-            else if ("view floating".equals(userInput) || "show floating".equals(userInput)) showFloating();
-            else if (userInput.contains("theme")) changeTheme(userInput);
-            else if (userInput.equals("show overdue")) showOverdue();
-            else if ("help".equals(userInput)) showHelp();
-        } catch (Exception e) {
-            throw new UIOperationException();
-        }
+        uiOperationHandler.performOperations(userInput);
     }
 
     // @@author A0126077E
-    private void changeTheme(String userInput) {
+    void changeTheme(String userInput) {
         Scene scene = main.getScene();
         ThemeChanger themer = new ThemeChanger();
         Platform.runLater(() -> {
@@ -197,7 +173,7 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0126077E
-    private void showTomorrow() {
+    void showTomorrow() {
         printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTomorrowView(task)));
         headerTitle.setText("Tasks: Tomorrow");
         updateTaskCounter();
@@ -210,7 +186,7 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0126077E
-    private void showFloating() {
+    void showFloating() {
         printedPlanner.setItems(plannerEntries.filtered(task -> util.isFloatingTask(task)));
         headerTitle.setText("Tasks: Floating");
         updateTaskCounter();
@@ -218,7 +194,7 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0126077E
-    private void showAll() {
+    void showAll() {
         printedPlanner.setItems(plannerEntries);
         headerTitle.setText("Tasks: All");
         setGenericIcon();
@@ -227,7 +203,7 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0126077E
-    private void showToday() {
+    void showToday() {
 
         printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTodayView(task)));
         headerTitle.setText("Tasks: Today + Floating");
@@ -236,7 +212,7 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    private void searchTask(String userInput) throws Exception {
+    void searchTask(String userInput) throws Exception {
 
         if (util.isKeywordSearch()) {
             String taskName = parser.getTaskName(userInput);
@@ -251,7 +227,7 @@ public class MainWindowController implements Initializable {
     /*
      * @@author A013333U Display a Help popup when user types in 'help'.
      */
-    private void showHelp() throws IOException {
+    void showHelp() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Help.fxml"));
         Scene helpScene = new Scene(root);
         Stage helpStage = new Stage();
@@ -295,7 +271,7 @@ public class MainWindowController implements Initializable {
 
     //@@author A0133333U
     // method displays list of overdue items
-    private void showOverdue() {
+    void showOverdue() {
         printedPlanner.setItems(plannerEntries.filtered(task -> util.isTaskOverdue(task)));
         headerTitle.setText("Tasks: Overdue");
         setWarningIcon();
@@ -304,7 +280,7 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0130949Y
-    private void markTaskCompleted(String userInput) throws Exception {
+    void markTaskCompleted(String userInput) throws Exception {
         try {
             int i = parser.getIndexForDone(userInput);
             Task task = plannerEntries.get(i);
@@ -348,13 +324,13 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0130949Y
-    private void viewTasks() {
+    void viewTasks() {
         plannerEntries = FXCollections.observableArrayList(operations.getTasks());
         afterOperation();
     }
 
     // @@author A0126077E
-    private void viewArchived() {
+    void viewArchived() {
         plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
         afterOperation();
         headerTitle.setText("Tasks: Archived");
@@ -362,14 +338,14 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0130949Y
-    private void sortTask(String userInput) {
+    void sortTask(String userInput) {
         System.out.println("Sorting");
         plannerEntries = FXCollections.observableArrayList(operations.sort());
         afterOperation();
     }
 
     // @@author A0130949Y
-    private void clearTasks() {
+    void clearTasks() {
         plannerEntries = FXCollections.observableArrayList(operations.clear());
         afterOperation();
         displayMessage(MESSAGE_FOR_CLEARING);
@@ -377,7 +353,7 @@ public class MainWindowController implements Initializable {
 
     // @@author A0130949Y
     // skip 1 iteration for that recurring task in that index
-    private void skipRecurringTask(String userInput) throws Exception {
+    void skipRecurringTask(String userInput) throws Exception {
         try {
             skippingRecurringTaskOperation(userInput);
             afterOperation();
@@ -401,13 +377,13 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
 
     // unused because stopRecurring has bugs
-    private void stopRecurringTask(String userInput) throws Exception {
+    void stopRecurringTask(String userInput) throws Exception {
         operations.stopRecurring(parser.getTaskIndex(userInput));
         afterOperation();
     }
 
     // @@author A0130949Y
-    private void redoTask() {
+    void redoTask() {
         try {
             plannerEntries = FXCollections.observableArrayList(operations.redo());
             displayMessage(MESSAGE_FOR_REDO);
@@ -418,7 +394,7 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0130949Y
-    private void undoTask() {
+    void undoTask() {
         try {
             plannerEntries = FXCollections.observableArrayList(operations.undo());
             displayMessage(MESSAGE_FOR_UNDO);
@@ -429,7 +405,7 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0130949Y
-    private void updateTask(String userInput) throws Exception {
+    void updateTask(String userInput) throws Exception {
         try {
             updateTaskOperation(userInput);
             afterOperation();
@@ -451,7 +427,7 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0130949Y
-    private void deleteTask(String userInput) throws Exception {
+    void deleteTask(String userInput) throws Exception {
         try {
             deleteTaskOperation(userInput);
             afterOperation();
@@ -472,13 +448,13 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0126077E
-    private void changeDirectory(String userInput) throws Exception {
+    void changeDirectory(String userInput) throws Exception {
         operations.changeDir(directoryParser.getFilePath(userInput));
         afterOperation();
     }
 
     // @@author A0126077E
-    private void addTask(String userInput) throws Exception {
+    void addTask(String userInput) throws Exception {
         try {
             addTaskOperation(userInput);
             afterOperation();
@@ -497,7 +473,7 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0130949Y
-    private void addRecurringTask(String userInput) throws Exception {
+    void addRecurringTask(String userInput) throws Exception {
         try {
             addRecurringTaskOperation(userInput);
             afterOperation();
@@ -617,5 +593,13 @@ public class MainWindowController implements Initializable {
             }).start());
             return listCell;
         });
+    }
+
+    public Logic getOperations() {
+        return operations;
+    }
+
+    public UserInputParser getParser() {
+        return parser;
     }
 }
