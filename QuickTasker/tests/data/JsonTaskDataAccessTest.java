@@ -163,9 +163,11 @@ public class JsonTaskDataAccessTest {
 
     @Test
     public void canSaveFileToNewDir(){
-        String path = "c:" + PATH_SEPARATOR +"temp" +FILE_NAME;
+        String path = "c:" + PATH_SEPARATOR +"temp" +PATH_SEPARATOR +FILE_NAME;
+        System.out.println(path);
         List<Task> tasks = create30TasksWithDifferentAttributes();
         dataHandler.setSavePath(path);
+        dataHandler.save(tasks);
         assertTrue(Files.exists(Paths.get(path)));
 
     }

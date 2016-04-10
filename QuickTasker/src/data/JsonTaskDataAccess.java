@@ -24,11 +24,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JsonTaskDataAccess implements TaskDataAccessObject {
+    private static final Logger logger = Logger.getLogger(JsonTaskDataAccess.class.getName());
+
     private static final String DEFAULT_FILENAME = "tasks.json";
     private static final Path DEFAULT_SAVE_PATH = Paths.get(DEFAULT_FILENAME);
-
     private SettingManager settings = new SettingManager();
-    private Logger logger;
     private Path pathOfSaveFile;
 
     public JsonTaskDataAccess() {
@@ -39,14 +39,16 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
     private void initialize() {
         String p = settings.getPathOfSaveFile();
         pathOfSaveFile = p != null ? Paths.get(p) : DEFAULT_SAVE_PATH;
-        if (Files.notExists(pathOfSaveFile)) createNewSaveFile();
+        if (Files.notExists(pathOfSaveFile)) createSaveFileIfNotExist();
     }
 
-    private void createNewSaveFile() throws CreateSaveFileException {
-        try {
-
-            Files.createFile(pathOfSaveFile);
+    private void createSaveFileIfNotExist() throws CreateSaveFileException {
+        try  {
+            if (pathOfSaveFile.getParent()!=null &&!Files.isRegularFile(pathOfSaveFile))
+                Files.createDirectories(pathOfSaveFile.getParent());
+           if (!Files.exists(pathOfSaveFile)) Files.createFile(pathOfSaveFile);
         } catch (IOException e) {
+            logger.warning(e.toString());
             throw new CreateSaveFileException();
         }
     }
@@ -73,11 +75,11 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     @Override
     public void save(Task t) throws SaveTasksException {
+        createSaveFileIfNotExist();
         Gson gson = getGson();
         String json = gson.toJson(t);
         try (BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile)) {
             writer.write(json);
-            writer.close();
         } catch (IOException e) {
             throw new SaveTasksException();
         }
@@ -85,12 +87,11 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
 
     @Override
     public void save(List<Task> ts) throws SaveTasksException {
-
+       createSaveFileIfNotExist();
         Gson gson = getGson();
         String json = gson.toJson(ts);
         try (BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile)) {
             writer.write(json);
-            writer.close();
 
         } catch (IOException e) {
             throw new SaveTasksException();
@@ -119,8 +120,9 @@ public class JsonTaskDataAccess implements TaskDataAccessObject {
         return this.pathOfSaveFile;
     }
 
-    // internal method for unit test
     protected void setSavePath(String path) {
+        Path p = Paths.get(path);
         this.pathOfSaveFile = Paths.get(path);
+
     }
 }
