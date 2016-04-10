@@ -1,7 +1,10 @@
 package ui.controller;
 
 
+import java.util.logging.Logger;
+
 import com.jfoenix.controls.JFXDecorator;
+
 
 import data.SettingManager;
 import data.SettingManagerImpl;
@@ -22,6 +25,7 @@ public class Main extends Application {
     private Scene scene;
     private static final int STAGE_MINIMUM_HEIGHT = 150;
     private static final int STAGE_MINIMUM_WIDTH = 560;
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     /**
      * @@author A0126077E.
@@ -36,17 +40,6 @@ public class Main extends Application {
     
     public static void main(String[] args) {
         launch(args);
-    }
-
-    public static Runnable getFxWrapper(final Runnable r) {
-        return () -> {
-            try {
-                r.run();
-            } catch (Exception e) {
-                // call logger.log here to handle thread exception
-                //Todo: error handling
-            }
-        };
     }
 
     // @@author A0133333U

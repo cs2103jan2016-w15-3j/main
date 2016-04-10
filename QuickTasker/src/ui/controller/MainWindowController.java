@@ -100,7 +100,7 @@ public class MainWindowController implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle b) {
         initPlanner();
         setCellFactory();
         initLogger();
@@ -295,12 +295,11 @@ public class MainWindowController implements Initializable {
 	}
 
 	//@@author kenan.
-	private void tickCheckBoxForMark(Task task, int i) {
+	private void tickCheckBoxForMark(Task t, int i) {
 		printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		printedPlanner.getSelectionModel().select(i);
-		printedPlanner.fireEvent(new TaskDoneEvent(task));
-		javafx.concurrent.Task<Void> sleeper;
-		sleeper = makeSleeper(500);
+		printedPlanner.fireEvent(new TaskDoneEvent(t));
+		javafx.concurrent.Task<Void> sleeper = makeSleeper(500);
 		sleeper.setOnSucceeded(event -> {
 			printedPlanner.getSelectionModel().clearSelection();
 			commandBox.clear();
@@ -363,10 +362,8 @@ public class MainWindowController implements Initializable {
 
 	private void skippingRecurringTaskOperation(String userInput) {
 		int index = parser.getTaskIndex(userInput);
-		Task task = plannerEntries.get(index);
-		if (!(task instanceof RecurringTask)) {
-            displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
-        } else {
+		if (!(plannerEntries.get(index) instanceof RecurringTask)) displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
+        else {
             plannerEntries = FXCollections.observableArrayList(operations.skip(index));
             displayMessage(MESSAGE_FOR_DATE_CHANGE);
         }
@@ -434,9 +431,8 @@ public class MainWindowController implements Initializable {
 	}
 
 	private void deleteTaskOperation(String userInput) {
-		int taskIndex;
-		taskIndex = parser.getTaskIndex(userInput);
-		plannerEntries = FXCollections.observableArrayList(operations.deleteTask(taskIndex));
+		plannerEntries = FXCollections
+                .observableArrayList(operations.deleteTask(parser.getTaskIndex(userInput)));
 	}
 
 	private void changeDirectory(String userInput) throws Exception {
@@ -479,9 +475,7 @@ public class MainWindowController implements Initializable {
 
 	private void addRecurringTaskOperation(String userInput) throws Exception {
 		RecurringTask newTask = makeRecurringTask(userInput);
-		if (isTimeSlotClashing(newTask)) {
-            displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
-        }
+		if (isTimeSlotClashing(newTask)) displayMessage(MESSAGE_FOR_CLASHING_TIME_SLOTS);
 		plannerEntries = FXCollections.observableArrayList(operations.addTask(newTask));
 	}
 

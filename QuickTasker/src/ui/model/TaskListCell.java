@@ -112,103 +112,81 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     @Override
-    public void updateItem(Task task, boolean empty) {
-        super.updateItem(task, empty);
-        if (empty) {
-            clearContent();
-        } else {
+    public void updateItem(Task t, boolean empty) {
+        super.updateItem(t, empty);
+        if (empty) clearContent();
+        else {
 
-            this.myTask = task;
-            addContent(task);
+            this.myTask = t;
+            addContent(t);
             rippler = new JFXRippler(grid);
             setGraphic(rippler);
         }
     }
 
-    protected void addContent(Task task) {
-        setTaskName(task);
-        setTaskId(task);
+    protected void addContent(Task t) {
+        setTaskName(t);
+        setTaskId(t);
 
-        setTaskStartDate(task);
-        setTaskDueDate(task);
+        setTaskStartDate(t);
+        setTaskDueDate(t);
 
-        setTaskStartTime(task);
-        setTaskEndTime(task);
+        setTaskStartTime(t);
+        setTaskEndTime(t);
 
         setGraphic(grid);
     }
 
-    protected void setTaskId(Task task) {
-        final int offset = 1;
-        taskId.setText(String.valueOf(getIndex() + offset));
+    protected void setTaskId(Task t) {
+        taskId.setText(String.valueOf(getIndex() + 1));
     }
 
-    protected void setTaskName(Task task) {
-        taskName.setText(task.getName());
+    protected void setTaskName(Task t) {
+        taskName.setText(t.getName());
     }
 
-    protected void setTaskStartDate(Task task) {
-        if (task != null && task.getStartDate() != null && !task.getStartDate().equals(LocalDate.MIN)) {
-            setStartDateInText(task);
-        } else {
-            taskStartDate.setText("");
-        }
+    protected void setTaskStartDate(Task t) {
+        if (t != null && t.getStartDate() != null && !t.getStartDate().equals(LocalDate.MIN)) setStartDateInText(t);
+        else taskStartDate.setText("");
     }
 
-    private void setStartDateInText(Task task) {
-        LocalDate startDate = task.getStartDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-        String dateString = formatter.format(startDate);
-        taskStartDate.setText(dateString);
+    private void setStartDateInText(Task t) {
+        taskStartDate.setText(DateTimeFormatter.ofPattern("dd MMM yyyy").format(t.getStartDate()));
     }
 
-    private boolean isNotFloatingTask(Task task) {
-        return !"floating".equals(task.getTaskType());
+    private boolean isNotFloatingTask(Task t) {
+        return !"floating".equals(t.getTaskType());
     }
 
-    protected void setTaskDueDate(Task task) {
+    protected void setTaskDueDate(Task t) {
 
-        if (task != null && task.getDueDate() != null && !task.getDueDate().equals(LocalDate.MAX)) {
-            LocalDate dueDate = task.getDueDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-            String dateString = formatter.format(dueDate);
-            taskDueDate.setText(dateString);
-        } else {
-            taskDueDate.setText("-");
-        }
+        taskDueDate.setText(t == null || t.getDueDate() == null || t.getDueDate().equals(LocalDate.MAX) ? "-"
+                : DateTimeFormatter.ofPattern("dd MMM yyyy").format(t.getDueDate()));
     }
 
-    protected void setTaskStartTime(Task task) {
-        if (task != null && isNotFloatingTask(task) && isNotEvent(task) && timeCheck(task)) {
-            LocalTime startTime = task.getStartTime();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            String timeString = formatter.format(startTime);
-            taskStartTime.setText(timeString);
-        } else {
-            taskStartTime.setText("");
-        }
+    protected void setTaskStartTime(Task t) {
+        taskStartTime.setText(t == null || !isNotFloatingTask(t) || !isNotEvent(t) || !timeCheck(t) ? ""
+                : DateTimeFormatter.ofPattern("HH:mm").format(t.getStartTime()));
     }
 
-    protected void setTaskEndTime(Task task) {
+    protected void setTaskEndTime(Task t) {
 
-        if (task != null && isNotFloatingTask(task) && isNotEvent(task) && timeCheck(task)) {
-            LocalTime endTime = task.getEndTime();
+        if (t == null || !isNotFloatingTask(t) || !isNotEvent(t) || !timeCheck(t)) taskEndTime.setText("-");
+        else {
+            LocalTime endTime = t.getEndTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(endTime);
             System.out.println(timeString);
             taskEndTime.setText(timeString);
-        } else {
-            taskEndTime.setText("-");
         }
     }
 
-    private boolean timeCheck(Task task) {
-        return task.getStartTime() != null || task.getEndTime() != null;
+    private boolean timeCheck(Task t) {
+        return t.getStartTime() != null || t.getEndTime() != null;
     }
 
-    private boolean isNotEvent(Task task) {
-        //todo:change to enum
-        return !"wholeDayEvent".equals(task.getTaskType());
+    private boolean isNotEvent(Task t) {
+        return !"wholeDayEvent".equals(t.getTaskType());
     }
 
     public JFXCheckBox getCheckBox() {

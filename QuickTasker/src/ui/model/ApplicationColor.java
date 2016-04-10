@@ -1,5 +1,6 @@
 package ui.model;
 
+//@author A0126077E
 public enum ApplicationColor {
     RED("#f44336"),
     HAPPY("#F44336"),
