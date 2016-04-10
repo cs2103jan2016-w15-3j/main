@@ -338,7 +338,11 @@ public class MainWindowController implements Initializable {
 		printedPlanner.setItems(plannerEntries.filtered(task -> util.isTaskOverdue(task)));
 		headerTitle.setText("Tasks: Overdue");
 		Image warningImage = new Image(getClass().getResourceAsStream("/img/warning.png"));
-		headerTitle.setGraphic(new ImageView(warningImage));
+		ImageView imageWarning = new ImageView(warningImage);
+		imageWarning.setFitHeight(25);
+		imageWarning.setFitWidth(25);
+		imageWarning.setPreserveRatio(true);
+		headerTitle.setGraphic(imageWarning);
 		updateTaskCounter();
 		commandBox.clear();
 	}
