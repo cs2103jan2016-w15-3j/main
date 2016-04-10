@@ -8,6 +8,8 @@ import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXRippler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -27,11 +29,13 @@ public class TaskListCell extends JFXListCell<Task> {
     private final Label taskStartTime = new Label();
     private final Label taskEndTime = new Label();
     private final Label taskId = new Label();
+    private final Label lateIcon = new Label();
     private final JFXCheckBox checkBox = new JFXCheckBox();
     private final JFXPopup searchBox = new JFXPopup();
     private final GridPane grid = new GridPane();
     private JFXRippler rippler = new JFXRippler();
     private Task myTask;
+    private final int offset = 1;
 
     public TaskListCell() {
         configureGrid();
@@ -94,8 +98,9 @@ public class TaskListCell extends JFXListCell<Task> {
         GridPane.setHalignment(taskEndTime, HPos.RIGHT);
     }
 
+    // @@author A0133333U
     private void configureIcon() {
-        // lateIcon.getStyleClass().add("late-icon");
+        lateIcon.getStyleClass().add("late-icon");
     }
 
     private void configureCheckBox() {
@@ -112,71 +117,81 @@ public class TaskListCell extends JFXListCell<Task> {
     }
 
     @Override
-    public void updateItem(Task t, boolean empty) {
-        super.updateItem(t, empty);
+    public void updateItem(Task task, boolean empty) {
+        super.updateItem(task, empty);
         if (empty) clearContent();
         else {
 
-            this.myTask = t;
-            addContent(t);
+            this.myTask = task;
+            addContent(task);
             rippler = new JFXRippler(grid);
             setGraphic(rippler);
         }
     }
 
-    protected void addContent(Task t) {
-        setTaskName(t);
-        setTaskId(t);
+    protected void addContent(Task task) {
+        setTaskName(task);
+        setTaskId(task);
 
-        setTaskStartDate(t);
-        setTaskDueDate(t);
+        setTaskStartDate(task);
+        setTaskDueDate(task);
 
-        setTaskStartTime(t);
-        setTaskEndTime(t);
+        setTaskStartTime(task);
+        setTaskEndTime(task);
 
         setGraphic(grid);
     }
-
-    protected void setTaskId(Task t) {
-        taskId.setText(String.valueOf(getIndex() + 1));
+    
+    //@@author A0133333U
+    protected void setIcon(Task task) {
+        Image image = new Image(getClass().getResourceAsStream("/img/late-icon.png"));
+    	ImageView imageView = new ImageView(image);
+    	imageView.setFitHeight(25);
+    	imageView.setFitWidth(25);
+    	imageView.setPreserveRatio(true);
+        lateIcon.setGraphic(imageView);
     }
 
-    protected void setTaskName(Task t) {
-        taskName.setText(t.getName());
+    protected void setTaskId(Task task) {
+        taskId.setText(String.valueOf(getIndex() + offset));    
     }
 
-    protected void setTaskStartDate(Task t) {
-        if (t != null && t.getStartDate() != null && !t.getStartDate().equals(LocalDate.MIN))
-            setStartDateInText(t);
+    protected void setTaskName(Task task) {
+        taskName.setText(task.getName());
+    }
+
+    protected void setTaskStartDate(Task task) {
+        if (task != null && task.getStartDate() != null && !task.getStartDate().equals(LocalDate.MIN))
+            setStartDateInText(task);
         else taskStartDate.setText("");
     }
 
-    private void setStartDateInText(Task t) {
-        taskStartDate.setText(DateTimeFormatter.ofPattern("dd MMM yyyy").format(t.getStartDate()));
+    private void setStartDateInText(Task task) {
+        taskStartDate.setText(DateTimeFormatter.ofPattern("dd MMM yyyy").format(task.getStartDate()));
     }
 
-    private boolean isNotFloatingTask(Task t) {
-        return !"floating".equals(t.getTaskType());
+    private boolean isNotFloatingTask(Task task) {
+        return !"floating".equals(task.getTaskType());
     }
 
-    protected void setTaskDueDate(Task t) {
+    protected void setTaskDueDate(Task task) {
 
-        taskDueDate.setText(t == null || t.getDueDate() == null || t.getDueDate().equals(LocalDate.MAX) ?
+        taskDueDate.setText(task == null || task.getDueDate() == null || task.getDueDate().equals(LocalDate.MAX) ?
                 "-" :
-                DateTimeFormatter.ofPattern("dd MMM yyyy").format(t.getDueDate()));
+                DateTimeFormatter.ofPattern("dd MMM yyyy").format(task.getDueDate()));
     }
 
-    protected void setTaskStartTime(Task t) {
-        taskStartTime.setText(t == null || !isNotFloatingTask(t) || !isNotEvent(t) || !timeCheck(t) ?
+    protected void setTaskStartTime(Task task) {
+        taskStartTime.setText(task == null || !isNotFloatingTask(task) || !isNotEvent(task) || !timeCheck(task) ?
                 "" :
-                DateTimeFormatter.ofPattern("HH:mm").format(t.getStartTime()));
+                DateTimeFormatter.ofPattern("HH:mm").format(task.getStartTime()));
     }
 
-    protected void setTaskEndTime(Task t) {
+    protected void setTaskEndTime(Task task) {
 
-        if (t == null || !isNotFloatingTask(t) || !isNotEvent(t) || !timeCheck(t)) taskEndTime.setText("-");
+        if (task == null || !isNotFloatingTask(task) || !isNotEvent(task) || !timeCheck(task)) taskEndTime.setText("-");
         else {
-            LocalTime endTime = t.getEndTime();
+            LocalTime endTime = task.getEndTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String timeString = formatter.format(endTime);
             System.out.println(timeString);
@@ -184,12 +199,12 @@ public class TaskListCell extends JFXListCell<Task> {
         }
     }
 
-    private boolean timeCheck(Task t) {
-        return t.getStartTime() != null || t.getEndTime() != null;
+    private boolean timeCheck(Task task) {
+        return task.getStartTime() != null || task.getEndTime() != null;
     }
 
-    private boolean isNotEvent(Task t) {
-        return !"wholeDayEvent".equals(t.getTaskType());
+    private boolean isNotEvent(Task task) {
+        return !"wholeDayEvent".equals(task.getTaskType());
     }
 
     public JFXCheckBox getCheckBox() {
@@ -202,6 +217,7 @@ public class TaskListCell extends JFXListCell<Task> {
 
     private void addControlsToGrid() {
         grid.add(taskId, 0, 0, 1, 2);
+        grid.add(lateIcon, 0, 2, 1, 2);
         grid.add(checkBox, 1, 0, 1, 2);
         grid.add(new HBox(taskName), 2, 0, 1, 2);
         grid.add(taskStartDate, 3, 0);
