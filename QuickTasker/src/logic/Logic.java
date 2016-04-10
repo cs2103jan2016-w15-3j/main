@@ -1,8 +1,9 @@
 package logic;
 
-import data.JsonTaskDataAccess;
+import data.JsonDataHandler;
 import data.SettingManager;
-import data.TaskDataAccessObject;
+import data.SettingManagerImpl;
+import data.DataHandler;
 import model.RecurringTask;
 import model.Task;
 import parser.Commands;
@@ -15,7 +16,7 @@ public class Logic {
     protected List<Task> list;
     protected List<Task> archivedList;
     protected TreeMap<Commands, Command> commandMap;
-    private TaskDataAccessObject storage;
+    private DataHandler storage;
     protected Stack<Commands> undoStack;
     protected Stack<Commands> redoStack;
     private SettingManager settings;
@@ -33,9 +34,9 @@ public class Logic {
         populateCommandMap();
         list = new ArrayList<Task>();
         assert (list != null);
-        settings = new SettingManager();
+        settings = new SettingManagerImpl();
         archivedList = new ArrayList<Task>();
-        storage = new JsonTaskDataAccess();
+        storage = new JsonDataHandler();
         undoStack = new Stack<Commands>();
         redoStack = new Stack<Commands>();
     }

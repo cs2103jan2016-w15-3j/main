@@ -2,6 +2,7 @@ package ui.controller;
 
 import com.jfoenix.controls.JFXDecorator;
 import data.SettingManager;
+import data.SettingManagerImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,7 +29,7 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        SettingManager settings = new SettingManager();
+        SettingManager settings = new SettingManagerImpl();
         this.primaryStage = primaryStage;
         // Do not remove these 2 lines of comments:
         /*Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));

@@ -5,7 +5,7 @@ import model.Task;
 
 import java.util.List;
 
-public interface TaskDataAccessObject {
+public interface DataHandler {
 
     List<Task> getTasks();
 

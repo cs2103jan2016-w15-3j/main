@@ -13,7 +13,6 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,8 +21,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class JsonTaskDataAccessTest {
-    private JsonTaskDataAccess dataHandler;
+public class JsonDataHandlerTest {
+    private JsonDataHandler dataHandler;
     private List<Task> plannerNotebook;
     public static final String WORKING_DIRECTORY = System.getProperty("user.dir");
     public static final String PATH_SEPARATOR =  System.getProperty("file.separator");
@@ -32,7 +31,7 @@ public class JsonTaskDataAccessTest {
     @Before
     public void setUp() throws Exception {
         plannerNotebook = new ArrayList<>();
-        dataHandler = new JsonTaskDataAccess();
+        dataHandler = new JsonDataHandler();
         dataHandler.setSavePath(FILE_NAME);
     }
 
@@ -60,7 +59,7 @@ public class JsonTaskDataAccessTest {
     @Test
     public void ifThereIsNoSaveFileCreateDefaultBasedOnSettingsFileName() throws IOException {
         Files.deleteIfExists(dataHandler.getFilePath());
-        dataHandler = new JsonTaskDataAccess();
+        dataHandler = new JsonDataHandler();
         assertTrue(hasSaveFile());
     }
 

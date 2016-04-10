@@ -1,15 +1,11 @@
-import data.JsonTaskDataAccessTest;
+import data.JsonDataHandlerTest;
 import data.SettingManagerTest;
-import logic.AddTaskTest;
-import logic.DeleteTaskTest;
-import logic.UpdateTaskTest;
+import logic.*;
 import model.RecurringTaskTest;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-import parser.DateTimeParserTest;
-import parser.UserInputParserTest;
-import ui.controller.TaskDoneEventTest;
+import parser.*;
 import ui.model.TaskListCellTest;
 
 import java.util.List;
@@ -27,10 +23,10 @@ public class TestRunner {
 
     public static void main(String[] args) {
         Result result = JUnitCore
-                .runClasses(JsonTaskDataAccessTest.class, SettingManagerTest.class, AddTaskTest.class,
-                        DeleteTaskTest.class, UpdateTaskTest.class, RecurringTaskTest.class,
-                        DateTimeParserTest.class, UserInputParserTest.class, TaskDoneEventTest.class,
-                        TaskListCellTest.class);
+                .runClasses(JsonDataHandlerTest.class, SettingManagerTest.class, AddTaskTest.class,
+                        DeleteTaskTest.class, LogicTest.class,SkipRecurTaskTest.class, UpdateTaskTest.class, RecurringTaskTest.class,
+                        DateTimeParserTest.class, UserInputParserTest.class,
+                        UpdateParserTest.class, UserInputParserTest.class, TaskListCellTest.class);
 
         System.out.println();
 

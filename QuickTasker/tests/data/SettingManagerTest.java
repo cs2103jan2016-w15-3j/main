@@ -16,7 +16,7 @@ public class SettingManagerTest {
 
     @Before
     public void setUp() throws Exception {
-        settingManager = new SettingManager();
+        settingManager = new SettingManagerImpl();
     }
 
     @After
@@ -33,7 +33,7 @@ public class SettingManagerTest {
     public void ifSettingsFileIsEmptyShouldSetDefault() {
         Configuration settings = null;
         removeEverythingFromSettingsFile();
-        settingManager = new SettingManager();
+        settingManager = new SettingManagerImpl();
         settings = settingManager.getConfigs();
         assertFalse(settings.isEmpty());
     }

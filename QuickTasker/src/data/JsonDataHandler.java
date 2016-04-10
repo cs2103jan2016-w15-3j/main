@@ -23,15 +23,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class JsonTaskDataAccess implements TaskDataAccessObject {
-    private static final Logger logger = Logger.getLogger(JsonTaskDataAccess.class.getName());
+public class JsonDataHandler implements DataHandler {
+    private static final Logger logger = Logger.getLogger(JsonDataHandler.class.getName());
 
     private static final String DEFAULT_FILENAME = "tasks.json";
     private static final Path DEFAULT_SAVE_PATH = Paths.get(DEFAULT_FILENAME);
-    private SettingManager settings = new SettingManager();
+    private SettingManager settings = new SettingManagerImpl();
     private Path pathOfSaveFile;
 
-    public JsonTaskDataAccess() {
+    public JsonDataHandler() {
 
         initialize();
     }
