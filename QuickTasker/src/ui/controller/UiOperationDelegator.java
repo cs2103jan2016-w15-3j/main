@@ -4,10 +4,10 @@ package ui.controller;
 import common.UIOperationException;
 import parser.Commands;
 
-public class UiOperationHandler {
+public class UiOperationDelegator {
     private final MainWindowController mainWindowController;
 
-    public UiOperationHandler(
+    public UiOperationDelegator(
             MainWindowController mainWindowController) { this.mainWindowController = mainWindowController; }
 
     public void performOperations(String userInput) throws UIOperationException {

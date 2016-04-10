@@ -45,7 +45,7 @@ import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 public class MainWindowController implements Initializable {
     // @@author A0126077E
     static Logger logger;
-    private final UiOperationHandler uiOperationHandler = new UiOperationHandler(this);
+    private final UiOperationDelegator uiOperationDelegator = new UiOperationDelegator(this);
     private Main main;
     private Stage stage;
     private final UserInputParser parser = new UserInputParser();
@@ -146,7 +146,7 @@ public class MainWindowController implements Initializable {
         if (isEmptyInput(userInput) || !enterKeyIsPressed(event)) return;
         logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
         try {
-            uiOperationHandler.performOperations(userInput);
+            uiOperationDelegator.performOperations(userInput);
         } catch (UIOperationException e) {
             logger.log(Level.SEVERE,
                     "Error occured at " + getClass().getName() + " within performOperation method.\n");
@@ -155,7 +155,7 @@ public class MainWindowController implements Initializable {
     }
     // @author A0126077E
     private void performOperations(String userInput) throws UIOperationException {
-        uiOperationHandler.performOperations(userInput);
+        uiOperationDelegator.performOperations(userInput);
     }
 
     // @@author A0126077E
