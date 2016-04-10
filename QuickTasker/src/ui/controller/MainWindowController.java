@@ -227,7 +227,7 @@ public class MainWindowController implements Initializable {
     }
     
 /*@@author A0133333U-unused
-unused because another team member had implemented search as well
+//unused because another team member had implemented search as well
 */
 /*private void searchTask(String userInput) {
         if (userInput != null) {
@@ -510,7 +510,7 @@ unused because another team member had implemented search as well
 
     /*
      * @@author: A0133333U
-     * added in extra params for this method
+     * added in extra params for this method - of which are startTime and endTime
      */
     private Task makeTask(String userInput) throws Exception {
         return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput),
