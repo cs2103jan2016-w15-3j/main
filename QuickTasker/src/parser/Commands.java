@@ -19,6 +19,7 @@ public enum Commands {
     SKIP_TASK,
     STOP_TASK,
     CHANGE_DIRECTORY,
-    CLEAR_TASK;
+    CLEAR_TASK,
+    BACK;
 
 }

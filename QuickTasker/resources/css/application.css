@@ -29,8 +29,12 @@
     -fx-border-width:0 4 4 4;
 }
 
+/* HelpBox */
 
-
+.hbox {
+    -fx-background-color: #502576;
+    -fx-spacing: 10;
+}
 /* List View */
 
 
@@ -79,11 +83,11 @@
 .task-name{
     -fx-font-family : 'Roboto';
     -fx-font-weight:bold; 
-    -fx-padding:10px;
+    -fx-padding: 10px;
 }
 
 .jfx-list-cell-content-container{
-    -fx-alignment:center-left;
+    -fx-alignment: center-left;
 }
 
 .jfx-list-cell-container> .label{
@@ -107,11 +111,9 @@
    -fx-rippler-fill : transparent;
 }
 
-.task-check-box{
-
-
-      -fx-unchecked-color: BLACK;
-      -fx-checked-color : RED;
+.task-check-box { 
+      -fx-unchecked-colour: BLACK;
+      -fx-checked-color : GREEN;
       -fx-font-weight : BOLD;
 }
 

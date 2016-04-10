@@ -1,18 +1,20 @@
 package logic;
-
+//@@author A0130949Y
 import model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by User on 7/4/2016.
- */
 public class ClearTasks<E> implements Command<Object> {
     private ArrayList<Task> tasks = new ArrayList<Task>();
 
     @Override
     public void execute(List<Task> list, Object op) {
+        executeClear(list);
+    }
+
+    // transfer the current list to a new task for undo proposes
+    private void executeClear(List<Task> list) {
         tasks.clear();
         for (int i = 0; i < list.size(); i++) {
             tasks.add(list.get(i));

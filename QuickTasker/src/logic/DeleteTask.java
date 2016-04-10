@@ -1,6 +1,5 @@
 package logic;
-//@@author A0130949
-
+//@@author A0130949Y
 import model.Task;
 
 import java.util.ArrayList;
@@ -9,14 +8,15 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class DeleteTask<E> implements Command<Object> {
     private static Logger loggerDelete = Logger.getLogger("log");
     private static Stack<Task> undoStackTask = new Stack<Task>();
     private static Stack<Task> redoTaskStack = new Stack<Task>();
 
     @Override
-    /* deletes a task from that index. exceptions are thrown for Junit tests.
-       please uncomment thrown exceptions for testing */ public void execute(List<Task> list, Object op) {
+    // deletes a task from that index. exceptions are thrown for Junit tests.
+    public void execute(List<Task> list, Object op) {
         loggerDelete.log(Level.INFO, "Start logging for delete");
         try {
             int index = (int) op;
@@ -55,7 +55,7 @@ public class DeleteTask<E> implements Command<Object> {
     }
 
     @Override
-    // takes out the previous-deleted-but-added-back-in task,from the redoTaskStack and remove it from the list
+    // takes out the previous-deleted-but-added-back-in task from the redoTaskStack and remove it from the list
     public void redo(ArrayList<Task> list) {
         loggerDelete.log(Level.INFO, "Start redo process for deleting");
         try {

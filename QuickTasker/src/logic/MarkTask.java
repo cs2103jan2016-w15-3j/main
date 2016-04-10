@@ -1,8 +1,9 @@
 package logic;
-
+//@@author A0130949Y
 import model.RecurringTask;
 import model.Task;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -37,6 +38,7 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
     }
 
     @Override
+    // puts task back to list
     public void undo(ArrayList<Task> list) {
         assert (archivedList.size() > 0);
         loggerMark.log(Level.INFO, "Start undo process for mark");
@@ -55,6 +57,7 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
         loggerMark.log(Level.INFO, "End");
     }
 
+    // return the recurring task from archived as well as to shift the date back
     private void undoForRecurringTask(ArrayList<Task> list) {
         String taskId = undoStackId.pop();
         redoStackId.push(taskId);
@@ -63,6 +66,7 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
     }
 
     @Override
+    // puts task back to ARCHIVED list
     public void redo(ArrayList list) {
         loggerMark.log(Level.INFO, "Start redo process for mark");
         try {
@@ -80,6 +84,7 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
         loggerMark.log(Level.INFO, "End");
     }
 
+    // backs the recurring task back into archived list and shift the date forward
     private void redoForRecurringTask(ArrayList list) {
         String taskId = redoStackId.pop();
         undoStackId.push(taskId);

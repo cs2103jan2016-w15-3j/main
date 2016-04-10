@@ -37,9 +37,13 @@ public class JsonDataHandler implements DataHandler {
     }
 
     private void initialize() {
+        loadSavePathFromSettingManager();
+        if (Files.notExists(pathOfSaveFile)) createSaveFileIfNotExist();
+    }
+
+    private void loadSavePathFromSettingManager() {
         String p = settings.getPathOfSaveFile();
         pathOfSaveFile = p != null ? Paths.get(p) : DEFAULT_SAVE_PATH;
-        if (Files.notExists(pathOfSaveFile)) createSaveFileIfNotExist();
     }
 
     private void createSaveFileIfNotExist() throws CreateSaveFileException {
@@ -75,18 +79,21 @@ public class JsonDataHandler implements DataHandler {
 
     @Override
     public void save(Task t) throws SaveTasksException {
+        loadSavePathFromSettingManager();
         createSaveFileIfNotExist();
         Gson gson = getGson();
         String json = gson.toJson(t);
         try (BufferedWriter writer = Files.newBufferedWriter(pathOfSaveFile)) {
             writer.write(json);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new SaveTasksException();
         }
     }
 
     @Override
     public void save(List<Task> ts) throws SaveTasksException {
+       loadSavePathFromSettingManager();
        createSaveFileIfNotExist();
         Gson gson = getGson();
         String json = gson.toJson(ts);
@@ -94,6 +101,7 @@ public class JsonDataHandler implements DataHandler {
             writer.write(json);
 
         } catch (IOException e) {
+            e.printStackTrace();
             throw new SaveTasksException();
         }
     }
@@ -120,8 +128,10 @@ public class JsonDataHandler implements DataHandler {
         return this.pathOfSaveFile;
     }
 
-    protected void setSavePath(String path) {
+    @Override
+    public void setSavePath(String path) {
         this.pathOfSaveFile = Paths.get(path);
+        settings.setPathOfSaveFile(path);
 
     }
 }

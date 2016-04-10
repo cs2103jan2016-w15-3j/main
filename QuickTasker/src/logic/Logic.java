@@ -1,5 +1,5 @@
 package logic;
-
+//@@author A0130949Y
 import data.JsonDataHandler;
 import data.SettingManager;
 import data.SettingManagerImpl;
@@ -9,8 +9,6 @@ import model.Task;
 import parser.Commands;
 
 import java.util.*;
-
-//@@author A0130949
 
 public class Logic {
     protected List<Task> list;
@@ -54,24 +52,22 @@ public class Logic {
         return (ArrayList<Task>) archivedList;
     }
 
-    public void populateCommandMap() {
+    private void populateCommandMap() {
         commandMap = new TreeMap<Commands, Command>();
         commandMap.put(Commands.CREATE_TASK, new AddTask());
         commandMap.put(Commands.DELETE_TASK, new DeleteTask());
         commandMap.put(Commands.UPDATE_TASK, new UpdateTask());
-        commandMap.put(Commands.SEARCH_TASK, new Search());
-        commandMap.put(Commands.SORT_TASK, new Sort());
         commandMap.put(Commands.SKIP_TASK, new SkipRecurTask());
         commandMap.put(Commands.STOP_TASK, new StopRecurTask());
         commandMap.put(Commands.MARK_TASK, new MarkTask());
-        commandMap.put((Commands.CLEAR_TASK), new ClearTasks());
+        commandMap.put((Commands.CLEAR_TASK),new ClearTasks());
     }
 
     public ArrayList<Task> clear() {
         //list.clear();
         //storage.reset();
         commandMap.get(Commands.CLEAR_TASK).execute(list, "");
-        undoStack.push(Commands.CLEAR_TASK);
+        manageStacks(Commands.CLEAR_TASK);
         return (ArrayList<Task>) list;
     }
 
@@ -104,7 +100,6 @@ public class Logic {
     public void manageStacks(Commands command) {
         undoStack.push(command);
         redoStack.clear();
-        ;
     }
 
     public ArrayList<Task> deleteTask(int index) {
@@ -124,10 +119,6 @@ public class Logic {
 
     public ArrayList<Task> undo() {
         Commands command = undoStack.pop();
-        if (!redoStack.isEmpty() && redoStack.peek() == Commands.CLEAR_TASK
-                && command == Commands.CLEAR_TASK) {
-            redoStack.pop();
-        }
         redoStack.push(command);
         commandMap.get(command).undo((ArrayList<Task>) list);
         System.out.println("undo " + command);
@@ -159,6 +150,7 @@ public class Logic {
         return (ArrayList<Task>) list;
     }
 
+    // mark uses this version of skip so that the undoStack does not take in skip command
     public void skipForMark(int index) {
         if (list.get(index) instanceof RecurringTask) {
             commandMap.get(Commands.SKIP_TASK).execute(list, index);
@@ -186,6 +178,7 @@ public class Logic {
         }
     }
 
+    // recurring task requires cloning as the task remains in the list
     private void shiftCompletedTaskToArchivedList(String taskId) {
         int index = findTask(taskId, list);
         Task completedTask = list.get(index);
@@ -203,14 +196,14 @@ public class Logic {
 
     // requires cloning to prevent the reucrring task from changing values
     private RecurringTask clone(Task completedTask) {
-        return new RecurringTask(completedTask.getName(), completedTask.getStartDate(),
-                completedTask.getDueDate(), ((RecurringTask) completedTask).getRecurType(),
-                completedTask.getStartTime(), completedTask.getEndTime(),
-                ((RecurringTask) completedTask).getNumberToRecur());
+        return new RecurringTask(completedTask.getName(),
+                completedTask.getStartDate(), completedTask.getDueDate(),
+                ((RecurringTask) completedTask).getRecurType(), completedTask.getStartTime(),
+                completedTask.getEndTime(), ((RecurringTask) completedTask).getNumberToRecur());
     }
 
     public void changeDir(String path) {
-        settings.setPathOfSaveFile(path);
+        storage.setSavePath(path);
         saveList();
     }
 

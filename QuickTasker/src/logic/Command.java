@@ -1,11 +1,9 @@
 package logic;
-
+//@@author A0130949
 import model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//@@author A0130949
 
 public interface Command<E> {
     void execute(List<Task> list, E op);

@@ -9,146 +9,151 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UpdateParser extends UserInputParser {
-    private final int INDEX_OF_TASK = 1;
-    private static Logger loggerUpdate = Logger.getLogger("setAttributesForUpdates in UpdateParser");
+	private final int INDEX_OF_TASK = 1;
+	private static Logger loggerUpdate = Logger.getLogger("setAttributesForUpdates in UpdateParser");
 
-    public void setAttributesForUpdates(String input) {
-        loggerUpdate.log(Level.INFO, "Start of setAttributesForUpdates");
 
-        DateTimeParser dateTimeParser = new DateTimeParser();
-        removeWhiteSpaces(input);
-        command = userCommand[0];
-        determineLengthOfInput();
-        userCommand = removeIndexToUpdate();
+	public void setAttributesForUpdates(String input) {
+		loggerUpdate.log(Level.INFO, "Start of setAttributesForUpdates");
 
-        loggerUpdate.log(Level.INFO, "Before checking if is floating update");
+		DateTimeParser dateTimeParser = new DateTimeParser();
+		removeWhiteSpaces(input);
+		command = userCommand[0];
+		determineLengthOfInput();
+		userCommand = removeIndexToUpdate();
 
-        if (!isFloatingUpdate()) {
-            loggerUpdate.log(Level.INFO, "Not floating update");
+		loggerUpdate.log(Level.INFO, "Before checking if is floating update");
 
-            setTime(userCommand);
-            userCommand = dateTimeParser.removeTime(userCommand);
-            determineLengthOfInput();
-            isEnglishDate();
-            setDate(numToUse, lengthOfInput);
-            userCommand = dateTimeParser.removeDate(userCommand);
-            determineLengthOfInput();
-            setTaskNameForUpdates();
-        } else {
-            loggerUpdate.log(Level.INFO, "Floating update");
+		if (!isFloatingUpdate()) {
+			loggerUpdate.log(Level.INFO, "Not floating update");
 
-            determineLengthOfInput();
-            userCommand = removeFloatingWord(getIndexForTaskNameUpdate());
-            determineLengthOfInput();
-            setFloatingTaskNameUpdate();
-            setDateFloating();
-            setTimeFloating();
-        }
-        loggerUpdate.log(Level.INFO, "End of setAttributesForUpdates");
+			setTime(userCommand);
+			userCommand = dateTimeParser.removeTime(userCommand);
+			determineLengthOfInput();
+			try {
+				isEnglishDate();
+				setDate(numToUse, lengthOfInput);
+			} catch (Exception e) {
 
-        System.out.println("task name:" + taskName);
-        System.out.println("parser startdate " + startDate);
-        System.out.println("parser enddate " + endDate);
-        System.out.println("parser starttime " + startTime);
-        System.out.println("parser endtime " + endTime);
-    }
+			}
+			userCommand = dateTimeParser.removeDate(userCommand);
+			determineLengthOfInput();
+			setTaskNameForUpdates();
+		} else {
+			loggerUpdate.log(Level.INFO, "Floating update");
 
-    private void setDateFloating() {
-        startDate = LocalDate.MAX;
-        endDate = LocalDate.MAX;
-    }
+			determineLengthOfInput();
+			userCommand = removeFloatingWord(getIndexForTaskNameUpdate());
+			determineLengthOfInput();
+			setFloatingTaskNameUpdate();
+			setDateFloating();
+			setTimeFloating();
+		}
+		loggerUpdate.log(Level.INFO, "End of setAttributesForUpdates");
 
-    private void setTimeFloating() {
-        startTime = LocalTime.MAX;
-        endTime = LocalTime.MAX;
-    }
+		System.out.println("task name:" + taskName);
+		System.out.println("parser startdate " + startDate);
+		System.out.println("parser enddate " + endDate);
+		System.out.println("parser starttime " + startTime);
+		System.out.println("parser endtime " + endTime);
+	}
 
-    private void setTaskNameForUpdates() {
-        // UPDATED AS OF 23/3/2016
+	private void setDateFloating() {
+		startDate = LocalDate.MAX;
+		endDate = LocalDate.MAX;
+	}
 
-        String output = "";
+	private void setTimeFloating() {
+		startTime = LocalTime.MAX;
+		endTime = LocalTime.MAX;
+	}
 
-        for (int i = 1; i < lengthOfInput; i++) {
-            System.out.println("I:  " + userCommand[i]);
-            output += userCommand[i] + " ";
-        }
-        output = output.trim();
-        taskName = output;
-    }
+	private void setTaskNameForUpdates() {
+		// UPDATED AS OF 23/3/2016
 
-    public int getIndexForUpdates(String userInput) {
-        removeWhiteSpaces(userInput);
-        return Integer.parseInt(userCommand[1]);
-    }
+		String output = "";
 
-    public String getTaskName(String userInput) {
-        setAttributesForUpdates(userInput);
-        return taskName;
-    }
+		for (int i = 1; i < lengthOfInput; i++) {
+			System.out.println("I:  " + userCommand[i]);
+			output += userCommand[i] + " ";
+		}
+		output = output.trim();
+		taskName = output;
+	}
 
-    public LocalDate getStartDate(String userInput) {
-        setAttributesForUpdates(userInput);
-        return startDate;
-    }
+	public int getIndexForUpdates(String userInput) {
+		removeWhiteSpaces(userInput);
+		return Integer.parseInt(userCommand[1]);
+	}
 
-    public LocalDate getEndDate(String userInput) {
-        setAttributesForUpdates(userInput);
-        return endDate;
-    }
+	public String getTaskName(String userInput) {
+		setAttributesForUpdates(userInput);
+		return taskName;
+	}
 
-    public LocalTime getStartTime(String userInput) {
-        setAttributesForUpdates(userInput);
-        return startTime;
-    }
+	public LocalDate getStartDate(String userInput) {
+		setAttributesForUpdates(userInput);
+		return startDate;
+	}
 
-    public LocalTime getEndTime(String userInput) {
-        setAttributesForUpdates(userInput);
-        return endTime;
-    }
+	public LocalDate getEndDate(String userInput) {
+		setAttributesForUpdates(userInput);
+		return endDate;
+	}
 
-    private void setFloatingTaskNameUpdate() {
-        String output = "";
-        for (int i = 2; i < lengthOfInput; i++) {
-            output += userCommand[i];
-            output += " ";
-        }
-        output = output.trim();
-        taskName = output;
-    }
+	public LocalTime getStartTime(String userInput) {
+		setAttributesForUpdates(userInput);
+		return startTime;
+	}
 
-    private String[] removeFloatingWord(int indexToRemove) {
-        ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList(userCommand));
-        tempUserCommand.remove(indexToRemove);
-        return tempUserCommand.toArray(new String[tempUserCommand.size()]);
-    }
+	public LocalTime getEndTime(String userInput) {
+		setAttributesForUpdates(userInput);
+		return endTime;
+	}
 
-    private int getIndexForTaskNameUpdate() {
-        int index = 0;
-        for (int i = lengthOfInput; i > 0; i--) {
+	private void setFloatingTaskNameUpdate() {
+		String output = "";
+		for (int i = 2; i < lengthOfInput; i++) {
+			output += userCommand[i];
+			output += " ";
+		}
+		output = output.trim();
+		taskName = output;
+	}
 
-            if (userCommand[i - 1].equals("floating")) {
-                index = i - 1;
-                break;
-            }
-        }
-        return index;
-    }
+	private String[] removeFloatingWord(int indexToRemove) {
+		ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList(userCommand));
+		tempUserCommand.remove(indexToRemove);
+		return tempUserCommand.toArray(new String[tempUserCommand.size()]);
+	}
 
-    private String[] removeIndexToUpdate() {
-        ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList((userCommand)));
-        tempUserCommand.remove(INDEX_OF_TASK);
-        return tempUserCommand.toArray(new String[tempUserCommand.size()]);
-    }
+	private int getIndexForTaskNameUpdate() {
+		int index = 0;
+		for (int i = lengthOfInput; i > 0; i--) {
 
-    private boolean isFloatingUpdate() {
-        boolean check = false;
+			if (userCommand[i - 1].equals("floating")) {
+				index = i - 1;
+				break;
+			}
+		}
+		return index;
+	}
 
-        for (String s : userCommand) {
-            if (s.equals("floating")) {
-                check = true;
-            }
-        }
-        return check;
-    }
+	private String[] removeIndexToUpdate() {
+		ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList((userCommand)));
+		tempUserCommand.remove(INDEX_OF_TASK);
+		return tempUserCommand.toArray(new String[tempUserCommand.size()]);
+	}
+
+	private boolean isFloatingUpdate() {
+		boolean check = false;
+
+		for (String s : userCommand) {
+			if (s.equals("floating")) {
+				check = true;
+			}
+		}
+		return check;
+	}
 
 }

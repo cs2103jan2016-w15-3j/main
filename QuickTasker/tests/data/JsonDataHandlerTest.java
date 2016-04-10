@@ -168,7 +168,6 @@ public class JsonDataHandlerTest {
         dataHandler.setSavePath(path);
         dataHandler.save(tasks);
         assertTrue(Files.exists(Paths.get(path)));
-
     }
 
     private Task readOneTask() {

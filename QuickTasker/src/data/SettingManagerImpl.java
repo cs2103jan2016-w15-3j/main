@@ -19,12 +19,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class SettingManagerImpl implements SettingManager {
     private static final String DEFAULT_FILENAME_OF_SETTING = "settings.properties";
     private static final Path DEFAULT_PATH_OF_SETTING = Paths.get(DEFAULT_FILENAME_OF_SETTING);
     private static final String SETTING_HEADER_TEXT = "Application Settings";
     private static final String DEFAULT_ENCODING = "UTF-8";
+    private static final Logger logger = Logger.getLogger(SettingManagerImpl.class.getName());
     private Configuration settings;
 
     public SettingManagerImpl() {
@@ -60,6 +62,7 @@ public class SettingManagerImpl implements SettingManager {
     @Override
     public void setPathOfSaveFile(String absolutePathOfSaveFile) {
         settings.setProperty(AvailableSettings.SAVE_LOCATION.toString(), absolutePathOfSaveFile);
+        assert (absolutePathOfSaveFile.equals(settings.getString(AvailableSettings.SAVE_LOCATION.name())));
     }
 
     @Override

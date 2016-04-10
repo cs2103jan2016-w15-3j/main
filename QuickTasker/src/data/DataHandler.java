@@ -13,5 +13,7 @@ public interface DataHandler {
 
     void save(List<Task> ts);
 
+    void setSavePath(String path);
+
     void reset();
 }

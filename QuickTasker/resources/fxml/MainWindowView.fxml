@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- @@author -->
 <?import com.jfoenix.controls.*?>
-<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <BorderPane fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65"
             fx:controller="ui.controller.MainWindowController">
     <center>
@@ -56,9 +57,9 @@
                             <JFXBadge fx:id="tasksCounter" position="TOP_RIGHT"
                                       styleClass="icons-badge" text="1"
                                       BorderPane.alignment="CENTER">
-                                <MaterialDesignIconView glyphName="INBOX" size="2.5em"
-                                                        styleClass="icon"
-                                                        textAlignment="CENTER" textOrigin="CENTER"/>
+                                 <MaterialDesignIconView glyphName="INBOX" size="2.5em"
+                                                         styleClass="icon"
+                                                         textAlignment="CENTER" textOrigin="CENTER"/>
                             </JFXBadge>
                         </StackPane>
                     </JFXRippler>
