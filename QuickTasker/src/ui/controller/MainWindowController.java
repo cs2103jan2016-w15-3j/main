@@ -133,24 +133,22 @@ public class MainWindowController implements Initializable {
 		return input == null || input.isEmpty() || "".equals(input.trim());
 	}
 
-	private boolean enterKeyIsPressed(KeyEvent event) {
-		return KeyCode.ENTER.equals(event.getCode());
+	private boolean enterKeyIsPressed(KeyEvent e) {
+		return KeyCode.ENTER.equals(e.getCode());
 	}
 
 	@FXML
 	private void handleEnterKeyPressed(KeyEvent event) {
 		String userInput = commandBox.getText();
-		if (!isEmptyInput(userInput) && enterKeyIsPressed(event)) {
-			logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
-			try {
-				performOperations(userInput);
-			} catch (UIOperationException e) {
-				logger.log(Level.SEVERE,
-						"Error occured at " + getClass().getName() + " within performOperation method.\n");
-				e.printStackTrace();
-
-			}
-		}
+		if (isEmptyInput(userInput) || !enterKeyIsPressed(event)) return;
+        logger.log(Level.INFO, "User typed in : <" + userInput + "> command string");
+        try {
+            performOperations(userInput);
+        } catch (UIOperationException e) {
+            logger.log(Level.SEVERE,
+                    "Error occured at " + getClass().getName() + " within performOperation method.\n");
+            e.printStackTrace();
+        }
 	}
 
     private class UIOperationException extends RuntimeException {}
@@ -174,9 +172,8 @@ public class MainWindowController implements Initializable {
             else if (parser.getCommand(userInput) == Commands.CLEAR_TASK) clearTasks();
             else if (userInput.contains("stop")) stopRecurringTask(userInput);
             else if ("show today".equals(userInput) || "view today".equals(userInput)) showToday();
-            else if ("show tomorrow".equals(userInput) || "view tomorrow".equals(userInput)) {
-                showTomorrow();;
-            } else if ("view floating".equals(userInput) || "show floating".equals(userInput)) showFloating();
+            else if ("show tomorrow".equals(userInput) || "view tomorrow".equals(userInput)) showTomorrow();
+            else if ("view floating".equals(userInput) || "show floating".equals(userInput)) showFloating();
             else if ("show all".equals(userInput) || "view all".equals(userInput)) showAll();
             else if (parser.getCommand(userInput) == Commands.SEARCH_TASK) searchTask(userInput);
             else if (userInput.contains("theme")) changeTheme(userInput);
