@@ -78,37 +78,37 @@ class SearchHelper {
 
     // @@author A0130949Y
     public boolean isTaskDueOnMonday(Task task) {
-        return isDueMonday(task);
+        return isDueMonday(task) || isFloatingTask(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnTuesday(Task task) {
-        return isDueTuesday(task);
+        return isDueTuesday(task) || isFloatingTask(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnWednesday(Task task) {
-        return isDueWednesday(task);
+        return isDueWednesday(task) || isFloatingTask(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnThursday(Task task) {
-        return isDueThursday(task);
+        return isDueThursday(task) || isFloatingTask(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnFriday(Task task) {
-        return isDueFriday(task);
+        return isDueFriday(task) || isFloatingTask(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnSaturday(Task task) {
-        return isDueSaturday(task);
+        return isDueSaturday(task) || isFloatingTask(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnSunday(Task task) {
-        return isDueSunday(task);
+        return isDueSunday(task) || isFloatingTask(task);
     }
 
     // @@author A0130949Y
