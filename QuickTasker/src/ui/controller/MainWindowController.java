@@ -632,33 +632,33 @@ public class MainWindowController implements Initializable {
         printedPlanner.setCellFactory(param -> {
             TaskListCell listCell = new TaskListCell();
             printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
-                Thread.currentThread()
-                        .setUncaughtExceptionHandler((task, e) -> Platform.runLater(System.out::println));
+                Thread.currentThread().setUncaughtExceptionHandler((task, e) -> Platform.runLater(
+                        () -> logger.info("JFonix library throws exception when accessing checkbox from different thread.\n"
+                                + " Would be fixed when library release new version")));
                 fireCheckBoxAndRemoveEventFilter(listCell, event);
             }).start());
             return listCell;
         });
     }
 
-    private void fireCheckBoxAndRemoveEventFilter(TaskListCell listCell, TaskDoneEvent event) {
-        if (listCellContainsSelectedTask(listCell, event)) {
-            listCell.getCheckBox().fire();
+    private void fireCheckBoxAndRemoveEventFilter(TaskListCell c, TaskDoneEvent e) {
+        if (listCellContainsSelectedTask(c, e)) {
+            c.getCheckBox().fire();
             javafx.concurrent.Task<Void> sleeper = makeSleeper(500);
             sleeper.setOnSucceeded(evt -> {
                 printedPlanner.getSelectionModel().clearSelection();
-                plannerEntries.remove(event.getTask());
-                operations.markAsDone(event.getTask().getId());
+                plannerEntries.remove(e.getTask());
+                operations.markAsDone(e.getTask().getId());
                 commandBox.clear();
                 afterOperation();
             });
             new Thread(sleeper).start();
-
         }
-        listCell.removeEventFilter(TASK_COMPLETE, null);
+        c.removeEventFilter(TASK_COMPLETE, null);
     }
 
-    private boolean listCellContainsSelectedTask(TaskListCell listCell, TaskDoneEvent event) {
-        return listCell.getTask().equals(event.getTask());
+    private boolean listCellContainsSelectedTask(TaskListCell c, TaskDoneEvent e) {
+        return c.getTask().equals(e.getTask());
     }
 
     public Logic getOperations() {
