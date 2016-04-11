@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 public class InputValidator {
     private static Logger loggerValidator = Logger.getLogger("checkIfValid in InputValidator");
     private  UserInputParser userInputParser;
-    private  UpdateParser updateParser;
     private  RecurringParser recurringParser;
     Commands cmd;
 
@@ -30,6 +29,8 @@ public class InputValidator {
     }
 
     private boolean checkUndoRedo(String input) {
+        userInputParser= new UserInputParser();
+
         cmd = userInputParser.getCommand(input);
 
         if (cmd == Commands.UNDO_TASK || cmd == Commands.REDO_TASK) {
@@ -39,6 +40,8 @@ public class InputValidator {
     }
 
     private boolean checkCommand(String input) {
+        userInputParser= new UserInputParser();
+
         cmd = userInputParser.getCommand(input);
 
         for (Commands c : Commands.values()) {
@@ -53,15 +56,8 @@ public class InputValidator {
         if (cmd == Commands.CREATE_TASK) {
             userInputParser=new UserInputParser();
             return userInputParser.getTaskName(input).length() != 0;
-        } else if (cmd == Commands.UPDATE_TASK) {
-            updateParser= new UpdateParser();
-            System.out.println("updateParser.getTaskName(input).length() != 0 " + (
-                    updateParser.getTaskName(input).length() != 0));
-            return updateParser.getTaskName(input).length() != 0;
         } else if (cmd == Commands.RECUR_TASK) {
             recurringParser= new RecurringParser();
-            System.out.println("recurringParser.getTaskName(input).length() != 0 " + (
-                    recurringParser.getTaskName(input).length() != 0));
             return recurringParser.getTaskName(input).length() != 0;
         } else {
             return true;
@@ -77,17 +73,6 @@ public class InputValidator {
             LocalTime endAddTime = userInputParser.getEndTime(input);
             if (isSameDate(startAddDate, endAddDate) && isTimeAvailable(startAddTime, endAddTime)) {
                 return endAddTime.isAfter(startAddTime);
-            }
-            return true;
-        } else if (cmd == Commands.UPDATE_TASK) {
-            updateParser= new UpdateParser();
-            LocalDate startUpdateDate = updateParser.getStartDate(input);
-            LocalDate endUpdateDate = updateParser.getEndDate(input);
-            LocalTime startUpdateTime = updateParser.getStartTime(input);
-            LocalTime endUpdateTime = updateParser.getEndTime(input);
-            if (isSameDate(startUpdateDate, endUpdateDate) && isTimeAvailable(startUpdateTime,
-                    endUpdateTime)) {
-                return endUpdateTime.isAfter(startUpdateTime);
             }
             return true;
         } else if (cmd == Commands.RECUR_TASK) {
@@ -117,14 +102,6 @@ public class InputValidator {
                 return endAdd.isAfter(startAdd) || endAdd.isEqual(startAdd);
             }
             return true;
-        } else if (cmd == Commands.UPDATE_TASK) {
-            updateParser= new UpdateParser();
-            LocalDate startUpdate = updateParser.getStartDate(input);
-            LocalDate endUpdate = updateParser.getEndDate(input);
-            if (isDateAvailable(startUpdate, endUpdate)) {
-                return endUpdate.isAfter(startUpdate) || endUpdate.isEqual(startUpdate);
-            }
-            return true;
         } else if (cmd == Commands.RECUR_TASK) {
             recurringParser= new RecurringParser();
             LocalDate startRecur = recurringParser.getStartDate(input);
@@ -151,7 +128,7 @@ public class InputValidator {
         loggerValidator.log(Level.INFO, "Start of checkIfClash");
 
         LocalDate startDate = task.getStartDate();
-        LocalDate endDate = task.getDueDate(); // TODO CHANGE TO ENDDATE
+        LocalDate endDate = task.getDueDate();
         LocalTime startTime = task.getStartTime();
         LocalTime endTime = task.getEndTime();
         loggerValidator.log(Level.INFO, "Before checking if two localdates");

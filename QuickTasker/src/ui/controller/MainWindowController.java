@@ -39,12 +39,10 @@ import java.util.logging.Logger;
 
 import static ui.controller.TaskDoneEvent.TASK_COMPLETE;
 
-/**
- * @@author A0133333U
- */
+// @@author A0126077E
 
 public class MainWindowController implements Initializable {
-    // @@author A0126077E
+
     static Logger logger;
     private final UiOperationDelegator uiOperationDelegator = new UiOperationDelegator(this);
     private Main main;
