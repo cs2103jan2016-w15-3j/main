@@ -30,7 +30,7 @@ public class DetermineCommandType {
             case "view":
                 return Commands.DISPLAY_TASK;
             case "back":
-                return Commands.DISPLAY_TASK;
+                return Commands.BACK;
             case "mark":
                 return Commands.MARK_TASK;
             case "undo":

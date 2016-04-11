@@ -236,9 +236,10 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    // @@author A0126077E
+    // @@author A0130949Y
     void showAll() {
-        printedPlanner.setItems(plannerEntries);
+        plannerEntries = FXCollections.observableArrayList(operations.getTasks());
+        afterOperation();
         headerTitle.setText("Tasks: All");
         setGenericIcon();
         updateTaskCounter();
@@ -446,7 +447,7 @@ public class MainWindowController implements Initializable {
         plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
         afterOperation();
         headerTitle.setText("Tasks: Archived");
-        setArchivedIcon();;
+        setArchivedIcon();
     }
 
     // @@author A0130949Y
