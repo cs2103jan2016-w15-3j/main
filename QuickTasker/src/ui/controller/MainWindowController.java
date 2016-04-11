@@ -339,7 +339,8 @@ public class MainWindowController implements Initializable {
         //setGenericIcon();
     }
 
-    private void clearTasks() {
+    // @@author A0130949Y
+    void clearTasks() {
         plannerEntries = FXCollections.observableArrayList(operations.clear());
         afterOperation();
         displayMessage(MESSAGE_FOR_CLEARING);
@@ -358,6 +359,7 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    // @@author A0130949Y
     private void skipRecurringTaskOperation(String userInput) {
         int index = parser.getTaskIndex(userInput);
         if (!(plannerEntries.get(index) instanceof RecurringTask))
@@ -367,8 +369,8 @@ public class MainWindowController implements Initializable {
             displayMessage(MESSAGE_FOR_DATE_CHANGE);
         }
     }
-    // @@author A0130949Y
 
+    // @@author A0130949Y
     // unused because stopRecurring has bugs
     void stopRecurringTask(String userInput) throws Exception {
         operations.stopRecurring(parser.getTaskIndex(userInput));
@@ -433,8 +435,8 @@ public class MainWindowController implements Initializable {
             displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         }
     }
-    // @@author A0130949Y
 
+    // @@author A0130949Y
     private void deleteTaskOperation(String userInput) {
         plannerEntries = FXCollections
                 .observableArrayList(operations.deleteTask(parser.getTaskIndex(userInput)));
@@ -548,6 +550,7 @@ public class MainWindowController implements Initializable {
         return isTimeSlotClashing;
     }
 
+    // @@author A0130949Y
     private static final int OFFSET_FOR_CHECKING_TIME = 1;
     private boolean startTimeWithinStartAndEnd(Task task, Task taskInList) {
         boolean result = false;
@@ -557,8 +560,8 @@ public class MainWindowController implements Initializable {
         }
         return result;
     }
-    // @@author A0130949Y
 
+    // @@author A0130949Y
     private boolean endTimeWithinStartAndEnd(Task task, Task taskInList) {
         boolean result = false;
         if (task.getEndTime() != null) {

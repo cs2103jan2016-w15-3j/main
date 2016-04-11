@@ -26,8 +26,6 @@ public class UiOperationDelegator {
                 mainWindowController.redoTask();
             else if (mainWindowController.getParser().getCommand(userInput) == Commands.EXIT)
                 mainWindowController.getOperations().exit();
-            else if (mainWindowController.getParser().getCommand(userInput) == Commands.SORT_TASK)
-                mainWindowController.sortTask(userInput);
             else if (mainWindowController.getParser().getCommand(userInput) == Commands.MARK_TASK)
                 mainWindowController.markTaskCompleted(userInput);
             else if (mainWindowController.getParser().getCommand(userInput) == Commands.RECUR_TASK)
