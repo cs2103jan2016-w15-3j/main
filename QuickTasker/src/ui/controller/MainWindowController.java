@@ -263,7 +263,7 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
     void showTuesday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnTuesday(task)));
-        headerTitle.setText("Tasks: Monday");
+        headerTitle.setText("Tasks: Tuesday");
         setGenericIcon();
         updateTaskCounter();
         commandBox.clear();
@@ -272,7 +272,7 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
     void showWednesday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnWednesday(task)));
-        headerTitle.setText("Tasks: Monday");
+        headerTitle.setText("Tasks: Wednesday");
         setGenericIcon();
         updateTaskCounter();
         commandBox.clear();
@@ -281,7 +281,7 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
     void showThursday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnThursday(task)));
-        headerTitle.setText("Tasks: Monday");
+        headerTitle.setText("Tasks: Thursday");
         setGenericIcon();
         updateTaskCounter();
         commandBox.clear();
@@ -290,7 +290,7 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
     void showFriday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnFriday(task)));
-        headerTitle.setText("Tasks: Monday");
+        headerTitle.setText("Tasks: Friday");
         setGenericIcon();
         updateTaskCounter();
         commandBox.clear();
@@ -299,7 +299,7 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
     void showSaturday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnSaturday(task)));
-        headerTitle.setText("Tasks: Monday");
+        headerTitle.setText("Tasks: Saturday");
         setGenericIcon();
         updateTaskCounter();
         commandBox.clear();
@@ -308,7 +308,7 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
     void showSunday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnSunday(task)));
-        headerTitle.setText("Tasks: Monday");
+        headerTitle.setText("Tasks: Sunday");
         setGenericIcon();
         updateTaskCounter();
         commandBox.clear();
@@ -316,6 +316,7 @@ public class MainWindowController implements Initializable {
 
     /*
      * @@author A013333U Display a Help popup when user types in 'help'.
+     *user can press esc key to exit the Help Window
      */
     void showHelp() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Help.fxml"));
