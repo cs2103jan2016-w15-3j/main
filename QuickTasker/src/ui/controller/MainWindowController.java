@@ -77,9 +77,9 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_ADD_CONFIRMED = "Your task is added to QuickTasker.";
     private static final String MESSAGE_DELETE_CONFIRMED = "Your task is deleted from QuickTasker.";
     private static final String MESSAGE_EDIT_CONFIRMED = "Your task is updated in QuickTasker.";
+    private static final String MESSAGE_FOR_DATE_CHANGE = "Dates updated in QuickTasker";
     // @@author A0130949Y
     private static final String MESSAGE_FOR_CLEARING = "All tasks are removed from QuickTasker.";
-    private static final String MESSAGE_FOR_DATE_CHANGE = "Dates updated in QuickTasker";
     private static final String MESSAGE_FOR_UNDO = "Undone last operation. Yay!";
     private static final String MESSAGE_FOR_REDO = "Redo the last undo. Yay!";
     private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
@@ -164,7 +164,7 @@ public class MainWindowController implements Initializable {
         uiOperationDelegator.performOperations(userInput);
     }
 
-    private void showTasks(String userInput) {
+    public void showTasks(String userInput) {
         String whatToShow = determineShow(userInput);
 
         if (whatToShow.equals("all")) {
@@ -175,6 +175,22 @@ public class MainWindowController implements Initializable {
             showTomorrow();
         } else if (whatToShow.equals("floating")) {
             showFloating();
+        } else if (whatToShow.equals("monday")) {
+            showMonday();
+        } else if (whatToShow.equals("tuesday")) {
+            showTuesday();
+        } else if (whatToShow.equals("wednesday")) {
+            showWednesday();
+        } else if (whatToShow.equals("thursday")) {
+            showThursday();
+        } else if (whatToShow.equals("friday")) {
+            showFriday();
+        } else if (whatToShow.equals("saturday")) {
+            showSaturday();
+        } else if (whatToShow.equals("sunday")) {
+            showSunday();
+        } else if (whatToShow.equals("overdue")) {
+            showOverdue();
         } else {
             viewArchived();
         }
@@ -252,9 +268,15 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0130949Y
+    // display tasks on monday
     void showMonday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnMonday(task)));
         headerTitle.setText("Tasks: Monday");
+        setUpDisplay();
+    }
+
+    // @@author A0130949Y
+    private void setUpDisplay() {
         setGenericIcon();
         updateTaskCounter();
         commandBox.clear();
@@ -264,54 +286,42 @@ public class MainWindowController implements Initializable {
     void showTuesday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnTuesday(task)));
         headerTitle.setText("Tasks: Tuesday");
-        setGenericIcon();
-        updateTaskCounter();
-        commandBox.clear();
+        setUpDisplay();
     }
 
     // @@author A0130949Y
     void showWednesday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnWednesday(task)));
         headerTitle.setText("Tasks: Wednesday");
-        setGenericIcon();
-        updateTaskCounter();
-        commandBox.clear();
+        setUpDisplay();
     }
 
     // @@author A0130949Y
     void showThursday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnThursday(task)));
         headerTitle.setText("Tasks: Thursday");
-        setGenericIcon();
-        updateTaskCounter();
-        commandBox.clear();
+        setUpDisplay();
     }
 
     // @@author A0130949Y
     void showFriday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnFriday(task)));
         headerTitle.setText("Tasks: Friday");
-        setGenericIcon();
-        updateTaskCounter();
-        commandBox.clear();
+        setUpDisplay();
     }
 
     // @@author A0130949Y
     void showSaturday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnSaturday(task)));
         headerTitle.setText("Tasks: Saturday");
-        setGenericIcon();
-        updateTaskCounter();
-        commandBox.clear();
+        setUpDisplay();
     }
 
     // @@author A0130949Y
     void showSunday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnSunday(task)));
         headerTitle.setText("Tasks: Sunday");
-        setGenericIcon();
-        updateTaskCounter();
-        commandBox.clear();
+        setUpDisplay();
     }
 
     
@@ -508,10 +518,13 @@ public class MainWindowController implements Initializable {
 		commandBox.clear();
 	}
 
+    private static final String MESSAGE_FOR_STOPPING_RECUR = "index %d is not recurring now";
+    private static final int OFFSET = 1;
     // @@author A0130949Y
-    // unused because stopRecurring has bugs
     void stopRecurringTask(String userInput) throws Exception {
-        operations.stopRecurring(parser.getTaskIndex(userInput));
+        int taskIndex = parser.getTaskIndex(userInput);
+        plannerEntries = FXCollections.observableArrayList(operations.stopRecurring(taskIndex));
+        displayMessage(String.format(MESSAGE_FOR_STOPPING_RECUR, taskIndex + OFFSET));
         afterOperation();
     }
 

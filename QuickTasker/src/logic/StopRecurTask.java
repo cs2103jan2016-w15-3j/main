@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-// this class is not in use because the there is some bugs with undo/redo
 public class StopRecurTask<E> implements Command<Object> {
     private Stack<Task> undoRecurStack = new Stack<Task>();
     private Stack<String> undoStackId = new Stack<String>();

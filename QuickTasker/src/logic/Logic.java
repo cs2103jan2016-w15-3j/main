@@ -159,13 +159,14 @@ public class Logic {
         }
     }
 
-    public void stopRecurring(int index) {
+    public ArrayList<Task> stopRecurring(int index) {
         if (list.get(index) instanceof RecurringTask) {
             commandMap.get(Commands.STOP_TASK).execute(list, index);
             manageStacks(Commands.STOP_TASK);
             saveList();
         }
         saveList();
+        return (ArrayList<Task>) list;
     }
 
     public void markAsDone(String taskId) {

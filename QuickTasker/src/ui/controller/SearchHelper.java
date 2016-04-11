@@ -78,42 +78,41 @@ class SearchHelper {
 
     // @@author A0130949Y
     public boolean isTaskDueOnMonday(Task task) {
-        return isDueMonday(task) || isFloatingTask(task);
+        return isDueMonday(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnTuesday(Task task) {
-        return isDueTuesday(task) || isFloatingTask(task);
+        return isDueTuesday(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnWednesday(Task task) {
-        return isDueWednesday(task) || isFloatingTask(task);
+        return isDueWednesday(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnThursday(Task task) {
-        return isDueThursday(task) || isFloatingTask(task);
+        return isDueThursday(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnFriday(Task task) {
-        return isDueFriday(task) || isFloatingTask(task);
+        return isDueFriday(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnSaturday(Task task) {
-        return isDueSaturday(task) || isFloatingTask(task);
+        return isDueSaturday(task);
     }
 
     // @@author A0130949Y
     public boolean isTaskDueOnSunday(Task task) {
-        return isDueSunday(task) || isFloatingTask(task);
+        return isDueSunday(task);
     }
 
     // @@author A0130949Y
     private boolean isDueMonday(Task task) {
-        System.out.println(getDays.getMonday());
         return task.getDueDate().isEqual(getDays.getMonday());
     }
 
