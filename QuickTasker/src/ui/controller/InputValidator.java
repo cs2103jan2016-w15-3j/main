@@ -26,7 +26,7 @@ public class InputValidator {
     }
 
     private static boolean isNull(String input) {
-        return !input.isEmpty();
+		return input.isEmpty();
     }
 
     private boolean checkUndoRedo(String input) {
@@ -51,14 +51,22 @@ public class InputValidator {
 
     private boolean checkTaskName(String input) {
         if (cmd == Commands.CREATE_TASK) {
+			System.out.println("userInputParser.getTaskName(input).length() != 0 "
+					+ (userInputParser.getTaskName(input).length() != 0));
             return userInputParser.getTaskName(input).length() != 0;
         } else if (cmd == Commands.UPDATE_TASK) {
+			System.out.println(
+					"updateParser.getTaskName(input).length() != 0 " + (updateParser.getTaskName(input).length() != 0));
             return updateParser.getTaskName(input).length() != 0;
         } else if (cmd == Commands.RECUR_TASK) {
+			System.out.println("recurringParser.getTaskName(input).length() != 0 "
+					+ (recurringParser.getTaskName(input).length() != 0));
             return recurringParser.getTaskName(input).length() != 0;
-        }
+		} else {
+			System.out.println("HERHEHRERH");
         return true;
     }
+	}
 
     private boolean checkTime(String input) {
         if (cmd == Commands.CREATE_TASK) {
@@ -91,9 +99,11 @@ public class InputValidator {
         }
         return true;
     }
+
     private boolean isSameDate(LocalDate start, LocalDate end) {
         return start.isEqual(end);
     }
+
     private boolean checkDate(String input) {
         if (cmd == Commands.CREATE_TASK) {
             LocalDate startAdd = userInputParser.getStartDate(input);
@@ -141,7 +151,7 @@ public class InputValidator {
 
         if (isNotTwoDates(startDate, endDate)) {
             return false;
-        }else if(isOneDate(startDate,endDate)) {
+		} else if (isOneDate(startDate, endDate)) {
             return false;
         } else {
             for (Task t : list) {
@@ -159,9 +169,11 @@ public class InputValidator {
         loggerValidator.log(Level.INFO, "End of checkIfClash");
         return false;
     }
+
     private boolean isOneDate(LocalDate start, LocalDate end) {
 
-        return (start.isEqual(LocalDate.MIN) && !end.isEqual(LocalDate.MAX)) || (!start.isEqual(LocalDate.MIN) && end.isEqual(LocalDate.MAX));
+		return (start.isEqual(LocalDate.MIN) && !end.isEqual(LocalDate.MAX))
+				|| (!start.isEqual(LocalDate.MIN) && end.isEqual(LocalDate.MAX));
     }
 
     public boolean isAllValid(String input) {
@@ -170,8 +182,12 @@ public class InputValidator {
         if (checkUndoRedo(input)) {
             return true;
         }
-        check = isNull(input) && checkCommand(input) && checkTaskName(input) && checkDate(input) && checkTime(input);
-
+		check = !isNull(input) && checkCommand(input) && checkTaskName(input) && checkDate(input) && checkTime(input);
+		System.out.println("isNull(input) " +isNull(input));
+		System.out.println("checkCommand(input) " +checkCommand(input));
+		System.out.println("checkTaskName(input) " +checkTaskName(input));
+		System.out.println("checkDate(input) " +checkDate(input));
+		System.out.println("checkTime(input) " +checkTime(input));
         return check;
     }
 

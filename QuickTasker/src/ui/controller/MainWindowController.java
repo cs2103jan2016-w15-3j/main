@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXBadge;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXTextField;
+import common.InvalidStringException;
 import common.UIOperationException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -54,6 +55,7 @@ public class MainWindowController implements Initializable {
     private final RecurringParser recurringParser = new RecurringParser();
     private final DirectoryParser directoryParser = new DirectoryParser();
     private final SearchParser searchParser = new SearchParser();
+    private final InputValidator inputValidator = new InputValidator();
     private final Logic operations = new Logic();
     private SearchHelper search = new SearchHelper();
 
@@ -80,6 +82,7 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_FOR_DATE_CHANGE = "Dates updated in QuickTasker";
     // @@author A0130949Y
     private static final String MESSAGE_FOR_CLEARING = "All tasks are removed from QuickTasker.";
+    private static final String MESSAGE_FOR_STOPPING_RECUR = "index %d is not recurring now";
     private static final String MESSAGE_FOR_UNDO = "Undone last operation. Yay!";
     private static final String MESSAGE_FOR_REDO = "Redo the last undo. Yay!";
     private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
@@ -90,6 +93,8 @@ public class MainWindowController implements Initializable {
     private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
     private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
     private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "No operations to undo before this.";
+
+	private static final String ERROR_MESSAGE_FOR_INVALID_INPUT = "Invalid Input. Please retype.";
 
     // @@author A0133333U
     public MainWindowController() {
@@ -143,7 +148,6 @@ public class MainWindowController implements Initializable {
     private boolean enterKeyIsPressed(KeyEvent e) {
         return KeyCode.ENTER.equals(e.getCode());
     }
-
     // This method will log the user input, as well as passes valid input to the performOperations method
     // @@author A0126077E
     @FXML
@@ -157,14 +161,13 @@ public class MainWindowController implements Initializable {
             logger.log(Level.SEVERE,
                     "Error occured at " + getClass().getName() + " within performOperation method.\n");
             e.printStackTrace();
+		} catch(InvalidStringException e) {
+			displayMessage(ERROR_MESSAGE_FOR_INVALID_INPUT);
         }
     }
-    // @author A0126077E
-    private void performOperations(String userInput) throws UIOperationException {
-        uiOperationDelegator.performOperations(userInput);
-    }
 
-    public void showTasks(String userInput) {
+//@@author A0121558H
+	protected void showTasks(String userInput) {
         String whatToShow = determineShow(userInput);
 
         if (whatToShow.equals("all")) {
@@ -317,6 +320,7 @@ public class MainWindowController implements Initializable {
         setUpDisplay();
     }
 
+
     // @@author A0130949Y
     void showSunday() {
         printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnSunday(task)));
@@ -324,9 +328,8 @@ public class MainWindowController implements Initializable {
         setUpDisplay();
     }
 
-    
     //@@author A0133333U Display a Help popup when user types in 'help'.
-     
+
     void showHelp() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Help.fxml"));
         Scene helpScene = new Scene(root);
@@ -357,7 +360,7 @@ public class MainWindowController implements Initializable {
         imageView.setPreserveRatio(true);
         headerTitle.setGraphic(imageView);
     }
-    
+
     // @@author A0133333U
     // sets different icons for header title of 'archived'
     protected void setArchivedIcon() {
@@ -418,6 +421,7 @@ public class MainWindowController implements Initializable {
         new Thread(sleeper).start();
     }
 
+
     // @@author A0126077E
     private javafx.concurrent.Task<Void> makeSleeper(int duration) {
         return new javafx.concurrent.Task<Void>() {
@@ -432,8 +436,7 @@ public class MainWindowController implements Initializable {
             }
         };
     }
-    
-    
+
 	 // @@author: A0133333U-unused
 	 // added in extra params for this method - unused because they refactored
 	private Task makeTaskOld(String userInput) throws Exception {
@@ -479,49 +482,9 @@ public class MainWindowController implements Initializable {
             displayMessage(MESSAGE_FOR_DATE_CHANGE);
         }
     }
-    
-	// @@author A0133333U-unused
-    // unused because another way of implementing search was used
-    private void searchForTask(String userInput) {
-		for (Task task : plannerEntries) {
-			String taskDescription = task.getName();
-			LocalDate taskStartDate = task.getStartDate();
-			LocalDate taskEndDate = task.getDueDate();
-			if (taskDescription.contains(userInput.toLowerCase())) {
-				// filteredEntries.clear();
-				filteredEntries.add(task);
-				System.out.println("filteredlist" + filteredEntries.size());
-				snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Search results returned.", "", 1500, (b) -> {
-				}));
-			} else {
-				snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Invalid search term!", "", 1500, (b) -> {
-				}));
-
-			}
-			afterSearch();
-
-		}
-	}
-	
-	
-	// @@author A0133333U-unused
-    // same reason as above method
-    private void refreshSearch() {
-		printedPlanner.setItems(filteredEntries);
-	}
-
-	// @@author A0133333U-unused
-    // same reason as above method
-    private void afterSearch() {
-		setCellFactory();
-		refreshSearch();
-		commandBox.clear();
-	}
-
-    private static final String MESSAGE_FOR_STOPPING_RECUR = "index %d is not recurring now";
-    private static final int OFFSET = 1;
     // @@author A0130949Y
     void stopRecurringTask(String userInput) throws Exception {
+        final int OFFSET = 1;
         int taskIndex = parser.getTaskIndex(userInput);
         plannerEntries = FXCollections.observableArrayList(operations.stopRecurring(taskIndex));
         displayMessage(String.format(MESSAGE_FOR_STOPPING_RECUR, taskIndex + OFFSET));
@@ -675,7 +638,7 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
     // checks that on the same day, returns true when there is clashing timeslot
     // unused due to bugs
-    private boolean isTimeSlotClashing(Task task) {
+/*    private boolean isTimeSlotClashing(Task task) {
         boolean isTimeSlotClashing = false;
         if (task.getEndTime() == null) return isTimeSlotClashing;
         for (Task taskInList : plannerEntries)
@@ -695,20 +658,21 @@ public class MainWindowController implements Initializable {
                 }
             }
         return isTimeSlotClashing;
-    }
+    }*/
 
     // @@author A0130949Y
     private static final int OFFSET_FOR_CHECKING_TIME = 1;
-    private boolean startTimeWithinStartAndEnd(Task task, Task taskInList) {
+
+/*    private boolean startTimeWithinStartAndEnd(Task task, Task taskInList) {
         boolean result = false;
         if (task.getStartTime() != null) {
             result = task.getStartTime().isAfter(taskInList.getStartTime().minusHours(OFFSET_FOR_CHECKING_TIME)) && task.getEndTime()
                             .isBefore((taskInList.getEndTime().plusHours(OFFSET_FOR_CHECKING_TIME)));
         }
         return result;
-    }
+    }*/
 
-    // @@author A0130949Y
+/*    // @@author A0130949Y
     private boolean endTimeWithinStartAndEnd(Task task, Task taskInList) {
         boolean result = false;
         if (task.getEndTime() != null) {
@@ -716,7 +680,7 @@ public class MainWindowController implements Initializable {
                             .isBefore(taskInList.getEndTime().plusHours(OFFSET_FOR_CHECKING_TIME));
         }
         return result;
-    }
+    }*/
 
     // @@author A0126077E
     private void displayMessage(String message) {

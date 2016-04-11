@@ -1,20 +1,24 @@
 package ui.controller;
 
 //@@author A0121558H
+import common.InvalidStringException;
 import common.UIOperationException;
 import parser.Commands;
 
 public class UiOperationDelegator {
     private final MainWindowController mainWindowController;
 
-    public UiOperationDelegator(
-            MainWindowController mainWindowController) { this.mainWindowController = mainWindowController; }
+	public UiOperationDelegator(MainWindowController mainWindowController) {
+		this.mainWindowController = mainWindowController;
+	}
 
-    public void performOperations(String userInput) throws UIOperationException {
-        /*InputValidator inputValidator = new InputValidator();
-        if (inputValidator.checkAllValid(userInput)) {
+	public void performOperations(String userInput) throws UIOperationException ,InvalidStringException {
+        InputValidator inputValidator = new InputValidator();
+        if (!inputValidator.checkAllValid(userInput)) {
             MainWindowController.logger.severe(inputValidator.toString());
-        } else  {*/
+            System.out.println("throw??");
+            throw new InvalidStringException();//TODO
+        } else {
             try {
                 if (mainWindowController.getParser().getCommand(userInput) == Commands.CREATE_TASK)
                     mainWindowController.addTask(userInput);
@@ -54,4 +58,5 @@ public class UiOperationDelegator {
                 throw new UIOperationException();
             }
         }
+    }
 }
