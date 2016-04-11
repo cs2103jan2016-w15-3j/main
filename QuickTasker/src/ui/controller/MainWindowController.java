@@ -31,6 +31,7 @@ import ui.model.TaskListCell;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.EmptyStackException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -65,6 +66,8 @@ public class MainWindowController implements Initializable {
     @FXML private Label headerTitle;
 
     private ObservableList<Task> plannerEntries;
+    private ObservableList<Task> filteredEntries;
+
     private Stage helpStage;
 
     /**
@@ -409,6 +412,14 @@ public class MainWindowController implements Initializable {
             }
         };
     }
+    
+    /*
+	 * @@author: A0133333U added in extra params for this method - unused because they refactored
+	 */
+	/*private Task makeTask(String userInput) throws Exception {
+		return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput), parser.getEndDate(userInput),
+				parser.getStartTime(userInput), parser.getEndTime(userInput));
+	}*/
 
     // @@author A0130949Y
     void viewArchived() {
@@ -448,6 +459,48 @@ public class MainWindowController implements Initializable {
             displayMessage(MESSAGE_FOR_DATE_CHANGE);
         }
     }
+    
+	// @@author A0133333U-unused
+    // unused because another way of implementing search was used
+    private void searchForTask(String userInput) {
+		for (Task task : plannerEntries) {
+			String taskDescription = task.getName();
+			LocalDate taskStartDate = task.getStartDate();
+			LocalDate taskEndDate = task.getDueDate();
+			if (taskDescription.contains(userInput.toLowerCase())) {
+				// filteredEntries.clear();
+				filteredEntries.add(task);
+				System.out.println("filteredlist" + filteredEntries.size());
+				snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Search results returned.", "", 1500, (b) -> {
+				}));
+			} else {
+				snackbar.fireEvent(new JFXSnackbar.SnackbarEvent("Invalid search term!", "", 1500, (b) -> {
+				}));
+
+			}
+			afterSearch();
+
+		}
+	}
+	
+	
+	// @@author A0133333U-unused
+    // same reason as above method
+    private void refreshSearch() {
+		printedPlanner.setItems(filteredEntries);
+	}
+
+	// @@author A0133333U-unused
+    // same reason as above method
+    private void afterSearch() {
+		setCellFactory();
+		refreshSearch();
+		commandBox.clear();
+	}
+    
+    	     
+    
+  
 
     // @@author A0130949Y
     // unused because stopRecurring has bugs

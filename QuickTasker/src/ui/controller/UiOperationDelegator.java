@@ -64,7 +64,7 @@ public class UiOperationDelegator {
             else if ("view sunday".equals(userInput) || "show sunday".equals(userInput))
                 mainWindowController.showSunday();
             else if (userInput.contains("theme")) mainWindowController.changeTheme(userInput);
-            else if (userInput.equals("show overdue")) mainWindowController.showOverdue();
+            else if (userInput.equalsIgnoreCase("show overdue")) mainWindowController.showOverdue();
             else if ("help".equals(userInput)) mainWindowController.showHelp();
         } catch (Exception e) {
             throw new UIOperationException();
