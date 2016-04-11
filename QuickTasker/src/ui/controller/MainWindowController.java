@@ -96,9 +96,9 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle b) {
+        initLogger();
         initPlanner();
         setCellFactory();
-        initLogger();
     }
 
     // @@author A0133333U
@@ -583,17 +583,22 @@ public class MainWindowController implements Initializable {
     // @@author A0126077E
     private void setCellFactory() {
         printedPlanner.setCellFactory(param -> {
-
             TaskListCell listCell = new TaskListCell();
             printedPlanner.addEventFilter(TASK_COMPLETE, event -> new Thread(() -> {
                 Thread.currentThread()
                         .setUncaughtExceptionHandler((task, e) -> Platform.runLater(System.out::println));
-                if (listCell.getTask().equals(event.getTask())) listCell.getCheckBox().fire();
-                listCell.removeEventFilter(TASK_COMPLETE, null);
+                fireCheckBoxAndRemoveEventFilter(listCell, event);
             }).start());
             return listCell;
         });
     }
+
+    private void fireCheckBoxAndRemoveEventFilter(TaskListCell listCell, TaskDoneEvent event) {
+        if (listCellContainsSelectedTask(listCell, event)) listCell.getCheckBox().fire();
+        listCell.removeEventFilter(TASK_COMPLETE, null);
+    }
+
+    private boolean listCellContainsSelectedTask(TaskListCell listCell, TaskDoneEvent event) {return listCell.getTask().equals(event.getTask());}
 
     public Logic getOperations() {
         return operations;
