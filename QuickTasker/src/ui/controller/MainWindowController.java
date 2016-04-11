@@ -314,11 +314,9 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    /*
-     * @@author A0133333U Display a Help popup when user types in 'help'.
-     */
-    //      *user can press esc key to exit the Help Window
-
+    
+    //@@author A0133333U Display a Help popup when user types in 'help'.
+     
     void showHelp() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Help.fxml"));
         Scene helpScene = new Scene(root);
@@ -426,9 +424,9 @@ public class MainWindowController implements Initializable {
         };
     }
     
-    /*
-	 * @@author: A0133333U added in extra params for this method - unused because they refactored
-	 */
+    
+	 //@@author: A0133333U-unused
+	 //added in extra params for this method - unused because they refactored
 	private Task makeTaskOld(String userInput) throws Exception {
 		return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput), parser.getEndDate(userInput),
 				parser.getStartTime(userInput), parser.getEndTime(userInput));
