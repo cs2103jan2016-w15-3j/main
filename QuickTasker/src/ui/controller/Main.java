@@ -24,6 +24,7 @@ public class Main extends Application {
     private Scene scene;
     private static final int STAGE_MINIMUM_HEIGHT = 150;
     private static final int STAGE_MINIMUM_WIDTH = 560;
+    // @@author A0133333U
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     // @author A0126077E
@@ -71,8 +72,8 @@ public class Main extends Application {
         scene.getStylesheets().add(Main.class.getResource("/css/fonts.css").toExternalForm());
         scene.getStylesheets().add(Main.class.getResource("/css/application.css").toExternalForm());
     }
-    // @author A0126077E
-
+    // @author A0126077E ????
+    
     private void initializePrimaryStage() {
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.getIcons().add(new Image(IMAGE_ICON));
