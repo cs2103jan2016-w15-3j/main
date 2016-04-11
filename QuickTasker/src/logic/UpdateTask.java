@@ -39,6 +39,7 @@ public class UpdateTask<E> implements Command<Object> {
     public void executeUpdate(int taskIndex, List<Task> list) {
         Task newTask = list.remove(list.size() - 1);
         Task updatedTask = checkAttributesForTask(newTask, taskIndex, list);
+        updatedTask.setTaskType();
         list.set(taskIndex, updatedTask);
         Collections.sort(list);
         undoStackInt.push(findTask(updatedTask.getId(), (ArrayList<Task>) list));
@@ -67,11 +68,11 @@ public class UpdateTask<E> implements Command<Object> {
             updatedTask.setName(list.get(taskIndex).getName());
         }
 
-        if (updatedTask.getStartTime() == null && list.get(taskIndex).getStartTime() != null) {
+        if (updatedTask.isStartTimeEmpty() && !list.get(taskIndex).isStartTimeEmpty()) {
             updatedTask.setStartTime(list.get(taskIndex).getStartTime());
         }
 
-        if (updatedTask.getEndTime() == null && list.get(taskIndex).getEndTime() != null) {
+        if (updatedTask.isEndTimeEmpty() && !list.get(taskIndex).isEndTimeEmpty()) {
             updatedTask.setEndTime(list.get(taskIndex).getEndTime());
         }
 

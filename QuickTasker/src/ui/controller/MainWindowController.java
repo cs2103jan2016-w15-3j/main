@@ -388,7 +388,6 @@ public class MainWindowController implements Initializable {
             operations.markAsDone(task.getId());
             task.setDone(true); // logic should handle
             tickCheckBoxForMark(task, i);
-            plannerEntries.remove(i);
         } catch (NumberFormatException e) {
             displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         } catch (IndexOutOfBoundsException e) {

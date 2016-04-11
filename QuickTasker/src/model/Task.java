@@ -224,6 +224,14 @@ public class Task implements Comparable {
                 || this.getStartDate().equals(LocalDate.MAX);
     }
 
+    public boolean isStartTimeEmpty() {
+        return this.getStartTime() == null || this.getStartTime().equals(LocalTime.MAX) || this.getStartTime().equals(LocalTime.MIN);
+    }
+
+    public boolean isEndTimeEmpty() {
+        return this.getEndTime() == null || this.getEndTime().equals(LocalTime.MAX) || this.getEndTime().equals(LocalTime.MIN);
+    }
+
     public boolean isDatesInvalid() {
         return this.getStartDate().isAfter(this.getDueDate());
     }
