@@ -54,7 +54,7 @@ public class MainWindowController implements Initializable {
     private final DirectoryParser directoryParser = new DirectoryParser();
     private final SearchParser searchParser = new SearchParser();
     private final Logic operations = new Logic();
-    private SearchHelper util = new SearchHelper();
+    private SearchHelper search = new SearchHelper();
 
     @FXML private AnchorPane mainContentContainer;
     @FXML private JFXBadge tasksCounter;
@@ -174,7 +174,7 @@ public class MainWindowController implements Initializable {
 
     // @@author A0126077E
     void showTomorrow() {
-        printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTomorrowView(task)));
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isItDisplayedInTomorrowView(task)));
         headerTitle.setText("Tasks: Tomorrow");
         updateTaskCounter();
         commandBox.clear();
@@ -187,7 +187,7 @@ public class MainWindowController implements Initializable {
 
     // @@author A0126077E
     void showFloating() {
-        printedPlanner.setItems(plannerEntries.filtered(task -> util.isFloatingTask(task)));
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isFloatingTask(task)));
         headerTitle.setText("Tasks: Floating");
         updateTaskCounter();
         commandBox.clear();
@@ -205,7 +205,7 @@ public class MainWindowController implements Initializable {
     // @@author A0126077E
     void showToday() {
 
-        printedPlanner.setItems(plannerEntries.filtered(task -> util.isItDisplayedInTodayView(task)));
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isItDisplayedInTodayView(task)));
         headerTitle.setText("Tasks: Today + Floating");
         setGenericIcon();
         updateTaskCounter();
@@ -214,10 +214,10 @@ public class MainWindowController implements Initializable {
 
     void searchTask(String userInput) throws Exception {
 
-        if (util.isKeywordSearch()) {
+        if (search.isKeywordSearch()) {
             String taskName = parser.getTaskName(userInput);
             headerTitle.setText("Search Results  \"" + taskName + "\":");
-            printedPlanner.setItems(plannerEntries.filtered(task -> util.containsKeyWord(task, taskName)));
+            printedPlanner.setItems(plannerEntries.filtered(task -> search.containsKeyWord(task, taskName)));
             updateTaskCounter();
         }
 
@@ -272,7 +272,7 @@ public class MainWindowController implements Initializable {
     //@@author A0133333U
     // method displays list of overdue items
     void showOverdue() {
-        printedPlanner.setItems(plannerEntries.filtered(task -> util.isTaskOverdue(task)));
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskOverdue(task)));
         headerTitle.setText("Tasks: Overdue");
         setWarningIcon();
         updateTaskCounter();
