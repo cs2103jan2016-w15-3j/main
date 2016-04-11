@@ -73,8 +73,9 @@ public class Task implements Comparable {
     }
 
     public void setTaskType() {
-        this.taskType = bothDateAndTimeAreDefaultValue() ? "floating"
-                : !onlyTimeAreDefaultValue() ? "task" : "wholeDayEvent";
+        this.taskType = bothDateAndTimeAreDefaultValue() ?
+                "floating" :
+                !onlyTimeAreDefaultValue() ? "task" : "wholeDayEvent";
     }
 
     private boolean onlyTimeAreDefaultValue() {
@@ -155,21 +156,25 @@ public class Task implements Comparable {
         return UUID.randomUUID().toString();
     }
 
-  //@@author A0126077E
+    //@@author A0126077E
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
         if (!(o instanceof Task)) return false;
         Task task = (Task) o;
-        return id.equals(task.id) && taskName.equals(task.taskName)
-                && !(endDate == null ? task.endDate != null : !endDate.equals(task.endDate))
-                && (startDate == null ? task.startDate == null : startDate.equals(task.startDate));
+        return id.equals(task.id) && taskName.equals(task.taskName) && !(endDate == null ?
+                task.endDate != null :
+                !endDate.equals(task.endDate)) && (startDate == null ?
+                task.startDate == null :
+                startDate.equals(task.startDate));
     }
 
     @Override
     public int hashCode() {
-        return 31 * ((startDate == null ? 0 : startDate.hashCode())
-                + 31 * (31 * taskName.hashCode() + (endDate == null ? 0 : endDate.hashCode()))) + id.hashCode();
+        return 31 * ((startDate == null ? 0 : startDate.hashCode()) + 31 * (31 * taskName.hashCode() + (
+                endDate == null ?
+                        0 :
+                        endDate.hashCode()))) + id.hashCode();
     }
 
     //@@author A0130949
@@ -215,21 +220,23 @@ public class Task implements Comparable {
     }
 
     public boolean isDueDateEmpty() {
-        return this.getDueDate() == null || this.getDueDate().equals(LocalDate.MIN)
-                || this.getDueDate().equals(LocalDate.MAX);
+        return this.getDueDate() == null || this.getDueDate().equals(LocalDate.MIN) || this.getDueDate()
+                .equals(LocalDate.MAX);
     }
 
     public boolean isStartDateEmpty() {
-        return this.getStartDate() == null || this.getStartDate().equals(LocalDate.MIN)
-                || this.getStartDate().equals(LocalDate.MAX);
+        return this.getStartDate() == null || this.getStartDate().equals(LocalDate.MIN) || this.getStartDate()
+                .equals(LocalDate.MAX);
     }
 
     public boolean isStartTimeEmpty() {
-        return this.getStartTime() == null || this.getStartTime().equals(LocalTime.MAX) || this.getStartTime().equals(LocalTime.MIN);
+        return this.getStartTime() == null || this.getStartTime().equals(LocalTime.MAX) || this.getStartTime()
+                .equals(LocalTime.MIN);
     }
 
     public boolean isEndTimeEmpty() {
-        return this.getEndTime() == null || this.getEndTime().equals(LocalTime.MAX) || this.getEndTime().equals(LocalTime.MIN);
+        return this.getEndTime() == null || this.getEndTime().equals(LocalTime.MAX) || this.getEndTime()
+                .equals(LocalTime.MIN);
     }
 
     public boolean isDatesInvalid() {

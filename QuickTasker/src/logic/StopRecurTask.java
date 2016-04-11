@@ -15,10 +15,10 @@ public class StopRecurTask<E> implements Command<Object> {
     private Stack<String> redoStackId = new Stack<String>();
 
     @Override
-    public void execute(List<Task> list, Object op) {
-        int index = (int) op;
-        if (list.get(index) instanceof RecurringTask) {
-            executeStopRecurring(list, index);
+    public void execute(List<Task> list, Object index) {
+        int taskIndex = (int) index;
+        if (list.get(taskIndex) instanceof RecurringTask) {
+            executeStopRecurring(list, taskIndex);
         }
     }
 
@@ -32,21 +32,31 @@ public class StopRecurTask<E> implements Command<Object> {
 
     @Override
     public void undo(ArrayList<Task> list) {
+        Task previousTask = undoStopRecurTask(list);
+        list.add(previousTask);
+    }
+
+    private Task undoStopRecurTask(ArrayList<Task> list) {
         String undoTaskId = undoStackId.pop();
         Task previousTask = undoRecurStack.pop();
         Task taskToBeReomved = list.remove(findTask(undoTaskId, list));
         redoRecurStack.push(taskToBeReomved);
         redoStackId.push(undoTaskId);
-        list.add(previousTask);
+        return previousTask;
     }
 
     @Override
     public void redo(ArrayList<Task> list) {
+        Task previousTask = redoStopRecurTask(list);
+        list.add(previousTask);
+    }
+
+    private Task redoStopRecurTask(ArrayList<Task> list) {
         String redoTaskId = redoStackId.pop();
         Task previousTask = redoRecurStack.pop();
         undoStackId.push(redoTaskId);
         undoRecurStack.push(list.remove(findTask(redoTaskId, list)));
-        list.add(previousTask);
+        return previousTask;
     }
 
     private RecurringTask clone(RecurringTask recurringTask) {
@@ -58,7 +68,8 @@ public class StopRecurTask<E> implements Command<Object> {
 
     @Override
     public int findTask(String id, ArrayList<Task> list) {
-        int position = -1;
+        final int INVALID = -1;
+        int position = INVALID;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {
                 position = i;

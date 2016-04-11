@@ -80,7 +80,7 @@ public class AddTaskTest {
     // A user could have added task without dates
     public void testNameAfterAddingWithoutDates() throws Exception {
         logic.addTask(new Task("name", null, null));
-        assertEquals(logic.getTasks().get(0).getName(), "name");
+        assertEquals(logic.getTasks().get(2).getName(), "name");
     }
 
     @Test

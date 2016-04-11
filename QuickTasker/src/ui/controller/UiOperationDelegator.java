@@ -1,6 +1,7 @@
 package ui.controller;
 
 //@@author A0121558H
+
 import common.InvalidStringException;
 import common.UIOperationException;
 import parser.Commands;
@@ -8,11 +9,11 @@ import parser.Commands;
 public class UiOperationDelegator {
     private final MainWindowController mainWindowController;
 
-	public UiOperationDelegator(MainWindowController mainWindowController) {
-		this.mainWindowController = mainWindowController;
-	}
+    public UiOperationDelegator(MainWindowController mainWindowController) {
+        this.mainWindowController = mainWindowController;
+    }
 
-	public void performOperations(String userInput) throws UIOperationException ,InvalidStringException {
+    public void performOperations(String userInput) throws UIOperationException, InvalidStringException {
         InputValidator inputValidator = new InputValidator();
         if (!inputValidator.checkAllValid(userInput)) {
             MainWindowController.logger.severe(inputValidator.toString());

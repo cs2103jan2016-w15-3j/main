@@ -17,13 +17,14 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
     private Stack<Task> redoStack = new Stack<Task>();
     private Stack<String> undoStackId = new Stack<String>();
     private Stack<String> redoStackId = new Stack<String>();
+    private static final int OFFSET = 1;
 
     @Override
     public void execute(List list, Object op) {
         loggerMark.log(Level.INFO, "Init variables for mark");
         archivedList = (ArrayList<Task>) list;
         String taskId = (String) op;
-        Task archivedTask = archivedList.get(archivedList.size() - 1);
+        Task archivedTask = archivedList.get(archivedList.size() - OFFSET);
         assert (archivedTask != null);
         loggerMark.log(Level.INFO, "Finish init of variables, Start the stack manipulation");
         executeArchive(taskId, archivedTask);
@@ -43,7 +44,7 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
         assert (archivedList.size() > 0);
         loggerMark.log(Level.INFO, "Start undo process for mark");
         try {
-            archivedList.remove(archivedList.size() - 1);
+            archivedList.remove(archivedList.size() - OFFSET);
             Task undoTask = undoStack.pop();
             if (undoTask instanceof RecurringTask) {
                 undoForRecurringTask(list);
@@ -95,7 +96,8 @@ public class MarkTask<E> extends SkipRecurTask<E> implements Command<Object> {
 
     @Override
     public int findTask(String id, ArrayList<Task> list) {
-        int position = -1;
+        final int INVALID = -1;
+        int position = INVALID;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {
                 position = i;

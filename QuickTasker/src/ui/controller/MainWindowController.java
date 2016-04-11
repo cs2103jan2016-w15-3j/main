@@ -32,7 +32,6 @@ import ui.model.TaskListCell;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.EmptyStackException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -75,7 +74,7 @@ public class MainWindowController implements Initializable {
     /**
      * Display messages as visual feedback for users.
      */
-     // @@author A0133333U
+    // @@author A0133333U
     private static final String MESSAGE_ADD_CONFIRMED = "Your task is added to QuickTasker.";
     private static final String MESSAGE_DELETE_CONFIRMED = "Your task is deleted from QuickTasker.";
     private static final String MESSAGE_EDIT_CONFIRMED = "Your task is updated in QuickTasker.";
@@ -88,15 +87,14 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
     private static final String ERROR_MESSAGE_FOR_WRONG_INDEX = "The index you entered is invalid!";
     private static final String ERROR_MESSAGE_FOR_INVALID_INDEX = "This index is not a number!";
-    private static final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
+    private static final String ERROR_MESSAGE_FOR_NOT_RECURRING_TASK = "This index is not a recurring task!";
     private static final String ERROR_MESSAGE_FOR_NO_TASK_ENTERED = "Did you enter a recurring task?";
     private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
     private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
     private static final String ERROR_MESSAGE_FOR_UNDO_ERROR = "No operations to undo before this.";
 
-	private static final String ERROR_MESSAGE_FOR_INVALID_INPUT = "Invalid Input. Please retype.";
+    private static final String ERROR_MESSAGE_FOR_INVALID_INPUT = "Invalid Input. Please retype.";
 
-    // @@author A0133333U
     public MainWindowController() {}
 
     public static Logger getLogger() {
@@ -146,6 +144,7 @@ public class MainWindowController implements Initializable {
     private boolean enterKeyIsPressed(KeyEvent e) {
         return KeyCode.ENTER.equals(e.getCode());
     }
+
     // This method will log the user input, as well as passes valid input to the performOperations method
     // @@author A0126077E
     @FXML
@@ -159,13 +158,13 @@ public class MainWindowController implements Initializable {
             logger.log(Level.SEVERE,
                     "Error occured at " + getClass().getName() + " within performOperation method.\n");
             e.printStackTrace();
-		} catch(InvalidStringException e) {
-			displayMessage(ERROR_MESSAGE_FOR_INVALID_INPUT);
+        } catch (InvalidStringException e) {
+            displayMessage(ERROR_MESSAGE_FOR_INVALID_INPUT);
         }
     }
 
-//@@author A0121558H
-	protected void showTasks(String userInput) {
+    //@@author A0121558H
+    protected void showTasks(String userInput) {
         String whatToShow = determineShow(userInput);
         if (whatToShow.equals("all")) {
             showAll();
@@ -236,9 +235,9 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    // @@author A0126077E
     void showAll() {
-        printedPlanner.setItems(plannerEntries);
+        plannerEntries = FXCollections.observableArrayList(operations.getTasks());
+        afterOperation();
         headerTitle.setText("Tasks: All");
         setGenericIcon();
         updateTaskCounter();
@@ -316,7 +315,6 @@ public class MainWindowController implements Initializable {
         headerTitle.setText("Tasks: Saturday");
         setUpDisplay();
     }
-
 
     // @@author A0130949Y
     void showSunday() {
@@ -402,13 +400,7 @@ public class MainWindowController implements Initializable {
             displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         } catch (IndexOutOfBoundsException e) {
             displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
-        }catch (Exception e){
         }
-    }
-
-    // @@author A0126077E
-    private void tickCheckBoxForMark(Task t, int i) {
-
     }
 
     // @@author A0126077E
@@ -426,19 +418,12 @@ public class MainWindowController implements Initializable {
         };
     }
 
-/*	 // @@author: A0133333U-unused
-	 // added in extra params for this method - unused because they refactored
-	private Task makeTaskOld(String userInput) throws Exception {
-		return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput), parser.getEndDate(userInput),
-				parser.getStartTime(userInput), parser.getEndTime(userInput));
-	}*/
-
     // @@author A0130949Y
     void viewArchived() {
         plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
         afterOperation();
         headerTitle.setText("Tasks: Archived");
-        setArchivedIcon();;
+        setArchivedIcon();
     }
 
     // @@author A0130949Y
@@ -465,18 +450,24 @@ public class MainWindowController implements Initializable {
     private void skipRecurringTaskOperation(String userInput) {
         int index = parser.getTaskIndex(userInput);
         if (!(plannerEntries.get(index) instanceof RecurringTask))
-            displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
+            displayMessage(ERROR_MESSAGE_FOR_NOT_RECURRING_TASK);
         else {
             plannerEntries = FXCollections.observableArrayList(operations.skip(index));
             displayMessage(MESSAGE_FOR_DATE_CHANGE);
         }
     }
     // @@author A0130949Y
+
+    private static final int OFFSET = 1;
+
     void stopRecurringTask(String userInput) throws Exception {
-        final int OFFSET = 1;
         int taskIndex = parser.getTaskIndex(userInput);
-        plannerEntries = FXCollections.observableArrayList(operations.stopRecurring(taskIndex));
-        displayMessage(String.format(MESSAGE_FOR_STOPPING_RECUR, taskIndex + OFFSET));
+        if (plannerEntries.get(taskIndex) instanceof RecurringTask) {
+            plannerEntries = FXCollections.observableArrayList(operations.stopRecurring(taskIndex));
+            displayMessage(String.format(MESSAGE_FOR_STOPPING_RECUR, taskIndex + OFFSET));
+        } else {
+            displayMessage(ERROR_MESSAGE_FOR_NOT_RECURRING_TASK);
+        }
         afterOperation();
     }
 
@@ -554,9 +545,7 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
     void addTask(String userInput) throws Exception {
         try {
-            System.out.println("AA");
             addTaskOperation(userInput);
-            System.out.println("BB");
             afterOperation();
             displayMessage(MESSAGE_ADD_CONFIRMED);
             printedPlanner.scrollTo(printedPlanner.getItems().size() - 1);
@@ -625,51 +614,7 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0130949Y
-    // checks that on the same day, returns true when there is clashing timeslot
-    // unused due to bugs
-/*    private boolean isTimeSlotClashing(Task task) {
-        boolean isTimeSlotClashing = false;
-        if (task.getEndTime() == null) return isTimeSlotClashing;
-        for (Task taskInList : plannerEntries)
-            if (taskInList.getDueDate().equals(task.getDueDate()) && taskInList.getStartDate()
-                    .equals(task.getStartDate())) {
-                if (taskInList.getEndTime() == null || taskInList.getStartTime() == null) {
-                    if (taskInList.getEndTime() != null && (endTimeWithinStartAndEnd(task, taskInList)
-                            || endTimeWithinStartAndEnd(taskInList, task))) {
-                        isTimeSlotClashing = true;
-                        break;
-                    }
-                } else if (endTimeWithinStartAndEnd(task, taskInList) || endTimeWithinStartAndEnd(
-                        taskInList, task) || startTimeWithinStartAndEnd(task, taskInList)
-                        || startTimeWithinStartAndEnd(taskInList, task)) {
-                    isTimeSlotClashing = true;
-                    break;
-                }
-            }
-        return isTimeSlotClashing;
-    }*/
-
-    // @@author A0130949Y
     private static final int OFFSET_FOR_CHECKING_TIME = 1;
-
-/*    private boolean startTimeWithinStartAndEnd(Task task, Task taskInList) {
-        boolean result = false;
-        if (task.getStartTime() != null) {
-            result = task.getStartTime().isAfter(taskInList.getStartTime().minusHours(OFFSET_FOR_CHECKING_TIME)) && task.getEndTime()
-                            .isBefore((taskInList.getEndTime().plusHours(OFFSET_FOR_CHECKING_TIME)));
-        }
-        return result;
-    }*/
-
-/*    // @@author A0130949Y
-    private boolean endTimeWithinStartAndEnd(Task task, Task taskInList) {
-        boolean result = false;
-        if (task.getEndTime() != null) {
-            result = task.getEndTime().isAfter(taskInList.getStartTime().minusHours(OFFSET_FOR_CHECKING_TIME)) && task.getEndTime()
-                            .isBefore(taskInList.getEndTime().plusHours(OFFSET_FOR_CHECKING_TIME));
-        }
-        return result;
-    }*/
 
     // @@author A0126077E
     private void displayMessage(String message) {
@@ -712,7 +657,9 @@ public class MainWindowController implements Initializable {
         listCell.removeEventFilter(TASK_COMPLETE, null);
     }
 
-    private boolean listCellContainsSelectedTask(TaskListCell listCell, TaskDoneEvent event) {return listCell.getTask().equals(event.getTask());}
+    private boolean listCellContainsSelectedTask(TaskListCell listCell, TaskDoneEvent event) {
+        return listCell.getTask().equals(event.getTask());
+    }
 
     public Logic getOperations() {
         return operations;

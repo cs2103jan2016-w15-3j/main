@@ -8,7 +8,6 @@ import data.SettingManagerImpl;
 import model.RecurringTask;
 import model.Task;
 import parser.Commands;
-import sun.rmi.runtime.Log;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -34,15 +33,24 @@ public class Logic {
 
     private void initializeVariables() {
         populateCommandMap();
-        list = new ArrayList<Task>();
+        initLists();
         assert (list != null);
         settings = new SettingManagerImpl();
-        archivedList = new ArrayList<Task>();
         storage = new JsonDataHandler();
+        initStacks();
+    }
+
+    private void initLists() {
+        list = new ArrayList<Task>();
+        archivedList = new ArrayList<Task>();
+    }
+
+    private void initStacks() {
         undoStack = new Stack<Commands>();
         redoStack = new Stack<Commands>();
     }
 
+    // get size of the list. use for testing
     public int getSize() {
         assert (list.size() >= 0);
         return list.size();
@@ -68,8 +76,6 @@ public class Logic {
     }
 
     public ArrayList<Task> clear() {
-        //list.clear();
-        //storage.reset();
         commandMap.get(Commands.CLEAR_TASK).execute(list, "");
         manageStacks(Commands.CLEAR_TASK);
         return (ArrayList<Task>) list;
@@ -139,12 +145,6 @@ public class Logic {
         return (ArrayList<Task>) list;
     }
 
-    public ArrayList<Task> sort() {
-        commandMap.get(Commands.SORT_TASK).execute(list, "");
-        saveList();
-        return (ArrayList<Task>) list;
-    }
-
     public ArrayList<Task> skip(int index) {
         if (list.get(index) instanceof RecurringTask) {
             commandMap.get(Commands.SKIP_TASK).execute(list, index);
@@ -173,12 +173,8 @@ public class Logic {
     }
 
     public void markAsDone(String taskId) {
-        try {
-            shiftCompletedTaskToArchivedList(taskId);
-            saveList();
-        }catch (ArrayIndexOutOfBoundsException e){
-            logger.info("Marking non-existent index in Logic -> List");
-        }
+        shiftCompletedTaskToArchivedList(taskId);
+        saveList();
     }
 
     // recurring task requires cloning as the task remains in the list
@@ -211,7 +207,8 @@ public class Logic {
     }
 
     public int findTask(String id, List<Task> list) {
-        int position = -1;
+        final int INVALID = -1;
+        int position = INVALID;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {
                 position = i;

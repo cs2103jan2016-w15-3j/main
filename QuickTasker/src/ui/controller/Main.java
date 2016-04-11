@@ -73,7 +73,7 @@ public class Main extends Application {
         scene.getStylesheets().add(Main.class.getResource("/css/application.css").toExternalForm());
     }
     // @author A0126077E ????
-    
+
     private void initializePrimaryStage() {
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.getIcons().add(new Image(IMAGE_ICON));

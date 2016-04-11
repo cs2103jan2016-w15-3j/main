@@ -12,10 +12,16 @@ public class SkipRecurTask<E> implements Command<Object> {
     private static Logger loggerSkip = Logger.getLogger("log");
     private Stack<Integer> undoStackInt = new Stack<Integer>();
     private Stack<Integer> redoStackInt = new Stack<Integer>();
+    private static final String MONTH = "month";
+    private static final String DAY = "day";
+    private static final String WEEK = "week";
+    private static final String MONTHS = "months";
+    private static final String DAYS = "days";
+    private static final String WEEKS = "weeks";
 
     @Override
-    public void execute(List<Task> list, Object op) {
-        executeSkip(list, (int) op);
+    public void execute(List<Task> list, Object index) {
+        executeSkip(list, (int) index);
     }
 
     private void executeSkip(List<Task> list, int index) {
@@ -39,11 +45,12 @@ public class SkipRecurTask<E> implements Command<Object> {
     protected void moveDateBackward(RecurringTask task) {
         assert (task != null);
         task.adjustDate();
-        if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
+        if (task.getRecurType().equalsIgnoreCase(WEEK) || task.getRecurType().equalsIgnoreCase(WEEKS)) {
             adjustDatesBackwardForWeeks(task);
-        } else if (task.getRecurType().equals("day") || task.getRecurType().equals("days")) {
+        } else if (task.getRecurType().equalsIgnoreCase(DAY) || task.getRecurType().equalsIgnoreCase(DAYS)) {
             adjustDatesBackwardForDays(task);
-        } else if (task.getRecurType().equals("month") || task.getRecurType().equals("months")) {
+        } else if (task.getRecurType().equalsIgnoreCase(MONTH) || task.getRecurType()
+                .equalsIgnoreCase(MONTHS)) {
             adjustDatesBackwardForMonths(task);
         } else {
             adjustDatesBackwardForYears(task);
@@ -54,11 +61,12 @@ public class SkipRecurTask<E> implements Command<Object> {
     protected void moveDateForward(RecurringTask task) {
         assert (task != null);
         task.adjustDate();
-        if (task.getRecurType().equals("week") || task.getRecurType().equals("weeks")) {
+        if (task.getRecurType().equalsIgnoreCase(WEEK) || task.getRecurType().equalsIgnoreCase(WEEKS)) {
             adjustDatesForwardForWeeks(task);
-        } else if (task.getRecurType().equals("day") || task.getRecurType().equals("days")) {
+        } else if (task.getRecurType().equalsIgnoreCase(DAY) || task.getRecurType().equalsIgnoreCase(DAYS)) {
             adjustDatesForwardForDays(task);
-        } else if (task.getRecurType().equals("month") || task.getRecurType().equals("months")) {
+        } else if (task.getRecurType().equalsIgnoreCase(MONTH) || task.getRecurType()
+                .equalsIgnoreCase(MONTHS)) {
             adjustDatesForwardForMonths(task);
         } else {
             adjustDatesForwardForYears(task);
@@ -171,7 +179,7 @@ public class SkipRecurTask<E> implements Command<Object> {
     public void redo(ArrayList<Task> list) {
         loggerSkip.log(Level.INFO, "Start redo process for skip");
         try {
-            redoOperation(list);
+            redoSkip(list);
         } catch (EmptyStackException e) {
             loggerSkip.log(Level.WARNING, "Redo stack is empty");
         } catch (IndexOutOfBoundsException e) {
@@ -181,7 +189,7 @@ public class SkipRecurTask<E> implements Command<Object> {
     }
 
     // shifts forward the date for the recurring task at redoIndex
-    private void redoOperation(ArrayList<Task> list) {
+    private void redoSkip(ArrayList<Task> list) {
         int redoIndex = redoStackInt.pop();
         RecurringTask recurringTask = (RecurringTask) list.get(redoIndex);
         moveDateForward(recurringTask);
@@ -191,7 +199,8 @@ public class SkipRecurTask<E> implements Command<Object> {
 
     @Override
     public int findTask(String id, ArrayList<Task> list) {
-        int position = -1;
+        final int INVALID = -1;
+        int position = INVALID;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {
                 position = i;

@@ -99,8 +99,9 @@ public class UserInputParser {
 
     private boolean isFloating() {
 
-		return (!dateTimeParser.isDate(userCommand[lengthOfInput - 1]) && !dateTimeParser.isDate(userCommand[lengthOfInput - 2])
-				&& !dateTimeParser.isDate("" + userCommand[lengthOfInput - 2] + userCommand[lengthOfInput - 1]));
+        return (!dateTimeParser.isDate(userCommand[lengthOfInput - 1]) && !dateTimeParser
+                .isDate(userCommand[lengthOfInput - 2]) && !dateTimeParser
+                .isDate("" + userCommand[lengthOfInput - 2] + userCommand[lengthOfInput - 1]));
     }
 
     public static LocalDate stringToLocalDate(String date) {
@@ -205,11 +206,11 @@ public class UserInputParser {
             numToUse = NUMBER_FLOATING;
         } else if (userCommand[lengthOfInput - 1].equalsIgnoreCase("today")) {
             numToUse = NUMBER_TODAY;
-		} else if (dateTimeParser.isDayOfWeek(userCommand[lengthOfInput - 1])
-				&& !dateTimeParser.isDate(userCommand[lengthOfInput - 2])) {
+        } else if (dateTimeParser.isDayOfWeek(userCommand[lengthOfInput - 1]) && !dateTimeParser
+                .isDate(userCommand[lengthOfInput - 2])) {
             numToUse = NUMBER_DAY_OF_WEEK;
-		} else if (dateTimeParser.isDate(userCommand[lengthOfInput - 1])
-				&& !dateTimeParser.isDate(userCommand[lengthOfInput - 2])) {
+        } else if (dateTimeParser.isDate(userCommand[lengthOfInput - 1]) && !dateTimeParser
+                .isDate(userCommand[lengthOfInput - 2])) {
             numToUse = NUMBER_ONLY_ONE_DATE;
         } else {
             numToUse = NUMBER_NORMAL;

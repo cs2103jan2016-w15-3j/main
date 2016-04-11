@@ -17,8 +17,7 @@ public class AddTask<E> implements Command<Object> {
 
     @Override
     // adds the task into the list. task cannot be null. throwing Exception is for Junit testing
-    public void execute(List<Task> list,
-            Object task) {
+    public void execute(List<Task> list, Object task) {
         loggerAdd.log(Level.INFO, "Start adding task");
         try {
             assert (task != null);
@@ -67,7 +66,8 @@ public class AddTask<E> implements Command<Object> {
 
     @Override
     public int findTask(String id, ArrayList<Task> list) {
-        int position = -1;
+        final int INVALID = -1;
+        int position = INVALID;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {
                 position = i;

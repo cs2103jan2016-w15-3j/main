@@ -11,6 +11,7 @@ import parser.UserInputParserTest;
 import ui.model.TaskListCellTest;
 
 import java.util.List;
+
 // @@author A0126077E
 public class TestRunner {
     public static final String ANSI_RESET = "\u001B[0m";

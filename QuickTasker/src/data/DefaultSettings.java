@@ -1,5 +1,6 @@
 package data;
 //@@author A0126077E
+
 import ui.model.ApplicationColor;
 
 import java.util.Properties;
