@@ -85,7 +85,7 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
     private static final String ERROR_MESSAGE_FOR_WRONG_INDEX = "The index you entered is invalid!";
     private static final String ERROR_MESSAGE_FOR_INVALID_INDEX = "This index is not a number!";
-    private static final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
+    private static final String ERROR_MESSAGE_FOR_NOT_RECURRING_TASK = "This index is not a recurring task!";
     private static final String ERROR_MESSAGE_FOR_NO_TASK_ENTERED = "Did you enter a recurring task?";
     private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
     private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
@@ -474,7 +474,7 @@ public class MainWindowController implements Initializable {
     private void skipRecurringTaskOperation(String userInput) {
         int index = parser.getTaskIndex(userInput);
         if (!(plannerEntries.get(index) instanceof RecurringTask))
-            displayMessage(ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK);
+            displayMessage(ERROR_MESSAGE_FOR_NOT_RECURRING_TASK);
         else {
             plannerEntries = FXCollections.observableArrayList(operations.skip(index));
             displayMessage(MESSAGE_FOR_DATE_CHANGE);
@@ -523,8 +523,12 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
     void stopRecurringTask(String userInput) throws Exception {
         int taskIndex = parser.getTaskIndex(userInput);
-        plannerEntries = FXCollections.observableArrayList(operations.stopRecurring(taskIndex));
-        displayMessage(String.format(MESSAGE_FOR_STOPPING_RECUR, taskIndex + OFFSET));
+        if (plannerEntries.get(taskIndex) instanceof RecurringTask) {
+            plannerEntries = FXCollections.observableArrayList(operations.stopRecurring(taskIndex));
+            displayMessage(String.format(MESSAGE_FOR_STOPPING_RECUR, taskIndex + OFFSET));
+        } else {
+            displayMessage(ERROR_MESSAGE_FOR_NOT_RECURRING_TASK);
+        }
         afterOperation();
     }
 
