@@ -80,12 +80,9 @@ public class MainWindowController implements Initializable {
     private static final String MESSAGE_FOR_UNDO = "Undone last operation. Yay!";
     private static final String MESSAGE_FOR_REDO = "Redo the last undo. Yay!";
     private static final String MESSAGE_FOR_CLASHING_TIME_SLOTS = "WARNING: YOU HAVE CLASHING TIME SLOTS";
-    // @@author A0133333U
     private static final String ERROR_MESSAGE_FOR_WRONG_INDEX = "The index you entered is invalid!";
     private static final String ERROR_MESSAGE_FOR_INVALID_INDEX = "This index is not a number!";
     private static final String ERROR_MESSAGE_FOR_SKIPPING_RECURRING_TASK = "This index is not a recurring task!";
-    // @@author A0130949Y
-
     private static final String ERROR_MESSAGE_FOR_NO_TASK_ENTERED = "Did you enter a recurring task?";
     private static final String ERROR_MESSAGE_FOR_EMPTY_TASK = "Did you enter a task correctly?";
     private static final String ERROR_MESSAGE_FOR_REDO_ERROR = "Did you undo before this?";
@@ -414,12 +411,6 @@ public class MainWindowController implements Initializable {
     }
 
     // @@author A0130949Y
-    void viewTasks() {
-        plannerEntries = FXCollections.observableArrayList(operations.getTasks());
-        afterOperation();
-    }
-
-    // @@author A0126077E
     void viewArchived() {
         plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
         afterOperation();

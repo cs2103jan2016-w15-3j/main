@@ -41,7 +41,7 @@ public class UiOperationDelegator {
             else if (mainWindowController.getParser().getCommand(userInput) == Commands.CHANGE_DIRECTORY)
                 mainWindowController.changeDirectory(userInput);
             else if (mainWindowController.getParser().getCommand(userInput) == Commands.BACK)
-                mainWindowController.viewTasks();
+                mainWindowController.showAll();
             else if ("show today".equals(userInput) || "view today".equals(userInput)) mainWindowController.showToday();
             else if ("show tomorrow".equals(userInput) || "view tomorrow".equals(userInput))
                 mainWindowController.showTomorrow();
