@@ -11,9 +11,9 @@ public class UiOperationDelegator {
             MainWindowController mainWindowController) { this.mainWindowController = mainWindowController; }
 
     public void performOperations(String userInput) throws UIOperationException {
-        InputValidator inputValidator = new InputValidator();
+        /*InputValidator inputValidator = new InputValidator();
         if (!inputValidator.checkAllValid(userInput)) MainWindowController.logger.severe(inputValidator.toString());
-        else try {
+        else*/ try {
             if (mainWindowController.getParser().getCommand(userInput) == Commands.CREATE_TASK)
                 mainWindowController.addTask(userInput);
             else if (mainWindowController.getParser().getCommand(userInput) == Commands.DELETE_TASK)
@@ -49,6 +49,20 @@ public class UiOperationDelegator {
             else if ("view archived".equals(userInput)) mainWindowController.viewArchived();
             else if ("view floating".equals(userInput) || "show floating".equals(userInput))
                 mainWindowController.showFloating();
+            else if ("view monday".equals(userInput) || "show monday".equals(userInput))
+                mainWindowController.showMonday();
+            else if ("view tuesday".equals(userInput) || "show tuesday".equals(userInput))
+                mainWindowController.showTuesday();
+            else if ("view wednesday".equals(userInput) || "show wednesday".equals(userInput))
+                mainWindowController.showWednesday();
+            else if ("view thursday".equals(userInput) || "show thursday".equals(userInput))
+                mainWindowController.showThursday();
+            else if ("view friday".equals(userInput) || "show friday".equals(userInput))
+                mainWindowController.showFriday();
+            else if ("view saturday".equals(userInput) || "show saturday".equals(userInput))
+                mainWindowController.showSaturday();
+            else if ("view sunday".equals(userInput) || "show sunday".equals(userInput))
+                mainWindowController.showSunday();
             else if (userInput.contains("theme")) mainWindowController.changeTheme(userInput);
             else if (userInput.equals("show overdue")) mainWindowController.showOverdue();
             else if ("help".equals(userInput)) mainWindowController.showHelp();

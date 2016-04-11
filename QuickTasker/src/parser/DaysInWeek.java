@@ -19,18 +19,25 @@ public class DaysInWeek {
         switch (LocalDate.now().getDayOfWeek()) {
             case MONDAY:
                 setMonday();
+                break;
             case TUESDAY:
                 setTuesday();
+                break;
             case WEDNESDAY:
                 setWednesday();
+                break;
             case THURSDAY:
                 setThursday();
+                break;
             case FRIDAY:
                 setFriday();
+                break;
             case SATURDAY:
                 setSaturday();
+                break;
             default:
                 setSunday();
+                break;
         }
     }
 

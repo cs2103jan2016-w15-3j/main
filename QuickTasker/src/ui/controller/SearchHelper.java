@@ -2,13 +2,14 @@ package ui.controller;
 
 import model.Task;
 import org.apache.commons.lang3.StringUtils;
-
+import parser.DaysInWeek;
 import java.time.LocalDate;
 
 // @ author A0126077E
 class SearchHelper {
     private final String FLOATING_TASK = "floating";
     private final double FUZZY_STRING_COMPARE_THRESHOLD = 0.65;
+    private final DaysInWeek getDays = new DaysInWeek();
 
     public boolean isItDisplayedInTodayView(Task t) {
         return isFloatingTask(t) || isDueToday(t);
@@ -73,5 +74,76 @@ class SearchHelper {
     // @@author A0126077E
     boolean isKeywordSearch() {
         return true;
+    }
+
+    // @@author A0130949Y
+    public boolean isTaskDueOnMonday(Task task) {
+        return isDueMonday(task);
+    }
+
+    // @@author A0130949Y
+    public boolean isTaskDueOnTuesday(Task task) {
+        return isDueTuesday(task);
+    }
+
+    // @@author A0130949Y
+    public boolean isTaskDueOnWednesday(Task task) {
+        return isDueWednesday(task);
+    }
+
+    // @@author A0130949Y
+    public boolean isTaskDueOnThursday(Task task) {
+        return isDueThursday(task);
+    }
+
+    // @@author A0130949Y
+    public boolean isTaskDueOnFriday(Task task) {
+        return isDueFriday(task);
+    }
+
+    // @@author A0130949Y
+    public boolean isTaskDueOnSaturday(Task task) {
+        return isDueSaturday(task);
+    }
+
+    // @@author A0130949Y
+    public boolean isTaskDueOnSunday(Task task) {
+        return isDueSunday(task);
+    }
+
+    // @@author A0130949Y
+    private boolean isDueMonday(Task task) {
+        System.out.println(getDays.getMonday());
+        return task.getDueDate().isEqual(getDays.getMonday());
+    }
+
+    // @@author A0130949Y
+    private boolean isDueTuesday(Task task) {
+        return task.getDueDate().isEqual(getDays.getTuesday());
+    }
+
+    // @@author A0130949Y
+    private boolean isDueWednesday(Task task) {
+        return task.getDueDate().isEqual(getDays.getWednesday());
+    }
+
+    // @@author A0130949Y
+    private boolean isDueThursday(Task task) {
+        return task.getDueDate().isEqual(getDays.getThursday());
+    }
+
+    // @@author A0130949Y
+    private boolean isDueFriday(Task task) {
+        return task.getDueDate().isEqual(getDays.getFriday());
+    }
+
+    // @@author A0130949Y
+    private boolean isDueSaturday(Task task) {
+        return task.getDueDate().isEqual(getDays.getSaturday());
+    }
+
+    // @@author A0130949Y
+    private boolean isDueSunday(Task task) {
+        return task.getDueDate().isEqual(getDays.getSunday());
     }
 }

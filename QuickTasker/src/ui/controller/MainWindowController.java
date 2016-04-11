@@ -164,6 +164,27 @@ public class MainWindowController implements Initializable {
         uiOperationDelegator.performOperations(userInput);
     }
 
+    private void showTasks(String userInput) {
+        String whatToShow = determineShow(userInput);
+
+        if (whatToShow.equals("all")) {
+            showAll();
+        } else if (whatToShow.equals("today")) {
+            showToday();
+        } else if (whatToShow.equals("tomorrow")) {
+            showTomorrow();
+        } else if (whatToShow.equals("floating")) {
+            showFloating();
+        } else {
+            viewArchived();
+        }
+    }
+
+    private String determineShow(String input) {
+        String[] withoutWhiteSpaces = input.split("\\s+");
+        return withoutWhiteSpaces[1];
+    }
+
     // @@author A0126077E
     void changeTheme(String userInput) {
         Scene scene = main.getScene();
@@ -227,6 +248,69 @@ public class MainWindowController implements Initializable {
             updateTaskCounter();
         }
 
+        commandBox.clear();
+    }
+
+    // @@author A0130949Y
+    void showMonday() {
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnMonday(task)));
+        headerTitle.setText("Tasks: Monday");
+        setGenericIcon();
+        updateTaskCounter();
+        commandBox.clear();
+    }
+
+    // @@author A0130949Y
+    void showTuesday() {
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnTuesday(task)));
+        headerTitle.setText("Tasks: Monday");
+        setGenericIcon();
+        updateTaskCounter();
+        commandBox.clear();
+    }
+
+    // @@author A0130949Y
+    void showWednesday() {
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnWednesday(task)));
+        headerTitle.setText("Tasks: Monday");
+        setGenericIcon();
+        updateTaskCounter();
+        commandBox.clear();
+    }
+
+    // @@author A0130949Y
+    void showThursday() {
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnThursday(task)));
+        headerTitle.setText("Tasks: Monday");
+        setGenericIcon();
+        updateTaskCounter();
+        commandBox.clear();
+    }
+
+    // @@author A0130949Y
+    void showFriday() {
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnFriday(task)));
+        headerTitle.setText("Tasks: Monday");
+        setGenericIcon();
+        updateTaskCounter();
+        commandBox.clear();
+    }
+
+    // @@author A0130949Y
+    void showSaturday() {
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnSaturday(task)));
+        headerTitle.setText("Tasks: Monday");
+        setGenericIcon();
+        updateTaskCounter();
+        commandBox.clear();
+    }
+
+    // @@author A0130949Y
+    void showSunday() {
+        printedPlanner.setItems(plannerEntries.filtered(task -> search.isTaskDueOnSunday(task)));
+        headerTitle.setText("Tasks: Monday");
+        setGenericIcon();
+        updateTaskCounter();
         commandBox.clear();
     }
 
