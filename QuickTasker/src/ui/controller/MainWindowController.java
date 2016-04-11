@@ -316,8 +316,9 @@ public class MainWindowController implements Initializable {
 
     /*
      * @@author A0133333U Display a Help popup when user types in 'help'.
-     *user can press esc key to exit the Help Window
      */
+    //      *user can press esc key to exit the Help Window
+
     void showHelp() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Help.fxml"));
         Scene helpScene = new Scene(root);
