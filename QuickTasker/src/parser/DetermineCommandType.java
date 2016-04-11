@@ -5,8 +5,7 @@ package parser;
 public class DetermineCommandType {
 
     public static Commands getCommand(String input) {
-
-        switch (input) {
+        switch (input.toLowerCase()) {
             case "add":
                 return Commands.CREATE_TASK;
             case "del":

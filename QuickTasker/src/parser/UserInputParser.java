@@ -4,7 +4,6 @@ package parser;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,14 +19,15 @@ public class UserInputParser {
     protected int lengthOfInput;
     protected int numToUse;
     private static Logger loggerTaskName = Logger.getLogger("setTaskName");
+    DateTimeParser dateTimeParser = new DateTimeParser();
 
     protected static final int NUMBER_NORMAL = 0;
     protected static final int NUMBER_TOMORROW = 1;
     protected static final int NUMBER_NEXT_DAY_DAY_AFTER = 2;
     protected static final int NUMBER_FLOATING = 3;
     protected static final int NUMBER_TODAY = 4;
-    protected static final int NUMBER_ONLY_START = 5;
-    protected static final int NUMBER_ONLY_END = 6;
+    protected static final int NUMBER_ONLY_ONE_DATE = 5;
+    protected static final int NUMBER_DAY_OF_WEEK = 6;
 
     public UserInputParser() {
         this.taskName = "";
@@ -54,25 +54,14 @@ public class UserInputParser {
 
         determineLengthOfInput();
         command = userCommand[0];
-        if (isStartOrEnd()) {
-            removeStartOrEnd();
-        }
         setTaskName();
-        System.out.println("task name:" + taskName);
-        System.out.println("parser startdate " + startDate);
-        System.out.println("parser enddate " + endDate);
-        System.out.println("parser starttime " + startTime);
-        System.out.println("parser endtime " + endTime);
     }
 
-    public void setAttributesForGetCommands(String userInput)/* throws setAttributeException*/ {
+    public void setAttributesForGetCommands(String userInput) {
         removeWhiteSpaces(userInput);
         determineLengthOfInput();
         command = userCommand[0];
     }
-
-	/*public static class setAttributeException extends RuntimeException {
-    }*/
 
     public void setTaskName() {
 
@@ -110,11 +99,8 @@ public class UserInputParser {
 
     private boolean isFloating() {
 
-        DateTimeParser parser = new DateTimeParser();
-
-        return (!parser.isDate(userCommand[lengthOfInput - 1]) && !parser
-                .isDate(userCommand[lengthOfInput - 2]) && !parser
-                .isDate("" + userCommand[lengthOfInput - 2] + userCommand[lengthOfInput - 1]));
+		return (!dateTimeParser.isDate(userCommand[lengthOfInput - 1]) && !dateTimeParser.isDate(userCommand[lengthOfInput - 2])
+				&& !dateTimeParser.isDate("" + userCommand[lengthOfInput - 2] + userCommand[lengthOfInput - 1]));
     }
 
     public static LocalDate stringToLocalDate(String date) {
@@ -133,21 +119,17 @@ public class UserInputParser {
         return endDate;
     }
 
-    // @@author A0133333U
     public LocalTime getStartTime(String userInput) {
         setAttributes(userInput);
 
         return startTime;
     }
 
-    // @@author A0133333U
     public LocalTime getEndTime(String userInput) {
         setAttributes(userInput);
 
         return endTime;
     }
-
-    //@@author A0121558H
 
     public String getTaskName(String userInput) {
         setAttributes(userInput);
@@ -182,12 +164,12 @@ public class UserInputParser {
             endDate = LocalDate.MAX;//
         } else if (numToSetDate == NUMBER_TODAY) {
             startDate = endDate = stringToLocalDate("today");
-        } else if (numToSetDate == NUMBER_ONLY_START) {
-            startDate = stringToLocalDate(userCommand[length - 2]);
-            endDate = LocalDate.MIN;
-        } else if (numToSetDate == NUMBER_ONLY_END) {
+        } else if (numToSetDate == NUMBER_ONLY_ONE_DATE) {
             startDate = LocalDate.MIN;
-            endDate = stringToLocalDate(userCommand[length - 2]);
+            endDate = stringToLocalDate(userCommand[length - 1]);
+        } else if (numToSetDate == NUMBER_DAY_OF_WEEK) {
+            startDate = dateTimeParser.getDayOfWeek(userCommand[length - 1]);
+            endDate = dateTimeParser.getDayOfWeek(userCommand[length - 1]);
         }
     }
 
@@ -212,7 +194,7 @@ public class UserInputParser {
     }
 
     protected void isEnglishDate() {
-        DateTimeParser parser = new DateTimeParser();
+
         String toCheck = userCommand[lengthOfInput - 2] + " " + userCommand[lengthOfInput - 1];
 
         if (userCommand[lengthOfInput - 1].equalsIgnoreCase("tomorrow")) {
@@ -223,38 +205,15 @@ public class UserInputParser {
             numToUse = NUMBER_FLOATING;
         } else if (userCommand[lengthOfInput - 1].equalsIgnoreCase("today")) {
             numToUse = NUMBER_TODAY;
-        } else if (parser.isDate(userCommand[lengthOfInput - 2]) && isStart(userCommand[lengthOfInput - 1])) {
-            numToUse = NUMBER_ONLY_START;
-        } else if (parser.isDate(userCommand[lengthOfInput - 2]) && isEnd(userCommand[lengthOfInput - 1])) {
-            numToUse = NUMBER_ONLY_END;
+		} else if (dateTimeParser.isDayOfWeek(userCommand[lengthOfInput - 1])
+				&& !dateTimeParser.isDate(userCommand[lengthOfInput - 2])) {
+            numToUse = NUMBER_DAY_OF_WEEK;
+		} else if (dateTimeParser.isDate(userCommand[lengthOfInput - 1])
+				&& !dateTimeParser.isDate(userCommand[lengthOfInput - 2])) {
+            numToUse = NUMBER_ONLY_ONE_DATE;
         } else {
             numToUse = NUMBER_NORMAL;
         }
     }
-
-    private boolean isStart(String input) {
-        return input.equalsIgnoreCase("start");
-    }
-
-    private boolean isEnd(String input) {
-        return input.equalsIgnoreCase("end");
-    }
-
-    private boolean isStartOrEnd() {
-
-        return numToUse == NUMBER_ONLY_START || numToUse == NUMBER_ONLY_END;
-    }
-
-    private void removeStartOrEnd() {
-
-        ArrayList<String> tempUserCommand = new ArrayList<String>(Arrays.asList((userCommand)));
-
-        for (int i = lengthOfInput - 1; i > 0; i--) {
-            if (tempUserCommand.get(i).equals("start") || tempUserCommand.get(i).equals("end")) {
-                tempUserCommand.remove(i);
-                break;
-            }
-        }
-        userCommand = tempUserCommand.toArray(new String[tempUserCommand.size()]);
-    }
 }
+

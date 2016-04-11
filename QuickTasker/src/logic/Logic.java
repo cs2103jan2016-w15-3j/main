@@ -8,8 +8,10 @@ import data.SettingManagerImpl;
 import model.RecurringTask;
 import model.Task;
 import parser.Commands;
+import sun.rmi.runtime.Log;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Logic {
     protected List<Task> list;
@@ -19,6 +21,7 @@ public class Logic {
     protected Stack<Commands> undoStack;
     protected Stack<Commands> redoStack;
     private SettingManager settings;
+    public static final Logger logger = Logger.getLogger(Logic.class.getName());
 
     public Logic() {
         init();
@@ -173,8 +176,8 @@ public class Logic {
         try {
             shiftCompletedTaskToArchivedList(taskId);
             saveList();
-        } catch (ArrayIndexOutOfBoundsException e) {
-        } catch (NumberFormatException e) {
+        }catch (ArrayIndexOutOfBoundsException e){
+            logger.info("Marking non-existent index in Logic -> List");
         }
     }
 

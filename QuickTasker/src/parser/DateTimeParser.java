@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DateTimeParser {
+	private static DaysInWeek daysInWeek = new DaysInWeek();
     private static Logger loggerParseDate = Logger.getLogger("parseDate in DateTimeParser");
     private static Logger loggerParseTime = Logger.getLogger("parseTime in DateTimeParser");
     private static Logger loggerIsDate = Logger.getLogger("isDate in DateTimeParser");
@@ -73,6 +74,8 @@ public class DateTimeParser {
                 output = LocalDate.now().plusDays(1);
             } else if (input.equalsIgnoreCase("next day")) {
                 output = LocalDate.now().plusDays(1);
+			} else if (isDayOfWeek(input)) {
+				output = getDayOfWeek(input);
             } else {
                 output = LocalDate.now().plusDays(2);
             }
@@ -93,16 +96,42 @@ public class DateTimeParser {
         return output;
     }
 
+	protected boolean isDayOfWeek(String input) {
+		return input.equalsIgnoreCase("monday") || input.equalsIgnoreCase("tuesday")
+				|| input.equalsIgnoreCase("wednesday") || input.equalsIgnoreCase("thursday")
+				|| input.equalsIgnoreCase("friday") || input.equalsIgnoreCase("saturday")
+				|| input.equalsIgnoreCase("sunday");
+	}
+
     private boolean isEnglish(String input) {
-        return (input.equalsIgnoreCase("today") || input.equalsIgnoreCase("tomorrow") || input
-                .equalsIgnoreCase("next day") || input.equalsIgnoreCase("day after"));
+		return (input.equalsIgnoreCase("today") || input.equalsIgnoreCase("tomorrow")
+				|| input.equalsIgnoreCase("next day") || input.equalsIgnoreCase("day after") || isDayOfWeek(input));
+	}
+
+	public LocalDate getDayOfWeek(String input) {
+
+		if (input.equalsIgnoreCase("monday")) {
+			return daysInWeek.getMonday();
+		} else if (input.equalsIgnoreCase("tuesday")) {
+			return daysInWeek.getTuesday();
+		} else if (input.equalsIgnoreCase("wednesday")) {
+			return daysInWeek.getWednesday();
+		} else if (input.equalsIgnoreCase("thursday")) {
+			return daysInWeek.getThursday();
+		} else if (input.equalsIgnoreCase("friday")) {
+			return daysInWeek.getFriday();
+		} else if (input.equalsIgnoreCase("saturday")) {
+			return daysInWeek.getSaturday();
+		} else {
+			return daysInWeek.getSunday();
+		}
     }
 
     public boolean isDate(String input) {
         loggerIsDate.log(Level.INFO, "Start of isDate");
 
-        if (input.equalsIgnoreCase("today") || input.equalsIgnoreCase("tomorrow") || input
-                .equalsIgnoreCase("day after") || input.equalsIgnoreCase("next day")) {
+		if (input.equalsIgnoreCase("today") || input.equalsIgnoreCase("tomorrow") || input.equalsIgnoreCase("day after")
+				|| input.equalsIgnoreCase("next day") || isDayOfWeek(input)) {
             return true;
 
         } else {
@@ -154,7 +183,7 @@ public class DateTimeParser {
     }
 
     public boolean isTime(String input) {
-        return (input.indexOf(':') >= 0) || (input.indexOf("pm") >= 0) || input.indexOf("am") >= 0;
+        return (input.indexOf(':') >= 0);
     }
 
     public ArrayList<Integer> indicesToDetermineTime(String[] input) {

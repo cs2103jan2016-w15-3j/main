@@ -398,11 +398,11 @@ public class MainWindowController implements Initializable {
             printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
             printedPlanner.getSelectionModel().select(i);
             printedPlanner.fireEvent(new TaskDoneEvent(task));
-
         } catch (NumberFormatException e) {
             displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         } catch (IndexOutOfBoundsException e) {
             displayMessage(ERROR_MESSAGE_FOR_INVALID_INDEX);
+        }catch (Exception e){
         }
     }
 
