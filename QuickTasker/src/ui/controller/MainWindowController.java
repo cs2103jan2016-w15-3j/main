@@ -315,7 +315,7 @@ public class MainWindowController implements Initializable {
     }
 
     /*
-     * @@author A013333U Display a Help popup when user types in 'help'.
+     * @@author A0133333U Display a Help popup when user types in 'help'.
      *user can press esc key to exit the Help Window
      */
     void showHelp() throws IOException {
