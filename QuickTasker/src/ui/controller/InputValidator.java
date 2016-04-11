@@ -16,9 +16,9 @@ import java.util.logging.Logger;
 
 public class InputValidator {
     private static Logger loggerValidator = Logger.getLogger("checkIfValid in InputValidator");
-    private static final UserInputParser userInputParser = new UserInputParser();
-    private static final UpdateParser updateParser = new UpdateParser();
-    private static final RecurringParser recurringParser = new RecurringParser();
+    private  UserInputParser userInputParser;
+    private  UpdateParser updateParser;
+    private  RecurringParser recurringParser;
     Commands cmd;
 
     public boolean checkAllValid(String userInput) {
@@ -51,25 +51,26 @@ public class InputValidator {
 
     private boolean checkTaskName(String input) {
         if (cmd == Commands.CREATE_TASK) {
-            System.out.println("userInputParser.getTaskName(input).length() != 0 " + (
-                    userInputParser.getTaskName(input).length() != 0));
+            userInputParser=new UserInputParser();
             return userInputParser.getTaskName(input).length() != 0;
         } else if (cmd == Commands.UPDATE_TASK) {
+            updateParser= new UpdateParser();
             System.out.println("updateParser.getTaskName(input).length() != 0 " + (
                     updateParser.getTaskName(input).length() != 0));
             return updateParser.getTaskName(input).length() != 0;
         } else if (cmd == Commands.RECUR_TASK) {
+            recurringParser= new RecurringParser();
             System.out.println("recurringParser.getTaskName(input).length() != 0 " + (
                     recurringParser.getTaskName(input).length() != 0));
             return recurringParser.getTaskName(input).length() != 0;
         } else {
-            System.out.println("HERHEHRERH");
             return true;
         }
     }
 
     private boolean checkTime(String input) {
         if (cmd == Commands.CREATE_TASK) {
+            userInputParser= new UserInputParser();
             LocalDate startAddDate = userInputParser.getStartDate(input);
             LocalDate endAddDate = userInputParser.getEndDate(input);
             LocalTime startAddTime = userInputParser.getStartTime(input);
@@ -79,6 +80,7 @@ public class InputValidator {
             }
             return true;
         } else if (cmd == Commands.UPDATE_TASK) {
+            updateParser= new UpdateParser();
             LocalDate startUpdateDate = updateParser.getStartDate(input);
             LocalDate endUpdateDate = updateParser.getEndDate(input);
             LocalTime startUpdateTime = updateParser.getStartTime(input);
@@ -89,6 +91,7 @@ public class InputValidator {
             }
             return true;
         } else if (cmd == Commands.RECUR_TASK) {
+            recurringParser= new RecurringParser();
             LocalDate startRecurDate = recurringParser.getStartDate(input);
             LocalDate endRecurDate = recurringParser.getEndDate(input);
             LocalTime startRecur = recurringParser.getStartTime(input);
@@ -107,6 +110,7 @@ public class InputValidator {
 
     private boolean checkDate(String input) {
         if (cmd == Commands.CREATE_TASK) {
+            userInputParser= new UserInputParser();
             LocalDate startAdd = userInputParser.getStartDate(input);
             LocalDate endAdd = userInputParser.getEndDate(input);
             if (isDateAvailable(startAdd, endAdd)) {
@@ -114,6 +118,7 @@ public class InputValidator {
             }
             return true;
         } else if (cmd == Commands.UPDATE_TASK) {
+            updateParser= new UpdateParser();
             LocalDate startUpdate = updateParser.getStartDate(input);
             LocalDate endUpdate = updateParser.getEndDate(input);
             if (isDateAvailable(startUpdate, endUpdate)) {
@@ -121,6 +126,7 @@ public class InputValidator {
             }
             return true;
         } else if (cmd == Commands.RECUR_TASK) {
+            recurringParser= new RecurringParser();
             LocalDate startRecur = recurringParser.getStartDate(input);
             LocalDate endRecur = recurringParser.getEndDate(input);
             if (isDateAvailable(startRecur, endRecur)) {
@@ -185,11 +191,6 @@ public class InputValidator {
         }
         check = !isNull(input) && checkCommand(input) && checkTaskName(input) && checkDate(input)
                 && checkTime(input);
-        System.out.println("isNull(input) " + isNull(input));
-        System.out.println("checkCommand(input) " + checkCommand(input));
-        System.out.println("checkTaskName(input) " + checkTaskName(input));
-        System.out.println("checkDate(input) " + checkDate(input));
-        System.out.println("checkTime(input) " + checkTime(input));
         return check;
     }
 
