@@ -114,6 +114,7 @@ public class TaskListCell extends JFXListCell<Task> {
         GridPane.setHalignment(taskDueDate, HPos.RIGHT);
     }
 
+    /// @@author A0133333U
     private void configureCheckBox() {
         checkBox.getStyleClass().add("task-check-box");
     }
@@ -152,12 +153,14 @@ public class TaskListCell extends JFXListCell<Task> {
                 DateTimeFormatter.ofPattern("dd MMM yyyy").format(t.getDueDate()));
     }
 
+    // @@author A0133333U
     protected void setTaskStartTime(Task t) {
         taskStartTime.setText(t == null || !isNotFloatingTask(t) || !isNotEvent(t) || !timeCheck(t) ?
                 "" :
                 DateTimeFormatter.ofPattern("HH:mm").format(t.getStartTime()));
     }
 
+    // @@author A0133333U
     protected void setTaskEndTime(Task t) {
 
         if (t == null || !isNotFloatingTask(t) || !isNotEvent(t) || !timeCheck(t)) taskEndTime.setText("-");
