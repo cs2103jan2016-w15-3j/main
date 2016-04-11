@@ -502,8 +502,7 @@ public class MainWindowController implements Initializable {
 
 		}
 	}
-	
-	
+
 	// @@author A0133333U-unused
     // same reason as above method
     private void refreshSearch() {
@@ -602,9 +601,7 @@ public class MainWindowController implements Initializable {
     // @@author A0130949Y
     void addTask(String userInput) throws Exception {
         try {
-            System.out.println("AA");
             addTaskOperation(userInput);
-            System.out.println("BB");
             afterOperation();
             displayMessage(MESSAGE_ADD_CONFIRMED);
             printedPlanner.scrollTo(printedPlanner.getItems().size() - 1);

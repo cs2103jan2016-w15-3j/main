@@ -33,8 +33,8 @@ public class SkipRecurTaskTest {
     @Test
     public void testSkip() {
         logic.skip(0);
-        assertEquals("Recurring 2", logic.getTasks().get(0).getName());
-        assertEquals(LocalDate.now().plusDays(2).plusWeeks(2), logic.getTasks().get(0).getStartDate());
+        assertEquals("Recurring 1", logic.getTasks().get(0).getName());
+        assertEquals(LocalDate.now().plusWeeks(2), logic.getTasks().get(2).getStartDate());
     }
 
     @Test
