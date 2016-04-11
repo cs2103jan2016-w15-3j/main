@@ -37,7 +37,8 @@ public class UpdateTask<E> implements Command<Object> {
     }
 
     public void executeUpdate(int taskIndex, List<Task> list) {
-        Task newTask = list.remove(list.size() - 1);
+        final int OFFSET = 1;
+        Task newTask = list.remove(list.size() - OFFSET);
         Task updatedTask = checkAttributesForTask(newTask, taskIndex, list);
         updatedTask.setTaskType();
         list.set(taskIndex, updatedTask);
@@ -85,27 +86,38 @@ public class UpdateTask<E> implements Command<Object> {
 
     @Override
     public void undo(ArrayList<Task> list) {
-        int undoIndex = undoStackInt.pop();
-        Task undoTask = undoStackTask.pop();
-        redoStackTask.push(list.get(undoIndex));
-        list.set(undoIndex, undoTask);
+        Task undoTask = undoUpdate(list);
         Collections.sort(list);
         redoStackInt.push(findTask(undoTask.getId(), list));
     }
 
+    private Task undoUpdate(ArrayList<Task> list) {
+        int undoIndex = undoStackInt.pop();
+        Task undoTask = undoStackTask.pop();
+        redoStackTask.push(list.get(undoIndex));
+        list.set(undoIndex, undoTask);
+        return undoTask;
+    }
+
     @Override
     public void redo(ArrayList<Task> list) {
-        int redoIndex = redoStackInt.pop();
-        Task redoTask = redoStackTask.pop();
-        undoStackTask.push(list.get(redoIndex));
-        list.set(redoIndex, redoTask);
+        Task redoTask = redoUpdate(list);
         Collections.sort(list);
         undoStackInt.push(findTask(redoTask.getId(), list));
     }
 
+    private Task redoUpdate(ArrayList<Task> list) {
+        int redoIndex = redoStackInt.pop();
+        Task redoTask = redoStackTask.pop();
+        undoStackTask.push(list.get(redoIndex));
+        list.set(redoIndex, redoTask);
+        return redoTask;
+    }
+
     @Override
     public int findTask(String id, ArrayList<Task> list) {
-        int position = -1;
+        final int INVALID = -1;
+        int position = INVALID;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {
                 position = i;

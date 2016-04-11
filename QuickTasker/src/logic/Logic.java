@@ -31,15 +31,24 @@ public class Logic {
 
     private void initializeVariables() {
         populateCommandMap();
-        list = new ArrayList<Task>();
+        initLists();
         assert (list != null);
         settings = new SettingManagerImpl();
-        archivedList = new ArrayList<Task>();
         storage = new JsonDataHandler();
+        initStacks();
+    }
+
+    private void initLists() {
+        list = new ArrayList<Task>();
+        archivedList = new ArrayList<Task>();
+    }
+
+    private void initStacks() {
         undoStack = new Stack<Commands>();
         redoStack = new Stack<Commands>();
     }
 
+    // get size of the list. use for testing
     public int getSize() {
         assert (list.size() >= 0);
         return list.size();
@@ -65,8 +74,6 @@ public class Logic {
     }
 
     public ArrayList<Task> clear() {
-        //list.clear();
-        //storage.reset();
         commandMap.get(Commands.CLEAR_TASK).execute(list, "");
         manageStacks(Commands.CLEAR_TASK);
         return (ArrayList<Task>) list;
@@ -133,12 +140,6 @@ public class Logic {
         commandMap.get(command).redo((ArrayList<Task>) list);
         System.out.println("redo " + command);
         Collections.sort(list);
-        return (ArrayList<Task>) list;
-    }
-
-    public ArrayList<Task> sort() {
-        commandMap.get(Commands.SORT_TASK).execute(list, "");
-        saveList();
         return (ArrayList<Task>) list;
     }
 
@@ -210,7 +211,8 @@ public class Logic {
     }
 
     public int findTask(String id, List<Task> list) {
-        int position = -1;
+        final int INVALID = -1;
+        int position = INVALID;
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getId().equals(id)) {
                 position = i;
