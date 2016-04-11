@@ -174,9 +174,7 @@ public class Logic {
             shiftCompletedTaskToArchivedList(taskId);
             saveList();
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new ArrayIndexOutOfBoundsException();
         } catch (NumberFormatException e) {
-            throw new NumberFormatException();
         }
     }
 

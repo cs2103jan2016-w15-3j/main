@@ -97,9 +97,7 @@ public class MainWindowController implements Initializable {
 	private static final String ERROR_MESSAGE_FOR_INVALID_INPUT = "Invalid Input. Please retype.";
 
     // @@author A0133333U
-    public MainWindowController() {
-
-    }
+    public MainWindowController() {}
 
     public static Logger getLogger() {
         return logger;
@@ -169,7 +167,6 @@ public class MainWindowController implements Initializable {
 //@@author A0121558H
 	protected void showTasks(String userInput) {
         String whatToShow = determineShow(userInput);
-
         if (whatToShow.equals("all")) {
             showAll();
         } else if (whatToShow.equals("today")) {
@@ -398,9 +395,10 @@ public class MainWindowController implements Initializable {
         try {
             int i = parser.getIndexForDone(userInput);
             Task task = plannerEntries.get(i);
-            operations.markAsDone(task.getId());
-            task.setDone(true); // logic should handle
-            tickCheckBoxForMark(task, i);
+            printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            printedPlanner.getSelectionModel().select(i);
+            printedPlanner.fireEvent(new TaskDoneEvent(task));
+
         } catch (NumberFormatException e) {
             displayMessage(ERROR_MESSAGE_FOR_WRONG_INDEX);
         } catch (IndexOutOfBoundsException e) {
@@ -410,17 +408,8 @@ public class MainWindowController implements Initializable {
 
     // @@author A0126077E
     private void tickCheckBoxForMark(Task t, int i) {
-        printedPlanner.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        printedPlanner.getSelectionModel().select(i);
-        printedPlanner.fireEvent(new TaskDoneEvent(t));
-        javafx.concurrent.Task<Void> sleeper = makeSleeper(500);
-        sleeper.setOnSucceeded(event -> {
-            printedPlanner.getSelectionModel().clearSelection();
-            commandBox.clear();
-        });
-        new Thread(sleeper).start();
-    }
 
+    }
 
     // @@author A0126077E
     private javafx.concurrent.Task<Void> makeSleeper(int duration) {
@@ -437,12 +426,12 @@ public class MainWindowController implements Initializable {
         };
     }
 
-	 // @@author: A0133333U-unused
+/*	 // @@author: A0133333U-unused
 	 // added in extra params for this method - unused because they refactored
 	private Task makeTaskOld(String userInput) throws Exception {
 		return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput), parser.getEndDate(userInput),
 				parser.getStartTime(userInput), parser.getEndTime(userInput));
-	}
+	}*/
 
     // @@author A0130949Y
     void viewArchived() {
@@ -707,7 +696,19 @@ public class MainWindowController implements Initializable {
     }
 
     private void fireCheckBoxAndRemoveEventFilter(TaskListCell listCell, TaskDoneEvent event) {
-        if (listCellContainsSelectedTask(listCell, event)) listCell.getCheckBox().fire();
+        if (listCellContainsSelectedTask(listCell, event)) {
+            listCell.getCheckBox().fire();
+            javafx.concurrent.Task<Void> sleeper = makeSleeper(500);
+            sleeper.setOnSucceeded(evt -> {
+                printedPlanner.getSelectionModel().clearSelection();
+                plannerEntries.remove(event.getTask());
+                operations.markAsDone(event.getTask().getId());
+                commandBox.clear();
+                afterOperation();
+            });
+            new Thread(sleeper).start();
+
+        }
         listCell.removeEventFilter(TASK_COMPLETE, null);
     }
 
