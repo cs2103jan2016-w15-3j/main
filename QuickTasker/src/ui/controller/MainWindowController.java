@@ -425,8 +425,8 @@ public class MainWindowController implements Initializable {
     }
     
     
-	 //@@author: A0133333U-unused
-	 //added in extra params for this method - unused because they refactored
+	 // @@author: A0133333U-unused
+	 // added in extra params for this method - unused because they refactored
 	private Task makeTaskOld(String userInput) throws Exception {
 		return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput), parser.getEndDate(userInput),
 				parser.getStartTime(userInput), parser.getEndTime(userInput));
@@ -643,10 +643,6 @@ public class MainWindowController implements Initializable {
         commandBox.clear();
     }
 
-    /*
-     * @@author: A0133333U added in extra params for this method - of which are
-     * startTime and endTime
-     */
     // @@author A0130949Y
     private Task makeTask(String userInput) throws Exception {
         return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput),
