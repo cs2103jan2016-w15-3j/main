@@ -171,14 +171,8 @@ public class Logic {
     }
 
     public void markAsDone(String taskId) {
-        try {
-            shiftCompletedTaskToArchivedList(taskId);
-            saveList();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new ArrayIndexOutOfBoundsException();
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException();
-        }
+        shiftCompletedTaskToArchivedList(taskId);
+        saveList();
     }
 
     // recurring task requires cloning as the task remains in the list
