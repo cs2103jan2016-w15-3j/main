@@ -14,6 +14,13 @@ public class DaysInWeek {
     private static LocalDate friday;
     private static LocalDate saturday;
     private static LocalDate sunday;
+    private static final int OFFSET_ONE = 1;
+    private static final int OFFSET_TWO = 2;
+    private static final int OFFSET_THREE = 3;
+    private static final int OFFSET_FOUR = 4;
+    private static final int OFFSET_FIVE = 5;
+    private static final int OFFSET_SIX = 6;
+    private static final int OFFSET_SEVEN = 7;
 
     public DaysInWeek() {
         switch (LocalDate.now().getDayOfWeek()) {
@@ -43,72 +50,72 @@ public class DaysInWeek {
 
     private void setMonday() {
         monday = LocalDate.now();
-        tuesday = LocalDate.now().plusDays(1);
-        wednesday = LocalDate.now().plusDays(2);
-        thursday = LocalDate.now().plusDays(3);
-        friday = LocalDate.now().plusDays(4);
-        saturday = LocalDate.now().plusDays(5);
-        sunday = LocalDate.now().plusDays(6);
+        tuesday = LocalDate.now().plusDays(OFFSET_ONE);
+        wednesday = LocalDate.now().plusDays(OFFSET_TWO);
+        thursday = LocalDate.now().plusDays(OFFSET_THREE);
+        friday = LocalDate.now().plusDays(OFFSET_FOUR);
+        saturday = LocalDate.now().plusDays(OFFSET_FIVE);
+        sunday = LocalDate.now().plusDays(OFFSET_SIX);
     }
 
     private void setTuesday() {
         tuesday = LocalDate.now();
-        wednesday = LocalDate.now().plusDays(1);
-        thursday = LocalDate.now().plusDays(2);
-        friday = LocalDate.now().plusDays(3);
-        saturday = LocalDate.now().plusDays(4);
-        sunday = LocalDate.now().plusDays(5);
-        monday = LocalDate.now().plusDays(6);
+        wednesday = LocalDate.now().plusDays(OFFSET_ONE);
+        thursday = LocalDate.now().plusDays(OFFSET_TWO);
+        friday = LocalDate.now().plusDays(OFFSET_THREE);
+        saturday = LocalDate.now().plusDays(OFFSET_FOUR);
+        sunday = LocalDate.now().plusDays(OFFSET_FIVE);
+        monday = LocalDate.now().plusDays(OFFSET_SIX);
     }
 
     private void setWednesday() {
         wednesday = LocalDate.now();
-        thursday = LocalDate.now().plusDays(1);
-        friday = LocalDate.now().plusDays(2);
-        saturday = LocalDate.now().plusDays(3);
-        sunday = LocalDate.now().plusDays(4);
-        monday = LocalDate.now().plusDays(5);
-        tuesday = LocalDate.now().plusDays(6);
+        thursday = LocalDate.now().plusDays(OFFSET_ONE);
+        friday = LocalDate.now().plusDays(OFFSET_TWO);
+        saturday = LocalDate.now().plusDays(OFFSET_THREE);
+        sunday = LocalDate.now().plusDays(OFFSET_FOUR);
+        monday = LocalDate.now().plusDays(OFFSET_FIVE);
+        tuesday = LocalDate.now().plusDays(OFFSET_SIX);
     }
 
     private void setThursday() {
         thursday = LocalDate.now();
-        friday = LocalDate.now().plusDays(1);
-        saturday = LocalDate.now().plusDays(2);
-        sunday = LocalDate.now().plusDays(3);
-        monday = LocalDate.now().plusDays(4);
-        tuesday = LocalDate.now().plusDays(5);
-        wednesday = LocalDate.now().plusDays(6);
+        friday = LocalDate.now().plusDays(OFFSET_ONE);
+        saturday = LocalDate.now().plusDays(OFFSET_TWO);
+        sunday = LocalDate.now().plusDays(OFFSET_THREE);
+        monday = LocalDate.now().plusDays(OFFSET_FOUR);
+        tuesday = LocalDate.now().plusDays(OFFSET_FIVE);
+        wednesday = LocalDate.now().plusDays(OFFSET_SIX);
     }
 
     private void setFriday() {
         friday = LocalDate.now();
-        saturday = LocalDate.now().plusDays(1);
-        sunday = LocalDate.now().plusDays(2);
-        monday = LocalDate.now().plusDays(3);
-        tuesday = LocalDate.now().plusDays(4);
-        wednesday = LocalDate.now().plusDays(5);
-        thursday = LocalDate.now().plusDays(6);
+        saturday = LocalDate.now().plusDays(OFFSET_ONE);
+        sunday = LocalDate.now().plusDays(OFFSET_TWO);
+        monday = LocalDate.now().plusDays(OFFSET_THREE);
+        tuesday = LocalDate.now().plusDays(OFFSET_FOUR);
+        wednesday = LocalDate.now().plusDays(OFFSET_FIVE);
+        thursday = LocalDate.now().plusDays(OFFSET_SIX);
     }
 
     private void setSaturday() {
         saturday = LocalDate.now();
-        sunday = LocalDate.now().plusDays(1);
-        monday = LocalDate.now().plusDays(2);
-        tuesday = LocalDate.now().plusDays(3);
-        wednesday = LocalDate.now().plusDays(4);
-        thursday = LocalDate.now().plusDays(5);
-        friday = LocalDate.now().plusDays(6);
+        sunday = LocalDate.now().plusDays(OFFSET_ONE);
+        monday = LocalDate.now().plusDays(OFFSET_TWO);
+        tuesday = LocalDate.now().plusDays(OFFSET_THREE);
+        wednesday = LocalDate.now().plusDays(OFFSET_FOUR);
+        thursday = LocalDate.now().plusDays(OFFSET_FIVE);
+        friday = LocalDate.now().plusDays(OFFSET_SIX);
     }
 
     private void setSunday() {
         sunday = LocalDate.now();
-        monday = LocalDate.now().plusDays(1);
-        tuesday = LocalDate.now().plusDays(2);
-        wednesday = LocalDate.now().plusDays(3);
-        thursday = LocalDate.now().plusDays(4);
-        friday = LocalDate.now().plusDays(5);
-        saturday = LocalDate.now().plusDays(6);
+        monday = LocalDate.now().plusDays(OFFSET_ONE);
+        tuesday = LocalDate.now().plusDays(OFFSET_TWO);
+        wednesday = LocalDate.now().plusDays(OFFSET_THREE);
+        thursday = LocalDate.now().plusDays(OFFSET_FOUR);
+        friday = LocalDate.now().plusDays(OFFSET_FIVE);
+        saturday = LocalDate.now().plusDays(OFFSET_SIX);
     }
 
     public LocalDate getMonday() {
