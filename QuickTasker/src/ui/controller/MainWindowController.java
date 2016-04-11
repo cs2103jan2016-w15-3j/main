@@ -347,6 +347,17 @@ public class MainWindowController implements Initializable {
         imageView.setPreserveRatio(true);
         headerTitle.setGraphic(imageView);
     }
+    
+    // @@author A0133333U
+    // sets different icons for header title of 'archived'
+    protected void setArchivedIcon() {
+        Image image = new Image(getClass().getResourceAsStream("/img/archived.png"));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(25);
+        imageView.setFitWidth(25);
+        imageView.setPreserveRatio(true);
+        headerTitle.setGraphic(imageView);
+    }
 
     // @@author A0133333U
     // this method will set and assign the warning icon to the header title when overdue tasks are shown
@@ -416,17 +427,17 @@ public class MainWindowController implements Initializable {
     /*
 	 * @@author: A0133333U added in extra params for this method - unused because they refactored
 	 */
-	/*private Task makeTask(String userInput) throws Exception {
+	private Task makeTaskOld(String userInput) throws Exception {
 		return new Task(parser.getTaskName(userInput), parser.getStartDate(userInput), parser.getEndDate(userInput),
 				parser.getStartTime(userInput), parser.getEndTime(userInput));
-	}*/
+	}
 
     // @@author A0130949Y
     void viewArchived() {
         plannerEntries = FXCollections.observableArrayList(operations.getArchivedTasks());
         afterOperation();
         headerTitle.setText("Tasks: Archived");
-        //setGenericIcon();
+        setArchivedIcon();;
     }
 
     // @@author A0130949Y
