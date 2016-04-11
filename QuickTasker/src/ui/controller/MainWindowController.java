@@ -508,10 +508,6 @@ public class MainWindowController implements Initializable {
 		refreshSearch();
 		commandBox.clear();
 	}
-    
-    	     
-    
-  
 
     // @@author A0130949Y
     // unused because stopRecurring has bugs
@@ -591,7 +587,7 @@ public class MainWindowController implements Initializable {
         afterOperation();
     }
 
-    // @@author A0126077E
+    // @@author A0130949Y
     void addTask(String userInput) throws Exception {
         try {
             System.out.println("AA");

@@ -1,18 +1,18 @@
 package ui.controller;
 
 //@@author A0121558H
-
-import javafx.collections.ObservableList;
-import model.Task;
-import parser.Commands;
-import parser.RecurringParser;
-import parser.UpdateParser;
-import parser.UserInputParser;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javafx.collections.ObservableList;
+import model.Task;
+import parser.Commands;
+import parser.DetermineCommandType;
+import parser.RecurringParser;
+import parser.UpdateParser;
+import parser.UserInputParser;
 
 public class InputValidator {
     private static Logger loggerValidator = Logger.getLogger("checkIfValid in InputValidator");
@@ -62,38 +62,43 @@ public class InputValidator {
 
     private boolean checkTime(String input) {
         if (cmd == Commands.CREATE_TASK) {
-            LocalTime startAdd = userInputParser.getStartTime(input);
-            LocalTime endAdd = userInputParser.getEndTime(input);
-            if (isTimeAvailable(startAdd, endAdd)) {
-                return endAdd.isAfter(startAdd);
+            LocalDate startAddDate = userInputParser.getStartDate(input);
+            LocalDate endAddDate = userInputParser.getEndDate(input);
+            LocalTime startAddTime = userInputParser.getStartTime(input);
+            LocalTime endAddTime = userInputParser.getEndTime(input);
+            if (isSameDate(startAddDate, endAddDate) && isTimeAvailable(startAddTime, endAddTime)) {
+                return endAddTime.isAfter(startAddTime);
             }
             return true;
         } else if (cmd == Commands.UPDATE_TASK) {
-            LocalTime startUpdate = updateParser.getStartTime(input);
-            LocalTime endUpdate = updateParser.getEndTime(input);
-            if (isTimeAvailable(startUpdate, endUpdate)) {
-                return endUpdate.isAfter(startUpdate);
+            LocalDate startUpdateDate = updateParser.getStartDate(input);
+            LocalDate endUpdateDate = updateParser.getEndDate(input);
+            LocalTime startUpdateTime = updateParser.getStartTime(input);
+            LocalTime endUpdateTime = updateParser.getEndTime(input);
+            if (isSameDate(startUpdateDate, endUpdateDate) && isTimeAvailable(startUpdateTime, endUpdateTime)) {
+                return endUpdateTime.isAfter(startUpdateTime);
             }
             return true;
         } else if (cmd == Commands.RECUR_TASK) {
+            LocalDate startRecurDate = recurringParser.getStartDate(input);
+            LocalDate endRecurDate = recurringParser.getEndDate(input);
             LocalTime startRecur = recurringParser.getStartTime(input);
             LocalTime endRecur = recurringParser.getEndTime(input);
-            if (isTimeAvailable(startRecur, endRecur)) {
+            if (isSameDate(startRecurDate, endRecurDate) && isTimeAvailable(startRecur, endRecur)) {
                 return endRecur.isAfter(startRecur);
             }
             return true;
         }
         return true;
     }
-
+    private boolean isSameDate(LocalDate start, LocalDate end) {
+        return start.isEqual(end);
+    }
     private boolean checkDate(String input) {
         if (cmd == Commands.CREATE_TASK) {
             LocalDate startAdd = userInputParser.getStartDate(input);
             LocalDate endAdd = userInputParser.getEndDate(input);
             if (isDateAvailable(startAdd, endAdd)) {
-                System.out.println(
-                        "endAdd.isAfter(startAdd) || endAdd.isEqual(startAdd) " + (endAdd.isAfter(startAdd)
-                                || endAdd.isEqual(startAdd)));
                 return endAdd.isAfter(startAdd) || endAdd.isEqual(startAdd);
             }
             return true;
@@ -136,6 +141,8 @@ public class InputValidator {
 
         if (isNotTwoDates(startDate, endDate)) {
             return false;
+        }else if(isOneDate(startDate,endDate)) {
+            return false;
         } else {
             for (Task t : list) {
                 if (isDaysOverlap(t, startDate, endDate)) {
@@ -152,6 +159,10 @@ public class InputValidator {
         loggerValidator.log(Level.INFO, "End of checkIfClash");
         return false;
     }
+    private boolean isOneDate(LocalDate start, LocalDate end) {
+
+        return (start.isEqual(LocalDate.MIN) && !end.isEqual(LocalDate.MAX)) || (!start.isEqual(LocalDate.MIN) && end.isEqual(LocalDate.MAX));
+    }
 
     public boolean isAllValid(String input) {
         boolean check = false;
@@ -159,20 +170,18 @@ public class InputValidator {
         if (checkUndoRedo(input)) {
             return true;
         }
-        check = isNull(input) && checkCommand(input) && checkTaskName(input) && checkDate(input) && checkTime(
-                input);
+        check = isNull(input) && checkCommand(input) && checkTaskName(input) && checkDate(input) && checkTime(input);
 
         return check;
     }
 
     private boolean isNotTwoDates(LocalDate start, LocalDate end) {
-        return start == LocalDate.MAX || end == LocalDate.MAX || start == LocalDate.MIN
-                || end == LocalDate.MIN;
+        return start == LocalDate.MAX || end == LocalDate.MAX || start == LocalDate.MIN || end == LocalDate.MIN;
     }
 
     private boolean isDaysOverlap(Task t, LocalDate start, LocalDate end) {
-        return (start.isBefore(t.getDueDate()) || start.isEqual(t.getDueDate())) && (
-                end.isAfter(t.getStartDate()) || end.isEqual(t.getStartDate()));
+        return (start.isBefore(t.getDueDate()) || start.isEqual(t.getDueDate()))
+                && (end.isAfter(t.getStartDate()) || end.isEqual(t.getStartDate()));
     }
 
     private boolean isSameDates(Task t, LocalDate start, LocalDate end) {
@@ -180,7 +189,7 @@ public class InputValidator {
     }
 
     private boolean isTimeOverlap(Task t, LocalTime start, LocalTime end) {
-        return (start.isBefore(t.getEndTime()) || start.equals(t.getEndTime())) && (
-                end.isAfter(t.getStartTime()) || end.equals(t.getStartTime()));
+        return (start.isBefore(t.getEndTime()) || start.equals(t.getEndTime()))
+                && (end.isAfter(t.getStartTime()) || end.equals(t.getStartTime()));
     }
 }
