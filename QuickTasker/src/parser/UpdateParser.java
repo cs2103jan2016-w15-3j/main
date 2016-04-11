@@ -57,34 +57,6 @@ public class UpdateParser extends UserInputParser {
             setTimeFloating();
         }
         loggerUpdate.log(Level.INFO, "End of setAttributesForUpdates");
-
-        System.out.println("task name:" + taskName);
-        System.out.println("parser startdate " + startDate);
-        System.out.println("parser enddate " + endDate);
-        System.out.println("parser starttime " + startTime);
-        System.out.println("parser endtime " + endTime);
-    }
-
-    private void setDateFloating() {
-        startDate = LocalDate.MIN;
-        endDate = LocalDate.MAX;
-    }
-
-    private void setTimeFloating() {
-        startTime = LocalTime.MIN;
-        endTime = LocalTime.MAX;
-    }
-
-    private void setTaskNameForUpdates() {
-
-        String output = "";
-
-        for (int i = 1; i < lengthOfInput; i++) {
-            System.out.println("I:  " + userCommand[i]);
-            output += userCommand[i] + " ";
-        }
-        output = output.trim();
-        taskName = output;
     }
 
     public int getIndexForUpdates(String userInput) {
@@ -115,6 +87,36 @@ public class UpdateParser extends UserInputParser {
     public LocalTime getEndTime(String userInput) {
         setAttributesForUpdates(userInput);
         return endTime;
+    }
+    public int getNumToRecur(String input) {
+        setAttributesForUpdates(input);
+        return numToRecur;
+    }
+
+    public String getDurationToRecur(String input) {
+        setAttributesForUpdates(input);
+        return durationToRecur;
+    }
+    private void setDateFloating() {
+        startDate = LocalDate.MIN;
+        endDate = LocalDate.MAX;
+    }
+
+    private void setTimeFloating() {
+        startTime = LocalTime.MIN;
+        endTime = LocalTime.MAX;
+    }
+
+    private void setTaskNameForUpdates() {
+
+        String output = "";
+
+        for (int i = 1; i < lengthOfInput; i++) {
+            System.out.println("I:  " + userCommand[i]);
+            output += userCommand[i] + " ";
+        }
+        output = output.trim();
+        taskName = output;
     }
 
     private void setFloatingTaskNameUpdate() {
@@ -168,7 +170,7 @@ public class UpdateParser extends UserInputParser {
                 .isTime(userCommand[lengthOfInput - 1]);
     }
 
-    // remeber to shift getter at bottom
+
     private boolean isRecurUpdate() {
         return userCommand[1].equalsIgnoreCase("recur");
     }
@@ -179,15 +181,5 @@ public class UpdateParser extends UserInputParser {
 
     private void setDurationToRecur() {
         durationToRecur = userCommand[lengthOfInput - 1];
-    }
-
-    public int getNumToRecur(String input) {
-        setAttributesForUpdates(input);
-        return numToRecur;
-    }
-
-    public String getDurationToRecur(String input) {
-        setAttributesForUpdates(input);
-        return durationToRecur;
     }
 }

@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import model.Task;
 import parser.Commands;
-import parser.DetermineCommandType;
 import parser.RecurringParser;
 import parser.UpdateParser;
 import parser.UserInputParser;
@@ -23,6 +22,39 @@ public class InputValidator {
 
 	public boolean checkAllValid(String userInput) {
 		return isAllValid(userInput);
+	}
+
+	// Checks if the added task will have any clashes with any range of tasks in
+	// the list.
+	public boolean checkIfClash(ObservableList<Task> list, Task task) {
+		loggerValidator.log(Level.INFO, "Start of checkIfClash");
+
+		LocalDate startDate = task.getStartDate();
+		LocalDate endDate = task.getDueDate();
+		LocalTime startTime = task.getStartTime();
+		LocalTime endTime = task.getEndTime();
+		loggerValidator.log(Level.INFO, "Before checking if two localdates");
+
+		if (isNotTwoDates(startDate, endDate)) {
+			// It is a floating task
+			return false;
+		} else if (isOneDate(startDate, endDate)) {
+			return false;
+		} else {
+			for (Task t : list) {
+				if (isDaysOverlap(t, startDate, endDate)) {
+					return true;
+				} else if (isSameDates(t, startDate, endDate)) {
+					if (isTimeOverlap(t, startTime, endTime)) {
+						return true;
+					} else {
+						continue;
+					}
+				}
+			}
+		}
+		loggerValidator.log(Level.INFO, "End of checkIfClash");
+		return false;
 	}
 
 	private static boolean isNull(String input) {
@@ -51,19 +83,12 @@ public class InputValidator {
 
 	private boolean checkTaskName(String input) {
 		if (cmd == Commands.CREATE_TASK) {
-			System.out.println("userInputParser.getTaskName(input).length() != 0 "
-					+ (userInputParser.getTaskName(input).length() != 0));
 			return userInputParser.getTaskName(input).length() != 0;
 		} else if (cmd == Commands.UPDATE_TASK) {
-			System.out.println(
-					"updateParser.getTaskName(input).length() != 0 " + (updateParser.getTaskName(input).length() != 0));
 			return updateParser.getTaskName(input).length() != 0;
 		} else if (cmd == Commands.RECUR_TASK) {
-			System.out.println("recurringParser.getTaskName(input).length() != 0 "
-					+ (recurringParser.getTaskName(input).length() != 0));
 			return recurringParser.getTaskName(input).length() != 0;
 		} else {
-			System.out.println("HERHEHRERH");
 			return true;
 		}
 	}
@@ -138,56 +163,19 @@ public class InputValidator {
 		return !(start == LocalDate.MIN) && !(end == LocalDate.MAX);
 	}
 
-	// Checks if the added task will have any clashes with any range of tasks in
-	// the list.
-	public boolean checkIfClash(ObservableList<Task> list, Task task) {
-		loggerValidator.log(Level.INFO, "Start of checkIfClash");
-
-		LocalDate startDate = task.getStartDate();
-		LocalDate endDate = task.getDueDate(); // TODO CHANGE TO ENDDATE
-		LocalTime startTime = task.getStartTime();
-		LocalTime endTime = task.getEndTime();
-		loggerValidator.log(Level.INFO, "Before checking if two localdates");
-
-		if (isNotTwoDates(startDate, endDate)) {
-			return false;
-		} else if (isOneDate(startDate, endDate)) {
-			return false;
-		} else {
-			for (Task t : list) {
-				if (isDaysOverlap(t, startDate, endDate)) {
-					return true;
-				} else if (isSameDates(t, startDate, endDate)) {
-					if (isTimeOverlap(t, startTime, endTime)) {
-						return true;
-					} else {
-						continue;
-					}
-				}
-			}
-		}
-		loggerValidator.log(Level.INFO, "End of checkIfClash");
-		return false;
-	}
-
 	private boolean isOneDate(LocalDate start, LocalDate end) {
 
 		return (start.isEqual(LocalDate.MIN) && !end.isEqual(LocalDate.MAX))
 				|| (!start.isEqual(LocalDate.MIN) && end.isEqual(LocalDate.MAX));
 	}
 
-	public boolean isAllValid(String input) {
+	private boolean isAllValid(String input) {
 		boolean check = false;
 
 		if (checkUndoRedo(input)) {
 			return true;
 		}
 		check = !isNull(input) && checkCommand(input) && checkTaskName(input) && checkDate(input) && checkTime(input);
-		System.out.println("isNull(input) " +isNull(input));
-		System.out.println("checkCommand(input) " +checkCommand(input));
-		System.out.println("checkTaskName(input) " +checkTaskName(input));
-		System.out.println("checkDate(input) " +checkDate(input));
-		System.out.println("checkTime(input) " +checkTime(input));
 		return check;
 	}
 

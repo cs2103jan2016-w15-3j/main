@@ -1,29 +1,29 @@
 package parser;
 
+//@@author A0121558H
 public class SearchParser extends UserInputParser {
 
-    private String toSearch;
+	private String toSearch;
 
-    private void setAttributesSearch(String input) {
-        removeWhiteSpaces(input);
-        determineLengthOfInput();
-        toSearch = setToSearch();
-    }
+	public String getWordsToSearch(String input) {
+		setAttributesSearch(input);
+		return toSearch;
+	}
 
-    private String setToSearch() {
-        String output = "";
+	private void setAttributesSearch(String input) {
+		removeWhiteSpaces(input);
+		determineLengthOfInput();
+		toSearch = setToSearch();
+	}
 
-        for (int i = 1; i < lengthOfInput; i++) {
-            output += userCommand[i];
-            output += " ";
-        }
-        output = output.trim();
-        return output;
-    }
+	private String setToSearch() {
+		String output = "";
 
-    public String getWordsToSearch(String input) {
-        setAttributesSearch(input);
-        return toSearch;
-    }
-
+		for (int i = 1; i < lengthOfInput; i++) {
+			output += userCommand[i];
+			output += " ";
+		}
+		output = output.trim();
+		return output;
+	}
 }

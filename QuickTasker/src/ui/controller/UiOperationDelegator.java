@@ -15,9 +15,8 @@ public class UiOperationDelegator {
 	public void performOperations(String userInput) throws UIOperationException ,InvalidStringException {
 		InputValidator inputValidator = new InputValidator();
 		if (!inputValidator.checkAllValid(userInput)) {
-			MainWindowController.logger.severe(inputValidator.toString());
-			System.out.println("throw??");
-			throw new InvalidStringException();//TODO
+			MainWindowController.logger.severe("Invalid input");
+			throw new InvalidStringException();
 		} else {
 			try {
 				if (mainWindowController.getParser().getCommand(userInput) == Commands.CREATE_TASK)
